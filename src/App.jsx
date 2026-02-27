@@ -4,7 +4,7 @@ import Gauntlet from "./games/Gauntlet.jsx";
 import HybridGauntlet from "./games/HybridGauntlet.jsx";
 import PatternTrainer from "./games/PatternTrainer.jsx";
 import RoadRulesGauntlet from "./games/RoadRulesGauntlet.jsx";
-import RoadSignsQuiz from "./games/RoadSignsQuiz.jsx";
+// import RoadSignsQuiz from "./games/RoadSignsQuiz.jsx"; // coming soon
 
 // ── SA flag colour stripe ──────────────────────────────────────────────────────
 function FlagStripe() {
@@ -87,8 +87,13 @@ function HomePage({ onSelect }) {
             </h1>
             <div style={{ width: 5, height: 44, background: T.red, borderRadius: 2 }} />
           </div>
-          <p style={{ color: T.dim, fontSize: 15, lineHeight: 1.7, maxWidth: 480, margin: "0 auto" }}>
-            Three free drill tools to get you through your learner's licence test. No sign-up. No cost. Just practice.
+          <p style={{ color: T.dim, fontSize: 15, lineHeight: 1.7, maxWidth: 480, margin: "0 auto 10px" }}>
+            Four free drill tools to get you through your learner's licence test. No sign-up. No cost. Just practice.
+          </p>
+          <p style={{ color: T.dim, fontSize: 13, lineHeight: 1.6, maxWidth: 480, margin: "0 auto" }}>
+            All questions are based on the official{" "}
+            <span style={{ color: T.text }}>South African Traffic Department manuals</span>
+            {" "}— the <em>Rules of the Road</em> and the <em>Manual on Road Traffic Signs</em>.
           </p>
         </div>
       </div>
@@ -125,20 +130,12 @@ function HomePage({ onSelect }) {
             onClick={() => onSelect("patterns")}
           />
           <GameCard
-            accentColor={T.red}
+            accentColor={T.blue}
             tag="Drill 4 · Road Rules · By Vehicle Code"
             title="Road Rules Gauntlet"
             description="120 road rules questions organised by vehicle type — general rules for all drivers, then Code 3 LMV, Code 1/2 Motorcycle, and Code 10/14 Heavy Vehicle. No mixing of codes."
             stats={["12 rounds", "120 questions", "4 vehicle categories", "Exam mode"]}
             onClick={() => onSelect("roadrules")}
-          />
-          <GameCard
-            accentColor={T.blue}
-            tag="Drill 5 · Road Signs · SVG Visual Quiz"
-            title="Know Your Signs"
-            description="Visual road sign recognition — see the actual sign, pick the correct meaning. Covers regulatory (circles), warning (triangles), guidance (squares), and road markings. Study mode included."
-            stats={["4 categories", "38 signs", "Study mode", "Timed mode"]}
-            onClick={() => onSelect("roadsigns")}
           />
         </div>
 
@@ -164,9 +161,16 @@ function HomePage({ onSelect }) {
       </div>
 
       {/* footer */}
-      <div style={{ borderTop: `1px solid ${T.border}`, padding: "20px", textAlign: "center" }}>
-        <p style={{ color: T.dim, fontSize: 13 }}>
-          Free for all South African learners · K53 questions based on the NRTA Road Traffic Act
+      <div style={{ borderTop: `1px solid ${T.border}`, padding: "24px 20px", textAlign: "center" }}>
+        <p style={{ color: T.dim, fontSize: 13, marginBottom: 6 }}>
+          Free for all South African learners · Questions sourced from the DLTC / Traffic Department official manuals
+        </p>
+        <p style={{ color: T.dim, fontSize: 12 }}>
+          © 2026 <span style={{ color: T.text }}>Nandawula Kabali-Kagwa</span>
+          {" · "}Built with{" "}
+          <span style={{ color: T.text }}>React</span>,{" "}
+          <span style={{ color: T.text }}>Vite</span>{" "}
+          &amp; <span style={{ color: T.text }}>Vercel</span>
         </p>
       </div>
       <FlagStripe />
@@ -182,7 +186,7 @@ export default function App() {
   if (activeGame === "hybrid")     return <HybridGauntlet    onBack={() => setActiveGame(null)} />;
   if (activeGame === "patterns")   return <PatternTrainer     onBack={() => setActiveGame(null)} />;
   if (activeGame === "roadrules")  return <RoadRulesGauntlet  onBack={() => setActiveGame(null)} />;
-  if (activeGame === "roadsigns")  return <RoadSignsQuiz      onBack={() => setActiveGame(null)} />;
+  // if (activeGame === "roadsigns")  return <RoadSignsQuiz      onBack={() => setActiveGame(null)} />; // coming soon
 
   return <HomePage onSelect={setActiveGame} />;
 }
