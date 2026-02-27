@@ -4,6 +4,7 @@ import Gauntlet from "./games/Gauntlet.jsx";
 import HybridGauntlet from "./games/HybridGauntlet.jsx";
 import PatternTrainer from "./games/PatternTrainer.jsx";
 import RoadRulesGauntlet from "./games/RoadRulesGauntlet.jsx";
+import RoadSignsQuiz from "./games/RoadSignsQuiz.jsx";
 
 // ── SA flag colour stripe ──────────────────────────────────────────────────────
 function FlagStripe() {
@@ -131,6 +132,14 @@ function HomePage({ onSelect }) {
             stats={["12 rounds", "120 questions", "4 vehicle categories", "Exam mode"]}
             onClick={() => onSelect("roadrules")}
           />
+          <GameCard
+            accentColor={T.blue}
+            tag="Drill 5 · Road Signs · SVG Visual Quiz"
+            title="Know Your Signs"
+            description="Visual road sign recognition — see the actual sign, pick the correct meaning. Covers regulatory (circles), warning (triangles), guidance (squares), and road markings. Study mode included."
+            stats={["4 categories", "38 signs", "Study mode", "Timed mode"]}
+            onClick={() => onSelect("roadsigns")}
+          />
         </div>
 
         {/* tip box */}
@@ -173,6 +182,7 @@ export default function App() {
   if (activeGame === "hybrid")     return <HybridGauntlet    onBack={() => setActiveGame(null)} />;
   if (activeGame === "patterns")   return <PatternTrainer     onBack={() => setActiveGame(null)} />;
   if (activeGame === "roadrules")  return <RoadRulesGauntlet  onBack={() => setActiveGame(null)} />;
+  if (activeGame === "roadsigns")  return <RoadSignsQuiz      onBack={() => setActiveGame(null)} />;
 
   return <HomePage onSelect={setActiveGame} />;
 }
