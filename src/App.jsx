@@ -78,7 +78,7 @@ function HomePage({ onSelect }) {
       <div style={{ background: T.surface, borderBottom: `1px solid ${T.border}`, padding: "28px 20px 24px" }}>
         <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
           <div style={{ fontSize: 11, letterSpacing: 5, color: T.dim, marginBottom: 10, fontFamily: T.mono, textTransform: "uppercase" }}>
-            South Africa · Code 8 · Learner's Licence
+            South Africa · Codes 1, 2, 3, 8, 10 &amp; 14 · Learner's Licence
           </div>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
             <div style={{ width: 5, height: 44, background: T.green, borderRadius: 2 }} />
