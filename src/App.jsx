@@ -3,6 +3,7 @@ import { T } from "./theme.js";
 import Gauntlet from "./games/Gauntlet.jsx";
 import HybridGauntlet from "./games/HybridGauntlet.jsx";
 import PatternTrainer from "./games/PatternTrainer.jsx";
+import RoadRulesGauntlet from "./games/RoadRulesGauntlet.jsx";
 
 // ── SA flag colour stripe ──────────────────────────────────────────────────────
 function FlagStripe() {
@@ -122,6 +123,14 @@ function HomePage({ onSelect }) {
             stats={["Pattern map", "41 quiz questions", "Speed match (15s)"]}
             onClick={() => onSelect("patterns")}
           />
+          <GameCard
+            accentColor={T.red}
+            tag="Drill 4 · Road Rules · By Vehicle Code"
+            title="Road Rules Gauntlet"
+            description="120 road rules questions organised by vehicle type — general rules for all drivers, then Code 3 LMV, Code 1/2 Motorcycle, and Code 10/14 Heavy Vehicle. No mixing of codes."
+            stats={["12 rounds", "120 questions", "4 vehicle categories", "Exam mode"]}
+            onClick={() => onSelect("roadrules")}
+          />
         </div>
 
         {/* tip box */}
@@ -160,9 +169,10 @@ function HomePage({ onSelect }) {
 export default function App() {
   const [activeGame, setActiveGame] = useState(null);
 
-  if (activeGame === "gauntlet")  return <Gauntlet      onBack={() => setActiveGame(null)} />;
-  if (activeGame === "hybrid")    return <HybridGauntlet onBack={() => setActiveGame(null)} />;
-  if (activeGame === "patterns")  return <PatternTrainer  onBack={() => setActiveGame(null)} />;
+  if (activeGame === "gauntlet")   return <Gauntlet          onBack={() => setActiveGame(null)} />;
+  if (activeGame === "hybrid")     return <HybridGauntlet    onBack={() => setActiveGame(null)} />;
+  if (activeGame === "patterns")   return <PatternTrainer     onBack={() => setActiveGame(null)} />;
+  if (activeGame === "roadrules")  return <RoadRulesGauntlet  onBack={() => setActiveGame(null)} />;
 
   return <HomePage onSelect={setActiveGame} />;
 }
