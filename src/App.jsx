@@ -284,7 +284,7 @@ function HomePage({ onSelect }) {
         <p style={{ color: T.dim, fontSize: 12 }}>
           Built by{" "}
           <a href="https://creativelynanda.co.za" target="_blank" rel="noreferrer" style={{ color: T.text, textDecoration: "none" }}>
-            Nanda Regine
+            Nandawula Kabali-Kagwa
           </a>
           {" · "}Creative Technologist · AI Engineer
         </p>
