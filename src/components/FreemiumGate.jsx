@@ -79,7 +79,7 @@ export default function FreemiumGate({ onClose, onUpgrade }) {
             onClick={() => goCheckout("monthly")}
             style={{ background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "center" }}
           >
-            <div style={{ color: T.gold, fontSize: 26, fontWeight: 700 }}>R49</div>
+            <div style={{ color: T.gold, fontSize: 26, fontWeight: 700 }}>R29</div>
             <div style={{ color: T.dim, fontSize: 11, fontFamily: T.mono, letterSpacing: 2 }}>PER MONTH</div>
           </button>
           <div style={{ width: 1, background: T.border }} />
@@ -87,7 +87,7 @@ export default function FreemiumGate({ onClose, onUpgrade }) {
             onClick={() => goCheckout("bundle")}
             style={{ background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "center" }}
           >
-            <div style={{ color: T.green, fontSize: 26, fontWeight: 700 }}>R149</div>
+            <div style={{ color: T.green, fontSize: 26, fontWeight: 700 }}>R69</div>
             <div style={{ color: T.dim, fontSize: 11, fontFamily: T.mono, letterSpacing: 2 }}>3 MONTHS</div>
           </button>
         </div>
@@ -113,7 +113,7 @@ export default function FreemiumGate({ onClose, onUpgrade }) {
           onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
           onMouseLeave={e => e.currentTarget.style.opacity = "1"}
         >
-          Unlock R49/month →
+          Unlock R29/month →
         </button>
         <button
           onClick={() => goCheckout("bundle")}
@@ -131,7 +131,7 @@ export default function FreemiumGate({ onClose, onUpgrade }) {
             marginBottom: 8,
           }}
         >
-          3 months for R149 — save R49 →
+          3 months for R69 — save R18 →
         </button>
         <button
           onClick={onClose}

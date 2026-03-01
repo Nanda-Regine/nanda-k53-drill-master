@@ -213,7 +213,7 @@ function HomePage({ onSelect, session, subMsg, onSignIn, onSignOut }) {
                 ⚠ You've used your 10 free questions today
               </div>
               <div style={{ color: T.dim, fontSize: 12 }}>
-                Unlock unlimited practice for R49/month
+                Unlock unlimited practice for R29/month
               </div>
             </div>
             <a href="/pricing.html" style={{
