@@ -7,12 +7,12 @@ import crypto from 'crypto';
 const PLANS = {
   monthly: {
     label:  'K53 Drill Master — 1 Month Unlimited',
-    amount: '49.00',
+    amount: '29.00',
     days:   30,
   },
   bundle: {
     label:  'K53 Drill Master — 3 Months Unlimited',
-    amount: '149.00',
+    amount: '69.00',
     days:   90,
   },
 };
