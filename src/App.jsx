@@ -7,6 +7,8 @@ import RoadRulesGauntlet from "./games/RoadRulesGauntlet.jsx";
 import MockExam from "./games/MockExam.jsx";
 import Progress from "./games/Progress.jsx";
 import { getRemainingQuestions, isPremium, isInFreeTrial, daysLeftInTrial, storePremiumToken, DAILY_LIMIT } from "./freemium.js";
+import { supabase } from "./supabase.js";
+import AuthModal from "./components/AuthModal.jsx";
 
 // ── SA flag colour stripe ──────────────────────────────────────────────────────
 function FlagStripe() {
@@ -113,8 +115,51 @@ function GameCard({ accentColor, tag, title, description, stats, onClick, badge 
   );
 }
 
+// ── Auth widget (sign-in button or user info) ─────────────────────────────────
+function AuthWidget({ session, subMsg, onSignIn, onSignOut }) {
+  if (!session) {
+    return (
+      <button
+        onClick={onSignIn}
+        style={{
+          background: "transparent", border: `1px solid ${T.borderBright}`,
+          color: T.dim, borderRadius: 3, padding: "4px 12px",
+          fontSize: 11, fontFamily: T.mono, cursor: "pointer",
+          transition: "color 0.15s, border-color 0.15s",
+        }}
+        onMouseEnter={e => { e.currentTarget.style.color = T.gold; e.currentTarget.style.borderColor = T.gold; }}
+        onMouseLeave={e => { e.currentTarget.style.color = T.dim; e.currentTarget.style.borderColor = T.borderBright; }}
+      >
+        Sign In
+      </button>
+    );
+  }
+  const email = session.user?.email ?? "";
+  const isSubscriber = isPremium() && localStorage.getItem("k53_premium") === "true";
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+      <span style={{ color: isSubscriber ? T.green : T.dim, fontSize: 11, fontFamily: T.mono }}>
+        {isSubscriber ? "✓ UNLIMITED" : "⚠ No active plan"} · {email}
+      </span>
+      {subMsg && (
+        <span style={{ color: T.red, fontSize: 11, fontFamily: T.mono }}>{subMsg}</span>
+      )}
+      <button
+        onClick={onSignOut}
+        style={{
+          background: "transparent", border: `1px solid ${T.border}`,
+          color: T.dim, borderRadius: 3, padding: "3px 10px",
+          fontSize: 11, fontFamily: T.mono, cursor: "pointer",
+        }}
+      >
+        Sign Out
+      </button>
+    </div>
+  );
+}
+
 // ── home page ─────────────────────────────────────────────────────────────────
-function HomePage({ onSelect }) {
+function HomePage({ onSelect, session, subMsg, onSignIn, onSignOut }) {
   const remaining = getRemainingQuestions();
   const trial = isInFreeTrial();
   const premium = isPremium(); // true during trial OR with paid key
@@ -139,8 +184,11 @@ function HomePage({ onSelect }) {
           <div style={{ color: T.dim, fontSize: 12, letterSpacing: 2, fontFamily: T.mono, marginBottom: 14 }}>
             SOUTH AFRICA'S #1 LICENCE PREP PLATFORM
           </div>
-          <div style={{ marginBottom: 14 }}>
+          <div style={{ marginBottom: 10 }}>
             <UsageBadge />
+          </div>
+          <div style={{ marginBottom: 14 }}>
+            <AuthWidget session={session} subMsg={subMsg} onSignIn={onSignIn} onSignOut={onSignOut} />
           </div>
           <p style={{ color: T.dim, fontSize: 13, lineHeight: 1.6, maxWidth: 480, margin: "0 auto" }}>
             All questions from the official{" "}
@@ -319,6 +367,53 @@ function UnlockBanner({ status }) {
 export default function App() {
   const [activeGame, setActiveGame] = useState(null);
   const [unlockStatus, setUnlockStatus] = useState(null); // null | "checking" | "success" | "failed"
+  const [session, setSession] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [subMsg, setSubMsg] = useState(null); // brief message after login (no subscription found, etc.)
+
+  // Check Supabase subscribers table for a valid subscription
+  async function checkSubscription(user) {
+    try {
+      const { data, error } = await supabase
+        .from("subscribers")
+        .select("plan, expires_at")
+        .eq("user_id", user.id)
+        .gt("expires_at", new Date().toISOString())
+        .maybeSingle();
+
+      if (error) throw error;
+      if (data) {
+        storePremiumToken(data.plan, data.expires_at);
+        setSubMsg(null);
+      } else {
+        setSubMsg("No active subscription found. Contact us on WhatsApp.");
+      }
+    } catch {
+      setSubMsg("Could not verify subscription. Check your connection.");
+    }
+  }
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    setSession(null);
+    setSubMsg(null);
+  }
+
+  // Listen for Supabase auth state changes (including magic link callback)
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      if (data.session) checkSubscription(data.session.user);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+      if (newSession) {
+        checkSubscription(newSession.user);
+        setShowAuthModal(false); // close modal on successful sign-in
+      }
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   // Handle PayFast return URL: /?unlock=TOKEN or /?cancelled=true
   useEffect(() => {
@@ -362,7 +457,14 @@ export default function App() {
   return (
     <>
       <UnlockBanner status={unlockStatus} />
-      <HomePage onSelect={setActiveGame} />
+      <HomePage
+        onSelect={setActiveGame}
+        session={session}
+        subMsg={subMsg}
+        onSignIn={() => setShowAuthModal(true)}
+        onSignOut={handleSignOut}
+      />
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
     </>
   );
 }
