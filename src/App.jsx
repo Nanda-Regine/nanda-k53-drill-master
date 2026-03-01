@@ -374,6 +374,7 @@ export default function App() {
 
   // Check Supabase subscribers table for a valid subscription
   async function checkSubscription(user) {
+    if (!supabase) return;
     try {
       const { data, error } = await supabase
         .from("subscribers")
@@ -395,13 +396,14 @@ export default function App() {
   }
 
   async function handleSignOut() {
-    await supabase.auth.signOut();
+    if (supabase) await supabase.auth.signOut();
     setSession(null);
     setSubMsg(null);
   }
 
   // Listen for Supabase auth state changes (including magic link callback)
   useEffect(() => {
+    if (!supabase) return;
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       if (data.session) checkSubscription(data.session.user);

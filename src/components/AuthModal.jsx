@@ -46,6 +46,11 @@ export default function AuthModal({ onClose, claimToken }) {
       }
     } else {
       // Returning subscriber — send a plain magic link
+      if (!supabase) {
+        setErrorMsg("Auth service unavailable. Contact us on WhatsApp.");
+        setUiState("error");
+        return;
+      }
       const { error } = await supabase.auth.signInWithOtp({
         email: trimmed,
         options: { emailRedirectTo: window.location.origin },
