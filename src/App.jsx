@@ -369,6 +369,7 @@ export default function App() {
   const [unlockStatus, setUnlockStatus] = useState(null); // null | "checking" | "success" | "failed"
   const [session, setSession] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [claimToken, setClaimToken] = useState(null); // set after payment so modal can activate subscriber
   const [subMsg, setSubMsg] = useState(null); // brief message after login (no subscription found, etc.)
 
   // Check Supabase subscribers table for a valid subscription
@@ -434,6 +435,8 @@ export default function App() {
           if (data.valid) {
             storePremiumToken(data.plan, data.expiry);
             setUnlockStatus("success");
+            setClaimToken(token); // open claim modal so user can activate on any device
+            setTimeout(() => setShowAuthModal(true), 1800);
           } else {
             setUnlockStatus("failed");
           }
@@ -464,7 +467,12 @@ export default function App() {
         onSignIn={() => setShowAuthModal(true)}
         onSignOut={handleSignOut}
       />
-      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+      {showAuthModal && (
+        <AuthModal
+          onClose={() => { setShowAuthModal(false); setClaimToken(null); }}
+          claimToken={claimToken}
+        />
+      )}
     </>
   );
 }
