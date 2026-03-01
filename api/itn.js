@@ -1,10 +1,47 @@
 // api/itn.js — Vercel serverless function
 // PayFast Instant Transaction Notification (ITN) handler.
-// PayFast POSTs here server-to-server when a payment completes/fails.
+// PayFast POSTs here server-to-server when a payment completes.
+// On COMPLETE: creates/finds the Supabase user and upserts their subscriber row,
+// then sends them a magic link invitation email automatically.
 
 import crypto from 'crypto';
+import { createClient } from '@supabase/supabase-js';
 
-export default function handler(req, res) {
+const PLAN_DAYS = { monthly: 30, bundle: 90 };
+
+function adminClient() {
+  return createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  );
+}
+
+async function activateSubscriber(email, plan) {
+  const supabase = adminClient();
+  const days = PLAN_DAYS[plan] || 30;
+  const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+  const siteUrl = process.env.SITE_URL || 'https://nanda-k53-drill-master.vercel.app';
+
+  // Invite user by email — creates account if new, sends magic link either way.
+  // The subscriber receives a "sign in to activate your account" email automatically.
+  const { data, error: inviteErr } = await supabase.auth.admin.inviteUserByEmail(email, {
+    redirectTo: siteUrl,
+  });
+  if (inviteErr) throw new Error(`Invite failed: ${inviteErr.message}`);
+
+  const userId = data.user.id;
+
+  // Upsert subscriber row (handles renewals / plan changes)
+  const { error: dbErr } = await supabase
+    .from('subscribers')
+    .upsert({ user_id: userId, email, plan, expires_at: expiresAt }, { onConflict: 'user_id' });
+  if (dbErr) throw new Error(`DB upsert failed: ${dbErr.message}`);
+
+  console.log(`[ITN] Activated: ${email} | plan=${plan} | expires=${expiresAt}`);
+}
+
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).send('Method Not Allowed');
   }
@@ -31,22 +68,20 @@ export default function handler(req, res) {
     return res.status(400).send('Invalid signature');
   }
 
-  // ── 2. Log the payment ────────────────────────────────────────────────────
+  // ── 2. Activate subscriber on COMPLETE ────────────────────────────────────
   const status = data.payment_status;
-  const log = {
-    payment_id:  data.pf_payment_id,
-    status,
-    amount:      data.amount_gross,
-    plan:        data.custom_str1,
-    email:       data.email_address,
-    name:        `${data.name_first || ''} ${data.name_last || ''}`.trim(),
-    timestamp:   new Date().toISOString(),
-  };
+  const email  = data.email_address;
+  const plan   = data.custom_str1 || 'monthly';
 
   if (status === 'COMPLETE') {
-    console.log('[ITN] Payment COMPLETE:', JSON.stringify(log));
+    try {
+      await activateSubscriber(email, plan);
+    } catch (err) {
+      // Log but still return 200 — PayFast retries on non-200, which we don't want
+      console.error('[ITN] Activation error:', err.message);
+    }
   } else {
-    console.log(`[ITN] Payment ${status}:`, JSON.stringify(log));
+    console.log(`[ITN] Payment ${status}: ${email}`);
   }
 
   // ── 3. Acknowledge to PayFast ─────────────────────────────────────────────
