@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { incrementQuestionCount, isGateHit, isPremium } from "../freemium.js";
+import FreemiumGate from "../components/FreemiumGate.jsx";
+import AITutor from "../components/AITutor.jsx";
 
 const TESTS = [
   {
@@ -643,6 +646,7 @@ export default function Code8Gauntlet({ onBack }) {
   const [currentStreak, setCurrentStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
   const [wrongAnswers, setWrongAnswers] = useState([]);
+  const [showGate, setShowGate] = useState(false);
   const [isExamMode, setIsExamMode] = useState(false);
   const [examQuestions, setExamQuestions] = useState([]);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -684,6 +688,11 @@ export default function Code8Gauntlet({ onBack }) {
 
   const handleSelect = (i) => {
     if (answered) return;
+    // ── Freemium gate ──
+    if (!incrementQuestionCount()) {
+      setShowGate(true);
+      return;
+    }
     clearInterval(timerRef.current);
     setSelected(i);
     setAnswered(true);
@@ -865,6 +874,8 @@ export default function Code8Gauntlet({ onBack }) {
     const timerColor = timeLeft > 15 ? "#007A4D" : timeLeft > 7 ? "#FFB612" : "#DE3831";
 
     return (
+      <>
+        {showGate && <FreemiumGate onClose={() => { setShowGate(false); setScreen("home"); }} />}
       <div style={{ minHeight: "100vh", background: "#060D07", fontFamily: "'Georgia', 'Times New Roman', serif", padding: "20px 16px" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
           {/* Header */}
@@ -939,6 +950,14 @@ export default function Code8Gauntlet({ onBack }) {
                 {selected === null ? "⏱ TIME'S UP — LEARN THIS" : isCorrect ? "✓ CORRECT" : "✗ WRONG — LEARN THIS"}
               </div>
               <div style={{ color: "#999", fontSize: 12, lineHeight: 1.6 }}>{currentQ.explain}</div>
+              {/* AI Tutor — only on wrong answers */}
+              {!isCorrect && answered && selected !== null && (
+                <AITutor
+                  question={currentQ.q}
+                  correctAnswer={currentQ.options[currentQ.answer]}
+                  chosenAnswer={currentQ.options[selected]}
+                />
+              )}
             </div>
           )}
 
@@ -949,6 +968,7 @@ export default function Code8Gauntlet({ onBack }) {
           )}
         </div>
       </div>
+      </>
     );
   }
 

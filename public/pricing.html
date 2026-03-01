@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>K53 Drill Master — Pricing</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:  #007A4D;
+      --gold:   #FFB612;
+      --red:    #DE3831;
+      --blue:   #4472CA;
+      --white:  #F5F5F0;
+      --bg:     #060D07;
+      --surface:#0D1F10;
+      --surfaceAlt: #122116;
+      --border: #1A3020;
+      --borderBright: #2A5035;
+      --text:   #E8EDE0;
+      --dim:    #6B7A62;
+      --font:   'Georgia', 'Times New Roman', serif;
+      --mono:   'Courier New', monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+    }
+
+    /* SA flag stripe */
+    .flag-stripe {
+      display: flex;
+      height: 6px;
+      width: 100%;
+    }
+    .flag-stripe div { flex: 1; }
+    .s1 { background: #000; }
+    .s2 { background: var(--gold); }
+    .s3 { background: var(--green); }
+    .s4 { background: var(--white); }
+    .s5 { background: var(--red); }
+    .s6 { background: var(--blue); }
+
+    /* nav */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-title {
+      color: var(--gold);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .nav-back {
+      color: var(--dim);
+      font-size: 13px;
+      font-family: var(--mono);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 3px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .nav-back:hover { color: var(--text); border-color: var(--borderBright); }
+
+    /* hero */
+    .hero {
+      text-align: center;
+      padding: 60px 20px 48px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .hero-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      color: var(--dim);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* pricing grid */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .plan-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .plan-card:hover { border-color: var(--borderBright); }
+    .plan-card.featured {
+      border-color: var(--gold);
+      background: #0F2413;
+    }
+    .plan-card.featured:hover { border-color: #ffc93d; }
+
+    .featured-badge {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: #060D07;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .plan-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .plan-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .plan-price {
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .plan-period {
+      font-size: 13px;
+      color: var(--dim);
+      margin-bottom: 28px;
+    }
+    .plan-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 24px;
+    }
+    .plan-features {
+      list-style: none;
+      flex: 1;
+      margin-bottom: 28px;
+    }
+    .plan-features li {
+      color: var(--dim);
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 6px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .plan-features li .check {
+      flex-shrink: 0;
+      font-size: 13px;
+      margin-top: 1px;
+    }
+    .plan-features li.active { color: var(--text); }
+    .plan-features li.active .check { color: var(--green); }
+    .plan-features li:not(.active) .check { color: var(--border); }
+
+    .plan-btn {
+      display: block;
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 4px;
+      border: none;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .plan-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .plan-btn:active { transform: translateY(0); }
+
+    .btn-free {
+      background: var(--surfaceAlt);
+      border: 1px solid var(--borderBright);
+      color: var(--text);
+    }
+    .btn-premium {
+      background: var(--gold);
+      color: #060D07;
+    }
+    .btn-bundle {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    /* value strip */
+    .value-strip {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 20px;
+      text-align: center;
+      margin-bottom: 0;
+    }
+    .value-strip h2 {
+      color: var(--gold);
+      font-size: 20px;
+      margin-bottom: 24px;
+      letter-spacing: -0.3px;
+    }
+    .value-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .value-stat-num {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .value-stat-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    /* faq */
+    .faq {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 48px 20px;
+    }
+    .faq h2 {
+      font-size: 22px;
+      color: var(--gold);
+      margin-bottom: 28px;
+      letter-spacing: -0.3px;
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+    }
+    .faq-q {
+      font-size: 15px;
+      color: var(--text);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .faq-a {
+      font-size: 14px;
+      color: var(--dim);
+      line-height: 1.7;
+    }
+
+    /* footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 20px;
+      text-align: center;
+    }
+    footer p {
+      color: var(--dim);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    footer a {
+      color: var(--text);
+      text-decoration: none;
+    }
+    footer a:hover { color: var(--gold); }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 28px; }
+      .plan-price { font-size: 34px; }
+      .value-stats { gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="flag-stripe">
+  <div class="s1"></div><div class="s2"></div><div class="s3"></div>
+  <div class="s4"></div><div class="s5"></div><div class="s6"></div>
+</div>
+
+<nav class="nav">
+  <div class="nav-title">K53 Drill Master</div>
+  <a href="/" class="nav-back">← Back to Drills</a>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-label">South Africa's #1 Licence Prep Platform</div>
+  <h1>Simple, Honest Pricing</h1>
+  <p>Start free. Upgrade when you're ready to go all-in on passing your test.</p>
+</div>
+
+<!-- Pricing cards -->
+<div class="pricing-grid">
+
+  <!-- Free -->
+  <div class="plan-card">
+    <div class="plan-tag">Tier 1</div>
+    <div class="plan-name">Free</div>
+    <div class="plan-price" style="color: var(--dim);">R0</div>
+    <div class="plan-period">always free</div>
+    <div class="plan-divider"></div>
+    <ul class="plan-features">
+      <li class="active"><span class="check">✓</span> 10 questions per day</li>
+      <li class="active"><span class="check">✓</span> All 4 drill modes</li>
+      <li class="active"><span class="check">✓</span> Basic score feedback</li>
+      <li><span class="check">✓</span> Mock exam mode</li>
+      <li><span class="check">✓</span> Progress tracking</li>
+      <li><span class="check">✓</span> AI Tutor explanations</li>
+      <li><span class="check">✓</span> Unlimited practice</li>
+    </ul>
+    <a href="/" class="plan-btn btn-free">Start Free</a>
+  </div>
+
+  <!-- Premium -->
+  <div class="plan-card featured">
+    <div class="featured-badge">MOST POPULAR</div>
+    <div class="plan-tag">Tier 2</div>
+    <div class="plan-name">Premium</div>
+    <div class="plan-price" style="color: var(--gold);">R49</div>
+    <div class="plan-period">per month</div>
+    <div class="plan-divider"></div>
+    <ul class="plan-features">
+      <li class="active"><span class="check">✓</span> Unlimited questions — no daily cap</li>
+      <li class="active"><span class="check">✓</span> All 4 drill modes</li>
+      <li class="active"><span class="check">✓</span> Full score & category analytics</li>
+      <li class="active"><span class="check">✓</span> Mock exam mode (68 questions)</li>
+      <li class="active"><span class="check">✓</span> Progress tracking dashboard</li>
+      <li class="active"><span class="check">✓</span> 🤖 AI Tutor explanations</li>
+      <li class="active"><span class="check">✓</span> Priority support via WhatsApp</li>
+    </ul>
+    <a href="/api/checkout?plan=monthly" class="plan-btn btn-premium">Unlock Unlimited →</a>
+  </div>
+
+  <!-- Bundle -->
+  <div class="plan-card">
+    <div class="plan-tag">Tier 3 · Best Value</div>
+    <div class="plan-name">Bundle</div>
+    <div class="plan-price" style="color: var(--green);">R149</div>
+    <div class="plan-period">3 months — save R‍49</div>
+    <div class="plan-divider"></div>
+    <ul class="plan-features">
+      <li class="active"><span class="check">✓</span> Everything in Premium</li>
+      <li class="active"><span class="check">✓</span> 3 months unlimited access</li>
+      <li class="active"><span class="check">✓</span> 🤖 AI Tutor explanations</li>
+      <li class="active"><span class="check">✓</span> Priority feature requests</li>
+      <li class="active"><span class="check">✓</span> Direct WhatsApp line to Nanda</li>
+      <li class="active"><span class="check">✓</span> Progress tracking dashboard</li>
+      <li class="active"><span class="check">✓</span> Mock exam mode (68 questions)</li>
+    </ul>
+    <a href="/api/checkout?plan=bundle" class="plan-btn btn-bundle">Get the Bundle →</a>
+  </div>
+
+</div>
+
+<!-- Value strip -->
+<div class="value-strip">
+  <h2>Why K53 Drill Master?</h2>
+  <div class="value-stats">
+    <div>
+      <div class="value-stat-num">300+</div>
+      <div class="value-stat-label">Practice Questions</div>
+    </div>
+    <div>
+      <div class="value-stat-num">4</div>
+      <div class="value-stat-label">Drill Modes</div>
+    </div>
+    <div>
+      <div class="value-stat-num">100%</div>
+      <div class="value-stat-label">SA DLTC Sourced</div>
+    </div>
+    <div>
+      <div class="value-stat-num">R49</div>
+      <div class="value-stat-label">Less than one lesson</div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq">
+  <h2>Questions & Answers</h2>
+
+  <div class="faq-item">
+    <div class="faq-q">How does the free tier work?</div>
+    <div class="faq-a">Your first 30 days are completely free and unlimited — no credit card required. After that, you get 10 practice questions per day forever. The counter resets at midnight.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">How do I pay? Is it secure?</div>
+    <div class="faq-a">Payment goes through PayFast — South Africa's most trusted payment gateway. You can pay by card, EFT, SnapScan, or Mobicred. No card details are stored on our servers. After payment, the app unlocks automatically.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">What's the AI Tutor?</div>
+    <div class="faq-a">When you answer a question incorrectly, a "Explain This" button appears. The AI Tutor gives you a 2–3 sentence explanation referencing the exact K53 road rule — in plain South African English.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">What is Mock Exam mode?</div>
+    <div class="faq-a">68 randomly selected questions — the same length as the real DLTC learner's test. You get a 45-minute countdown timer. 75% (51/68) is the pass mark, same as the real exam.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Can I get a refund?</div>
+    <div class="faq-a">If you're not happy within the first 7 days, message Nanda on WhatsApp for a full refund. No questions asked.</div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>
+    K53 Drill Master — South Africa's #1 Licence Prep Platform<br/>
+    Questions from the official DLTC / Traffic Department manuals<br/>
+    <a href="/">← Back to Practice</a> ·
+    <a href="https://wa.me/27842916742" target="_blank">WhatsApp Support</a>
+  </p>
+  <p style="margin-top: 10px;">
+    Built by <a href="https://creativelynanda.co.za" target="_blank">Nanda Regine</a>
+    · Creative Technologist · AI Engineer
+  </p>
+</footer>
+
+<div class="flag-stripe">
+  <div class="s1"></div><div class="s2"></div><div class="s3"></div>
+  <div class="s4"></div><div class="s5"></div><div class="s6"></div>
+</div>
+
+</body>
+</html>

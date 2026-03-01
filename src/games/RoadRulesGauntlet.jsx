@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { incrementQuestionCount } from "../freemium.js";
+import FreemiumGate from "../components/FreemiumGate.jsx";
+import AITutor from "../components/AITutor.jsx";
 
 // ─── QUESTION DATA ────────────────────────────────────────────────────────────
 // vehicleType: "general" | "lmv" | "motorcycle" | "hmv"
@@ -889,6 +892,7 @@ export default function RoadRulesGauntlet({ onBack }) {
   const [currentStreak, setCurrentStreak] = useState(0);
   const [bestStreak, setBestStreak]     = useState(0);
   const [wrongAnswers, setWrongAnswers] = useState([]);
+  const [showGate, setShowGate] = useState(false);
   const [isExamMode, setIsExamMode]     = useState(false);
   const [examQuestions, setExamQuestions] = useState([]);
   const [timeLeft, setTimeLeft]         = useState(0);
@@ -929,6 +933,7 @@ export default function RoadRulesGauntlet({ onBack }) {
 
   const handleSelect = (i) => {
     if (answered) return;
+    if (!incrementQuestionCount()) { setShowGate(true); return; }
     clearInterval(timerRef.current);
     setSelected(i);
     setAnswered(true);
@@ -1109,6 +1114,8 @@ export default function RoadRulesGauntlet({ onBack }) {
     const timerPct  = timedMode ? (timeLeft / 30) * 100 : 100;
     const timerColor = timeLeft > 15 ? "#007A4D" : timeLeft > 8 ? "#FFB612" : "#DE3831";
     return (
+      <>
+        {showGate && <FreemiumGate onClose={() => { setShowGate(false); setScreen("home"); }} />}
       <div style={{ minHeight:"100vh", background:BG, fontFamily:FONT, padding:"20px 16px", color:TEXT }}>
         <div style={{ display:"flex", height:6, width:"100%", position:"fixed", top:0, left:0, zIndex:10 }}>
           {["#000000","#FFB612","#007A4D","#F5F5F0","#DE3831","#4472CA"].map((c,i) => <div key={i} style={{flex:1,background:c}} />)}
@@ -1187,6 +1194,9 @@ export default function RoadRulesGauntlet({ onBack }) {
                 {selected === null ? "⏱ TIME'S UP" : isCorrect ? "✓ CORRECT" : "✗ INCORRECT"}
               </div>
               <p style={{ color:TEXT, fontSize:14, lineHeight:1.7, margin:0 }}>{currentQ.explain}</p>
+              {!isCorrect && answered && selected !== null && (
+                <AITutor question={currentQ.q} correctAnswer={currentQ.options[currentQ.answer]} chosenAnswer={currentQ.options[selected]} />
+              )}
             </div>
           )}
 
@@ -1197,6 +1207,7 @@ export default function RoadRulesGauntlet({ onBack }) {
           )}
         </div>
       </div>
+      </>
     );
   }
 

@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { incrementQuestionCount } from "../freemium.js";
+import FreemiumGate from "../components/FreemiumGate.jsx";
+import AITutor from "../components/AITutor.jsx";
 
 const TESTS = [
   {
@@ -711,6 +714,7 @@ export default function UltimateGauntlet({ onBack }) {
   const [currentStreak, setCurrentStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
   const [wrongAnswers, setWrongAnswers] = useState([]);
+  const [showGate, setShowGate] = useState(false);
   const [isExamMode, setIsExamMode] = useState(false);
   const [examQuestions, setExamQuestions] = useState([]);
   const [timedMode, setTimedMode] = useState(false);
@@ -741,6 +745,7 @@ export default function UltimateGauntlet({ onBack }) {
 
   const handleSelect = (i) => {
     if (answered) return;
+    if (!incrementQuestionCount()) { setShowGate(true); return; }
     clearInterval(timerRef.current);
     setSelected(i); setAnswered(true);
     if (i === currentQ.answer) {
@@ -879,6 +884,8 @@ export default function UltimateGauntlet({ onBack }) {
     const timerPct = timedMode ? (timeLeft / 30) * 100 : 100;
     const timerColor = timeLeft > 15 ? "#007A4D" : timeLeft > 7 ? "#FFB612" : "#DE3831";
     return (
+      <>
+        {showGate && <FreemiumGate onClose={() => { setShowGate(false); setScreen("home"); }} />}
       <div style={{ minHeight: "100vh", background: "#060D07", fontFamily: "'Georgia', 'Times New Roman', serif", padding: "20px 16px" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
@@ -944,6 +951,9 @@ export default function UltimateGauntlet({ onBack }) {
                 {selected === null ? "⏱ TIME'S UP — MEMORISE THIS" : isCorrect ? "✓ CORRECT" : "✗ WRONG — BURN THIS IN"}
               </div>
               <div style={{ color: "#888", fontSize: 12, lineHeight: 1.7 }}>{currentQ.explain}</div>
+              {!isCorrect && answered && selected !== null && (
+                <AITutor question={currentQ.q} correctAnswer={currentQ.options[currentQ.answer]} chosenAnswer={currentQ.options[selected]} />
+              )}
             </div>
           )}
 
@@ -954,6 +964,7 @@ export default function UltimateGauntlet({ onBack }) {
           )}
         </div>
       </div>
+      </>
     );
   }
 

@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { incrementQuestionCount } from "../freemium.js";
+import FreemiumGate from "../components/FreemiumGate.jsx";
+import AITutor from "../components/AITutor.jsx";
 
 // ─── ALL PATTERNS GROUPED BY FAMILY ─────────────────────────────────────────
 const PATTERN_GROUPS = [
@@ -277,6 +280,7 @@ export default function PatternTrainer({ onBack }) {
   const [qIdx, setQIdx] = useState(0);
   const [selected, setSelected] = useState(null);
   const [answered, setAnswered] = useState(false);
+  const [showGate, setShowGate] = useState(false);
   const [score, setScore] = useState(0);
   const [wrongList, setWrongList] = useState([]);
   const [speedCards, setSpeedCards] = useState([]);
@@ -326,6 +330,7 @@ export default function PatternTrainer({ onBack }) {
 
   const handleQuizSelect = (opt) => {
     if (answered) return;
+    if (!incrementQuestionCount()) { setShowGate(true); return; }
     setSelected(opt);
     setAnswered(true);
     const q = quizQ[qIdx];
@@ -514,6 +519,8 @@ export default function PatternTrainer({ onBack }) {
     const q = quizQ[qIdx];
     const progress = (qIdx / quizQ.length) * 100;
     return (
+      <>
+        {showGate && <FreemiumGate onClose={() => { setShowGate(false); setMode("home"); }} />}
       <div style={{ minHeight:"100vh", background: BG, fontFamily:"'Georgia', 'Times New Roman', serif", padding:"20px 16px", color: TEXT }}>
         <div style={{ maxWidth:640, margin:"0 auto" }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:14 }}>
@@ -572,6 +579,7 @@ export default function PatternTrainer({ onBack }) {
           )}
         </div>
       </div>
+      </>
     );
   }
 
