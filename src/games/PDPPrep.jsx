@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import T from '../theme.js';
+import { awardBadge } from '../components/Badges.jsx';
 
 // ── Question Bank ─────────────────────────────────────────────────────────────
 // 6 modules × ~17 questions = 100 questions total
@@ -130,7 +131,6 @@ const QUESTIONS = [
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const HOURS_KEY  = 'k53_pdp_hours';
 const PROG_KEY   = 'k53_pdp_progress';
-const CERT_KEY   = 'k53_pdp_cert';
 
 function getHours() {
   try { return parseFloat(localStorage.getItem(HOURS_KEY) || '0'); } catch { return 0; }
@@ -143,12 +143,6 @@ function getProgress() {
 }
 function saveProgress(p) {
   try { localStorage.setItem(PROG_KEY, JSON.stringify(p)); } catch {}
-}
-function hasCert() {
-  try { return localStorage.getItem(CERT_KEY) === 'true'; } catch { return false; }
-}
-function awardCert() {
-  try { localStorage.setItem(CERT_KEY, 'true'); } catch {}
 }
 function moduleQuestions(moduleId) {
   return QUESTIONS.filter(q => q.module === moduleId);
@@ -165,46 +159,6 @@ function allModulesComplete(progress) {
   });
 }
 
-// ── PDF Certificate ───────────────────────────────────────────────────────────
-function generateCertPDF(hours) {
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
-  const html = `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><title>PDP Certificate</title>
-<style>
-  body { font-family: Georgia, serif; margin: 0; background: #f5f5f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-  .cert { background: white; width: 800px; padding: 60px; border: 8px double #007A4D; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
-  .flag { font-size: 48px; margin-bottom: 8px; }
-  h1 { color: #007A4D; font-size: 28px; margin: 0 0 4px; letter-spacing: 2px; text-transform: uppercase; }
-  h2 { color: #DE3831; font-size: 20px; margin: 0 0 32px; }
-  .title { font-size: 36px; font-weight: bold; color: #1a1a2e; margin: 24px 0 8px; }
-  .sub { font-size: 18px; color: #555; margin-bottom: 32px; }
-  .detail { font-size: 15px; color: #333; margin: 8px 0; }
-  .seal { margin: 32px auto; width: 100px; height: 100px; border: 4px solid #FFB612; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; background: #fffbe6; }
-  .footer { margin-top: 40px; font-size: 12px; color: #999; border-top: 1px solid #eee; padding-top: 16px; }
-</style></head>
-<body><div class="cert">
-  <div class="flag">🇿🇦</div>
-  <h1>K53 Drill Master</h1>
-  <h2>Professional Driving Permit Prep Programme</h2>
-  <div class="title">Certificate of Completion</div>
-  <div class="sub">This certifies that the holder has successfully completed all PDP preparation modules</div>
-  <div class="detail">📅 Date: <strong>${dateStr}</strong></div>
-  <div class="detail">⏱️ Study Hours Logged: <strong>${hours.toFixed(1)} hours</strong></div>
-  <div class="detail">📊 All 6 Modules Completed at ≥80% Pass Rate</div>
-  <div class="seal">🏆</div>
-  <div class="footer">This certificate is issued by K53 Drill Master for study purposes. It does not replace the official PDP examination issued by the RTMC or provincial authorities.</div>
-</div></body></html>`;
-
-  const blob = new Blob([html], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `PDP_Certificate_${now.toISOString().slice(0,10)}.html`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function PDPPrep({ onBack }) {
@@ -218,8 +172,6 @@ export default function PDPPrep({ onBack }) {
   const [progress, setProgress]     = useState(getProgress);
   const [hours, setHours]           = useState(getHours);
   const [sessionStart, setSessionStart] = useState(null);
-  const [certified, setCertified]   = useState(hasCert);
-
   // Track study time
   useEffect(() => {
     if (screen === 'module') setSessionStart(Date.now());
@@ -231,11 +183,10 @@ export default function PDPPrep({ onBack }) {
     }
   }, [screen]);
 
-  // Award cert when all modules pass
+  // Award PDP Ready badge when all modules pass
   useEffect(() => {
-    if (!certified && allModulesComplete(progress)) {
-      awardCert();
-      setCertified(true);
+    if (allModulesComplete(progress)) {
+      awardBadge('pdp_ready');
     }
   }, [progress]);
 
@@ -316,17 +267,14 @@ export default function PDPPrep({ onBack }) {
             </div>
           </div>
 
-          {/* Certificate */}
-          {certified && (
-            <div style={{ background: 'linear-gradient(135deg,#007A4D,#005a38)', borderRadius: 12, padding: 16, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ fontSize: 32 }}>🏆</span>
-              <div style={{ flex: 1 }}>
-                <div style={{ color: '#fff', fontWeight: 700 }}>All modules passed!</div>
-                <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: 13 }}>Download your certificate</div>
+          {/* PDP Ready badge */}
+          {allModulesComplete(progress) && (
+            <div style={{ background: 'linear-gradient(135deg,#1a0d40,#2d1a6e)', border: '1px solid #6c47ff55', borderRadius: 12, padding: 16, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ fontSize: 36 }}>🎓</span>
+              <div>
+                <div style={{ color: '#fff', fontWeight: 700, fontSize: 15 }}>PDP Ready!</div>
+                <div style={{ color: 'rgba(200,180,255,0.8)', fontSize: 12, marginTop: 2 }}>Badge earned — visible in your Badges collection</div>
               </div>
-              <button onClick={() => generateCertPDF(hours)} style={{ background: '#FFB612', color: '#1a1a2e', border: 'none', borderRadius: 8, padding: '8px 14px', fontWeight: 700, cursor: 'pointer', fontSize: 13 }}>
-                📄 Download
-              </button>
             </div>
           )}
 
@@ -358,7 +306,7 @@ export default function PDPPrep({ onBack }) {
           })}
 
           <div style={{ marginTop: 8, padding: '12px 16px', background: T.surfaceAlt, borderRadius: 10, fontSize: 13, color: T.dim, textAlign: 'center' }}>
-            Pass all modules at ≥80% to earn your completion certificate
+            Pass all modules at ≥80% to earn the 🎓 PDP Ready badge
           </div>
         </div>
       </div>

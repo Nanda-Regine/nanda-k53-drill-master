@@ -1,10 +1,8 @@
-// South African flag colour palette + shared UI constants
 const FONT_SIZE_KEY = 'k53_font_size';
 
 export function getFontSize() {
   try { return localStorage.getItem(FONT_SIZE_KEY) || 'medium'; } catch { return 'medium'; }
 }
-
 export function setFontSize(size) {
   try { localStorage.setItem(FONT_SIZE_KEY, size); } catch {}
 }
@@ -19,7 +17,7 @@ const FONT_SCALES = {
 function buildTheme(size = 'medium') {
   const scale = FONT_SCALES[size] || FONT_SCALES.medium;
   return {
-    // SA flag colours
+    // SA flag palette
     green:       '#007A4D',
     gold:        '#FFB612',
     red:         '#DE3831',
@@ -27,22 +25,26 @@ function buildTheme(size = 'medium') {
     white:       '#F5F5F0',
     black:       '#000000',
 
-    // UI surfaces (dark, green-tinted)
-    bg:          '#060D07',
-    surface:     '#0D1F10',
-    surfaceAlt:  '#122116',
-    border:      '#1A3020',
-    borderBright:'#2A5035',
+    // Dark surfaces — deep navy-black (more premium than green-tinted)
+    bg:          '#0a0a0f',
+    surface:     '#111118',
+    surfaceAlt:  '#18181f',
+    surfaceGlass:'rgba(24,24,31,0.7)',
+    border:      '#2a2a3a',
+    borderBright:'#3a3a4a',
 
-    // Typography
-    text:        '#E8EDE0',
-    dim:         '#6B7A62',
-    font:        "'Georgia', 'Times New Roman', serif",
-    mono:        "'Courier New', monospace",
+    // Text
+    text:        '#eeeef5',
+    dim:         '#6b6b82',
+
+    // Typography — Inter for modern SaaS feel
+    font:        "'Inter','Segoe UI',system-ui,sans-serif",
+    mono:        "'Courier New',monospace",
 
     // Spacing
-    radius:   10,
-    radiusLg: 14,
+    radius:   12,
+    radiusLg: 18,
+    radiusXl: 24,
 
     // Dynamic font sizes
     fontSize:        scale.base,

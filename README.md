@@ -1,7 +1,7 @@
 # K53 Drill Master
 
 **South Africa's most accessible learner's licence prep platform.**
-Built for township learners, rural communities, and anyone who can't afford to fail twice.
+Built for fellow citizens, rural communities, the youth, and anyone who can't afford to fail twice.
 
 > _"A driving licence is a job offer. We make sure everyone gets to say yes."_
 
