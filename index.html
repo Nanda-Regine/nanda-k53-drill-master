@@ -1,14 +1,80 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-ZA">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Free South African K53 learner's licence practice app — drill tests for Code 8 and Code 10 licences." />
-    <title>K53 Learner's Prep — Free South African Practice Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- Primary SEO -->
+    <title>K53 Drill Master — Free South African Learner's Licence Practice Tests</title>
+    <meta name="description" content="South Africa's #1 K53 learner's licence practice app. 400+ official questions, mock exams, road signs, PDP prep. Free — 10 questions/day. Works on any phone." />
+    <meta name="keywords" content="K53, learner's licence, South Africa, DLTC, K53 test, learner licence practice, Code 8, Code 10, road signs, K53 questions, SA driving test" />
+    <meta name="author" content="Nandawula Kabali-Kagwa" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://k53drillmaster.co.za/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://k53drillmaster.co.za/" />
+    <meta property="og:title" content="K53 Drill Master — Ace Your SA Learner's Licence Test" />
+    <meta property="og:description" content="400+ official K53 questions. Mock exams. AI explanations. Road Rules, PDP Prep, Vehicle Checks. Free daily practice — from R29/month for unlimited." />
+    <meta property="og:image" content="https://k53drillmaster.co.za/og-image.png" />
+    <meta property="og:locale" content="en_ZA" />
+    <meta property="og:site_name" content="K53 Drill Master" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="K53 Drill Master — Free SA Learner's Licence Practice" />
+    <meta name="twitter:description" content="South Africa's best K53 practice app. 400+ questions, mock exams, PDP prep. Free to start." />
+    <meta name="twitter:image" content="https://k53drillmaster.co.za/og-image.png" />
+
+    <!-- PWA / Mobile -->
+    <meta name="theme-color" content="#007A4D" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="K53 Drill" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"WebApplication",
+      "name":"K53 Drill Master",
+      "url":"https://k53drillmaster.co.za",
+      "description":"South Africa's most comprehensive K53 learner's licence practice platform. 400+ official DLTC questions, mock exams, PDP prep, road signs, vehicle inspection checklists.",
+      "applicationCategory":"EducationApplication",
+      "operatingSystem":"Any",
+      "inLanguage":"en-ZA",
+      "offers":[
+        {"@type":"Offer","name":"Free","price":"0","priceCurrency":"ZAR","description":"10 free questions per day, forever"},
+        {"@type":"Offer","name":"Monthly","price":"29","priceCurrency":"ZAR","description":"Unlimited questions per month"},
+        {"@type":"Offer","name":"3-Month Bundle","price":"69","priceCurrency":"ZAR","description":"3 months unlimited access"}
+      ],
+      "creator":{"@type":"Person","name":"Nandawula Kabali-Kagwa","url":"https://creativelynanda.co.za"},
+      "countryOfOrigin":"ZA",
+      "keywords":"K53, learner's licence, DLTC, South Africa, Code 8, Code 10"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Is K53 Drill Master free?","acceptedAnswer":{"@type":"Answer","text":"Yes. 10 free questions every day forever. First 30 days are unlimited. Paid plans from R29/month."}},
+        {"@type":"Question","name":"What K53 topics are covered?","acceptedAnswer":{"@type":"Answer","text":"Road rules, road signs, vehicle controls, speed limits, right of way, alcohol limits, accidents, dangerous goods, PDP legislation and vehicle inspections — all from official DLTC manuals."}},
+        {"@type":"Question","name":"Does it work offline?","acceptedAnswer":{"@type":"Answer","text":"All questions are bundled in the app. Progress saves locally on your device. No internet needed to practice."}},
+        {"@type":"Question","name":"Is it for Code 10 and Code 14 licences?","acceptedAnswer":{"@type":"Answer","text":"Yes. The PDP Prep module covers legislation, dangerous goods and professional driving specifically for Code 10 and Code 14."}}
+      ]
+    }
+    </script>
+
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      body { background: #060D07; color: #E8EDE0; }
+      html { scroll-behavior: smooth; }
+      body { background: #060D07; color: #E8EDE0; -webkit-font-smoothing: antialiased; }
       button { font-family: inherit; }
+      #root { padding-bottom: env(safe-area-inset-bottom, 0px); }
     </style>
   </head>
   <body>
