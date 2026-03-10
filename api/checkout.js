@@ -15,6 +15,16 @@ const PLANS = {
     amount: '69.00',
     days:   90,
   },
+  lifetime: {
+    label:  'K53 Drill Master — Lifetime Access',
+    amount: '149.00',
+    days:   365 * 20,
+  },
+  lifetime_pdp: {
+    label:  'K53 Drill Master — Lifetime + PDP Prep',
+    amount: '199.00',
+    days:   365 * 20,
+  },
 };
 
 function generateToken(plan, days) {

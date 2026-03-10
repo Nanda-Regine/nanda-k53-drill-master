@@ -455,7 +455,7 @@ export default function App() {
         )}
 
         {/* ── Pricing strip ─────────────────────────────────────────────────────── */}
-        {(tier === TIERS.FREE && !inTrial) && <PricingStrip T={T} onPlanSelect={(t) => { activateTier(t); refreshTier(); }} />}
+        {(tier === TIERS.FREE && !inTrial) && <PricingStrip T={T} onPlanSelect={(t) => { window.location.href = `/api/checkout?plan=${t}`; }} />}
 
         {/* ── Upgrade nudge if in trial ─────────────────────────────────────────── */}
         {inTrial && (
@@ -508,7 +508,7 @@ export default function App() {
           </div>
           {PLANS.map(plan => (
             <motion.div key={plan.tier} whileTap={{ scale: 0.97 }}
-              onClick={() => { activateTier(plan.tier); refreshTier(); setShowPaywall(false); }}
+              onClick={() => { window.location.href = `/api/checkout?plan=${plan.tier}`; }}
               style={{
                 background: plan.highlight ? 'linear-gradient(135deg,#007A4D,#005a38)' : T.surfaceAlt,
                 border: `1px solid ${plan.highlight ? '#007A4D88' : T.border}`,
@@ -530,7 +530,7 @@ export default function App() {
             </motion.div>
           ))}
           <motion.div whileTap={{ scale: 0.97 }}
-            onClick={() => { activateTier(TIERS.LIFETIME_PDP); refreshTier(); setShowPaywall(false); }}
+            onClick={() => { window.location.href = `/api/checkout?plan=${TIERS.LIFETIME_PDP}`; }}
             style={{ background: 'linear-gradient(135deg,#1a0d40,#0d1a40)', border: '1px solid rgba(108,71,255,0.4)', borderRadius: T.radiusLg, padding: '16px', marginBottom: 10, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14 }}>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, fontSize: T.fontSizeLg, color: '#fff' }}>Lifetime + PDP Prep 🎓</div>
