@@ -55,7 +55,7 @@ const QUESTIONS = [
 const CATEGORIES = [...new Set(QUESTIONS.map(q => q.cat))];
 
 // ── Component ─────────────────────────────────────────────────────────────────
-export default function VehicleControls({ onBack }) {
+export default function VehicleControls({ onBack, onPass }) {
   const [screen, setScreen]     = useState('menu'); // menu | quiz | result
   const [mode, setMode]         = useState(null);   // 'all' | category name
   const [questions, setQuestions] = useState([]);
@@ -66,6 +66,7 @@ export default function VehicleControls({ onBack }) {
   const [timeLeft, setTimeLeft] = useState(20);
   const [history, setHistory]   = useState({}); // id → 'correct' | 'wrong'
   const timerRef = useRef(null);
+  const passedFiredRef = useRef(false);
 
   // Timer with cleanup
   useEffect(() => {
@@ -184,6 +185,7 @@ export default function VehicleControls({ onBack }) {
   if (screen === 'result') {
     const pct = Math.round((correct / questions.length) * 100);
     const passed = pct >= 80;
+    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
     const missed = questions.filter(q => history[q.id] === 'wrong');
 
     return (
@@ -245,7 +247,7 @@ export default function VehicleControls({ onBack }) {
       </div>
 
       <div style={{ padding: 20 }}>
-        <div style={{ background: T.surfaceAlt, borderRadius: T.radiusLg, padding: 18, marginBottom: 18, lineHeight: 1.55, fontWeight: 500, fontSize: T.fontSizeXl }}>
+        <div style={{ background: "rgba(255,182,18,0.07)", border: "1px solid rgba(255,182,18,0.22)", borderRadius: T.radiusLg, padding: 18, marginBottom: 18, lineHeight: 1.55, fontWeight: 500, fontSize: T.fontSizeXl, color: "#F0E8C8" }}>
           {q?.q}
         </div>
 

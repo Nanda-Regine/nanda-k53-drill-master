@@ -702,7 +702,7 @@ function buildExamQuestions() {
   return shuffle(all).slice(0, 70);
 }
 
-export default function UltimateGauntlet({ onBack }) {
+export default function UltimateGauntlet({ onBack, onPass }) {
   const [screen, setScreen] = useState("home");
   const [testIndex, setTestIndex] = useState(0);
   const [qIndex, setQIndex] = useState(0);
@@ -720,6 +720,7 @@ export default function UltimateGauntlet({ onBack }) {
   const [timedMode, setTimedMode] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
   const timerRef = useRef(null);
+  const passedFiredRef = useRef(false);
 
   const currentTest = isExamMode ? null : TESTS[testIndex];
   const currentQ = isExamMode ? examQuestions[qIndex] : currentTest?.questions[qIndex];
@@ -919,7 +920,7 @@ export default function UltimateGauntlet({ onBack }) {
             {currentStreak >= 3 && <span style={{ color: "#FFB612", marginLeft: 16 }}>🔥 {currentStreak} STREAK</span>}
           </div>
 
-          <div style={{ background: "#0D1F10", border: `1px solid ${activeColor}33`, borderRadius: 4, padding: "20px", marginBottom: 14, color: "#fff", fontSize: 14, lineHeight: 1.8, fontWeight: 600 }}>
+          <div style={{ background: "rgba(255,182,18,0.07)", border: "1px solid rgba(255,182,18,0.22)", borderRadius: 4, padding: "20px", marginBottom: 14, color: "#F0E8C8", fontSize: 14, lineHeight: 1.8, fontWeight: 600 }}>
             {currentQ.q}
           </div>
 
@@ -973,6 +974,7 @@ export default function UltimateGauntlet({ onBack }) {
     const finalTotal = isExamMode ? examQuestions.length : (currentTest?.questions.length || 10);
     const pct = Math.round((score / finalTotal) * 100);
     const passed = isExamMode ? pct >= 77 : score >= PASS_SCORE;
+    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
     return (
       <div style={{ minHeight: "100vh", background: "#060D07", fontFamily: "'Georgia', 'Times New Roman', serif", padding: "24px 16px" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>

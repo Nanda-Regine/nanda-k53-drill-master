@@ -120,7 +120,7 @@ function formatTime(secs) {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-export default function MockExam({ onBack }) {
+export default function MockExam({ onBack, onPass }) {
   const [screen, setScreen] = useState("intro"); // intro | quiz | result
   const [questions, setQuestions] = useState([]);
   const [qIdx, setQIdx] = useState(0);
@@ -131,6 +131,7 @@ export default function MockExam({ onBack }) {
   const [timeLeft, setTimeLeft] = useState(EXAM_SECONDS);
   const [showGate, setShowGate] = useState(false);
   const timerRef = useRef(null);
+  const passedFiredRef = useRef(false);
 
   const currentQ = questions[qIdx];
   const progress = questions.length ? (qIdx / questions.length) * 100 : 0;
@@ -289,7 +290,7 @@ export default function MockExam({ onBack }) {
           </div>
 
           {/* Question */}
-          <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 4, padding: "20px", marginBottom: 14, color: T.white, fontSize: 14, lineHeight: 1.7, fontWeight: 600 }}>
+          <div style={{ background: "rgba(255,182,18,0.07)", border: "1px solid rgba(255,182,18,0.22)", borderRadius: 4, padding: "20px", marginBottom: 14, color: "#F0E8C8", fontSize: 14, lineHeight: 1.7, fontWeight: 600 }}>
             {currentQ.q}
           </div>
 
@@ -340,6 +341,7 @@ export default function MockExam({ onBack }) {
   if (screen === "result") {
     const pct = Math.round((score / EXAM_QUESTIONS) * 100);
     const passed = pct >= PASS_MARK * 100;
+    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
 
     // Category breakdown
     const categoryMap = {};

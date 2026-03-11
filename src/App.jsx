@@ -3,13 +3,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { T as BaseT, getFontSize, setFontSize } from './theme.js';
 
 // ── Games ──────────────────────────────────────────────────────────────────────
-import Gauntlet          from './games/Gauntlet.jsx';
-import HybridGauntlet    from './games/HybridGauntlet.jsx';
-import PatternTrainer    from './games/PatternTrainer.jsx';
-import RoadRulesGauntlet from './games/RoadRulesGauntlet.jsx';
-import MockExam          from './games/MockExam.jsx';
-import VehicleControls   from './games/VehicleControls.jsx';
-import PDPPrep           from './games/PDPPrep.jsx';
+import Gauntlet            from './games/Gauntlet.jsx';
+import HybridGauntlet      from './games/HybridGauntlet.jsx';
+import PatternTrainer      from './games/PatternTrainer.jsx';
+import RoadRulesGauntlet   from './games/RoadRulesGauntlet.jsx';
+import MockExam            from './games/MockExam.jsx';
+import VehicleControls     from './games/VehicleControls.jsx';
+import PDPPrep             from './games/PDPPrep.jsx';
+import MotorcycleGauntlet  from './games/MotorcycleGauntlet.jsx';
+import HeavyVehicleGauntlet from './games/HeavyVehicleGauntlet.jsx';
 
 // ── Components ─────────────────────────────────────────────────────────────────
 import Onboarding        from './components/Onboarding.jsx';
@@ -59,12 +61,46 @@ const CODES = [
 
 // ── Games catalogue with code relevance ────────────────────────────────────────
 const GAMES = [
+  // ── Code 1/2 (Motorcycle) ────────────────────────────────────────────────
+  {
+    id: 'motorcycle', label: 'Motorcycle Gauntlet',
+    desc: '5 rounds · 50 questions · Code 1 specific',
+    icon: '🏍️', tier: 'free', diff: 'beginner',
+    codes: ['code12'],
+  },
+  // ── Code 8 (Light Motor Vehicle) ─────────────────────────────────────────
   {
     id: 'gauntlet',   label: 'Code 8 Gauntlet',
     desc: '9 rounds · 90 questions · all K53 categories',
     icon: '⚡', tier: 'free', diff: 'beginner',
     codes: ['code8'],
   },
+  {
+    id: 'mockexam',   label: 'Mock Exam',
+    desc: '68 questions · 45 min · 75% to pass',
+    icon: '📝', tier: 'free', diff: 'intermediate',
+    codes: ['code8'],
+  },
+  {
+    id: 'hybrid',     label: 'Hybrid Gauntlet',
+    desc: '100 tricky "EXCEPT" trap questions',
+    icon: '🔥', tier: 'premium', diff: 'advanced',
+    codes: ['code8'],
+  },
+  // ── Code 10/14 (Heavy Vehicle) ────────────────────────────────────────────
+  {
+    id: 'heavy',      label: 'Heavy Vehicle Gauntlet',
+    desc: '5 rounds · 50 questions · Code 10/14 specific',
+    icon: '🚛', tier: 'free', diff: 'beginner',
+    codes: ['code10', 'code14'],
+  },
+  {
+    id: 'pdp',        label: 'PDP Prep Programme',
+    desc: '6 modules · 100 questions · earn PDP Ready badge',
+    icon: '🎓', tier: 'pdp', diff: 'professional',
+    codes: ['code10', 'code14'],
+  },
+  // ── All codes ─────────────────────────────────────────────────────────────
   {
     id: 'road_rules', label: 'Road Rules Gauntlet',
     desc: '15 rounds · 75 questions · timed',
@@ -82,24 +118,6 @@ const GAMES = [
     desc: '41 K53 values · pattern + speed modes',
     icon: '🔢', tier: 'free', diff: 'intermediate',
     codes: ['code12', 'code8', 'code10', 'code14'],
-  },
-  {
-    id: 'mockexam',   label: 'Mock Exam',
-    desc: '68 questions · 45 min · 75% to pass',
-    icon: '📝', tier: 'free', diff: 'intermediate',
-    codes: ['code12', 'code8'],
-  },
-  {
-    id: 'hybrid',     label: 'Hybrid Gauntlet',
-    desc: '100 tricky "EXCEPT" trap questions',
-    icon: '🔥', tier: 'premium', diff: 'advanced',
-    codes: ['code8', 'code10', 'code14'],
-  },
-  {
-    id: 'pdp',        label: 'PDP Prep Programme',
-    desc: '6 modules · 100 questions · earn PDP Ready badge',
-    icon: '🎓', tier: 'pdp', diff: 'professional',
-    codes: ['code10', 'code14'],
   },
 ];
 
@@ -236,6 +254,20 @@ export default function App() {
     }
   }, [refreshTier]);
 
+  // Browser back button → return to home instead of exiting the app
+  useEffect(() => {
+    const onPop = () => { setActiveGame(null); setNavTab('home'); };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  // Push a history entry whenever we enter a game or non-home tab so browser back works
+  useEffect(() => {
+    if (activeGame !== null || navTab !== 'home') {
+      window.history.pushState({ k53: true }, '');
+    }
+  }, [activeGame, navTab]);
+
   const onOnboardingComplete = useCallback(() => {
     localStorage.setItem(ONBOARDING_KEY, '1');
     setShowOnboarding(false);
@@ -250,6 +282,8 @@ export default function App() {
     if (awarded?.length) { setPendingBadge(awarded[0]); setConfettiActive(true); }
   }, [refreshTier]);
 
+  const onGamePass = useCallback(() => setConfettiActive(true), []);
+
   const handleGameSelect = useCallback((game) => {
     if (game.tier === 'pdp' && !hasPDPAccess()) { setShowPaywall(true); return; }
     if (game.tier === 'premium' && tier === TIERS.FREE) { setShowPaywall(true); return; }
@@ -262,15 +296,25 @@ export default function App() {
     setT(buildLiveTheme());
   }, []);
 
+  // ── Confetti overlay — always render on top of games ────────────────────────
+  const confettiOverlay = (
+    <>
+      <Confetti active={confettiActive} />
+      {pendingBadge && <BadgeToast badgeId={pendingBadge} onDismiss={() => { setPendingBadge(null); setConfettiActive(false); }} />}
+    </>
+  );
+
   // ── Game routes ─────────────────────────────────────────────────────────────
   if (showOnboarding) return <Onboarding onComplete={onOnboardingComplete} />;
-  if (activeGame === 'gauntlet')   return <Gauntlet          onBack={onGameBack} />;
-  if (activeGame === 'hybrid')     return <HybridGauntlet    onBack={onGameBack} />;
-  if (activeGame === 'patterns')   return <PatternTrainer    onBack={onGameBack} />;
-  if (activeGame === 'road_rules') return <RoadRulesGauntlet onBack={onGameBack} />;
-  if (activeGame === 'mockexam')   return <MockExam          onBack={onGameBack} />;
-  if (activeGame === 'controls')   return <VehicleControls   onBack={onGameBack} />;
-  if (activeGame === 'pdp')        return <PDPPrep           onBack={onGameBack} />;
+  if (activeGame === 'gauntlet')    return <>{confettiOverlay}<Gauntlet            onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'hybrid')      return <>{confettiOverlay}<HybridGauntlet      onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'patterns')    return <>{confettiOverlay}<PatternTrainer      onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'road_rules')  return <>{confettiOverlay}<RoadRulesGauntlet   onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'mockexam')    return <>{confettiOverlay}<MockExam            onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'controls')    return <>{confettiOverlay}<VehicleControls     onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'pdp')         return <>{confettiOverlay}<PDPPrep             onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'motorcycle')  return <>{confettiOverlay}<MotorcycleGauntlet  onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'heavy')       return <>{confettiOverlay}<HeavyVehicleGauntlet onBack={onGameBack} onPass={onGamePass} /></>;
 
   // ── Tab routes ──────────────────────────────────────────────────────────────
   if (navTab === 'checklist') return <VehicleChecklist onBack={() => setNavTab('home')} />;

@@ -161,7 +161,7 @@ function allModulesComplete(progress) {
 
 
 // ── Component ─────────────────────────────────────────────────────────────────
-export default function PDPPrep({ onBack }) {
+export default function PDPPrep({ onBack, onPass }) {
   const [screen, setScreen]         = useState('dashboard'); // dashboard | module | result
   const [activeModule, setActiveModule] = useState(null);
   const [questions, setQuestions]   = useState([]);
@@ -318,6 +318,7 @@ export default function PDPPrep({ onBack }) {
     const total = questions.length;
     const pct = Math.round((sessionCorrect / total) * 100);
     const passed = pct >= 80;
+    if (passed) onPass?.();
     return (
       <div style={{ minHeight: '100vh', background: T.surface, color: T.text, fontFamily: T.font, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
         <div style={{ fontSize: 64, marginBottom: 12 }}>{passed ? '🎉' : '📚'}</div>
@@ -359,7 +360,7 @@ export default function PDPPrep({ onBack }) {
       </div>
 
       <div style={{ padding: 20 }}>
-        <div style={{ background: T.surfaceAlt, borderRadius: 14, padding: 20, marginBottom: 20, fontSize: 17, lineHeight: 1.55, fontWeight: 500 }}>
+        <div style={{ background: "rgba(255,182,18,0.07)", border: "1px solid rgba(255,182,18,0.22)", borderRadius: 14, padding: 20, marginBottom: 20, fontSize: 17, lineHeight: 1.55, fontWeight: 500, color: "#F0E8C8" }}>
           {currentQ?.q}
         </div>
 

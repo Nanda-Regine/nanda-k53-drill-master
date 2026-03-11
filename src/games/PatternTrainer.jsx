@@ -274,7 +274,7 @@ function shuffle(arr) {
   return a;
 }
 
-export default function PatternTrainer({ onBack }) {
+export default function PatternTrainer({ onBack, onPass }) {
   const [mode, setMode] = useState("home");
   const [quizQ, setQuizQ] = useState([]);
   const [qIdx, setQIdx] = useState(0);
@@ -293,6 +293,7 @@ export default function PatternTrainer({ onBack }) {
   const [timeLeft, setTimeLeft] = useState(15);
   const [timedOut, setTimedOut] = useState(false);
   const timerRef = useRef(null);
+  const passedFiredRef = useRef(false);
 
   const startQuiz = () => {
     setQuizQ(shuffle(QUIZ_QUESTIONS));
@@ -537,7 +538,7 @@ export default function PatternTrainer({ onBack }) {
 
           <div style={{ color:DIM, fontSize:10, letterSpacing:3, marginBottom:12 }}>Q {qIdx+1} / {quizQ.length}</div>
 
-          <div style={{ background:"#111", border:`1px solid ${BORDER}`, borderRadius:4, padding:"20px", marginBottom:14, fontSize:15, lineHeight:1.7, fontWeight:600, color:"#fff" }}>
+          <div style={{ background:"rgba(255,182,18,0.07)", border:"1px solid rgba(255,182,18,0.22)", borderRadius:4, padding:"20px", marginBottom:14, fontSize:15, lineHeight:1.7, fontWeight:600, color:"#F0E8C8" }}>
             {q.q}
           </div>
 
@@ -586,6 +587,7 @@ export default function PatternTrainer({ onBack }) {
   // ─── QUIZ RESULT ─────────────────────────────────────────────────────────────
   if (mode === "quizresult") {
     const pct = Math.round((score/quizQ.length)*100);
+    if (pct >= 75 && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
     return (
       <div style={{ minHeight:"100vh", background: BG, fontFamily:"'Georgia', 'Times New Roman', serif", padding:"24px 16px", color: TEXT }}>
         <div style={{ maxWidth:640, margin:"0 auto" }}>
@@ -704,6 +706,7 @@ export default function PatternTrainer({ onBack }) {
   if (mode === "speedresult") {
     const total = speedCards.length;
     const pct = Math.round((speedScore/total)*100);
+    if (pct >= 75 && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
     return (
       <div style={{ minHeight:"100vh", background: BG, fontFamily:"'Georgia', 'Times New Roman', serif", padding:"24px 16px", color: TEXT }}>
         <div style={{ maxWidth:640, margin:"0 auto" }}>

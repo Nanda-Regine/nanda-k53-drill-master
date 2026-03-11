@@ -176,7 +176,7 @@ const ROUNDS = [
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
-export default function RoadRulesGauntlet({ onBack }) {
+export default function RoadRulesGauntlet({ onBack, onPass }) {
   const [screen, setScreen]       = useState('rounds');   // rounds | quiz | result
   const [activeRound, setActiveRound] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -189,6 +189,7 @@ export default function RoadRulesGauntlet({ onBack }) {
     try { return JSON.parse(localStorage.getItem('k53_rrg_progress') || '{}'); } catch { return {}; }
   });
   const timerRef = useRef(null);
+  const passedFiredRef = useRef(false);
 
   // ── Timer — cleared on unmount to prevent memory leaks ──
   useEffect(() => {
@@ -302,6 +303,7 @@ export default function RoadRulesGauntlet({ onBack }) {
     const totalQ = questions.length;
     const pct = Math.round((correct / totalQ) * 100);
     const passed = pct >= 80;
+    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
     return (
       <div style={{ minHeight: '100vh', background: T.surface, color: T.text, fontFamily: T.font, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
         <div style={{ fontSize: 60, marginBottom: 12 }}>{passed ? '🎉' : '📖'}</div>
@@ -337,7 +339,7 @@ export default function RoadRulesGauntlet({ onBack }) {
       </div>
 
       <div style={{ padding: 20 }}>
-        <div style={{ background: T.surfaceAlt, borderRadius: 14, padding: 18, marginBottom: 18, fontSize: 17, lineHeight: 1.55, fontWeight: 500 }}>
+        <div style={{ background: "rgba(255,182,18,0.07)", border: "1px solid rgba(255,182,18,0.22)", borderRadius: 14, padding: 18, marginBottom: 18, fontSize: 17, lineHeight: 1.55, fontWeight: 500, color: "#F0E8C8" }}>
           {q?.q}
         </div>
 
