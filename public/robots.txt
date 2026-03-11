@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://k53drillmaster.co.za/sitemap.xml
