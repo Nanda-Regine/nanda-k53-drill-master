@@ -10,8 +10,10 @@ import RoadRulesGauntlet   from './games/RoadRulesGauntlet.jsx';
 import MockExam            from './games/MockExam.jsx';
 import VehicleControls     from './games/VehicleControls.jsx';
 import PDPPrep             from './games/PDPPrep.jsx';
-import MotorcycleGauntlet  from './games/MotorcycleGauntlet.jsx';
+import MotorcycleGauntlet   from './games/MotorcycleGauntlet.jsx';
 import HeavyVehicleGauntlet from './games/HeavyVehicleGauntlet.jsx';
+import MotorcycleMockExam   from './games/MotorcycleMockExam.jsx';
+import TestDayPrep          from './components/TestDayPrep.jsx';
 
 // ── Components ─────────────────────────────────────────────────────────────────
 import Onboarding        from './components/Onboarding.jsx';
@@ -66,6 +68,12 @@ const GAMES = [
     id: 'motorcycle', label: 'Motorcycle Gauntlet',
     desc: '5 rounds · 50 questions · Code 1 specific',
     icon: '🏍️', tier: 'free', diff: 'beginner',
+    codes: ['code12'],
+  },
+  {
+    id: 'moto_exam',  label: 'Motorcycle Mock Exam',
+    desc: '40 questions · 30 min · 75% to pass',
+    icon: '📝', tier: 'free', diff: 'intermediate',
     codes: ['code12'],
   },
   // ── Code 8 (Light Motor Vehicle) ─────────────────────────────────────────
@@ -129,11 +137,11 @@ const DIFF_COLORS = {
 };
 
 const NAV = [
-  { id: 'home',      icon: '🏠', label: 'Home'       },
-  { id: 'checklist', icon: '✅', label: 'Checklist'  },
-  { id: 'weak',      icon: '🎯', label: 'Weak Spots' },
-  { id: 'progress',  icon: '📈', label: 'Progress'   },
-  { id: 'settings',  icon: '⚙️', label: 'Settings'   },
+  { id: 'home',      icon: '🏠', label: 'Home'      },
+  { id: 'testday',   icon: '📋', label: 'Test Day'  },
+  { id: 'weak',      icon: '🎯', label: 'Weak Spots'},
+  { id: 'progress',  icon: '📈', label: 'Progress'  },
+  { id: 'settings',  icon: '⚙️', label: 'Settings'  },
 ];
 
 const PLANS = [
@@ -315,9 +323,11 @@ export default function App() {
   if (activeGame === 'pdp')         return <>{confettiOverlay}<PDPPrep             onBack={onGameBack} onPass={onGamePass} /></>;
   if (activeGame === 'motorcycle')  return <>{confettiOverlay}<MotorcycleGauntlet  onBack={onGameBack} onPass={onGamePass} /></>;
   if (activeGame === 'heavy')       return <>{confettiOverlay}<HeavyVehicleGauntlet onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'moto_exam')   return <>{confettiOverlay}<MotorcycleMockExam   onBack={onGameBack} onPass={onGamePass} /></>;
 
   // ── Tab routes ──────────────────────────────────────────────────────────────
   if (navTab === 'checklist') return <VehicleChecklist onBack={() => setNavTab('home')} />;
+  if (navTab === 'testday')   return <TestDayPrep      onBack={() => setNavTab('home')} />;
   if (navTab === 'weak')      return <WeakSpotsReview  onBack={() => setNavTab('home')} />;
   if (navTab === 'progress')  return <ProgressHistory  onBack={() => setNavTab('home')} />;
   if (navTab === 'settings')  return <Settings onBack={() => setNavTab('home')} onFontSizeChange={handleFontSizeChange} />;
@@ -466,8 +476,10 @@ export default function App() {
         {/* ── Quick actions ─────────────────────────────────────────────────────── */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
           {[
-            { id: 'checklist', icon: '✅', label: 'Vehicle Checklist', sub: 'Test-day inspection',  grad: 'rgba(0,122,77,0.12)',  border: 'rgba(0,122,77,0.25)'   },
-            { id: 'weak',      icon: '🎯', label: 'Weak Spots Drill',  sub: 'Your missed questions', grad: 'rgba(222,56,49,0.1)', border: 'rgba(222,56,49,0.25)'  },
+            { id: 'testday',   icon: '📋', label: 'Test Day Guide',    sub: 'Docs, tips & mindset',  grad: 'rgba(255,182,18,0.1)', border: 'rgba(255,182,18,0.25)'  },
+            { id: 'checklist', icon: '✅', label: 'Vehicle Checklist', sub: 'Test-day inspection',   grad: 'rgba(0,122,77,0.12)',  border: 'rgba(0,122,77,0.25)'    },
+            { id: 'weak',      icon: '🎯', label: 'Weak Spots Drill',  sub: 'Your missed questions', grad: 'rgba(222,56,49,0.1)',  border: 'rgba(222,56,49,0.25)'   },
+            { id: 'progress',  icon: '📈', label: 'My Progress',       sub: 'Streaks & history',     grad: 'rgba(68,114,202,0.1)', border: 'rgba(68,114,202,0.25)'  },
           ].map((a, i) => (
             <motion.div key={a.id} custom={i} variants={cardVariants} initial="hidden" animate="visible"
               whileTap={{ scale: 0.96 }} onClick={() => setNavTab(a.id)}
