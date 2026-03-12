@@ -353,7 +353,7 @@ export default function MockExam({ onBack, onPass }) {
       if (categoryMap[w.category]) categoryMap[w.category].wrong += 1;
     });
 
-    const waLink = `https://wa.me/?text=${encodeURIComponent(`🚗 I scored ${score}/${EXAM_QUESTIONS} (${pct}%) on my K53 Mock Exam! ${passed ? "PASSED ✅" : "Need more practice 📚"} Train for your test at https://nanda-k53-drill-master.vercel.app`)}`;
+    const waLink = `https://wa.me/?text=${encodeURIComponent(`🚗 I scored ${score}/${EXAM_QUESTIONS} (${pct}%) on my K53 Mock Exam! ${passed ? "PASSED ✅" : "Need more practice 📚"} Train for your test at https://k53drillmaster.co.za`)}`;
 
     return (
       <div style={{ minHeight: "100vh", background: T.bg, fontFamily: T.font, color: T.text, padding: "24px 16px" }}>
