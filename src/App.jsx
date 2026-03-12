@@ -13,6 +13,7 @@ import PDPPrep             from './games/PDPPrep.jsx';
 import MotorcycleGauntlet   from './games/MotorcycleGauntlet.jsx';
 import HeavyVehicleGauntlet from './games/HeavyVehicleGauntlet.jsx';
 import MotorcycleMockExam   from './games/MotorcycleMockExam.jsx';
+import RoadSignsQuiz        from './games/RoadSignsQuiz.jsx';
 import TestDayPrep          from './components/TestDayPrep.jsx';
 
 // ── Components ─────────────────────────────────────────────────────────────────
@@ -125,6 +126,12 @@ const GAMES = [
     id: 'patterns',   label: 'Know Your Numbers',
     desc: '41 K53 values · pattern + speed modes',
     icon: '🔢', tier: 'free', diff: 'intermediate',
+    codes: ['code12', 'code8', 'code10', 'code14'],
+  },
+  {
+    id: 'roadsigns',  label: 'Road Signs Quiz',
+    desc: 'Real sign images · study + quiz mode',
+    icon: '🛑', tier: 'free', diff: 'beginner',
     codes: ['code12', 'code8', 'code10', 'code14'],
   },
 ];
@@ -324,6 +331,7 @@ export default function App() {
   if (activeGame === 'motorcycle')  return <>{confettiOverlay}<MotorcycleGauntlet  onBack={onGameBack} onPass={onGamePass} /></>;
   if (activeGame === 'heavy')       return <>{confettiOverlay}<HeavyVehicleGauntlet onBack={onGameBack} onPass={onGamePass} /></>;
   if (activeGame === 'moto_exam')   return <>{confettiOverlay}<MotorcycleMockExam   onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'roadsigns')   return <>{confettiOverlay}<RoadSignsQuiz         onBack={onGameBack} onPass={onGamePass} /></>;
 
   // ── Tab routes ──────────────────────────────────────────────────────────────
   if (navTab === 'checklist') return <VehicleChecklist onBack={() => setNavTab('home')} />;

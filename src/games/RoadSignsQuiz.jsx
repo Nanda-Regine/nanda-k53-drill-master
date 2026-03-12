@@ -1,6 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
 import { T } from "../theme.js";
 
+// Real sign image component with SVG fallback
+function RealSignImg({ src, alt, fallback, size = 120 }) {
+  const [err, setErr] = useState(false);
+  if (err || !src) return <div style={{ display: "flex", justifyContent: "center" }}>{fallback}</div>;
+  return (
+    <img
+      src={`./signs/${src}`}
+      alt={alt || "road sign"}
+      onError={() => setErr(true)}
+      style={{ width: size, height: size, objectFit: "contain", imageRendering: "crisp-edges", filter: "brightness(1.1) contrast(1.05)" }}
+    />
+  );
+}
+
 // ── SA flag stripe ─────────────────────────────────────────────────────────────
 function FlagStripe() {
   return (
@@ -506,6 +520,7 @@ const QUESTIONS = [
   // ── REGULATORY ──────────────────────────────────────────────────────────────
   {
     id: "r01", category: "regulatory",
+    img: "sign_010.jpg",
     sign: <SignStop />,
     question: "What does this sign mean?",
     options: ["Come to a complete stop and proceed when safe", "Slow down and yield to traffic", "Stop only if there is traffic coming", "Reduce speed to 10 km/h"],
@@ -514,6 +529,7 @@ const QUESTIONS = [
   },
   {
     id: "r02", category: "regulatory",
+    img: "sign_016.jpg",
     sign: <SignYield />,
     question: "What does this sign require you to do?",
     options: ["Stop completely", "Give way to traffic on the major road", "Sound your horn before proceeding", "Flash your headlights"],
@@ -538,6 +554,7 @@ const QUESTIONS = [
   },
   {
     id: "r05", category: "regulatory",
+    img: "sign_019.jpg",
     sign: <SignNoEntry />,
     question: "What does this sign mean?",
     options: ["No stopping", "No U-turn", "No entry — do not drive into this road", "One-way traffic ahead"],
@@ -546,6 +563,7 @@ const QUESTIONS = [
   },
   {
     id: "r06", category: "regulatory",
+    img: "sign_105.jpg",
     sign: <SignNoOvertaking />,
     question: "What does this sign prohibit?",
     options: ["Parking on this road", "Overtaking (passing) another vehicle", "U-turns at this point", "Hooting in this area"],
@@ -554,6 +572,7 @@ const QUESTIONS = [
   },
   {
     id: "r07", category: "regulatory",
+    img: "sign_107.jpg",
     sign: <SignNoParking />,
     question: "What does a blue circle with a P and a red diagonal slash mean?",
     options: ["Parking is permitted here", "No parking allowed", "Parking for disabled only", "Pay parking area"],
@@ -562,6 +581,7 @@ const QUESTIONS = [
   },
   {
     id: "r08", category: "regulatory",
+    img: "sign_108.jpg",
     sign: <SignNoStopping />,
     question: "What does this sign prohibit?",
     options: ["No parking during certain hours", "Absolutely no stopping of any vehicle at any time", "No U-turns", "No dropping off passengers"],
@@ -570,6 +590,7 @@ const QUESTIONS = [
   },
   {
     id: "r09", category: "regulatory",
+    img: "sign_020.jpg",
     sign: <SignOneWay direction="right" />,
     question: "What does this sign mean?",
     options: ["Turn right only", "One-way traffic in the direction of the arrow", "Detour to the right", "Right lane closed ahead"],
@@ -660,6 +681,7 @@ const QUESTIONS = [
   // ── WARNING ─────────────────────────────────────────────────────────────────
   {
     id: "w01", category: "warning",
+    img: "sign_272.jpg",
     sign: <SignDangerousIntersection />,
     question: "A triangle with a cross inside warns of what?",
     options: ["Railway crossing ahead", "A dangerous intersection ahead", "A T-junction ahead", "Roadworks zone"],
@@ -668,6 +690,7 @@ const QUESTIONS = [
   },
   {
     id: "w02", category: "warning",
+    img: "sign_330.jpg",
     sign: <SignPedestrianCrossing />,
     question: "What does this warning triangle mean?",
     options: ["School zone ahead", "Pedestrian crossing ahead", "Children playing area", "Cycle lane begins"],
@@ -676,6 +699,7 @@ const QUESTIONS = [
   },
   {
     id: "w03", category: "warning",
+    img: "sign_345.jpg",
     sign: <SignSchoolCrossing />,
     question: "This yellow triangle with two figures is placed near a school. What must you do?",
     options: ["Stop and wait for the guard's signal", "Reduce speed — children may be crossing", "Sound your horn to warn children", "Proceed normally as children are supervised"],
@@ -684,6 +708,7 @@ const QUESTIONS = [
   },
   {
     id: "w04", category: "warning",
+    img: "sign_374.jpg",
     sign: <SignSlipperyRoad />,
     question: "A triangle showing a skidding car means?",
     options: ["Steep decline ahead", "Slippery road surface — reduce speed", "Road ends", "Gravel road begins"],
@@ -732,6 +757,7 @@ const QUESTIONS = [
   },
   {
     id: "w10", category: "warning",
+    img: "sign_329.jpg",
     sign: <SignTrafficLights />,
     question: "A triangle containing a set of traffic lights means?",
     options: ["Traffic lights are out of order", "Traffic lights ahead — be prepared to stop", "No traffic lights on this road", "Emergency vehicle signal ahead"],
@@ -740,6 +766,7 @@ const QUESTIONS = [
   },
   {
     id: "w11", category: "warning",
+    img: "sign_357.jpg",
     sign: <SignLevelCrossing />,
     question: "A triangle with a large X warns of what?",
     options: ["Dangerous junction", "Level (rail) crossing ahead — watch for trains", "Road closed ahead", "No crossing"],
@@ -977,7 +1004,9 @@ function QuizEngine({ questions, onFinish, timed }) {
           {cat?.label}
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          {q.sign}
+          {q.img
+            ? <RealSignImg src={q.img} alt={q.question} fallback={q.sign} size={130} />
+            : q.sign}
         </div>
         <div style={{
           color: T.text, fontSize: 17, fontWeight: 600,
