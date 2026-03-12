@@ -403,7 +403,7 @@ export default function App() {
             {[
               { val: '1.2M', lbl: 'SA learners test yearly' },
               { val: '50%',  lbl: 'fail rate nationally'    },
-              { val: '400+', lbl: 'official DLTC questions' },
+              { val: '600+', lbl: 'official DLTC questions' },
             ].map(s => (
               <div key={s.lbl} style={{ textAlign: 'center', flex: 1 }}>
                 <div style={{ fontWeight: 800, fontSize: T.fontSizeLg, color: T.gold }}>{s.val}</div>
@@ -504,9 +504,6 @@ export default function App() {
           For {CODES.find(c => c.id === selectedCode)?.label} · {CODES.find(c => c.id === selectedCode)?.sub}
         </div>
         {relevantGames.map((game, i) => <GameCard key={game.id} game={game} index={i} tier={tier} onSelect={handleGameSelect} />)}
-
-        {/* ── Road Signs coming soon ────────────────────────────────────────────── */}
-        <ComingSoonCard index={relevantGames.length} />
 
         {/* ── Other modes ───────────────────────────────────────────────────────── */}
         {otherGames.length > 0 && (
@@ -652,26 +649,6 @@ function GameCard({ game, index, tier, onSelect, muted = false }) {
   );
 }
 
-// ── Coming soon card ──────────────────────────────────────────────────────────
-function ComingSoonCard({ index }) {
-  const T = BaseT;
-  return (
-    <motion.div custom={index} variants={cardVariants} initial="hidden" animate="visible"
-      style={{ background: T.surfaceAlt, border: `1px solid rgba(255,182,18,0.2)`, borderRadius: T.radiusLg, padding: '14px 14px', marginBottom: 10, position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 3, background: 'rgba(255,182,18,0.4)', borderRadius: '14px 0 0 14px' }} />
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, paddingLeft: 10 }}>
-        <span style={{ fontSize: 26, flexShrink: 0 }}>🚧</span>
-        <div style={{ flex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 3, flexWrap: 'wrap' }}>
-            <span style={{ fontWeight: 700, fontSize: T.fontSizeLg, color: T.dim }}>Road Signs Quiz</span>
-            <span style={{ background: 'rgba(255,182,18,0.12)', color: T.gold, borderRadius: 99, padding: '1px 9px', fontSize: T.fontSize - 3, fontWeight: 700, letterSpacing: 0.5 }}>COMING SOON</span>
-          </div>
-          <div style={{ color: T.dim, fontSize: T.fontSize - 1 }}>Interactive sign recognition · every SA road sign explained</div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 // ── Inline pricing strip ──────────────────────────────────────────────────────
 function PricingStrip({ T, onPlanSelect }) {
