@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { T } from "../theme.js";
+import { prepareAll, stableId } from '../utils/quizHelpers.js';
+import { recordResult } from '../utils/progressHistory.js';
+import { recordAnswer } from '../utils/spacedRepetition.js';
 
 function SignImg({ src, alt, size = 130 }) {
   return (
@@ -895,7 +898,10 @@ function QuizEngine({ questions, onFinish, timed }) {
     if (revealed) return;
     setSelected(optIdx);
     setRevealed(true);
-    if (optIdx === q.answer) setScore(s => s + 1);
+    const isCorrectSign = optIdx === q.answer;
+    if (isCorrectSign) setScore(s => s + 1);
+    recordResult(isCorrectSign, 'signs');
+    recordAnswer(stableId(q, 'sign_'), isCorrectSign);
   }, [revealed, q]);
 
   useEffect(() => {
@@ -1081,7 +1087,7 @@ export default function RoadSignsQuiz({ onBack, onPass }) {
       setActiveQuestions(pool);
       setScreen("study_" + (catId ?? "all"));
     } else {
-      setActiveQuestions(shuffle(pool));
+      setActiveQuestions(prepareAll(shuffle(pool)));
       setScreen("quiz");
     }
   }
@@ -1111,7 +1117,7 @@ export default function RoadSignsQuiz({ onBack, onPass }) {
       <div style={{ paddingTop: 24 }}>
         {screen === "home" && <HomeScreen onStart={handleStart} />}
         {screen === "quiz" && <QuizEngine questions={activeQuestions} onFinish={handleFinish} timed={timed} />}
-        {screen === "result" && <ResultScreen score={finalScore} total={activeQuestions.length} onRetry={() => { setActiveQuestions(q => shuffle([...q])); setScreen("quiz"); }} onHome={() => setScreen("home")} />}
+        {screen === "result" && <ResultScreen score={finalScore} total={activeQuestions.length} onRetry={() => { setActiveQuestions(q => prepareAll(shuffle([...q]))); setScreen("quiz"); }} onHome={() => setScreen("home")} />}
         {studyCatId && <StudyMode catId={studyCatId} onBack={() => setScreen("home")} />}
       </div>
     </div>

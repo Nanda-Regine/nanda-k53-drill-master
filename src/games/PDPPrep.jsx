@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import T from '../theme.js';
 import { awardBadge } from '../components/Badges.jsx';
+import { prepareAll } from '../utils/quizHelpers.js';
+import { recordResult } from '../utils/progressHistory.js';
+import { recordAnswer } from '../utils/spacedRepetition.js';
 
 // ── Question Bank ─────────────────────────────────────────────────────────────
 // 6 modules × ~17 questions = 100 questions total
@@ -192,8 +195,7 @@ export default function PDPPrep({ onBack, onPass }) {
 
   const startModule = useCallback((moduleId) => {
     const qs = moduleQuestions(moduleId);
-    // shuffle
-    const shuffled = [...qs].sort(() => Math.random() - 0.5);
+    const shuffled = prepareAll([...qs].sort(() => Math.random() - 0.5));
     setActiveModule(moduleId);
     setQuestions(shuffled);
     setQIndex(0);
@@ -213,6 +215,8 @@ export default function PDPPrep({ onBack, onPass }) {
     setConfirmed(true);
     const q = questions[qIndex];
     const isCorrect = selected === q.answer;
+    recordResult(isCorrect, 'pdp');
+    recordAnswer(q.id, isCorrect);
     if (isCorrect) {
       setSessionCorrect(c => c + 1);
       const newProg = { ...progress, [q.id]: true };

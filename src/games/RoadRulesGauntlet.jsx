@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import T from '../theme.js';
 import { incrementQuestionCount, isGateHit } from '../freemium.js';
+import { prepareAll, stableId } from '../utils/quizHelpers.js';
+import { recordResult } from '../utils/progressHistory.js';
+import { recordAnswer } from '../utils/spacedRepetition.js';
 
 // ── Question Bank – Rounds 1-12 (original) + 13-15 (new) ─────────────────────
 
@@ -211,7 +214,7 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
     const round = ROUNDS.find(r => r.id === roundId);
     const shuffled = [...round.questions].sort(() => Math.random() - 0.5);
     setActiveRound(roundId);
-    setQuestions(shuffled);
+    setQuestions(prepareAll(shuffled));
     setQIndex(0);
     setSelected(null);
     setConfirmed(false);
@@ -230,9 +233,12 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
     clearInterval(timerRef.current);
     setConfirmed(true);
     const q = questions[qIndex];
-    if (selected === q.answer) {
+    const isCorrect = selected === q.answer;
+    if (isCorrect) {
       setCorrect(c => c + 1);
     }
+    recordResult(isCorrect, 'road_rules');
+    recordAnswer(stableId(q, 'rr_'), isCorrect);
     incrementQuestionCount();
   };
 

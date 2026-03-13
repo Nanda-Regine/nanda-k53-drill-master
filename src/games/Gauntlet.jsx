@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { incrementQuestionCount, isGateHit, isPremium } from "../freemium.js";
 import FreemiumGate from "../components/FreemiumGate.jsx";
 import AITutor from "../components/AITutor.jsx";
+import { prepareAll, stableId } from '../utils/quizHelpers.js';
+import { recordResult } from '../utils/progressHistory.js';
+import { recordAnswer } from '../utils/spacedRepetition.js';
 
 const TESTS = [
   {
@@ -653,9 +656,10 @@ export default function Code8Gauntlet({ onBack, onPass }) {
   const [timedMode, setTimedMode] = useState(false);
   const timerRef = useRef(null);
   const passedFiredRef = useRef(false);
+  const [preparedQs, setPreparedQs] = useState([]);
 
   const currentTest = isExamMode ? null : TESTS[testIndex];
-  const currentQ = isExamMode ? examQuestions[qIndex] : currentTest?.questions[qIndex];
+  const currentQ = preparedQs[qIndex] ?? (isExamMode ? examQuestions[qIndex] : currentTest?.questions[qIndex]);
   const totalQ = isExamMode ? examQuestions.length : currentTest?.questions.length;
 
   useEffect(() => {
@@ -698,6 +702,8 @@ export default function Code8Gauntlet({ onBack, onPass }) {
     setSelected(i);
     setAnswered(true);
     const correct = i === currentQ.answer;
+    recordResult(correct, 'gauntlet');
+    recordAnswer(stableId(currentQ, 'g_'), correct);
     if (correct) {
       setScore((s) => s + 1);
       const ns = currentStreak + 1;
@@ -737,6 +743,7 @@ export default function Code8Gauntlet({ onBack, onPass }) {
   };
 
   const startTest = (index) => {
+    setPreparedQs(prepareAll(TESTS[index].questions));
     setTestIndex(index);
     setQIndex(0);
     setSelected(null);
@@ -752,6 +759,7 @@ export default function Code8Gauntlet({ onBack, onPass }) {
 
   const startExam = (timed) => {
     const qs = buildExamQuestions(60);
+    setPreparedQs(prepareAll(qs));
     setExamQuestions(qs);
     setQIndex(0);
     setSelected(null);

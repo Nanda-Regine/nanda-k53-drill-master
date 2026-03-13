@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { incrementQuestionCount } from "../freemium.js";
 import FreemiumGate from "../components/FreemiumGate.jsx";
 import AITutor from "../components/AITutor.jsx";
+import { prepareAll, stableId } from '../utils/quizHelpers.js';
+import { recordResult } from '../utils/progressHistory.js';
+import { recordAnswer } from '../utils/spacedRepetition.js';
 
 const TESTS = [
   {
@@ -721,9 +724,10 @@ export default function UltimateGauntlet({ onBack, onPass }) {
   const [timeLeft, setTimeLeft] = useState(30);
   const timerRef = useRef(null);
   const passedFiredRef = useRef(false);
+  const [preparedQs, setPreparedQs] = useState([]);
 
   const currentTest = isExamMode ? null : TESTS[testIndex];
-  const currentQ = isExamMode ? examQuestions[qIndex] : currentTest?.questions[qIndex];
+  const currentQ = preparedQs[qIndex] ?? (isExamMode ? examQuestions[qIndex] : currentTest?.questions[qIndex]);
   const totalQ = isExamMode ? examQuestions.length : currentTest?.questions.length;
 
   useEffect(() => {
@@ -749,7 +753,10 @@ export default function UltimateGauntlet({ onBack, onPass }) {
     if (!incrementQuestionCount()) { setShowGate(true); return; }
     clearInterval(timerRef.current);
     setSelected(i); setAnswered(true);
-    if (i === currentQ.answer) {
+    const correctHG = i === currentQ.answer;
+    recordResult(correctHG, 'gauntlet');
+    recordAnswer(stableId(currentQ, 'hg_'), correctHG);
+    if (correctHG) {
       setScore(s => s + 1);
       const ns = currentStreak + 1;
       setCurrentStreak(ns);
@@ -773,13 +780,16 @@ export default function UltimateGauntlet({ onBack, onPass }) {
   };
 
   const startTest = (i) => {
+    setPreparedQs(prepareAll(TESTS[i].questions));
     setTestIndex(i); setQIndex(0); setSelected(null); setAnswered(false);
     setScore(0); setShowExplain(false); setCurrentStreak(0); setWrongAnswers([]);
     setIsExamMode(false); if (timedMode) setTimeLeft(30); setScreen("quiz");
   };
 
   const startExam = (timed) => {
-    setExamQuestions(buildExamQuestions()); setQIndex(0); setSelected(null); setAnswered(false);
+    const examQs = buildExamQuestions();
+    setPreparedQs(prepareAll(examQs));
+    setExamQuestions(examQs); setQIndex(0); setSelected(null); setAnswered(false);
     setScore(0); setShowExplain(false); setCurrentStreak(0); setWrongAnswers([]);
     setIsExamMode(true); setTimedMode(timed); if (timed) setTimeLeft(30); setScreen("quiz");
   };

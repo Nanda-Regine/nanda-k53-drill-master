@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { T } from '../theme.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { prepareAll } from '../utils/quizHelpers.js';
 
 // ── Question bank ─────────────────────────────────────────────────────────────
 // Covers lights, wipers, bonnet/boot checks, instrument panel, brakes,
@@ -88,7 +89,7 @@ export default function VehicleControls({ onBack, onPass }) {
     const pool = selectedMode === 'all'
       ? [...QUESTIONS]
       : QUESTIONS.filter(q => q.cat === selectedMode);
-    const shuffled = pool.sort(() => Math.random() - 0.5);
+    const shuffled = prepareAll(pool.sort(() => Math.random() - 0.5));
     setMode(selectedMode);
     setQuestions(shuffled);
     setQIndex(0);

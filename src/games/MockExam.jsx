@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { T } from "../theme.js";
 import { incrementQuestionCount, isPremium } from "../freemium.js";
 import FreemiumGate from "../components/FreemiumGate.jsx";
+import { prepareAll, stableId } from '../utils/quizHelpers.js';
+import { recordResult } from '../utils/progressHistory.js';
+import { recordAnswer } from '../utils/spacedRepetition.js';
 
 // ── Pull questions from all 4 game files (imported inline data) ───────────────
 // We duplicate a cross-section here for the mock exam.
@@ -156,7 +159,7 @@ export default function MockExam({ onBack, onPass }) {
   }, [screen]);
 
   const startExam = () => {
-    const pool = shuffle(QUESTION_POOL).slice(0, EXAM_QUESTIONS);
+    const pool = prepareAll(shuffle(QUESTION_POOL).slice(0, EXAM_QUESTIONS));
     setQuestions(pool);
     setQIdx(0);
     setSelected(null);
@@ -173,7 +176,10 @@ export default function MockExam({ onBack, onPass }) {
     clearInterval(timerRef.current);
     setSelected(i);
     setAnswered(true);
-    if (i === currentQ.answer) {
+    const isCorrectME = i === currentQ.answer;
+    recordResult(isCorrectME, 'mockexam');
+    recordAnswer(stableId(currentQ, 'me_'), isCorrectME);
+    if (isCorrectME) {
       setScore(s => s + 1);
     } else {
       setWrongAnswers(w => [...w, {

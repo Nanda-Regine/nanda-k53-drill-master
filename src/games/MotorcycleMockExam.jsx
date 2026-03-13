@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { T } from "../theme.js";
 import { incrementQuestionCount } from "../freemium.js";
 import FreemiumGate from "../components/FreemiumGate.jsx";
+import { prepareAll, stableId } from '../utils/quizHelpers.js';
+import { recordResult } from '../utils/progressHistory.js';
+import { recordAnswer } from '../utils/spacedRepetition.js';
 
 const EXAM_QUESTIONS = 40;
 const EXAM_SECONDS   = 30 * 60; // 30 minutes
@@ -134,7 +137,7 @@ export default function MotorcycleMockExam({ onBack, onPass }) {
   }, [screen]);
 
   const startExam = () => {
-    setQuestions(shuffle(QUESTION_POOL).slice(0, EXAM_QUESTIONS));
+    setQuestions(prepareAll(shuffle(QUESTION_POOL).slice(0, EXAM_QUESTIONS)));
     setQIdx(0);
     setSelected(null);
     setAnswered(false);
@@ -151,7 +154,10 @@ export default function MotorcycleMockExam({ onBack, onPass }) {
     clearInterval(timerRef.current);
     setSelected(i);
     setAnswered(true);
-    if (i === currentQ.answer) {
+    const isCorrectMME = i === currentQ.answer;
+    recordResult(isCorrectMME, 'motorcycle');
+    recordAnswer(stableId(currentQ, 'mme_'), isCorrectMME);
+    if (isCorrectMME) {
       setScore(s => s + 1);
     } else {
       setWrongAnswers(w => [...w, {

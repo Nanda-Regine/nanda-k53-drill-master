@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { incrementQuestionCount } from "../freemium.js";
 import FreemiumGate from "../components/FreemiumGate.jsx";
 import AITutor from "../components/AITutor.jsx";
+import { prepareAllStr, stableId } from '../utils/quizHelpers.js';
+import { recordResult } from '../utils/progressHistory.js';
+import { recordAnswer } from '../utils/spacedRepetition.js';
 
 // ─── ALL PATTERNS GROUPED BY FAMILY ─────────────────────────────────────────
 const PATTERN_GROUPS = [
@@ -296,13 +299,13 @@ export default function PatternTrainer({ onBack, onPass }) {
   const passedFiredRef = useRef(false);
 
   const startQuiz = () => {
-    setQuizQ(shuffle(QUIZ_QUESTIONS));
+    setQuizQ(prepareAllStr(shuffle(QUIZ_QUESTIONS)));
     setQIdx(0); setSelected(null); setAnswered(false); setScore(0); setWrongList([]);
     setMode("quiz");
   };
 
   const startSpeed = () => {
-    setSpeedCards(shuffle(SPEED_CARDS));
+    setSpeedCards(prepareAllStr(shuffle(SPEED_CARDS)));
     setSIdx(0); setSpeedScore(0); setSpeedWrong(0);
     setSpeedAnswered(false); setSpeedSelected(null);
     setTimeLeft(15); setTimedOut(false);
@@ -335,7 +338,10 @@ export default function PatternTrainer({ onBack, onPass }) {
     setSelected(opt);
     setAnswered(true);
     const q = quizQ[qIdx];
-    if (opt === q.correct) {
+    const isCorrectPT = opt === q.correct;
+    recordResult(isCorrectPT, 'patterns');
+    recordAnswer(stableId(q, 'pt_'), isCorrectPT);
+    if (isCorrectPT) {
       setScore(s => s + 1);
     } else {
       setWrongList(w => [...w, { q: q.q, yours: opt, correct: q.correct, explain: q.explain }]);
@@ -356,7 +362,10 @@ export default function PatternTrainer({ onBack, onPass }) {
     setSpeedSelected(opt);
     setSpeedAnswered(true);
     const card = speedCards[sIdx];
-    if (opt === card.correct) setSpeedScore(s => s + 1);
+    const isCorrectSP = opt === card.correct;
+    recordResult(isCorrectSP, 'patterns');
+    recordAnswer(stableId(card, 'sp_'), isCorrectSP);
+    if (isCorrectSP) setSpeedScore(s => s + 1);
     else setSpeedWrong(w => w + 1);
   };
 
