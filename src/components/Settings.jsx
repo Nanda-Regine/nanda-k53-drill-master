@@ -3,15 +3,17 @@ import { T, getFontSize, setFontSize } from '../theme.js';
 import { resetHistory } from '../utils/progressHistory.js';
 import { resetStreak } from '../utils/streakTracker.js';
 import { resetSR } from '../utils/spacedRepetition.js';
+import { useLang } from '../LangContext.jsx';
 
-const FONT_OPTIONS = [
-  { value: 'small',  label: 'Small',   preview: 13 },
-  { value: 'medium', label: 'Medium',  preview: 15 },
-  { value: 'large',  label: 'Large',   preview: 18 },
-  { value: 'xlarge', label: 'X-Large', preview: 21 },
+const FONT_KEYS = [
+  { value: 'small',  key: 'font_small',  preview: 13 },
+  { value: 'medium', key: 'font_medium', preview: 15 },
+  { value: 'large',  key: 'font_large',  preview: 18 },
+  { value: 'xlarge', key: 'font_xlarge', preview: 21 },
 ];
 
 export default function Settings({ onBack, onFontSizeChange }) {
+  const { t, lang, setLang, LANGUAGES } = useLang();
   const [fontSize, setFontSizeState] = useState(getFontSize());
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [resetDone, setResetDone] = useState(false);
@@ -19,7 +21,7 @@ export default function Settings({ onBack, onFontSizeChange }) {
   const handleFontChange = (size) => {
     setFontSizeState(size);
     setFontSize(size);
-    onFontSizeChange?.(size); // bubble up to App to re-render with new theme
+    onFontSizeChange?.(size);
   };
 
   const handleReset = () => {
@@ -71,20 +73,47 @@ export default function Settings({ onBack, onFontSizeChange }) {
       <div style={{ background: '#1a1a2e', padding: '20px 20px 20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <button onClick={onBack} style={{ background: 'none', border: 'none', color: T.text, fontSize: 22, cursor: 'pointer' }}>←</button>
-          <div style={{ fontWeight: 700, fontSize: T.fontSizeXl }}>Settings</div>
+          <div style={{ fontWeight: 700, fontSize: T.fontSizeXl }}>{t('settings_title')}</div>
         </div>
       </div>
 
       <div style={{ padding: '0 20px' }}>
 
-        {/* ── Font Size ── */}
-        {SECTION('Text Size')}
+        {/* ── Language ── */}
+        {SECTION(t('settings_language'))}
         <div style={{ background: T.surfaceAlt, border: `1px solid ${T.border}`, borderRadius: 12, padding: 16, marginBottom: 10 }}>
           <div style={{ color: T.dim, fontSize: T.fontSize - 1, marginBottom: 14 }}>
-            Adjust text size to suit your reading preference
+            {t('settings_language_sub')}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+            {LANGUAGES.map(l => {
+              const isActive = lang === l.code;
+              return (
+                <button key={l.code} onClick={() => setLang(l.code)}
+                  style={{
+                    background: isActive ? '#007A4D' : T.surface,
+                    border: `2px solid ${isActive ? '#007A4D' : T.border}`,
+                    borderRadius: 10, padding: '10px 8px', cursor: 'pointer',
+                    color: isActive ? '#fff' : T.text, fontFamily: T.font,
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    textAlign: 'left',
+                  }}>
+                  <span style={{ fontSize: 18, flexShrink: 0 }}>{l.flag}</span>
+                  <span style={{ fontSize: T.fontSize - 1, fontWeight: isActive ? 700 : 400, lineHeight: 1.2 }}>{l.nativeName}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ── Font Size ── */}
+        {SECTION(t('settings_textSize'))}
+        <div style={{ background: T.surfaceAlt, border: `1px solid ${T.border}`, borderRadius: 12, padding: 16, marginBottom: 10 }}>
+          <div style={{ color: T.dim, fontSize: T.fontSize - 1, marginBottom: 14 }}>
+            {t('settings_textSize_sub')}
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-            {FONT_OPTIONS.map(opt => {
+            {FONT_KEYS.map(opt => {
               const isActive = fontSize === opt.value;
               return (
                 <button key={opt.value} onClick={() => handleFontChange(opt.value)}
@@ -96,7 +125,7 @@ export default function Settings({ onBack, onFontSizeChange }) {
                     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
                   }}>
                   <span style={{ fontSize: opt.preview, fontWeight: 600, lineHeight: 1 }}>Aa</span>
-                  <span style={{ fontSize: 12, color: isActive ? 'rgba(255,255,255,0.8)' : T.dim }}>{opt.label}</span>
+                  <span style={{ fontSize: 12, color: isActive ? 'rgba(255,255,255,0.8)' : T.dim }}>{t(opt.key)}</span>
                 </button>
               );
             })}
@@ -104,44 +133,44 @@ export default function Settings({ onBack, onFontSizeChange }) {
           {/* Preview */}
           <div style={{ marginTop: 14, background: T.surface, borderRadius: 10, padding: '12px 14px', border: `1px solid ${T.border}` }}>
             <div style={{ fontSize: T.fontSizeLg, fontWeight: 500, lineHeight: 1.5, color: T.text }}>
-              Preview: The vehicle must stop before crossing the line.
+              {t('font_preview')}
             </div>
             <div style={{ fontSize: T.fontSize - 1, color: T.dim, marginTop: 4 }}>
-              This is how questions will appear at the <strong>{fontSize}</strong> size.
+              {t('font_preview_sub')} <strong>{fontSize}</strong> {t('font_preview_size')}
             </div>
           </div>
         </div>
 
         {/* ── App Info ── */}
-        {SECTION('About')}
-        <ROW icon="🇿🇦" label="K53 Drill Master" sub="South African learner's licence prep" right="v2.0" />
-        <ROW icon="📋" label="Based on K53 Manual" sub="National Road Traffic Act 93 of 1996" />
-        <ROW icon="🔒" label="Privacy" sub="All data stored locally on your device — never uploaded" />
+        {SECTION(t('settings_about'))}
+        <ROW icon="🇿🇦" label="K53 Drill Master" sub={t('about_app')} right="v2.0" />
+        <ROW icon="📋" label={t('about_manual')} sub="National Road Traffic Act 93 of 1996" />
+        <ROW icon="🔒" label="Privacy" sub={t('about_privacy')} />
 
         {/* ── Data management ── */}
-        {SECTION('Data')}
-        <ROW icon="📊" label="Study data" sub="Progress history, streaks and badges are saved on this device" />
+        {SECTION(t('settings_data'))}
+        <ROW icon="📊" label="Study data" sub={t('data_study')} />
         <ROW
           icon="🗑️"
-          label="Reset all progress"
-          sub="Clears history, streaks, badges, and quiz progress"
+          label={t('reset_label')}
+          sub={t('reset_sub')}
           danger
           onClick={() => setShowResetConfirm(true)}
         />
 
         {resetDone && (
           <div style={{ background: '#003d22', border: '1px solid #007A4D', borderRadius: 10, padding: '12px 16px', marginTop: 4, color: '#4ade80', fontWeight: 600 }}>
-            ✅ All progress reset
+            {t('reset_done')}
           </div>
         )}
 
         {/* ── Tips ── */}
-        {SECTION('Study Tips')}
+        {SECTION(t('settings_tips'))}
         <div style={{ background: T.surfaceAlt, border: `1px solid ${T.border}`, borderRadius: 12, padding: '14px 16px', lineHeight: 1.65, fontSize: T.fontSize, color: T.dim }}>
-          <div style={{ marginBottom: 8 }}>🎯 <strong style={{ color: T.text }}>Weak Spots:</strong> Use the Weak Spots Review after 50+ questions for best results.</div>
-          <div style={{ marginBottom: 8 }}>🔁 <strong style={{ color: T.text }}>Spaced Repetition:</strong> Questions you get wrong come back sooner — trust the system.</div>
-          <div style={{ marginBottom: 8 }}>✅ <strong style={{ color: T.text }}>Checklist:</strong> Run the Vehicle Inspection Checklist the morning of your test.</div>
-          <div>📈 <strong style={{ color: T.text }}>Progress:</strong> Aim for 80%+ in every category before booking your test date.</div>
+          <div style={{ marginBottom: 8 }}>🎯 <strong style={{ color: T.text }}>{t('tip_weak_label')}</strong> {t('tip_weak')}</div>
+          <div style={{ marginBottom: 8 }}>🔁 <strong style={{ color: T.text }}>{t('tip_sr_label')}</strong> {t('tip_sr')}</div>
+          <div style={{ marginBottom: 8 }}>✅ <strong style={{ color: T.text }}>{t('tip_checklist_label')}</strong> {t('tip_checklist')}</div>
+          <div>📈 <strong style={{ color: T.text }}>{t('tip_progress_label')}</strong> {t('tip_progress')}</div>
         </div>
       </div>
 
@@ -150,18 +179,18 @@ export default function Settings({ onBack, onFontSizeChange }) {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 9990, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div style={{ background: T.surface, borderRadius: 16, padding: 24, maxWidth: 340, width: '100%', border: `1px solid ${T.border}` }}>
             <div style={{ fontSize: 40, textAlign: 'center', marginBottom: 12 }}>⚠️</div>
-            <div style={{ fontWeight: 700, fontSize: T.fontSizeXl, textAlign: 'center', marginBottom: 8 }}>Reset all progress?</div>
+            <div style={{ fontWeight: 700, fontSize: T.fontSizeXl, textAlign: 'center', marginBottom: 8 }}>{t('reset_confirm_title')}</div>
             <div style={{ color: T.dim, textAlign: 'center', fontSize: T.fontSize, lineHeight: 1.55, marginBottom: 24 }}>
-              This will permanently delete your history, streaks, badges, and quiz progress. This cannot be undone.
+              {t('reset_confirm_body')}
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <button onClick={() => setShowResetConfirm(false)}
                 style={{ flex: 1, background: T.surfaceAlt, color: T.text, border: `1px solid ${T.border}`, borderRadius: 10, padding: 14, fontWeight: 600, cursor: 'pointer', fontSize: T.fontSizeLg, fontFamily: T.font }}>
-                Cancel
+                {t('btn_cancel')}
               </button>
               <button onClick={handleReset}
                 style={{ flex: 1, background: '#DE3831', color: '#fff', border: 'none', borderRadius: 10, padding: 14, fontWeight: 700, cursor: 'pointer', fontSize: T.fontSizeLg, fontFamily: T.font }}>
-                Reset
+                {t('btn_reset')}
               </button>
             </div>
           </div>

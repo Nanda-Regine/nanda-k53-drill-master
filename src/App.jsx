@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { T as BaseT, getFontSize, setFontSize } from './theme.js';
+import { useLang } from './LangContext.jsx';
 
 // ── Games ──────────────────────────────────────────────────────────────────────
 import Gauntlet            from './games/Gauntlet.jsx';
@@ -55,85 +56,26 @@ function buildLiveTheme() {
 }
 
 // ── Licence codes ──────────────────────────────────────────────────────────────
-const CODES = [
-  { id: 'code12', label: 'Code 1/2', sub: 'Motorcycle',          icon: '🏍️' },
-  { id: 'code8',  label: 'Code 8',   sub: 'Light Motor Vehicle', icon: '🚗' },
-  { id: 'code10', label: 'Code 10',  sub: 'Heavy Motor Vehicle', icon: '🚛' },
-  { id: 'code14', label: 'Code 14',  sub: 'Extra Heavy + PDP',   icon: '🚚' },
+const CODES_BASE = [
+  { id: 'code12', label: 'Code 1/2', subKey: 'code_motorcycle', icon: '🏍️' },
+  { id: 'code8',  label: 'Code 8',   subKey: 'code_light',      icon: '🚗' },
+  { id: 'code10', label: 'Code 10',  subKey: 'code_heavy',      icon: '🚛' },
+  { id: 'code14', label: 'Code 14',  subKey: 'code_extraheavy', icon: '🚚' },
 ];
 
 // ── Games catalogue with code relevance ────────────────────────────────────────
-const GAMES = [
-  // ── Code 1/2 (Motorcycle) ────────────────────────────────────────────────
-  {
-    id: 'motorcycle', label: 'Motorcycle Gauntlet',
-    desc: '5 rounds · 50 questions · Code 1 specific',
-    icon: '🏍️', tier: 'free', diff: 'beginner',
-    codes: ['code12'],
-  },
-  {
-    id: 'moto_exam',  label: 'Motorcycle Mock Exam',
-    desc: '40 questions · 30 min · 75% to pass',
-    icon: '📝', tier: 'free', diff: 'intermediate',
-    codes: ['code12'],
-  },
-  // ── Code 8 (Light Motor Vehicle) ─────────────────────────────────────────
-  {
-    id: 'gauntlet',   label: 'Code 8 Gauntlet',
-    desc: '9 rounds · 90 questions · all K53 categories',
-    icon: '⚡', tier: 'free', diff: 'beginner',
-    codes: ['code8'],
-  },
-  {
-    id: 'mockexam',   label: 'Mock Exam',
-    desc: '68 questions · 45 min · 75% to pass',
-    icon: '📝', tier: 'free', diff: 'intermediate',
-    codes: ['code8'],
-  },
-  {
-    id: 'hybrid',     label: 'Hybrid Gauntlet',
-    desc: '100 tricky "EXCEPT" trap questions',
-    icon: '🔥', tier: 'premium', diff: 'advanced',
-    codes: ['code8'],
-  },
-  // ── Code 10/14 (Heavy Vehicle) ────────────────────────────────────────────
-  {
-    id: 'heavy',      label: 'Heavy Vehicle Gauntlet',
-    desc: '5 rounds · 50 questions · Code 10/14 specific',
-    icon: '🚛', tier: 'free', diff: 'beginner',
-    codes: ['code10', 'code14'],
-  },
-  {
-    id: 'pdp',        label: 'PDP Prep Programme',
-    desc: '6 modules · 100 questions · earn PDP Ready badge',
-    icon: '🎓', tier: 'pdp', diff: 'professional',
-    codes: ['code10', 'code14'],
-  },
-  // ── All codes ─────────────────────────────────────────────────────────────
-  {
-    id: 'road_rules', label: 'Road Rules Gauntlet',
-    desc: '15 rounds · 75 questions · timed',
-    icon: '🚦', tier: 'free', diff: 'beginner',
-    codes: ['code12', 'code8', 'code10', 'code14'],
-  },
-  {
-    id: 'controls',   label: 'Vehicle Controls Test',
-    desc: '30 questions · lights, brakes, instruments',
-    icon: '🔩', tier: 'free', diff: 'beginner',
-    codes: ['code12', 'code8', 'code10', 'code14'],
-  },
-  {
-    id: 'patterns',   label: 'Know Your Numbers',
-    desc: '41 K53 values · pattern + speed modes',
-    icon: '🔢', tier: 'free', diff: 'intermediate',
-    codes: ['code12', 'code8', 'code10', 'code14'],
-  },
-  {
-    id: 'roadsigns',  label: 'Road Signs Quiz',
-    desc: 'Real sign images · study + quiz mode',
-    icon: '🛑', tier: 'free', diff: 'beginner',
-    codes: ['code12', 'code8', 'code10', 'code14'],
-  },
+const GAMES_BASE = [
+  { id: 'motorcycle', icon: '🏍️', tier: 'free',    diff: 'beginner',     codes: ['code12'] },
+  { id: 'moto_exam',  icon: '📝', tier: 'free',    diff: 'intermediate', codes: ['code12'] },
+  { id: 'gauntlet',   icon: '⚡', tier: 'free',    diff: 'beginner',     codes: ['code8'] },
+  { id: 'mockexam',   icon: '📝', tier: 'free',    diff: 'intermediate', codes: ['code8'] },
+  { id: 'hybrid',     icon: '🔥', tier: 'premium', diff: 'advanced',     codes: ['code8'] },
+  { id: 'heavy',      icon: '🚛', tier: 'free',    diff: 'beginner',     codes: ['code10', 'code14'] },
+  { id: 'pdp',        icon: '🎓', tier: 'pdp',     diff: 'professional', codes: ['code10', 'code14'] },
+  { id: 'road_rules', icon: '🚦', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'controls',   icon: '🔩', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'patterns',   icon: '🔢', tier: 'free',    diff: 'intermediate', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'roadsigns',  icon: '🛑', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
 ];
 
 const DIFF_COLORS = {
@@ -143,12 +85,12 @@ const DIFF_COLORS = {
   professional: '#6c47ff',
 };
 
-const NAV = [
-  { id: 'home',      icon: '🏠', label: 'Home'      },
-  { id: 'testday',   icon: '📋', label: 'Test Day'  },
-  { id: 'weak',      icon: '🎯', label: 'Weak Spots'},
-  { id: 'progress',  icon: '📈', label: 'Progress'  },
-  { id: 'settings',  icon: '⚙️', label: 'Settings'  },
+const NAV_BASE = [
+  { id: 'home',      icon: '🏠', labelKey: 'nav_home'      },
+  { id: 'testday',   icon: '📋', labelKey: 'nav_testday'  },
+  { id: 'weak',      icon: '🎯', labelKey: 'nav_weak'     },
+  { id: 'progress',  icon: '📈', labelKey: 'nav_progress' },
+  { id: 'settings',  icon: '⚙️', labelKey: 'nav_settings' },
 ];
 
 const PLANS = [
@@ -197,6 +139,10 @@ function Sheet({ show, onClose, children }) {
 }
 
 export default function App() {
+  const { t } = useLang();
+  const CODES = CODES_BASE.map(c => ({ ...c, sub: t(c.subKey) }));
+  const GAMES = GAMES_BASE.map(g => ({ ...g, label: t(`game_${g.id}`), desc: t(`game_${g.id}_desc`) }));
+  const NAV   = NAV_BASE.map(n => ({ ...n, label: t(n.labelKey) }));
   const [T, setT]             = useState(buildLiveTheme);
   const [showOnboarding, setShowOnboarding] = useState(() => !localStorage.getItem(ONBOARDING_KEY));
   const [activeGame, setActiveGame]         = useState(null);
@@ -373,10 +319,10 @@ export default function App() {
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ fontSize: 22 }}>🇿🇦</span>
-                <span style={{ fontSize: T.fontSizeXxl, fontWeight: 800, color: '#fff', letterSpacing: -0.5 }}>K53 Drill Master</span>
+                <span style={{ fontSize: T.fontSizeXxl, fontWeight: 800, color: '#fff', letterSpacing: -0.5 }}>{t('appName')}</span>
               </div>
               <p style={{ color: T.dim, fontSize: T.fontSize - 1, marginTop: 2 }}>
-                South Africa's learner's licence prep platform
+                {t('appTagline')}
               </p>
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -387,12 +333,12 @@ export default function App() {
               {!user ? (
                 <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowAuth(true)}
                   style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '7px 13px', color: T.dim, cursor: 'pointer', fontSize: T.fontSize - 2, fontFamily: T.font }}>
-                  Sign in
+                  {t('signIn')}
                 </motion.button>
               ) : (
                 <motion.button whileTap={{ scale: 0.9 }} onClick={() => { supabase?.auth.signOut(); setUser(null); setSubMsg(''); }}
                   style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '7px 13px', color: T.dim, cursor: 'pointer', fontSize: T.fontSize - 2, fontFamily: T.font }}>
-                  Sign out
+                  {t('signOut')}
                 </motion.button>
               )}
             </div>
@@ -401,9 +347,9 @@ export default function App() {
           {/* Stats bar */}
           <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 12, padding: '10px 14px', marginBottom: 14, display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'space-between' }}>
             {[
-              { val: '1.2M', lbl: 'SA learners test yearly' },
-              { val: '50%',  lbl: 'fail rate nationally'    },
-              { val: '600+', lbl: 'official DLTC questions' },
+              { val: '1.2M', lbl: t('stat_learners') },
+              { val: '50%',  lbl: t('stat_fail')     },
+              { val: '600+', lbl: t('stat_questions') },
             ].map(s => (
               <div key={s.lbl} style={{ textAlign: 'center', flex: 1 }}>
                 <div style={{ fontWeight: 800, fontSize: T.fontSizeLg, color: T.gold }}>{s.val}</div>
@@ -415,11 +361,11 @@ export default function App() {
           {/* Status pills */}
           <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
             <div style={{ background: 'rgba(255,182,18,0.1)', border: '1px solid rgba(255,182,18,0.25)', borderRadius: 99, padding: '4px 11px', display: 'flex', alignItems: 'center', gap: 5 }}>
-              <span>🔥</span><span style={{ color: T.gold, fontWeight: 700, fontSize: T.fontSize - 2 }}>{streak} day streak</span>
+              <span>🔥</span><span style={{ color: T.gold, fontWeight: 700, fontSize: T.fontSize - 2 }}>{streak} {t('dayStreak')}</span>
             </div>
             {inTrial && (
               <div style={{ background: 'rgba(0,122,77,0.12)', border: '1px solid rgba(0,122,77,0.3)', borderRadius: 99, padding: '4px 11px' }}>
-                <span style={{ color: '#4ade80', fontWeight: 600, fontSize: T.fontSize - 2 }}>🎁 {trialLeft}d free trial</span>
+                <span style={{ color: '#4ade80', fontWeight: 600, fontSize: T.fontSize - 2 }}>🎁 {trialLeft}{t('daysFreeTrial')}</span>
               </div>
             )}
             {!inTrial && tier !== TIERS.FREE && (
@@ -429,17 +375,17 @@ export default function App() {
             )}
             {!inTrial && tier === TIERS.FREE && (
               <div style={{ background: 'rgba(222,56,49,0.1)', border: '1px solid rgba(222,56,49,0.25)', borderRadius: 99, padding: '4px 11px' }}>
-                <span style={{ color: '#f87171', fontWeight: 600, fontSize: T.fontSize - 2 }}>📊 {remaining} Q's left today</span>
+                <span style={{ color: '#f87171', fontWeight: 600, fontSize: T.fontSize - 2 }}>📊 {remaining} {t('questionsLeft')}</span>
               </div>
             )}
             {hasPDP && (
               <div style={{ background: 'rgba(108,71,255,0.12)', border: '1px solid rgba(108,71,255,0.3)', borderRadius: 99, padding: '4px 11px' }}>
-                <span style={{ color: '#a78bfa', fontWeight: 600, fontSize: T.fontSize - 2 }}>🎓 PDP Ready</span>
+                <span style={{ color: '#a78bfa', fontWeight: 600, fontSize: T.fontSize - 2 }}>🎓 {t('pdpReady')}</span>
               </div>
             )}
             <motion.button whileTap={{ scale: 0.95 }} onClick={() => shareWhatsApp(streak)}
               style={{ background: 'rgba(37,211,102,0.08)', border: '1px solid rgba(37,211,102,0.2)', borderRadius: 99, padding: '4px 11px', display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer', color: '#25d366', fontWeight: 600, fontSize: T.fontSize - 2, fontFamily: T.font }}>
-              💬 Share
+              💬 {t('share')}
             </motion.button>
           </div>
 
@@ -456,7 +402,7 @@ export default function App() {
         {/* ── Code picker ──────────────────────────────────────────────────────── */}
         <div style={{ marginBottom: 18 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: T.dim, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 10 }}>
-            Your Licence Code
+            {t('licenceCode')}
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
             {CODES.map(code => {
@@ -484,10 +430,10 @@ export default function App() {
         {/* ── Quick actions ─────────────────────────────────────────────────────── */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
           {[
-            { id: 'testday',   icon: '📋', label: 'Test Day Guide',    sub: 'Docs, tips & mindset',  grad: 'rgba(255,182,18,0.1)', border: 'rgba(255,182,18,0.25)'  },
-            { id: 'checklist', icon: '✅', label: 'Vehicle Checklist', sub: 'Test-day inspection',   grad: 'rgba(0,122,77,0.12)',  border: 'rgba(0,122,77,0.25)'    },
-            { id: 'weak',      icon: '🎯', label: 'Weak Spots Drill',  sub: 'Your missed questions', grad: 'rgba(222,56,49,0.1)',  border: 'rgba(222,56,49,0.25)'   },
-            { id: 'progress',  icon: '📈', label: 'My Progress',       sub: 'Streaks & history',     grad: 'rgba(68,114,202,0.1)', border: 'rgba(68,114,202,0.25)'  },
+            { id: 'testday',   icon: '📋', label: t('qa_testday'),   sub: t('qa_testday_sub'),   grad: 'rgba(255,182,18,0.1)', border: 'rgba(255,182,18,0.25)'  },
+            { id: 'checklist', icon: '✅', label: t('qa_checklist'), sub: t('qa_checklist_sub'), grad: 'rgba(0,122,77,0.12)',  border: 'rgba(0,122,77,0.25)'    },
+            { id: 'weak',      icon: '🎯', label: t('qa_weak'),      sub: t('qa_weak_sub'),      grad: 'rgba(222,56,49,0.1)',  border: 'rgba(222,56,49,0.25)'   },
+            { id: 'progress',  icon: '📈', label: t('qa_progress'),  sub: t('qa_progress_sub'),  grad: 'rgba(68,114,202,0.1)', border: 'rgba(68,114,202,0.25)'  },
           ].map((a, i) => (
             <motion.div key={a.id} custom={i} variants={cardVariants} initial="hidden" animate="visible"
               whileTap={{ scale: 0.96 }} onClick={() => setNavTab(a.id)}
@@ -501,7 +447,7 @@ export default function App() {
 
         {/* ── Relevant games section ────────────────────────────────────────────── */}
         <div style={{ fontSize: 11, fontWeight: 700, color: T.dim, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 10 }}>
-          For {CODES.find(c => c.id === selectedCode)?.label} · {CODES.find(c => c.id === selectedCode)?.sub}
+          {t('forCode')} {CODES.find(c => c.id === selectedCode)?.label} · {CODES.find(c => c.id === selectedCode)?.sub}
         </div>
         {relevantGames.map((game, i) => <GameCard key={game.id} game={game} index={i} tier={tier} onSelect={handleGameSelect} />)}
 
@@ -509,7 +455,7 @@ export default function App() {
         {otherGames.length > 0 && (
           <>
             <div style={{ fontSize: 11, fontWeight: 700, color: T.dim, letterSpacing: 1.5, textTransform: 'uppercase', margin: '20px 0 10px' }}>
-              Other Practice Modes
+              {t('otherModes')}
             </div>
             {otherGames.map((game, i) => <GameCard key={game.id} game={game} index={i} tier={tier} onSelect={handleGameSelect} muted />)}
           </>
@@ -524,8 +470,8 @@ export default function App() {
             style={{ background: `linear-gradient(135deg,rgba(0,122,77,0.15),rgba(255,182,18,0.08))`, border: `1px solid rgba(255,182,18,0.2)`, borderRadius: T.radiusLg, padding: '14px 16px', marginTop: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ fontSize: 22 }}>🚀</span>
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 700, color: T.gold, fontSize: T.fontSizeLg }}>Lock in before trial ends</div>
-              <div style={{ fontSize: T.fontSize - 2, color: T.dim }}>From R29/month — unlimited questions forever</div>
+              <div style={{ fontWeight: 700, color: T.gold, fontSize: T.fontSizeLg }}>{t('lockInTitle')}</div>
+              <div style={{ fontSize: T.fontSize - 2, color: T.dim }}>{t('lockInSub')}</div>
             </div>
             <span style={{ color: T.gold, fontSize: 18 }}>›</span>
           </motion.div>
@@ -552,7 +498,7 @@ export default function App() {
       <Sheet show={showBadgeGrid} onClose={() => setShowBadgeGrid(false)}>
         <div style={{ background: T.surface, borderRadius: '20px 20px 0 0', padding: 20 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <div style={{ fontWeight: 700, fontSize: T.fontSizeXl }}>Your Badges</div>
+            <div style={{ fontWeight: 700, fontSize: T.fontSizeXl }}>{t('yourBadges')}</div>
             <button onClick={() => setShowBadgeGrid(false)} style={{ background: 'none', border: 'none', color: T.dim, fontSize: 24, cursor: 'pointer' }}>×</button>
           </div>
           <BadgeGrid />
@@ -563,9 +509,9 @@ export default function App() {
       {/* ── Paywall sheet ─────────────────────────────────────────────────────── */}
       <Sheet show={showPaywall} onClose={() => setShowPaywall(false)}>
         <div style={{ background: T.surface, borderRadius: '20px 20px 0 0', padding: '24px 20px' }}>
-          <div style={{ fontWeight: 800, fontSize: T.fontSizeXl, marginBottom: 4 }}>Unlock Full Access</div>
+          <div style={{ fontWeight: 800, fontSize: T.fontSizeXl, marginBottom: 4 }}>{t('unlockAccess')}</div>
           <div style={{ color: T.dim, fontSize: T.fontSize, marginBottom: 20 }}>
-            Unlimited questions · all modes · progress saved forever
+            {t('unlockSub')}
           </div>
           {PLANS.map(plan => (
             <motion.div key={plan.tier} whileTap={{ scale: 0.97 }}
@@ -580,7 +526,7 @@ export default function App() {
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ fontWeight: 700, fontSize: T.fontSizeLg, color: plan.highlight ? '#fff' : T.text }}>{plan.label}</span>
-                  {plan.highlight && <span style={{ background: T.gold, color: '#000', borderRadius: 6, padding: '1px 7px', fontSize: 9, fontWeight: 800, letterSpacing: 1 }}>BEST VALUE</span>}
+                  {plan.highlight && <span style={{ background: T.gold, color: '#000', borderRadius: 6, padding: '1px 7px', fontSize: 9, fontWeight: 800, letterSpacing: 1 }}>{t('bestValue')}</span>}
                 </div>
                 <div style={{ fontSize: T.fontSize - 2, color: plan.highlight ? 'rgba(255,255,255,0.65)' : T.dim, marginTop: 2 }}>{plan.desc}</div>
               </div>
@@ -600,7 +546,7 @@ export default function App() {
             <div><span style={{ fontWeight: 800, fontSize: T.fontSizeXl, color: T.gold }}>R199</span></div>
           </motion.div>
           <button onClick={() => setShowPaywall(false)} style={{ width: '100%', marginTop: 4, background: 'none', border: 'none', color: T.dim, cursor: 'pointer', fontSize: T.fontSize, padding: '10px 0', fontFamily: T.font }}>
-            Maybe later
+            {t('maybeLater')}
           </button>
         </div>
       </Sheet>
@@ -614,6 +560,7 @@ export default function App() {
 // ── Game card component ────────────────────────────────────────────────────────
 function GameCard({ game, index, tier, onSelect, muted = false }) {
   const T = BaseT;
+  const { t } = useLang();
   const locked = (game.tier === 'pdp' && !hasPDPAccess()) || (game.tier === 'premium' && tier === TIERS.FREE);
   const dc = DIFF_COLORS[game.diff];
 
@@ -638,8 +585,8 @@ function GameCard({ game, index, tier, onSelect, muted = false }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap', marginBottom: 3 }}>
             <span style={{ fontWeight: 700, fontSize: T.fontSizeLg }}>{game.label}</span>
-            <span style={{ background: dc + '20', color: dc, borderRadius: 99, padding: '1px 8px', fontSize: T.fontSize - 3, fontWeight: 600, textTransform: 'capitalize' }}>{game.diff}</span>
-            {locked && <span style={{ background: T.bg, color: T.dim, borderRadius: 99, padding: '1px 8px', fontSize: T.fontSize - 3, border: `1px solid ${T.border}` }}>🔒 Upgrade</span>}
+            <span style={{ background: dc + '20', color: dc, borderRadius: 99, padding: '1px 8px', fontSize: T.fontSize - 3, fontWeight: 600, textTransform: 'capitalize' }}>{t(`diff_${game.diff}`)}</span>
+            {locked && <span style={{ background: T.bg, color: T.dim, borderRadius: 99, padding: '1px 8px', fontSize: T.fontSize - 3, border: `1px solid ${T.border}` }}>{t('upgradeLabel')}</span>}
           </div>
           <div style={{ color: T.dim, fontSize: T.fontSize - 1 }}>{game.desc}</div>
         </div>
@@ -652,15 +599,16 @@ function GameCard({ game, index, tier, onSelect, muted = false }) {
 
 // ── Inline pricing strip ──────────────────────────────────────────────────────
 function PricingStrip({ T, onPlanSelect }) {
+  const { t } = useLang();
   const cols = [
-    { label: 'Free',     price: 'R0',   period: '/day',  features: ['10 questions/day', '30-day trial unlimited', 'Progress tracking'], cta: 'Current plan', active: true,  tier: null },
-    { label: 'Monthly',  price: 'R29',  period: '/mo',   features: ['Unlimited questions', 'All 7 modes', 'Badges + streaks'],           cta: 'Get Monthly',  active: false, tier: TIERS.MONTHLY },
-    { label: '3 Months', price: 'R69',  period: '',      features: ['Best value', 'Unlimited + PDP Prep', 'Save R18'],                    cta: 'Best Value ✦', active: false, tier: TIERS.BUNDLE, highlight: true },
+    { label: 'Free',     price: 'R0',   period: '/day',  features: ['10 questions/day', '30-day trial unlimited', 'Progress tracking'], cta: t('currentPlan'), active: true,  tier: null },
+    { label: 'Monthly',  price: 'R29',  period: '/mo',   features: ['Unlimited questions', 'All 7 modes', 'Badges + streaks'],           cta: 'Get Monthly',    active: false, tier: TIERS.MONTHLY },
+    { label: '3 Months', price: 'R69',  period: '',      features: ['Best value', 'Unlimited + PDP Prep', 'Save R18'],                    cta: `${t('bestValue')} ✦`, active: false, tier: TIERS.BUNDLE, highlight: true },
   ];
   return (
     <div style={{ marginTop: 24, marginBottom: 4 }}>
       <div style={{ fontSize: 11, fontWeight: 700, color: T.dim, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 12 }}>
-        Pricing — No Surprises
+        {t('pricingTitle')}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8 }}>
         {cols.map(col => (
@@ -692,7 +640,7 @@ function PricingStrip({ T, onPlanSelect }) {
         ))}
       </div>
       <div style={{ textAlign: 'center', fontSize: 10, color: T.dim, marginTop: 10 }}>
-        Paid via PayFast · Card · EFT · SnapScan · Instant activation
+        {t('pricingFooter')}
       </div>
     </div>
   );

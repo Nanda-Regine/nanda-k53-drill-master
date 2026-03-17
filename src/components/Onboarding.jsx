@@ -1,36 +1,39 @@
 import { useState } from "react";
 import { T } from "../theme.js";
-
-const SLIDES = [
-  {
-    emoji: "🇿🇦",
-    title: "Welcome to K53 Drill Master",
-    body: "South Africa's most comprehensive learner's licence prep platform. All questions sourced directly from the official DLTC manuals.",
-    cta: "Next →",
-  },
-  {
-    emoji: "🎯",
-    title: "How to use this app",
-    body: (
-      <ol style={{ textAlign: "left", paddingLeft: 20, color: "#6B7A62", fontSize: 14, lineHeight: 2 }}>
-        <li><strong style={{ color: "#E8EDE0" }}>Know Your Numbers</strong> — memorise the critical K53 values first</li>
-        <li><strong style={{ color: "#E8EDE0" }}>Standard Gauntlet</strong> — drill all 9 rounds until you pass each</li>
-        <li><strong style={{ color: "#E8EDE0" }}>Hybrid Gauntlet</strong> — master the tricky "EXCEPT" traps</li>
-        <li><strong style={{ color: "#FFB612" }}>Mock Exam</strong> — 68 questions, real test format, 45 minutes</li>
-      </ol>
-    ),
-    cta: "Got it →",
-  },
-  {
-    emoji: "🏆",
-    title: "You're ready to start",
-    body: "Answer questions daily to build your streak 🔥, earn badges, and track your progress by category. The more you drill, the more confident you'll be on test day.",
-    cta: "Start Drilling →",
-  },
-];
+import { useLang } from "../LangContext.jsx";
 
 export default function Onboarding({ onComplete }) {
+  const { t } = useLang();
   const [slide, setSlide] = useState(0);
+
+  const SLIDES = [
+    {
+      emoji: "🇿🇦",
+      title: t('ob1_title'),
+      body: t('ob1_body'),
+      cta: t('ob1_cta'),
+    },
+    {
+      emoji: "🎯",
+      title: t('ob2_title'),
+      body: (
+        <ol style={{ textAlign: "left", paddingLeft: 20, color: "#6B7A62", fontSize: 14, lineHeight: 2 }}>
+          <li><strong style={{ color: "#E8EDE0" }}>Know Your Numbers</strong> — memorise the critical K53 values first</li>
+          <li><strong style={{ color: "#E8EDE0" }}>Standard Gauntlet</strong> — drill all 9 rounds until you pass each</li>
+          <li><strong style={{ color: "#E8EDE0" }}>Hybrid Gauntlet</strong> — master the tricky "EXCEPT" traps</li>
+          <li><strong style={{ color: "#FFB612" }}>Mock Exam</strong> — 68 questions, real test format, 45 minutes</li>
+        </ol>
+      ),
+      cta: t('ob2_cta'),
+    },
+    {
+      emoji: "🏆",
+      title: t('ob3_title'),
+      body: t('ob3_body'),
+      cta: t('ob3_cta'),
+    },
+  ];
+
   const current = SLIDES[slide];
   const isLast = slide === SLIDES.length - 1;
 
@@ -114,7 +117,7 @@ export default function Onboarding({ onComplete }) {
               cursor: "pointer", fontFamily: T.font,
             }}
           >
-            Skip intro
+            {t('btn_skipIntro')}
           </button>
         )}
       </div>
