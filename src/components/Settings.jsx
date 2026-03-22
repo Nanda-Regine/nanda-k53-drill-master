@@ -4,6 +4,7 @@ import { resetHistory } from '../utils/progressHistory.js';
 import { resetStreak } from '../utils/streakTracker.js';
 import { resetSR } from '../utils/spacedRepetition.js';
 import { useLang } from '../LangContext.jsx';
+import { isSoundEnabled, setSoundEnabled, sfx } from '../utils/sounds.js';
 
 const FONT_KEYS = [
   { value: 'small',  key: 'font_small',  preview: 13 },
@@ -17,6 +18,14 @@ export default function Settings({ onBack, onFontSizeChange }) {
   const [fontSize, setFontSizeState] = useState(getFontSize());
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [resetDone, setResetDone] = useState(false);
+  const [soundOn, setSoundOn] = useState(isSoundEnabled);
+
+  const handleSoundToggle = () => {
+    const next = !soundOn;
+    setSoundOn(next);
+    setSoundEnabled(next);
+    if (next) sfx('correct'); // preview the sound when turning on
+  };
 
   const handleFontChange = (size) => {
     setFontSizeState(size);
@@ -104,6 +113,26 @@ export default function Settings({ onBack, onFontSizeChange }) {
               );
             })}
           </div>
+        </div>
+
+        {/* ── Sound ── */}
+        {SECTION('Sound & Haptics')}
+        <div style={{ background: T.surfaceAlt, border: `1px solid ${T.border}`, borderRadius: 12, padding: '14px 16px', marginBottom: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: T.fontSize }}>Answer sounds</div>
+            <div style={{ color: T.dim, fontSize: T.fontSize - 2, marginTop: 2 }}>Tick on correct, buzz on wrong</div>
+          </div>
+          <button onClick={handleSoundToggle} style={{
+            width: 48, height: 28, borderRadius: 99, border: 'none', cursor: 'pointer',
+            background: soundOn ? '#007A4D' : T.border,
+            position: 'relative', transition: 'background 0.2s',
+          }}>
+            <div style={{
+              position: 'absolute', top: 3, left: soundOn ? 23 : 3,
+              width: 22, height: 22, borderRadius: '50%', background: '#fff',
+              transition: 'left 0.2s', boxShadow: '0 1px 4px rgba(0,0,0,0.3)',
+            }} />
+          </button>
         </div>
 
         {/* ── Font Size ── */}

@@ -679,6 +679,10 @@ export default function HeavyVehicleGauntlet({ onBack, onPass }) {
     const pct = Math.round((score / finalTotal) * 100);
     const passed = isExamMode ? pct >= 70 : score >= PASS_SCORE;
     if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
+    const waText = isExamMode
+      ? `🚛 I scored ${score}/${finalTotal} (${pct}%) on the K53 Code 10/14 Exam! ${passed ? "PASSED ✅" : "Need more practice 📚"} Train at https://k53drillmaster.co.za`
+      : `🚛 K53 Heavy Vehicle Round ${currentTest?.id}: ${score}/${finalTotal} (${pct}%) ${passed ? "✅ PASSED" : "📚 Drilling"} — https://k53drillmaster.co.za`;
+    const waLink = `https://wa.me/?text=${encodeURIComponent(waText)}`;
 
     return (
       <div style={{ minHeight: "100vh", background: "#060D07", fontFamily: "'Georgia', 'Times New Roman', serif", padding: "24px 16px" }}>
@@ -718,6 +722,13 @@ export default function HeavyVehicleGauntlet({ onBack, onPass }) {
             </div>
           )}
 
+          <a href={waLink} target="_blank" rel="noreferrer" style={{
+            display: "block", width: "100%", padding: "13px", background: "#25D366", color: "#fff",
+            border: "none", borderRadius: 4, fontSize: 14, fontWeight: 700, cursor: "pointer",
+            fontFamily: "'Georgia', 'Times New Roman', serif", textAlign: "center", textDecoration: "none", marginBottom: 10,
+          }}>
+            📲 Share on WhatsApp
+          </a>
           <div style={{ display: "flex", gap: 10 }}>
             <button onClick={() => isExamMode ? startExam(timedMode) : startTest(testIndex)}
               style={{ flex: 1, padding: "13px", background: "#DE3831", color: "#fff", border: "none", borderRadius: 4, fontSize: 11, fontWeight: 900, letterSpacing: 2, cursor: "pointer", fontFamily: "'Georgia', 'Times New Roman', serif" }}>

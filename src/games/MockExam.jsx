@@ -5,6 +5,8 @@ import FreemiumGate from "../components/FreemiumGate.jsx";
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { sfx } from '../utils/sounds.js';
+import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 
 // ── Pull questions from all 4 game files (imported inline data) ───────────────
 // We duplicate a cross-section here for the mock exam.
@@ -123,6 +125,51 @@ function formatTime(secs) {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+// ── Animated score count-up card ─────────────────────────────────────────────
+function ScoreCard({ score, total, pct, passed }) {
+  const [displayScore, setDisplayScore] = useState(0);
+  const [displayPct, setDisplayPct] = useState(0);
+
+  useEffect(() => {
+    let start = null;
+    const duration = 900;
+    function step(ts) {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplayScore(Math.round(eased * score));
+      setDisplayPct(Math.round(eased * pct));
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }, [score, pct]);
+
+  return (
+    <div style={{
+      background: passed ? "#001a12" : "#1a0000",
+      border: `2px solid ${passed ? "#007A4D" : "#DE3831"}`,
+      borderRadius: 8, padding: "32px 28px", textAlign: "center", marginBottom: 24,
+      animation: 'scaleIn 0.3s ease',
+    }}>
+      <div style={{ color: passed ? "#007A4D" : "#DE3831", fontSize: 10, letterSpacing: 4, marginBottom: 12 }}>
+        📝 MOCK EXAM RESULT
+      </div>
+      <div style={{ color: "#fff", fontSize: 64, fontWeight: 900, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+        {displayScore}<span style={{ color: "#1A3020", fontSize: 36 }}>/{total}</span>
+      </div>
+      <div style={{ color: passed ? "#007A4D" : "#DE3831", fontSize: 32, fontWeight: 900, marginTop: 8, fontVariantNumeric: 'tabular-nums' }}>
+        {displayPct}%
+      </div>
+      <div style={{ color: "#6B7A62", fontSize: 14, marginTop: 10 }}>
+        {passed
+          ? "🎉 PASSED — You're ready for the real test!"
+          : `Need 75% to pass — you got ${pct}%. Keep practising!`}
+      </div>
+    </div>
+  );
+}
+
 export default function MockExam({ onBack, onPass }) {
   const [screen, setScreen] = useState("intro"); // intro | quiz | result
   const [questions, setQuestions] = useState([]);
@@ -180,8 +227,10 @@ export default function MockExam({ onBack, onPass }) {
     recordResult(isCorrectME, 'mockexam');
     recordAnswer(stableId(currentQ, 'me_'), isCorrectME);
     if (isCorrectME) {
+      sfx('correct'); hapticCorrect();
       setScore(s => s + 1);
     } else {
+      sfx('wrong'); hapticWrong();
       setWrongAnswers(w => [...w, {
         q: currentQ.q,
         yourAnswer: currentQ.options[i],
@@ -347,7 +396,7 @@ export default function MockExam({ onBack, onPass }) {
   if (screen === "result") {
     const pct = Math.round((score / EXAM_QUESTIONS) * 100);
     const passed = pct >= PASS_MARK * 100;
-    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
+    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; sfx('pass'); hapticPass(); onPass?.(); }
 
     // Category breakdown
     const categoryMap = {};
@@ -365,25 +414,10 @@ export default function MockExam({ onBack, onPass }) {
       <div style={{ minHeight: "100vh", background: T.bg, fontFamily: T.font, color: T.text, padding: "24px 16px" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
 
-          {/* Score card */}
-          <div style={{ background: passed ? "#001a12" : "#1a0000", border: `2px solid ${passed ? T.green : T.red}`, borderRadius: 6, padding: "32px 28px", textAlign: "center", marginBottom: 24 }}>
-            <div style={{ color: passed ? T.green : T.red, fontSize: 10, letterSpacing: 4, fontFamily: T.mono, marginBottom: 12 }}>
-              📝 MOCK EXAM RESULT
-            </div>
-            <div style={{ color: T.white, fontSize: 64, fontWeight: 900, lineHeight: 1 }}>
-              {score}<span style={{ color: T.border }}>/{EXAM_QUESTIONS}</span>
-            </div>
-            <div style={{ color: passed ? T.green : T.red, fontSize: 28, fontWeight: 900, marginTop: 6 }}>
-              {pct}%
-            </div>
-            <div style={{ color: T.dim, fontSize: 14, marginTop: 8 }}>
-              {passed
-                ? "🎉 PASSED — You're ready for the real test!"
-                : `Need 75% to pass — you got ${pct}%. Keep practising!`}
-            </div>
-            <div style={{ color: T.dim, fontSize: 12, marginTop: 6, fontFamily: T.mono }}>
-              Time remaining: {formatTime(timeLeft)}
-            </div>
+          {/* Score card — animated count-up */}
+          <ScoreCard score={score} total={EXAM_QUESTIONS} pct={pct} passed={passed} />
+          <div style={{ color: T.dim, fontSize: 12, marginTop: -16, marginBottom: 20, textAlign: "center", fontFamily: T.mono }}>
+            Time remaining: {formatTime(timeLeft)}
           </div>
 
           {/* Category breakdown */}

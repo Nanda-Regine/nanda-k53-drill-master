@@ -85,12 +85,43 @@ const DIFF_COLORS = {
   professional: '#6c47ff',
 };
 
+// SVG nav icons — no emoji, proper design system
+const NAV_ICONS = {
+  home: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  ),
+  testday: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="2" width="6" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+      <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+    </svg>
+  ),
+  weak: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+    </svg>
+  ),
+  progress: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+    </svg>
+  ),
+  settings: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  ),
+};
+
 const NAV_BASE = [
-  { id: 'home',      icon: '🏠', labelKey: 'nav_home'      },
-  { id: 'testday',   icon: '📋', labelKey: 'nav_testday'  },
-  { id: 'weak',      icon: '🎯', labelKey: 'nav_weak'     },
-  { id: 'progress',  icon: '📈', labelKey: 'nav_progress' },
-  { id: 'settings',  icon: '⚙️', labelKey: 'nav_settings' },
+  { id: 'home',      labelKey: 'nav_home'      },
+  { id: 'testday',   labelKey: 'nav_testday'  },
+  { id: 'weak',      labelKey: 'nav_weak'     },
+  { id: 'progress',  labelKey: 'nav_progress' },
+  { id: 'settings',  labelKey: 'nav_settings' },
 ];
 
 const PLANS = [
@@ -188,7 +219,7 @@ export default function App() {
         refreshTier();
         setSubMsg('');
       } else {
-        setSubMsg('No active subscription found. Contact us on WhatsApp.');
+        setSubMsg('No active subscription found. Email hello@creativelynanda.co.za');
       }
     } catch {}
   }
@@ -345,15 +376,15 @@ export default function App() {
           </div>
 
           {/* Stats bar */}
-          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 12, padding: '10px 14px', marginBottom: 14, display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'space-between' }}>
+          <div style={{ marginBottom: 14, display: 'flex', gap: 0, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 12, overflow: 'hidden' }}>
             {[
               { val: '1.2M', lbl: t('stat_learners') },
               { val: '50%',  lbl: t('stat_fail')     },
               { val: '600+', lbl: t('stat_questions') },
-            ].map(s => (
-              <div key={s.lbl} style={{ textAlign: 'center', flex: 1 }}>
-                <div style={{ fontWeight: 800, fontSize: T.fontSizeLg, color: T.gold }}>{s.val}</div>
-                <div style={{ fontSize: 10, color: T.dim, marginTop: 1 }}>{s.lbl}</div>
+            ].map((s, i) => (
+              <div key={s.lbl} style={{ flex: 1, textAlign: 'center', padding: '10px 8px', borderRight: i < 2 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
+                <div style={{ fontWeight: 800, fontSize: T.fontSizeLg, color: T.gold, lineHeight: 1 }}>{s.val}</div>
+                <div style={{ fontSize: 9, color: T.dim, marginTop: 3, letterSpacing: 0.3 }}>{s.lbl}</div>
               </div>
             ))}
           </div>
@@ -428,34 +459,55 @@ export default function App() {
         </div>
 
         {/* ── Quick actions ─────────────────────────────────────────────────────── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 20 }}>
           {[
-            { id: 'testday',   icon: '📋', label: t('qa_testday'),   sub: t('qa_testday_sub'),   grad: 'rgba(255,182,18,0.1)', border: 'rgba(255,182,18,0.25)'  },
-            { id: 'checklist', icon: '✅', label: t('qa_checklist'), sub: t('qa_checklist_sub'), grad: 'rgba(0,122,77,0.12)',  border: 'rgba(0,122,77,0.25)'    },
-            { id: 'weak',      icon: '🎯', label: t('qa_weak'),      sub: t('qa_weak_sub'),      grad: 'rgba(222,56,49,0.1)',  border: 'rgba(222,56,49,0.25)'   },
-            { id: 'progress',  icon: '📈', label: t('qa_progress'),  sub: t('qa_progress_sub'),  grad: 'rgba(68,114,202,0.1)', border: 'rgba(68,114,202,0.25)'  },
+            { id: 'testday',   icon: '📋', label: t('qa_testday'),   sub: t('qa_testday_sub'),   accent: '#FFB612' },
+            { id: 'checklist', icon: '✅', label: t('qa_checklist'), sub: t('qa_checklist_sub'), accent: '#007A4D' },
+            { id: 'weak',      icon: '🎯', label: t('qa_weak'),      sub: t('qa_weak_sub'),      accent: '#DE3831' },
+            { id: 'progress',  icon: '📈', label: t('qa_progress'),  sub: t('qa_progress_sub'),  accent: '#4472CA' },
           ].map((a, i) => (
             <motion.div key={a.id} custom={i} variants={cardVariants} initial="hidden" animate="visible"
               whileTap={{ scale: 0.96 }} onClick={() => setNavTab(a.id)}
-              style={{ background: `linear-gradient(135deg,${a.grad},transparent)`, border: `1px solid ${a.border}`, borderRadius: T.radiusLg, padding: '14px 14px', cursor: 'pointer' }}>
-              <span style={{ fontSize: 26 }}>{a.icon}</span>
-              <div style={{ fontWeight: 700, fontSize: T.fontSizeLg, marginTop: 6 }}>{a.label}</div>
-              <div style={{ fontSize: T.fontSize - 2, color: T.dim, marginTop: 2 }}>{a.sub}</div>
+              style={{
+                background: T.surfaceAlt,
+                border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: 16, padding: '14px', cursor: 'pointer',
+                position: 'relative', overflow: 'hidden',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
+              }}>
+              {/* Top accent line */}
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${a.accent}80, transparent)` }} />
+              {/* Icon chip */}
+              <div style={{
+                width: 36, height: 36, borderRadius: 10, marginBottom: 10,
+                background: `${a.accent}15`, border: `1px solid ${a.accent}25`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
+              }}>{a.icon}</div>
+              <div style={{ fontWeight: 700, fontSize: T.fontSizeLg, lineHeight: 1.25, marginBottom: 3 }}>{a.label}</div>
+              <div style={{ fontSize: T.fontSize - 2, color: T.dim, lineHeight: 1.4 }}>{a.sub}</div>
             </motion.div>
           ))}
         </div>
 
         {/* ── Relevant games section ────────────────────────────────────────────── */}
-        <div style={{ fontSize: 11, fontWeight: 700, color: T.dim, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 10 }}>
-          {t('forCode')} {CODES.find(c => c.id === selectedCode)?.label} · {CODES.find(c => c.id === selectedCode)?.sub}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <div style={{ flex: 1, height: 1, background: T.border }} />
+          <div style={{ fontSize: 10, fontWeight: 700, color: T.dim, letterSpacing: 2, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+            {t('forCode')} {CODES.find(c => c.id === selectedCode)?.label}
+          </div>
+          <div style={{ flex: 1, height: 1, background: T.border }} />
         </div>
         {relevantGames.map((game, i) => <GameCard key={game.id} game={game} index={i} tier={tier} onSelect={handleGameSelect} />)}
 
         {/* ── Other modes ───────────────────────────────────────────────────────── */}
         {otherGames.length > 0 && (
           <>
-            <div style={{ fontSize: 11, fontWeight: 700, color: T.dim, letterSpacing: 1.5, textTransform: 'uppercase', margin: '20px 0 10px' }}>
-              {t('otherModes')}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '20px 0 12px' }}>
+              <div style={{ flex: 1, height: 1, background: T.border }} />
+              <div style={{ fontSize: 10, fontWeight: 700, color: T.dim, letterSpacing: 2, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                {t('otherModes')}
+              </div>
+              <div style={{ flex: 1, height: 1, background: T.border }} />
             </div>
             {otherGames.map((game, i) => <GameCard key={game.id} game={game} index={i} tier={tier} onSelect={handleGameSelect} muted />)}
           </>
@@ -486,9 +538,14 @@ export default function App() {
           const active = navTab === item.id;
           return (
             <motion.button key={item.id} whileTap={{ scale: 0.88 }} onClick={() => setNavTab(item.id)}
-              style={{ flex: 1, background: 'none', border: 'none', padding: '10px 0 8px', color: active ? T.gold : T.dim, cursor: 'pointer', fontFamily: T.font, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, borderTop: `2px solid ${active ? T.gold : 'transparent'}`, transition: 'color 0.15s' }}>
-              <span style={{ fontSize: 20 }}>{item.icon}</span>
-              <span style={{ fontSize: 10, fontWeight: active ? 700 : 400 }}>{item.label}</span>
+              style={{ flex: 1, background: 'none', border: 'none', padding: '10px 0 8px', color: active ? T.gold : T.dim, cursor: 'pointer', fontFamily: T.font, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, transition: 'color 0.2s', position: 'relative' }}>
+              {/* Active indicator dot */}
+              {active && (
+                <motion.div layoutId="nav-active-dot"
+                  style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 20, height: 2, background: T.gold, borderRadius: 99 }} />
+              )}
+              {NAV_ICONS[item.id]}
+              <span style={{ fontSize: 9, fontWeight: active ? 700 : 400, letterSpacing: 0.3 }}>{item.label}</span>
             </motion.button>
           );
         })}
@@ -567,30 +624,58 @@ function GameCard({ game, index, tier, onSelect, muted = false }) {
   return (
     <motion.div
       custom={index} variants={cardVariants} initial="hidden" animate="visible"
-      whileTap={!locked ? { scale: 0.97 } : {}}
+      whileTap={!locked ? { scale: 0.975 } : {}}
       onClick={() => onSelect(game)}
       style={{
         background: T.surfaceAlt,
-        border: `1px solid ${locked ? T.border : dc + '33'}`,
-        borderRadius: T.radiusLg, padding: '14px 14px', marginBottom: 10,
+        border: `1px solid ${locked ? T.border : 'rgba(255,255,255,0.06)'}`,
+        borderRadius: 16, marginBottom: 8,
         cursor: locked ? 'default' : 'pointer',
-        opacity: locked ? 0.5 : muted ? 0.7 : 1,
+        opacity: locked ? 0.45 : muted ? 0.65 : 1,
         position: 'relative', overflow: 'hidden',
-        boxShadow: !locked && !muted ? `0 2px 12px rgba(0,0,0,0.3)` : 'none',
+        boxShadow: !locked && !muted ? `0 1px 3px rgba(0,0,0,0.4), 0 0 0 0.5px rgba(255,255,255,0.04)` : 'none',
       }}>
-      {/* Left colour bar */}
-      <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 3, background: dc, borderRadius: '14px 0 0 14px' }} />
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, paddingLeft: 10 }}>
-        <span style={{ fontSize: 26, flexShrink: 0 }}>{game.icon}</span>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap', marginBottom: 3 }}>
-            <span style={{ fontWeight: 700, fontSize: T.fontSizeLg }}>{game.label}</span>
-            <span style={{ background: dc + '20', color: dc, borderRadius: 99, padding: '1px 8px', fontSize: T.fontSize - 3, fontWeight: 600, textTransform: 'capitalize' }}>{t(`diff_${game.diff}`)}</span>
-            {locked && <span style={{ background: T.bg, color: T.dim, borderRadius: 99, padding: '1px 8px', fontSize: T.fontSize - 3, border: `1px solid ${T.border}` }}>{t('upgradeLabel')}</span>}
-          </div>
-          <div style={{ color: T.dim, fontSize: T.fontSize - 1 }}>{game.desc}</div>
+      {/* Accent gradient strip top */}
+      {!locked && !muted && (
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1.5, background: `linear-gradient(90deg, ${dc}, transparent)` }} />
+      )}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+        {/* Icon zone */}
+        <div style={{
+          width: 56, height: 56, flexShrink: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: `${dc}12`, margin: '10px 0 10px 12px', borderRadius: 12,
+          border: `1px solid ${dc}22`,
+        }}>
+          <span style={{ fontSize: 24 }}>{game.icon}</span>
         </div>
-        <span style={{ fontSize: 16, color: T.dim, flexShrink: 0, marginTop: 2 }}>›</span>
+        {/* Content */}
+        <div style={{ flex: 1, minWidth: 0, padding: '12px 10px 12px 12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3, flexWrap: 'wrap' }}>
+            <span style={{ fontWeight: 700, fontSize: T.fontSizeLg, lineHeight: 1.2 }}>{game.label}</span>
+            <span style={{
+              background: `${dc}18`, color: dc, borderRadius: 6,
+              padding: '1px 7px', fontSize: T.fontSize - 3, fontWeight: 600,
+              letterSpacing: 0.3, textTransform: 'uppercase',
+            }}>{t(`diff_${game.diff}`)}</span>
+            {locked && (
+              <span style={{
+                background: 'rgba(255,255,255,0.05)', color: T.dim, borderRadius: 6,
+                padding: '1px 7px', fontSize: T.fontSize - 3, border: `1px solid ${T.border}`,
+                letterSpacing: 0.3,
+              }}>🔒 {t('upgradeLabel')}</span>
+            )}
+          </div>
+          <div style={{ color: T.dim, fontSize: T.fontSize - 2, lineHeight: 1.45 }}>{game.desc}</div>
+        </div>
+        {/* Chevron */}
+        {!locked && (
+          <div style={{ paddingRight: 14, color: T.dim, flexShrink: 0 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </div>
+        )}
       </div>
     </motion.div>
   );

@@ -985,6 +985,10 @@ export default function UltimateGauntlet({ onBack, onPass }) {
     const pct = Math.round((score / finalTotal) * 100);
     const passed = isExamMode ? pct >= 77 : score >= PASS_SCORE;
     if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
+    const waText = isExamMode
+      ? `🏆 K53 Hybrid Exam: ${score}/${finalTotal} (${pct}%) ${passed ? "ABOVE 77% — READY ✅" : "Need more drilling 📚"} — https://k53drillmaster.co.za`
+      : `🚗 K53 Hybrid Round ${currentTest?.id}: ${score}/${finalTotal} (${pct}%) ${passed ? "✅" : "📚"} — https://k53drillmaster.co.za`;
+    const waLink = `https://wa.me/?text=${encodeURIComponent(waText)}`;
     return (
       <div style={{ minHeight: "100vh", background: "#060D07", fontFamily: "'Georgia', 'Times New Roman', serif", padding: "24px 16px" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
@@ -1023,6 +1027,13 @@ export default function UltimateGauntlet({ onBack, onPass }) {
             </div>
           )}
 
+          <a href={waLink} target="_blank" rel="noreferrer" style={{
+            display: "block", width: "100%", padding: "13px", background: "#25D366", color: "#fff",
+            border: "none", borderRadius: 4, fontSize: 14, fontWeight: 700, cursor: "pointer",
+            fontFamily: "'Georgia', 'Times New Roman', serif", textAlign: "center", textDecoration: "none", marginBottom: 10,
+          }}>
+            📲 Share on WhatsApp
+          </a>
           <div style={{ display: "flex", gap: 10 }}>
             <button onClick={() => isExamMode ? startExam(timedMode) : startTest(testIndex)} style={{ flex: 1, padding: "13px", background: "#DE3831", color: "#fff", border: "none", borderRadius: 4, fontSize: 11, fontWeight: 900, letterSpacing: 2, cursor: "pointer", fontFamily: "'Georgia', 'Times New Roman', serif" }}>RETRY</button>
             <button onClick={() => setScreen("home")} style={{ flex: 1, padding: "13px", background: "#FFB612", color: "#000", border: "none", borderRadius: 4, fontSize: 11, fontWeight: 900, letterSpacing: 2, cursor: "pointer", fontFamily: "'Georgia', 'Times New Roman', serif" }}>HOME →</button>

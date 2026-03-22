@@ -15,7 +15,7 @@ Payment processing is handled by PayFast. We never see or store your card detail
 We use Vercel Analytics to track aggregate page views. No personally identifiable information is collected.
 
 3. YOUR RIGHTS
-Delete all local data via Settings → Reset all progress. To delete your account, contact us via WhatsApp.
+Delete all local data via Settings → Reset all progress. To delete your account, email us at the address below.
 
 4. CONTACT
 Nandawula Kabali-Kagwa · hello@creativelynanda.co.za`;
@@ -42,7 +42,7 @@ Questions sourced from public DLTC manuals. App code is proprietary — do not c
 Provided "as is". Not liable for test outcomes.
 
 7. CONTACT
-WhatsApp: +27 84 291 6742`;
+hello@creativelynanda.co.za`;
 
 const DISCLAIMER = `EDUCATIONAL DISCLAIMER
 
@@ -91,9 +91,9 @@ export default function Footer() {
               style={{ color: T.dim, fontSize: 12, fontFamily: T.font, textDecoration: 'none' }}>
               🌐 creativelynanda.co.za
             </a>
-            <a href="https://wa.me/27842916742" target="_blank" rel="noopener noreferrer"
-              style={{ color: '#25d366', fontSize: 12, fontFamily: T.font, textDecoration: 'none' }}>
-              💬 WhatsApp
+            <a href="mailto:hello@creativelynanda.co.za"
+              style={{ color: T.dim, fontSize: 12, fontFamily: T.font, textDecoration: 'none' }}>
+              ✉ hello@creativelynanda.co.za
             </a>
           </div>
         </div>

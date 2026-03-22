@@ -5,6 +5,8 @@ import AITutor from "../components/AITutor.jsx";
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { sfx } from '../utils/sounds.js';
+import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 
 const TESTS = [
   {
@@ -649,6 +651,7 @@ export default function Code8Gauntlet({ onBack, onPass }) {
   const [currentStreak, setCurrentStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
   const [wrongAnswers, setWrongAnswers] = useState([]);
+  const [onARoll, setOnARoll] = useState(null); // "3 in a row! 🔥" etc
   const [showGate, setShowGate] = useState(false);
   const [isExamMode, setIsExamMode] = useState(false);
   const [examQuestions, setExamQuestions] = useState([]);
@@ -705,11 +708,20 @@ export default function Code8Gauntlet({ onBack, onPass }) {
     recordResult(correct, 'gauntlet');
     recordAnswer(stableId(currentQ, 'g_'), correct);
     if (correct) {
+      sfx('correct');
+      hapticCorrect();
       setScore((s) => s + 1);
       const ns = currentStreak + 1;
       setCurrentStreak(ns);
       if (ns > bestStreak) setBestStreak(ns);
+      // "On a roll" toast at streak milestones
+      if (ns === 3) { sfx('streak'); setOnARoll('🔥 3 in a row!'); setTimeout(() => setOnARoll(null), 1800); }
+      else if (ns === 5) { sfx('streak'); setOnARoll('🔥🔥 5 in a row!'); setTimeout(() => setOnARoll(null), 1800); }
+      else if (ns === 7) { sfx('streak'); setOnARoll('⚡ 7 in a row — UNSTOPPABLE'); setTimeout(() => setOnARoll(null), 2000); }
+      else if (ns > 7 && ns % 5 === 0) { sfx('streak'); setOnARoll(`🏆 ${ns} in a row!`); setTimeout(() => setOnARoll(null), 2000); }
     } else {
+      sfx('wrong');
+      hapticWrong();
       setCurrentStreak(0);
       setWrongAnswers((prev) => [...prev, {
         q: currentQ.q,
@@ -885,6 +897,22 @@ export default function Code8Gauntlet({ onBack, onPass }) {
     return (
       <>
         {showGate && <FreemiumGate onClose={() => { setShowGate(false); setScreen("home"); }} />}
+
+        {/* "On a roll" streak toast */}
+        {onARoll && (
+          <div style={{
+            position: 'fixed', top: 24, left: '50%', transform: 'translateX(-50%)',
+            background: 'linear-gradient(135deg,#007A4D,#005a38)', color: '#fff',
+            borderRadius: 99, padding: '10px 22px', fontSize: 15, fontWeight: 700,
+            zIndex: 9999, boxShadow: '0 4px 24px rgba(0,122,77,0.4)',
+            fontFamily: "'Georgia', 'Times New Roman', serif",
+            animation: 'fadeInDown 0.2s ease',
+            whiteSpace: 'nowrap',
+          }}>
+            {onARoll}
+          </div>
+        )}
+
       <div style={{ minHeight: "100vh", background: "#060D07", fontFamily: "'Georgia', 'Times New Roman', serif", padding: "20px 16px" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
           {/* Header */}
@@ -986,7 +1014,11 @@ export default function Code8Gauntlet({ onBack, onPass }) {
     const finalTotal = isExamMode ? examQuestions.length : (currentTest?.questions.length || 10);
     const pct = Math.round((score / finalTotal) * 100);
     const passed = isExamMode ? pct >= 70 : score >= PASS_SCORE;
-    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
+    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; sfx('pass'); hapticPass(); onPass?.(); }
+    const waText = isExamMode
+      ? `🚗 I scored ${score}/${finalTotal} (${pct}%) on the K53 Gauntlet Exam! ${passed ? "PASSED ✅" : "Need more practice 📚"} Train at https://k53drillmaster.co.za`
+      : `🚗 K53 Round ${currentTest?.id}: ${score}/${finalTotal} (${pct}%) ${passed ? "✅ PASSED" : "📚 Keep drilling"} — https://k53drillmaster.co.za`;
+    const waLink = `https://wa.me/?text=${encodeURIComponent(waText)}`;
 
     return (
       <div style={{ minHeight: "100vh", background: "#060D07", fontFamily: "'Georgia', 'Times New Roman', serif", padding: "24px 16px" }}>
@@ -1029,6 +1061,15 @@ export default function Code8Gauntlet({ onBack, onPass }) {
               <div style={{ color: "#007A4D", fontSize: 16 }}>🔥 PERFECT ROUND — Not a single mistake.</div>
             </div>
           )}
+
+          {/* WhatsApp share */}
+          <a href={waLink} target="_blank" rel="noreferrer" style={{
+            display: "block", width: "100%", padding: "13px", background: "#25D366", color: "#fff",
+            border: "none", borderRadius: 4, fontSize: 14, fontWeight: 700, cursor: "pointer",
+            fontFamily: "'Georgia', 'Times New Roman', serif", textAlign: "center", textDecoration: "none", marginBottom: 10,
+          }}>
+            📲 Share on WhatsApp
+          </a>
 
           {/* Buttons */}
           <div style={{ display: "flex", gap: 10 }}>

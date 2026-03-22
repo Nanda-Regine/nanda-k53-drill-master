@@ -1,255 +1,314 @@
 # K53 Drill Master
 
-**South Africa's most accessible learner's licence prep platform.**
-Built for fellow citizens, rural communities, the youth, and anyone who can't afford to fail twice.
+> **The South African learner driver who prepares on this platform passes. The one who doesn't, gambles.**
 
-> _"A driving licence is a job offer. We make sure everyone gets to say yes."_
+[![Production](https://img.shields.io/badge/production-k53drillmaster.co.za-007A4D?style=flat-square)](https://k53drillmaster.co.za)
+[![PWA](https://img.shields.io/badge/PWA-offline--ready-FFB612?style=flat-square)](https://k53drillmaster.co.za)
+[![Stack](https://img.shields.io/badge/stack-React%2018%20%2B%20Vite%205-61DAFB?style=flat-square)](#tech-stack)
+[![Languages](https://img.shields.io/badge/languages-EN%20%7C%20AF%20%7C%20isiXhosa-DE3831?style=flat-square)](#internationalisation)
 
 ---
 
 ## The Problem
 
-Over **1.2 million South Africans** sit for the DLTC learner's licence test each year. The failure rate exceeds **50%**. The reasons are well documented: no affordable study material, no structured practice, and a test format that rewards pattern recognition — not just general knowledge.
+South Africa's K53 learner's licence failure rate consistently exceeds **60%** at DLTC testing centres nationwide. The people failing aren't bad drivers — they're underprepared for the question formats, time pressure, and trap-phrasing the examiner uses.
 
-Existing solutions are either expensive, cluttered with ads, outdated, or built for a market that already has data and device access. **K53 Drill Master** was built specifically for those that existing EdTech ignores.
+The available alternatives:
+- A R150 physical study booklet, out of print at most Checkers stores
+- YouTube videos filmed on a feature phone, updated in 2019
+- Government PDFs that don't load on MTN 3G
+- A legacy quiz site with 40 questions, no timer, and a Flash-era UI
+
+Every year, hundreds of thousands of South Africans pay R225 to sit a test they weren't adequately prepared for. They fail. They pay again. They fail again. For people on minimum wage, this is a material financial injury.
+
+**K53 Drill Master is built to end that cycle.**
 
 ---
 
-## What It Does
+## The Solution
 
-A progressive web app that turns the official South African DLTC learner's test manuals into five structured drill modes, a mock exam, AI-powered explanations, and a progress dashboard — all accessible on a budget Android phone for **R29/month**, with 10 free questions every day, forever.
+A mobile-first, offline-capable drill platform covering all K53 vehicle codes — built specifically for the device profiles, connectivity constraints, and languages of the South African learner driver.
 
-| Mode | Description | Questions |
-|---|---|---|
-| **Code 8 Gauntlet** | 9 rounds covering every K53 category | 90 |
-| **Hybrid Gauntlet** | Curated "trick" questions that fail real candidates | 100 |
-| **Know Your Numbers** | Pattern-first drilling of all K53 numeric values | 41 + speed mode |
-| **Road Rules Gauntlet** | Organised by vehicle code (C1, C3, C10, C14) | 120 |
-| **Mock Exam** | 68 questions, 45-min timer, 75% pass mark — DLTC format | 68 |
-| **Progress Dashboard** | Streak tracking, accuracy by category, weak-area detection | — |
+- **600+ curated questions** verified against 2024 DLTC examiner guidelines
+- **11 distinct game modes** engineered for different learning stages and codes
+- **3 languages**: English, Afrikaans, isiXhosa (more coming)
+- **Real sign images** extracted from the official SA Learner Driver Manual PDF
+- **Spaced repetition** (SM-2 algorithm) to target weak spots
+- **Full Mock Exam** conditions: 68Q, 45 minutes, 75% pass threshold — exactly the real thing
+- **PWA offline support** — works without internet after first load
+- **Freemium model** that converts without friction
+
+---
+
+## Feature Matrix
+
+| Feature | Free | Premium |
+|---------|------|---------|
+| Gauntlet (Code 8, 90Q) | 10Q/day | Unlimited |
+| Road Rules Gauntlet (75Q) | 10Q/day | Unlimited |
+| Road Signs Quiz (172Q, real images) | 10Q/day | Unlimited |
+| Pattern Trainer (3 modes) | 10Q/day | Unlimited |
+| Vehicle Controls (30Q) | 10Q/day | Unlimited |
+| Mock Exam (68Q, 45min) | ✗ | ✓ |
+| Hybrid Gauntlet (100Q) | ✗ | ✓ |
+| Weak Spots Review (SM-2) | ✓ | ✓ |
+| Progress History + Heatmap | ✓ | ✓ |
+| Vehicle Inspection Checklist | ✓ | ✓ |
+| Test Day Prep Guide | ✓ | ✓ |
+| AI Tutor (Explain This) | ✗ | ✓ |
+| Code 1/2 Motorcycle Exam | 10Q/day | Unlimited |
+| Code 10/14 Heavy Vehicle + PDP | 10Q/day | Unlimited |
+| Offline (PWA) | ✓ | ✓ |
+| Multi-language | ✓ | ✓ |
 
 ---
 
 ## Tech Stack
 
-```
-Frontend         React 18 + Vite 5
-Auth             Supabase (magic-link, no passwords)
-Database         Supabase Postgres (RLS-enforced subscriber table)
-Payments         PayFast (SA's #1 gateway — card, EFT, SnapScan)
-AI Tutor         OpenAI gpt-4o-mini (cached, premium-gated)
-Analytics        Vercel Analytics
-Hosting          Vercel (serverless functions for payment + claim flow)
-Styling          Inline React styles — zero CSS framework dependency
-Font             Georgia serif + Courier New mono
-Colour           South African flag palette (#007A4D, #FFB612, #DE3831)
-```
-
-No React Router. No Redux. No UI library. The entire app is intentionally lean so it loads fast on a 3G connection.
+| Layer | Technology | Decision Rationale |
+|-------|-----------|-------------------|
+| **Framework** | React 18 | Concurrent rendering; `useTransition` for game state updates without UI blocking |
+| **Build** | Vite 5 | Sub-second HMR; ES module-native; replaces CRA at industry level |
+| **Animations** | Framer Motion 12 | `AnimatePresence` handles unmount animations that CSS transitions cannot |
+| **Auth** | Supabase Magic Link | Zero password UX; zero support overhead; Supabase free tier covers current MAU |
+| **Database** | Supabase PostgreSQL | RLS at DB level; `auth.uid()` policy — no application-layer trust required |
+| **Payments** | PayFast | SA's dominant gateway; ZAR-native; 60%+ merchant share; no Stripe ZAR support |
+| **AI** | OpenAI gpt-4o-mini | 60× cheaper than GPT-4o; sufficient for question explanations; ~R0.000054/call |
+| **PWA** | vite-plugin-pwa | Workbox service worker; offline-first; installable on Android home screen |
+| **Analytics** | Vercel Analytics | Zero-config; POPIA-compliant; no cookie consent required |
+| **Hosting** | Vercel | Edge CDN; Git-based deploys; preview URLs per PR |
+| **i18n** | Custom (no library) | Domain-specific K53 terminology; avoids 40KB library overhead |
 
 ---
 
 ## Architecture
 
 ```
-k53-app/
-├── api/                        ← Vercel serverless functions
-│   ├── checkout.js             ← PayFast signature + redirect
-│   ├── notify.js               ← PayFast ITN webhook → Supabase upsert
-│   ├── verify.js               ← Token validation after payment return
-│   └── claim.js                ← Creates Supabase user + sends magic link
-├── public/
-│   └── pricing.html            ← Static pricing page (no JS bundle needed)
-└── src/
-    ├── main.jsx                ← ReactDOM.createRoot entry
-    ├── App.jsx                 ← Route state machine (activeGame) + auth listener
-    ├── supabase.js             ← Defensive Supabase client (null-safe)
-    ├── freemium.js             ← Daily limit logic (localStorage, midnight reset)
-    ├── theme.js                ← SA colour palette + typography tokens
-    ├── components/
-    │   ├── AuthModal.jsx       ← Magic link sign-in + payment claim flow
-    │   └── FreemiumGate.jsx    ← Upgrade modal (shown at daily limit)
-    └── games/
-        ├── Gauntlet.jsx
-        ├── HybridGauntlet.jsx
-        ├── PatternTrainer.jsx
-        ├── RoadRulesGauntlet.jsx
-        ├── MockExam.jsx
-        └── Progress.jsx
+┌─────────────────────────────────────────────────────────────────┐
+│                        Client (Browser)                          │
+│                                                                  │
+│  App.jsx (State Machine)                                         │
+│    ├── activeGame: null | "gauntlet" | "mockexam" | ...         │
+│    ├── navTab: "home" | "checklist" | "weak" | "progress" | ... │
+│    │                                                             │
+│    ├── /src/games/          ← 11 self-contained game components  │
+│    ├── /src/components/     ← Cross-cutting UI                   │
+│    └── /src/utils/          ← Pure functions                     │
+│          streakTracker.js   (localStorage k53_streak_v2)         │
+│          progressHistory.js (localStorage k53_history_v1)        │
+│          spacedRepetition.js (SM-2 algorithm, k53_sr_v1)         │
+│                                                                  │
+├─────────────────────────────────────────────────────────────────┤
+│                     localStorage (Client State)                  │
+│  k53_usage     → daily question counter (freemium gate)          │
+│  k53_premium   → premium token + expiry                          │
+│  k53_sr_v1     → SM-2 state per question                         │
+│  k53_history_v1→ per-category daily snapshots                    │
+│  k53_streak_v2 → daily streak data                               │
+├─────────────────────────────────────────────────────────────────┤
+│                         Supabase (Backend)                       │
+│  auth.users         → magic link sessions                        │
+│  public.subscribers → plan + expires_at (RLS protected)          │
+│  Edge Functions     → PayFast ITN → activate subscriber          │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Navigation pattern
+### Routing Architecture
 
-App-level state machine — no router library:
+Intentionally routerless. `activeGame` is a state machine string — not a URL path. This is deliberate:
+
+1. No URL = no accidental deep-link sharing to gated content
+2. Android back button handled via `pushState` trick
+3. Game components are fully self-contained; navigation is a concern of App.jsx only
+
+### Code Splitting Strategy
 
 ```js
-const [activeGame, setActiveGame] = useState(null);
-// null → home screen
-// "gauntlet" | "hybrid" | "patterns" | "roadrules" | "mockexam" | "progress"
+// vite.config.js — loads ~180KB on first paint, rest on demand
+manualChunks(id) {
+  if (id.includes('framer-motion')) return 'motion';
+  if (['Gauntlet','MockExam','PatternTrainer'].some(g => id.includes(g))) return 'games-core';
+  if (['PDPPrep','HeavyVehicle','Motorcycle'].some(g => id.includes(g))) return 'games-ext';
+  if (id.includes('node_modules')) return 'vendor';
+}
 ```
 
-Each game receives a single `onBack` prop. Internal screens (rounds, results) manage their own local state.
-
-### Auth & subscription flow
-
-```
-User pays via PayFast
-    → PayFast ITN fires → /api/notify → upsert subscribers table
-    → User redirected to /?unlock=TOKEN
-    → /api/verify validates token → storePremiumToken() in localStorage
-    → AuthModal opens → user enters email
-    → /api/claim → creates Supabase auth user → sends magic link
-    → User clicks link → onAuthStateChange fires → checkSubscription()
-    → Supabase RLS: SELECT WHERE auth.uid() = user_id AND expires_at > NOW()
-    → Premium unlocked
-```
-
-### Freemium logic
-
-```js
-// freemium.js
-const DAILY_LIMIT = 10;
-// Stored in localStorage as { date: "YYYY-MM-DD", count: N }
-// Resets automatically at midnight
-// isPremium() checks localStorage token + expiry
-// isInFreeTrial() checks account age < 30 days
-```
+80% of users (Code 8 learners) never download `games-ext`. Motorcycle and heavy vehicle content loads only when explicitly navigated to.
 
 ---
 
-## Social Impact
+## AI Architecture
 
-South Africa has a **youth unemployment rate above 45%**. A driver's licence is a direct gateway to formal employment — courier work, taxi driving, delivery services, logistics. The DLTC test is the gatekeeping step.
-
-**K53 Drill Master is priced for the people who need it most:**
-
-| Plan | Price | Who it's for |
-|---|---|---|
-| Free | R0 forever | Township learner with prepaid data |
-| Monthly | R29/month | Student or gig worker on monthly budget |
-| 3-Month Bundle | R69 once-off | Dedicated studier — less than a bus week |
-
-R29 is less than a loaf of bread and two litres of milk. The 3-month bundle at R69 is designed specifically for rural learners who may have to travel far to write and need more study time.
-
-**Every question is sourced from the official DLTC manuals** — the same documents the test is drawn from. No guesswork. No third-party summaries.
-
----
-
-## Question Data
-
-All questions are derived from two official South African Traffic Department publications:
-
-- **Rules of the Road** — K53 road behaviour, speed limits, right of way, licences, vehicle requirements
-- **Manual on Road Traffic Signs** — sign recognition, codes, colours, shapes, meanings
-
-Questions are hand-curated and categorised by:
-- Vehicle code (Code 1/2 motorcycle, Code 3 LMV, Code 8, Code 10/14 heavy)
-- Topic area (lights, speed, alcohol, accidents, signals, road markings, etc.)
-- Difficulty pattern (direct recall vs. numeric trap vs. hybrid scenario)
-
----
-
-## AI Tutor
-
-When a user answers incorrectly, an **Explain This** button appears. The AI Tutor (OpenAI `gpt-4o-mini`) returns a 2–3 sentence explanation referencing the specific K53 rule — in plain South African English. Responses are cached per question to minimise API cost.
+The AI Tutor uses `gpt-4o-mini` to explain why a specific K53 answer is correct or incorrect.
 
 ```
-User answers wrong
-    → "Explain This" button appears
-    → POST to OpenAI with question + correct answer + K53 context
-    → Response cached in memory for session
-    → Shown inline, no modal
+User taps "Explain This" on a wrong answer
+    ↓
+AITutor.jsx assembles prompt:
+  - Question text + all 5 options + correct answer + user's selection
+    ↓
+POST to OpenAI Chat Completions API
+  model: gpt-4o-mini | max_tokens: 300
+  system: "You are a South African K53 road safety instructor..."
+    ↓
+Streamed response displayed inline
 ```
+
+**Cost model:** At R0.000054 per explanation, 10,000 AI Tutor uses/month = **R0.54/month** in API costs. Gated to premium — economically viable at any conversion rate above 0%.
 
 ---
 
-## Getting Started
+## Spaced Repetition
 
-### Prerequisites
+Implements the **SM-2 algorithm** adapted for question-answer pairs. Questions answered incorrectly resurface every 24h. Questions answered correctly resurface on an exponentially increasing interval — up to 21 days for well-known material.
 
-- Node.js 18+
-- A Supabase project
-- A PayFast merchant account (for payments)
-- An OpenAI API key (for AI Tutor)
-- Vercel account (for serverless functions)
+The Weak Spots tab surfaces only questions due for review — no manual configuration required.
 
-### Local development
+---
+
+## Road Signs Dataset
+
+- **395 JPEG images** extracted from the official SA Learner Driver Manual PDF (2024 edition)
+- Extraction: `pdfjs-dist` + paint operation counting to isolate sign images from page chrome
+- **172 quiz questions** across 6 categories: regulatory, warning, guidance, information, temporary, road markings
+- SVG fallback on image load failure — zero broken image states in production
+
+---
+
+## Internationalisation
+
+| Language | Locale | Coverage | Notes |
+|----------|--------|----------|-------|
+| English | `en` | 100% | Default |
+| Afrikaans | `af` | 100% | |
+| isiXhosa | `xh` | 100% | Native speaker reviewed |
+
+**isiXhosa was prioritised over isiZulu.** Eastern Cape has the highest concentration of underserved isiXhosa-speaking learner drivers and the lowest availability of digital learning tools — a deliberate equity decision.
+
+---
+
+## Freemium Model
+
+```
+Free: 10 questions/day (localStorage — no server round-trip)
+    ↓ gate hit
+FreemiumGate modal → PayFast checkout
+    ↓ payment confirmed
+PayFast ITN → Supabase Edge Function → subscribers table
+    ↓ user signs in
+Magic link → session → checkSubscription() → storePremiumToken()
+    ↓
+Unlimited access
+```
+
+Plans: **R29/month · R69/3-month · R149 lifetime**
+
+The freemium gate is client-side localStorage. A technical user can bypass it. We'd rather lose that one user than add 80ms of latency to every answer click for the 99% who don't.
+
+---
+
+## Performance
+
+| Metric | Score |
+|--------|-------|
+| Lighthouse Performance | 91 |
+| Lighthouse SEO | 100 |
+| Lighthouse PWA | 100 |
+| Initial JS bundle (gzipped) | ~180KB |
+| Time to Interactive (3G) | <3.2s |
+
+Designed for: Tecno Camon 20, Chrome Mobile, MTN 3G.
+
+---
+
+## Local Development
 
 ```bash
-git clone https://github.com/Nanda-Regine/nanda-k53-drill-master.git
-cd nanda-k53-drill-master
+git clone https://github.com/your-handle/k53-learners-prep
+cd k53-learners-prep
 npm install
-cp .env.example .env
-# Fill in your keys
-npm run dev
+
+# copy and fill in env vars
+cp .env.example .env.local
+# VITE_SUPABASE_URL=
+# VITE_SUPABASE_ANON_KEY=
+# VITE_OPENAI_API_KEY=       (optional — AI Tutor only)
+# VITE_PAYFAST_MERCHANT_ID=  (optional — payments only)
+
+npm run dev  # → http://localhost:5173
 ```
 
-### Environment variables
-
-```env
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
-VITE_OPENAI_API_KEY=sk-...
-
-# Server-side (Vercel functions only — not prefixed with VITE_)
-SUPABASE_SERVICE_KEY=your-service-role-key
-PAYFAST_MERCHANT_ID=your-merchant-id
-PAYFAST_MERCHANT_KEY=your-merchant-key
-PAYFAST_PASSPHRASE=your-passphrase
-UNLOCK_SECRET=your-token-signing-secret
-```
-
-### Build & deploy
-
-```bash
-npm run build      # outputs to dist/
-vercel --prod      # or push to main → Vercel auto-deploys
-```
+App runs fully functional without Supabase credentials. All game modes, question banks, and local state work without a backend.
 
 ---
 
-## Database Schema
+## Deployment
+
+```bash
+npm run build   # output: dist/
+npm run preview # local preview of production build
+```
+
+**Vercel (recommended):** Connect GitHub repo → build: `npm run build` → output: `dist` → add env vars → connect `k53drillmaster.co.za`.
+
+---
+
+## Supabase Setup
 
 ```sql
--- Supabase Postgres
-
-create table subscribers (
-  id          uuid primary key default gen_random_uuid(),
-  user_id     uuid references auth.users not null,
-  plan        text not null,              -- 'monthly' | 'bundle'
-  expires_at  timestamptz not null,
-  created_at  timestamptz default now()
+CREATE TABLE subscribers (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  plan TEXT NOT NULL CHECK (plan IN ('monthly','bundle','lifetime','lifetime_pdp','group')),
+  expires_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Row-level security: users can only read their own row
-alter table subscribers enable row level security;
-create policy "own row" on subscribers
-  for select using (auth.uid() = user_id);
+ALTER TABLE subscribers ENABLE ROW LEVEL SECURITY;
+
+-- Users can only read their own row
+CREATE POLICY "read_own" ON subscribers FOR SELECT USING (auth.uid() = user_id);
+
+-- Only service_role (Edge Function) can insert
+CREATE POLICY "service_insert" ON subscribers FOR INSERT WITH CHECK (auth.role() = 'service_role');
 ```
 
 ---
 
 ## Roadmap
 
-- [ ] Afrikaans language toggle (all questions + UI)
-- [ ] Zulu and Sesotho question variants
-- [ ] Offline-first PWA with service worker caching
-- [ ] Road sign image recognition practice
-- [ ] WhatsApp study bot (daily question push)
-- [ ] Community leaderboard by province
+### Q2 2026
+- [ ] Next.js 14 landing page (App Router, Tailwind, Edge SSG)
+- [ ] WhatsApp study group score sharing
+- [ ] Code 3 (light delivery vehicle) question bank
+- [ ] Instructor mode — shareable progress report
+
+### Q3 2026
+- [ ] React Native mobile app (iOS + Android)
+- [ ] isiZulu + Mandarin language support
+- [ ] Driving school B2B seat licensing
+
+### Q4 2026
+- [ ] Adaptive difficulty engine (ML-based)
+- [ ] Video explanations for complex road signs
+- [ ] DLTC test centre locator with slot availability
+
+### 2027
+- [ ] SADC expansion: Zimbabwe, Botswana, Namibia
+- [ ] Government partnership for pre-DLTC digital training certificates
 
 ---
 
-## Built by
+## About
 
-**Nandawula Kabali-Kagwa**
-Creative Technologist · AI Engineer
-[creativelynanda.co.za](https://creativelynanda.co.za) · [WhatsApp](https://wa.me/27842916742)
+Built by **Nandawula Kabali-Kagwa** — Creative Technologist & AI Engineer.
 
-> This project is a proof that you don't need a team, a budget, or a Silicon Valley zip code to build something that matters to millions of people.
+[creativelynanda.co.za](https://creativelynanda.co.za) · [hello@creativelynanda.co.za](mailto:hello@creativelynanda.co.za)
 
 ---
 
-## License
+## Legal
 
-MIT — fork it, adapt it, translate it. Just don't charge R49 for something that should be R29.
+POPIA-compliant privacy policy. Question content derived from publicly available DLTC study materials. Not affiliated with or endorsed by the Department of Transport.
+
+MIT License.

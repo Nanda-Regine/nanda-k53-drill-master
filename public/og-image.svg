@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#060D07;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0D1F10;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="stripe" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#000000" />
+      <stop offset="16.7%" style="stop-color:#FFB612" />
+      <stop offset="33.3%" style="stop-color:#007A4D" />
+      <stop offset="50%" style="stop-color:#F5F5F0" />
+      <stop offset="66.7%" style="stop-color:#DE3831" />
+      <stop offset="100%" style="stop-color:#4472CA" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feBlend in="SourceGraphic" mode="multiply" result="blend"/>
+      <feComposite in="blend" in2="SourceGraphic" operator="in"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grain overlay -->
+  <rect width="1200" height="630" fill="#007A4D" opacity="0.03"/>
+
+  <!-- SA Flag stripe at top -->
+  <rect x="0" y="0" width="1200" height="6" fill="url(#stripe)"/>
+
+  <!-- Decorative circle – green glow -->
+  <circle cx="980" cy="315" r="280" fill="#007A4D" opacity="0.06"/>
+  <circle cx="980" cy="315" r="200" fill="#007A4D" opacity="0.06"/>
+  <circle cx="980" cy="315" r="120" fill="#007A4D" opacity="0.08"/>
+
+  <!-- Grid lines (subtle) -->
+  <g opacity="0.04" stroke="#007A4D" stroke-width="1">
+    <line x1="0" y1="105" x2="1200" y2="105"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="0" y1="525" x2="1200" y2="525"/>
+    <line x1="150" y1="0" x2="150" y2="630"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="450" y1="0" x2="450" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="750" y1="0" x2="750" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="1050" y1="0" x2="1050" y2="630"/>
+  </g>
+
+  <!-- PASS badge -->
+  <rect x="80" y="72" width="100" height="36" rx="18" fill="#007A4D" opacity="0.9"/>
+  <text x="130" y="95" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#E8EDE0" text-anchor="middle" letter-spacing="2">PASS</text>
+
+  <!-- Main headline -->
+  <text x="80" y="200" font-family="Georgia, serif" font-size="72" font-weight="700" fill="#E8EDE0" filter="url(#glow)">K53 Drill</text>
+  <text x="80" y="285" font-family="Georgia, serif" font-size="72" font-weight="700" fill="#FFB612" filter="url(#glow)">Master</text>
+
+  <!-- Subheadline -->
+  <text x="80" y="345" font-family="Georgia, serif" font-size="24" fill="#6B7A62">South Africa's learner licence drill app.</text>
+  <text x="80" y="378" font-family="Georgia, serif" font-size="24" fill="#6B7A62">600+ questions. 11 game modes. 3 languages.</text>
+
+  <!-- Divider -->
+  <rect x="80" y="410" width="60" height="3" rx="2" fill="#FFB612"/>
+
+  <!-- Stats row -->
+  <g font-family="Georgia, serif">
+    <!-- Stat 1 -->
+    <text x="80" y="460" font-size="42" font-weight="700" fill="#007A4D">600+</text>
+    <text x="80" y="490" font-size="14" fill="#6B7A62">questions</text>
+
+    <!-- Stat 2 -->
+    <text x="260" y="460" font-size="42" font-weight="700" fill="#007A4D">11</text>
+    <text x="260" y="490" font-size="14" fill="#6B7A62">game modes</text>
+
+    <!-- Stat 3 -->
+    <text x="400" y="460" font-size="42" font-weight="700" fill="#007A4D">3</text>
+    <text x="400" y="490" font-size="14" fill="#6B7A62">languages</text>
+
+    <!-- Stat 4 -->
+    <text x="520" y="460" font-size="42" font-weight="700" fill="#FFB612">Free</text>
+    <text x="520" y="490" font-size="14" fill="#6B7A62">to start</text>
+  </g>
+
+  <!-- CTA button -->
+  <rect x="80" y="535" width="270" height="52" rx="26" fill="#007A4D"/>
+  <text x="215" y="567" font-family="Georgia, serif" font-size="18" font-weight="700" fill="#E8EDE0" text-anchor="middle">Start Practising Free →</text>
+
+  <!-- Domain -->
+  <text x="80" y="608" font-family="Georgia, serif" font-size="14" fill="#1A3020">k53drillmaster.co.za</text>
+
+  <!-- Right side — mock UI card -->
+  <rect x="760" y="80" width="360" height="470" rx="24" fill="#0D1F10" stroke="#1A3020" stroke-width="1.5"/>
+
+  <!-- Card header -->
+  <rect x="760" y="80" width="360" height="56" rx="24" fill="#007A4D" opacity="0.15"/>
+  <rect x="760" y="112" width="360" height="24" fill="#007A4D" opacity="0.15"/>
+  <text x="940" y="116" font-family="Georgia, serif" font-size="13" fill="#FFB612" text-anchor="middle" font-weight="700">ROAD SIGNS QUIZ</text>
+
+  <!-- Mock question -->
+  <text x="940" y="165" font-family="Georgia, serif" font-size="13" fill="#6B7A62" text-anchor="middle">What does this sign mean?</text>
+
+  <!-- Mock sign circle -->
+  <circle cx="940" cy="240" r="52" fill="#DE3831" stroke="#E8EDE0" stroke-width="4"/>
+  <text x="940" y="253" font-family="Georgia, serif" font-size="26" font-weight="900" fill="#E8EDE0" text-anchor="middle">STOP</text>
+
+  <!-- Mock options -->
+  <rect x="790" y="312" width="300" height="38" rx="8" fill="#007A4D" stroke="#007A4D" stroke-width="1.5"/>
+  <text x="940" y="336" font-family="Georgia, serif" font-size="13" fill="#E8EDE0" text-anchor="middle">Come to a complete stop</text>
+
+  <rect x="790" y="358" width="300" height="38" rx="8" fill="#0D1F10" stroke="#1A3020" stroke-width="1.5"/>
+  <text x="940" y="382" font-family="Georgia, serif" font-size="13" fill="#6B7A62" text-anchor="middle">Slow down and yield</text>
+
+  <rect x="790" y="404" width="300" height="38" rx="8" fill="#0D1F10" stroke="#1A3020" stroke-width="1.5"/>
+  <text x="940" y="428" font-family="Georgia, serif" font-size="13" fill="#6B7A62" text-anchor="middle">Stop only if traffic present</text>
+
+  <rect x="790" y="450" width="300" height="38" rx="8" fill="#0D1F10" stroke="#1A3020" stroke-width="1.5"/>
+  <text x="940" y="474" font-family="Georgia, serif" font-size="13" fill="#6B7A62" text-anchor="middle">Yield to oncoming traffic</text>
+
+  <!-- Progress bar -->
+  <rect x="790" y="502" width="300" height="6" rx="3" fill="#1A3020"/>
+  <rect x="790" y="502" width="135" height="6" rx="3" fill="#FFB612"/>
+
+  <!-- SA Flag stripe at bottom -->
+  <rect x="0" y="624" width="1200" height="6" fill="url(#stripe)"/>
+</svg>

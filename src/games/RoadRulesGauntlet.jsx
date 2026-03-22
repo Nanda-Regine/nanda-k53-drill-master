@@ -310,6 +310,8 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
     const pct = Math.round((correct / totalQ) * 100);
     const passed = pct >= 80;
     if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
+    const waText = `🚦 K53 Road Rules Round ${activeRound}: ${correct}/${totalQ} (${pct}%) ${passed ? '✅ PASSED' : '📚 Keep drilling'} — https://k53drillmaster.co.za`;
+    const waLink = `https://wa.me/?text=${encodeURIComponent(waText)}`;
     return (
       <div style={{ minHeight: '100vh', background: T.surface, color: T.text, fontFamily: T.font, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
         <div style={{ fontSize: 60, marginBottom: 12 }}>{passed ? '🎉' : '📖'}</div>
@@ -317,6 +319,13 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
         <div style={{ fontSize: 20, fontWeight: 600, color: passed ? '#007A4D' : '#DE3831', marginBottom: 24 }}>
           {correct}/{totalQ} correct ({pct}%)
         </div>
+        <a href={waLink} target="_blank" rel="noreferrer" style={{
+          display: 'block', width: '100%', maxWidth: 320, padding: '13px', background: '#25D366', color: '#fff',
+          border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 700, cursor: 'pointer',
+          fontFamily: T.font, textAlign: 'center', textDecoration: 'none', marginBottom: 12,
+        }}>
+          📲 Share on WhatsApp
+        </a>
         <div style={{ display: 'flex', gap: 12 }}>
           <button onClick={() => startRound(activeRound)} style={{ background: '#FFB612', color: '#1a1a2e', border: 'none', borderRadius: 10, padding: '12px 20px', fontWeight: 700, fontSize: 15, cursor: 'pointer' }}>Retry</button>
           <button onClick={() => setScreen('rounds')} style={{ background: T.surfaceAlt, color: T.text, border: `1px solid ${T.border}`, borderRadius: 10, padding: '12px 20px', fontWeight: 700, fontSize: 15, cursor: 'pointer' }}>All Rounds</button>

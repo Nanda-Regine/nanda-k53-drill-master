@@ -313,6 +313,8 @@ export default function MotorcycleMockExam({ onBack, onPass }) {
     const pct = Math.round((score / EXAM_QUESTIONS) * 100);
     const passed = pct >= PASS_MARK * 100;
     if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
+    const waText = `🏍️ I scored ${score}/${EXAM_QUESTIONS} (${pct}%) on the K53 Code 1 Mock Exam! ${passed ? "PASSED ✅" : "Need more practice 📚"} Train at https://k53drillmaster.co.za`;
+    const waLink = `https://wa.me/?text=${encodeURIComponent(waText)}`;
 
     const categoryMap = {};
     questions.forEach(q => {
@@ -379,6 +381,13 @@ export default function MotorcycleMockExam({ onBack, onPass }) {
             </div>
           )}
 
+          <a href={waLink} target="_blank" rel="noreferrer" style={{
+            display: "block", width: "100%", padding: "13px", background: "#25D366", color: "#fff",
+            border: "none", borderRadius: 4, fontSize: 14, fontWeight: 700, cursor: "pointer",
+            fontFamily: T.font, textAlign: "center", textDecoration: "none", marginBottom: 10,
+          }}>
+            📲 Share on WhatsApp
+          </a>
           <div style={{ display: "flex", gap: 10 }}>
             <button onClick={startExam} style={{ flex: 1, padding: "13px", background: "#DE3831", color: "#fff", border: "none", borderRadius: 4, fontSize: 11, fontWeight: 900, letterSpacing: 2, cursor: "pointer", fontFamily: T.font }}>
               RETRY
