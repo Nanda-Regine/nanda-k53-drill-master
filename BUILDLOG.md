@@ -456,7 +456,52 @@ A new contributor should be able to understand `Gauntlet.jsx` by reading only `G
 
 ---
 
-## Metrics at End of Phase 13 (Current)
+## Phase 14 — Quiz UX Overhaul: SA Flag Energy In-Game
+**Commit:** `bcc7b72` | **2026-03-22**
+
+The landing page had strong SA flag identity — bold green/gold/red, flag stripe, vivid contrast. The in-game UI was dark and muted: tiny border-only feedback, 3px progress bars, small text. Gap between landing page and game was jarring.
+
+### What shipped
+
+**Gauntlet (Code 8):**
+- 3px progress bar → segmented blocks (one block per question; green = done, round-colour = current, dark = pending). 10 questions → 10 clearly readable blocks.
+- Answer buttons: full vivid fill on reveal — correct = solid green (#007A4D) background with white text, wrong = solid red (#DE3831) with white text. Previous design: only border changed colour.
+- A/B/C/D letter badge: green pill with 15% opacity green background before answering; blends with fill colour after.
+- Question card: 16px bold text (was 14px), left 4px border in round's accent colour (was subtle gold tint border).
+- Score display: 32px in round's accent colour (was 22px gold regardless of round).
+- Timer: countdown number visible inline alongside bar with colour urgency (green/gold/red at thresholds).
+- SA flag stripe (6-colour, 4px) fixed to top of quiz AND result screens (was only on home screen).
+- Result screen: pass/fail pill badge, 72px score, transparent tinted background (was flat dark card).
+
+**MockExam:**
+- ScoreCard: pass/fail pill badge + 72px count-up score, transparent green/red tinted background.
+- Progress bar: 6px thick, green→gold gradient (was 3px flat gold).
+- Question card and answer buttons: same full-fill treatment as Gauntlet.
+- NEXT button: larger padding, cleaner letterSpacing.
+
+**RoadSignsQuiz:**
+- Added `sfx('correct')` / `sfx('wrong')` + hapticCorrect/hapticWrong — was the only quiz game missing sounds and haptics.
+- Wrong-answer review added to results screen: shows sign image, your answer vs correct answer, full explanation. Previously results showed only a percentage and two buttons.
+- `wrongAnswers` state tracked in QuizEngine, passed via `onFinish(score, wrongAnswers)` to parent.
+- Answer buttons: same full-fill + green pill badges.
+- Progress bar: 6px with green→accent gradient.
+- Score display: 22px in category accent colour with "SCORE" label.
+- Pass/fail pill badge on results.
+
+### Technical decisions
+
+**Full-fill vs border-only feedback.**
+Border-only feedback requires the eye to parse a subtle colour change at the edge of a button. Full fill makes the correct/wrong state unmissable — the entire button surface changes. This matters especially on budget Android displays with lower colour accuracy.
+
+**Segmented progress blocks over a bar.**
+A continuous bar shows approximate progress. Blocks show exact position: "I'm on question 7 of 10." At 10 questions per round, 10 blocks at ~60px each on a 640px container = perfectly legible. Would not use for 68-question MockExam (too narrow per block) — kept gradient bar there.
+
+**wrongAnswers tracking architecture in RoadSignsQuiz.**
+QuizEngine was a pure `score`-returning component. Extended to `(score, wrongAnswers[])`. State accumulates in QuizEngine via `setWrongAnswers(w => [...w, {...}])`, then passed on `onFinish`. Called only after `revealed = true` (user has answered), so state is settled by the time `next()` calls `onFinish`.
+
+---
+
+## Metrics at End of Phase 14 (Current)
 
 | Metric | Value |
 |--------|-------|
@@ -464,11 +509,11 @@ A new contributor should be able to understand `Gauntlet.jsx` by reading only `G
 | Vehicle codes covered | Code 1, 2, 8, 10, 14 |
 | Game modes | 11 |
 | Languages | 3 |
-| Bundle size (initial) | ~106KB gzipped (index chunk) |
-| Games with WhatsApp share | 6 / 6 |
-| Sound engine | Web Audio API, 4 synthesized sounds |
-| Haptic patterns | 4 (tap, correct, wrong, pass) |
-| OG image | 1200×630 PNG, sharp-generated |
-| Nav icons | SVG (5 icons, no emoji) |
-| Sound toggle | Settings, persists to localStorage |
+| Bundle size (initial) | ~107KB gzipped (index chunk) |
+| Games with sounds + haptics | 11 / 11 |
+| Games with wrong-answer review | All |
+| RoadSigns wrong-answer review | Added (sign image + explanation) |
+| Answer button feedback | Full vivid fill (all quiz games) |
+| Progress indicator | Segmented blocks (Gauntlet), gradient bar (MockExam/Signs) |
+| SA flag stripe | Fixed to quiz + result screens across all Gauntlets |
 | Pricing | Free / R29 / R69 / R149 |
