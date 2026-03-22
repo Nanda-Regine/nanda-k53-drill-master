@@ -4,6 +4,8 @@ import { incrementQuestionCount, isGateHit } from '../freemium.js';
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { sfx } from '../utils/sounds.js';
+import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 
 // ── Question Bank – Rounds 1-12 (original) + 13-15 (new) ─────────────────────
 
@@ -235,7 +237,10 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
     const q = questions[qIndex];
     const isCorrect = selected === q.answer;
     if (isCorrect) {
+      sfx('correct'); hapticCorrect();
       setCorrect(c => c + 1);
+    } else {
+      sfx('wrong'); hapticWrong();
     }
     recordResult(isCorrect, 'road_rules');
     recordAnswer(stableId(q, 'rr_'), isCorrect);
@@ -309,7 +314,7 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
     const totalQ = questions.length;
     const pct = Math.round((correct / totalQ) * 100);
     const passed = pct >= 80;
-    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
+    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; sfx('pass'); hapticPass(); onPass?.(); }
     const waText = `🚦 K53 Road Rules Round ${activeRound}: ${correct}/${totalQ} (${pct}%) ${passed ? '✅ PASSED' : '📚 Keep drilling'} — https://k53drillmaster.co.za`;
     const waLink = `https://wa.me/?text=${encodeURIComponent(waText)}`;
     return (

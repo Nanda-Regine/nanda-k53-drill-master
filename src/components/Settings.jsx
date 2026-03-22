@@ -5,6 +5,97 @@ import { resetStreak } from '../utils/streakTracker.js';
 import { resetSR } from '../utils/spacedRepetition.js';
 import { useLang } from '../LangContext.jsx';
 import { isSoundEnabled, setSoundEnabled, sfx } from '../utils/sounds.js';
+import { isPremium, isInFreeTrial, daysLeftInTrial, getRemainingToday, DAILY_LIMIT } from '../freemium.js';
+
+// ── Legal documents ────────────────────────────────────────────────────────────
+const LEGAL_DOCS = {
+  privacy: {
+    title: 'Privacy Policy',
+    content: `PRIVACY POLICY — K53 Drill Master
+Last updated: March 2026
+
+1. DATA WE COLLECT
+All study data (progress, streaks, badges, quiz history) is stored locally on your device using browser localStorage. We do not upload your answers to any server.
+
+If you sign in with a magic link, we store your email address in our Supabase database solely to verify your subscription. We do not sell or share your email.
+
+Payment processing is handled by PayFast. We never see or store your card details.
+
+2. ANALYTICS
+We use Vercel Analytics to track aggregate page views. No personally identifiable information is collected.
+
+3. YOUR RIGHTS
+Delete all local data via Settings → Reset all progress.
+To delete your account, email hello@creativelynanda.co.za.
+
+4. CONTACT
+Nandawula Kabali-Kagwa · hello@creativelynanda.co.za`,
+  },
+  terms: {
+    title: 'Terms of Service',
+    content: `TERMS OF SERVICE — K53 Drill Master
+Last updated: March 2026
+
+1. ACCEPTANCE
+By using K53 Drill Master you agree to these terms.
+
+2. SERVICE
+K53 Drill Master is an educational tool for the SA DLTC learner's licence test. We do not guarantee pass results.
+
+3. FREE TIER
+Free users receive a 30-day unlimited trial from first use.
+After the trial: up to ${DAILY_LIMIT} questions per day, free forever.
+The ${DAILY_LIMIT}-question daily limit resets at midnight each day.
+Each answered question (correct or wrong) counts toward the daily limit.
+
+4. PAID PLANS
+Processed via PayFast (ZAR). Monthly plans auto-renew. Lifetime plans are one-time.
+No refunds after activation.
+
+5. INTELLECTUAL PROPERTY
+Questions sourced from public DLTC manuals. App code is proprietary — do not copy or resell.
+
+6. LIABILITY
+Provided "as is". Not liable for test outcomes.
+
+7. CONTACT
+hello@creativelynanda.co.za`,
+  },
+  disclaimer: {
+    title: 'Disclaimer',
+    content: `EDUCATIONAL DISCLAIMER
+
+K53 Drill Master is independent and NOT affiliated with the SA Department of Transport, DLTC, or any government body.
+
+Questions are based on the publicly available K53 manuals (Rules of the Road and Manual on Road Traffic Signs).
+
+Always study the official manuals alongside this app.
+
+The ${DAILY_LIMIT}-question free daily limit exists to keep the service sustainable. Upgrade for unlimited access.`,
+  },
+};
+
+function LegalModal({ doc, onClose }) {
+  return (
+    <div
+      onClick={onClose}
+      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 9999, display: 'flex', alignItems: 'flex-end' }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{ background: T.surface, borderRadius: '20px 20px 0 0', width: '100%', maxHeight: '82vh', display: 'flex', flexDirection: 'column' }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 20px 14px', borderBottom: `1px solid ${T.border}` }}>
+          <div style={{ fontWeight: 700, fontSize: 17, color: T.text, fontFamily: T.font }}>{doc.title}</div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: T.dim, fontSize: 26, cursor: 'pointer', lineHeight: 1, padding: '0 4px' }}>×</button>
+        </div>
+        <div style={{ overflowY: 'auto', padding: '16px 20px 48px', flex: 1 }}>
+          <pre style={{ fontFamily: T.font, fontSize: 13, color: T.dim, whiteSpace: 'pre-wrap', lineHeight: 1.8 }}>{doc.content}</pre>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FONT_KEYS = [
   { value: 'small',  key: 'font_small',  preview: 13 },
@@ -19,6 +110,12 @@ export default function Settings({ onBack, onFontSizeChange }) {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [resetDone, setResetDone] = useState(false);
   const [soundOn, setSoundOn] = useState(isSoundEnabled);
+  const [openLegal, setOpenLegal] = useState(null); // 'privacy' | 'terms' | 'disclaimer'
+
+  const premium = isPremium();
+  const inTrial = isInFreeTrial();
+  const daysLeft = daysLeftInTrial();
+  const remaining = getRemainingToday();
 
   const handleSoundToggle = () => {
     const next = !soundOn;
@@ -170,11 +267,79 @@ export default function Settings({ onBack, onFontSizeChange }) {
           </div>
         </div>
 
+        {/* ── Your Plan ── */}
+        {SECTION('Your Plan')}
+        <div style={{ background: T.surfaceAlt, border: `1px solid ${T.border}`, borderRadius: 12, padding: '14px 16px', marginBottom: 10 }}>
+          {premium && !inTrial ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ fontSize: 24 }}>⭐</span>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: T.fontSizeLg, color: T.gold }}>Premium — Unlimited</div>
+                <div style={{ fontSize: T.fontSize - 2, color: T.dim, marginTop: 2 }}>All questions, all modes, AI Tutor</div>
+              </div>
+            </div>
+          ) : inTrial ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ fontSize: 24 }}>🎁</span>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: T.fontSizeLg, color: '#4ade80' }}>Free Trial — Unlimited</div>
+                <div style={{ fontSize: T.fontSize - 2, color: T.dim, marginTop: 2 }}>
+                  {daysLeft} day{daysLeft !== 1 ? 's' : ''} remaining · All features unlocked
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                <span style={{ fontSize: 24 }}>🆓</span>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: T.fontSizeLg, color: T.text }}>Free Tier</div>
+                  <div style={{ fontSize: T.fontSize - 2, color: T.dim, marginTop: 2 }}>
+                    <span style={{ color: remaining === 0 ? T.red : T.text, fontWeight: 600 }}>{remaining}</span>
+                    {' '}of {DAILY_LIMIT} questions left today
+                  </div>
+                </div>
+              </div>
+              {/* What counts */}
+              <div style={{ background: T.surface, borderRadius: 10, padding: '10px 14px', fontSize: T.fontSize - 2, color: T.dim, lineHeight: 1.7 }}>
+                <div style={{ fontWeight: 600, color: T.text, marginBottom: 4 }}>How daily questions work</div>
+                <div>• Each question you answer (correct or wrong) counts as 1.</div>
+                <div>• Counter resets at midnight every day.</div>
+                <div>• All 11 game modes share the same daily pool.</div>
+                <div style={{ marginTop: 6, color: T.gold }}>Upgrade for unlimited — from R29/month.</div>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* ── App Info ── */}
         {SECTION(t('settings_about'))}
         <ROW icon="🇿🇦" label="K53 Drill Master" sub={t('about_app')} right="v2.0" />
         <ROW icon="📋" label={t('about_manual')} sub="National Road Traffic Act 93 of 1996" />
-        <ROW icon="🔒" label="Privacy" sub={t('about_privacy')} />
+
+        {/* ── Legal ── */}
+        {SECTION('Legal')}
+        <ROW
+          icon="🔒"
+          label="Privacy Policy"
+          sub="How we handle your data"
+          right="›"
+          onClick={() => setOpenLegal('privacy')}
+        />
+        <ROW
+          icon="📜"
+          label="Terms of Service"
+          sub="Usage rules, free tier, refund policy"
+          right="›"
+          onClick={() => setOpenLegal('terms')}
+        />
+        <ROW
+          icon="⚠️"
+          label="Disclaimer"
+          sub="Not affiliated with DLTC or RTMC"
+          right="›"
+          onClick={() => setOpenLegal('disclaimer')}
+        />
 
         {/* ── Data management ── */}
         {SECTION(t('settings_data'))}
@@ -204,6 +369,11 @@ export default function Settings({ onBack, onFontSizeChange }) {
       </div>
 
       {/* Reset confirmation modal */}
+      {/* Legal doc modal */}
+      {openLegal && (
+        <LegalModal doc={LEGAL_DOCS[openLegal]} onClose={() => setOpenLegal(null)} />
+      )}
+
       {showResetConfirm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 9990, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div style={{ background: T.surface, borderRadius: 16, padding: 24, maxWidth: 340, width: '100%', border: `1px solid ${T.border}` }}>
