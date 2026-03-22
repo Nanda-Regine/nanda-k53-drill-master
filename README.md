@@ -275,6 +275,113 @@ CREATE POLICY "service_insert" ON subscribers FOR INSERT WITH CHECK (auth.role()
 
 ---
 
+## Build Journal
+
+A chronological log of what shipped and why.
+
+---
+
+### 2026-03-22 — UX Overhaul: SA Flag Energy in Every Quiz Screen
+
+The core question banks were complete but the in-game experience was underwhelming relative to the landing page. The landing page carried SA flag identity strongly (green/gold/red, bold typography, flag stripe). The games were dark and muted — small text, border-only feedback, thin progress bars.
+
+**Gauntlet:**
+- Replaced 3px progress bar with segmented blocks (one per question: green=done, round-colour=current, dark=pending)
+- Answer buttons now fill with vivid solid colour on reveal — correct=green, wrong=red, white text — no more subtle border-only feedback
+- A/B/C/D letter badge: green pill before answering, blends to fill after
+- Question card: 16px bold text, left border in round's accent colour
+- Score display: 32px in round colour
+- Timer: countdown number visible inline alongside the bar
+- SA flag stripe fixed to top of quiz and result screens
+- Result screen: pass/fail pill badge, 72px score, transparent tinted background
+
+**MockExam:**
+- ScoreCard redesigned: pass/fail pill + 72px count-up score, transparent green/red tint
+- Progress bar: 6px thick, green→gold gradient
+- Question card and answer buttons: same full-fill treatment as Gauntlet
+
+**RoadSignsQuiz:**
+- Added sounds (sfx correct/wrong) and haptics — was the only game missing these
+- Wrong-answer review added to results screen: shows sign image, your answer vs correct, full explanation
+- Answer buttons: full-fill on reveal, green pill letter badges
+- Score display upgraded to match other games
+- Pass/fail pill badge on results
+
+---
+
+### 2026-03-22 — Settings, Legal, SEO, AITutor Cost Savings
+
+**Settings:**
+- Added "Your Plan" section showing tier, days left in trial, daily questions remaining
+- Added Legal section: Privacy Policy, Terms of Service, Disclaimer as bottom-sheet modals
+- Terms explicitly states the 10Q/day free tier limit
+
+**SEO (index.html):**
+- Complete meta tag overhaul: hreflang, OG dimensions, Twitter card
+- JSON-LD: SoftwareApplication schema, FAQPage (7 entries), BreadcrumbList
+- Inline CSS animations: fadeInDown, fadeInUp, scaleIn
+
+**AITutor:**
+- djb2 hash cache key (replaces 80-char string slice — eliminates collision risk)
+- Cache pruning at 200 entries (prevents localStorage bloat)
+- Rate limiting: 3 AI calls/day free, unlimited premium
+- temperature:0 + max_tokens:120 (deterministic responses, lower cost)
+
+**RoadRulesGauntlet:**
+- Added sounds and haptics (sfx correct/wrong/pass)
+
+---
+
+### 2026-03-22 — Sound Engine, UX Overhaul, WhatsApp Sharing, OG Image
+
+- Procedural Web Audio API sound engine (no audio files, offline-safe): correct, wrong, pass, streak sounds
+- Haptic feedback via Vibration API on answer events
+- WhatsApp score sharing added to Gauntlet and MockExam results
+- OG image created and deployed
+- Streak sharing from home screen
+- Global UX pass: font sizes, spacing, motion animations tightened
+
+---
+
+### 2026-03-22 — Multi-language: English, Afrikaans, isiXhosa
+
+- Custom i18n system with zero library overhead
+- Full coverage across all UI strings in 3 languages
+- Language selector persisted to localStorage
+- isiXhosa prioritised over isiZulu: Eastern Cape has highest concentration of underserved isiXhosa-speaking learner drivers and lowest availability of digital learning tools
+
+---
+
+### 2026-03-22 — Road Signs Quiz: 172 Questions, 6 Categories, Real Images
+
+- 395 JPEG images extracted from official SA Learner Driver Manual PDF (2024)
+- Extraction pipeline: `pdfjs-dist` + paint operation counting to isolate sign images from page chrome
+- 172 quiz questions across: Regulatory (Control), Regulatory (Prohibition), Warning, Guidance, Road Markings, Temporary
+- Study mode, timed mode, category drill mode
+- SVG fallback on image load failure
+
+---
+
+### Earlier — Foundation Sprint
+
+- React 18 + Vite 5 + Framer Motion project setup
+- Supabase auth (magic link) + PayFast payments integration
+- Freemium gate: 10 questions/day localStorage counter, no server round-trip
+- SM-2 spaced repetition algorithm for weak spot targeting
+- Daily streak tracker with badge system (13 badges)
+- Code 8 Gauntlet: 9 rounds × 10 questions, exam simulator
+- MockExam: 68Q, 45 minutes, 75% pass mark, category breakdown
+- HybridGauntlet: EXCEPT/NOT trap questions (premium)
+- PatternTrainer: number pattern drills
+- VehicleControls: instrument and control questions
+- RoadRulesGauntlet: 75 road rules questions with sounds
+- Motorcycle Gauntlet + Mock Exam (Code 1/2)
+- Heavy Vehicle Gauntlet (Code 10/14)
+- PDP Prep: 6 professional driver modules (~100 questions, PDP tier)
+- PWA: Workbox service worker, offline-first, installable
+
+---
+
 ## Roadmap
 
 ### Q2 2026
@@ -282,6 +389,8 @@ CREATE POLICY "service_insert" ON subscribers FOR INSERT WITH CHECK (auth.role()
 - [ ] WhatsApp study group score sharing
 - [ ] Code 3 (light delivery vehicle) question bank
 - [ ] Instructor mode — shareable progress report
+- [ ] Supabase Edge Function for AITutor (move API key server-side)
+- [ ] Backend progress sync (currently localStorage-only)
 
 ### Q3 2026
 - [ ] React Native mobile app (iOS + Android)
