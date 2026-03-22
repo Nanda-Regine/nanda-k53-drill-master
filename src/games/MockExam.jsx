@@ -147,24 +147,24 @@ function ScoreCard({ score, total, pct, passed }) {
 
   return (
     <div style={{
-      background: passed ? "#001a12" : "#1a0000",
+      background: passed ? "rgba(0,122,77,0.08)" : "rgba(222,56,49,0.08)",
       border: `2px solid ${passed ? "#007A4D" : "#DE3831"}`,
-      borderRadius: 8, padding: "32px 28px", textAlign: "center", marginBottom: 24,
+      borderRadius: 12, padding: "36px 28px", textAlign: "center", marginBottom: 24,
       animation: 'scaleIn 0.3s ease',
     }}>
-      <div style={{ color: passed ? "#007A4D" : "#DE3831", fontSize: 10, letterSpacing: 4, marginBottom: 12 }}>
-        📝 MOCK EXAM RESULT
+      <div style={{ display: 'inline-block', background: passed ? "#007A4D" : "#DE3831", color: '#fff', fontSize: 11, letterSpacing: 4, padding: '6px 20px', borderRadius: 99, marginBottom: 20, fontWeight: 900 }}>
+        {passed ? "✓ PASSED" : "✗ NOT PASSED"}
       </div>
-      <div style={{ color: "#fff", fontSize: 64, fontWeight: 900, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
-        {displayScore}<span style={{ color: "#1A3020", fontSize: 36 }}>/{total}</span>
+      <div style={{ color: "#fff", fontSize: 72, fontWeight: 900, lineHeight: 1, fontVariantNumeric: 'tabular-nums', marginBottom: 8 }}>
+        {displayScore}<span style={{ color: "#2a2a3a", fontSize: 40 }}>/{total}</span>
       </div>
-      <div style={{ color: passed ? "#007A4D" : "#DE3831", fontSize: 32, fontWeight: 900, marginTop: 8, fontVariantNumeric: 'tabular-nums' }}>
+      <div style={{ color: passed ? "#007A4D" : "#DE3831", fontSize: 32, fontWeight: 900, fontVariantNumeric: 'tabular-nums', marginBottom: 12 }}>
         {displayPct}%
       </div>
-      <div style={{ color: "#6B7A62", fontSize: 14, marginTop: 10 }}>
+      <div style={{ color: "#6b6b82", fontSize: 14 }}>
         {passed
-          ? "🎉 PASSED — You're ready for the real test!"
-          : `Need 75% to pass — you got ${pct}%. Keep practising!`}
+          ? "Excellent — you're ready for the real test!"
+          : `Need 75% to pass. You got ${pct}%. Keep drilling!`}
       </div>
     </div>
   );
@@ -331,8 +331,8 @@ export default function MockExam({ onBack, onPass }) {
           </div>
 
           {/* Progress */}
-          <div style={{ height: 3, background: T.surface, borderRadius: 2, marginBottom: 4 }}>
-            <div style={{ height: "100%", width: `${progress}%`, background: T.gold, borderRadius: 2, transition: "width 0.3s" }} />
+          <div style={{ height: 6, background: T.surface, borderRadius: 3, marginBottom: 4 }}>
+            <div style={{ height: "100%", width: `${progress}%`, background: `linear-gradient(90deg, ${T.green}, ${T.gold})`, borderRadius: 3, transition: "width 0.3s" }} />
           </div>
 
           {/* Timer bar */}
@@ -345,29 +345,33 @@ export default function MockExam({ onBack, onPass }) {
           </div>
 
           {/* Question */}
-          <div style={{ background: "rgba(255,182,18,0.07)", border: "1px solid rgba(255,182,18,0.22)", borderRadius: 4, padding: "20px", marginBottom: 14, color: "#F0E8C8", fontSize: 14, lineHeight: 1.7, fontWeight: 600 }}>
+          <div style={{ background: T.surface, borderLeft: `4px solid ${T.gold}`, borderRadius: 4, padding: "22px 20px", marginBottom: 16, color: T.text, fontSize: 16, lineHeight: 1.7, fontWeight: 700 }}>
             {currentQ.q}
           </div>
 
           {/* Options */}
           <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 14 }}>
             {currentQ.options.map((opt, i) => {
-              let bc = T.border, bg = T.surface, tc = "#aaa";
-              if (answered) {
-                if (i === currentQ.answer) { bc = T.green; bg = "#001a12"; tc = T.green; }
-                else if (i === selected) { bc = T.red; bg = "#1a0000"; tc = T.red; }
-                else { tc = "#2a2a2a"; }
+              let bc, bg, tc;
+              if (!answered) {
+                bc = T.border; bg = T.surface; tc = T.text;
+              } else if (i === currentQ.answer) {
+                bc = T.green; bg = T.green; tc = "#fff";
+              } else if (i === selected) {
+                bc = T.red; bg = T.red; tc = "#fff";
+              } else {
+                bc = T.border; bg = T.bg; tc = T.border;
               }
               return (
                 <button key={i} onClick={() => handleSelect(i)}
-                  style={{ background: bg, border: `2px solid ${bc}`, borderRadius: 4, padding: "13px 14px", textAlign: "left", cursor: answered ? "default" : "pointer", display: "flex", gap: 10, alignItems: "flex-start", fontFamily: T.font }}
-                  onMouseEnter={e => { if (!answered) e.currentTarget.style.borderColor = T.gold; }}
-                  onMouseLeave={e => { if (!answered) e.currentTarget.style.borderColor = T.border; }}
+                  style={{ background: bg, border: `2px solid ${bc}`, borderRadius: 6, padding: "14px 16px", textAlign: "left", cursor: answered ? "default" : "pointer", display: "flex", gap: 12, alignItems: "flex-start", transition: "all 0.15s", fontFamily: T.font }}
+                  onMouseEnter={e => { if (!answered) { e.currentTarget.style.borderColor = T.gold; e.currentTarget.style.background = T.surfaceAlt; } }}
+                  onMouseLeave={e => { if (!answered) { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.background = T.surface; } }}
                 >
-                  <span style={{ color: tc, fontSize: 10, fontWeight: 900, minWidth: 18, marginTop: 2 }}>{String.fromCharCode(65 + i)}</span>
-                  <span style={{ color: tc, fontSize: 13, lineHeight: 1.5 }}>{opt}</span>
-                  {answered && i === currentQ.answer && <span style={{ marginLeft: "auto", color: T.green }}>✓</span>}
-                  {answered && i === selected && i !== currentQ.answer && <span style={{ marginLeft: "auto", color: T.red }}>✗</span>}
+                  <span style={{ background: !answered ? 'rgba(0,122,77,0.15)' : 'transparent', color: !answered ? T.green : tc, fontSize: 11, fontWeight: 900, minWidth: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 4, flexShrink: 0, marginTop: 1 }}>{String.fromCharCode(65 + i)}</span>
+                  <span style={{ color: tc, fontSize: 14, lineHeight: 1.5 }}>{opt}</span>
+                  {answered && i === currentQ.answer && <span style={{ marginLeft: "auto", color: "#fff", fontSize: 16 }}>✓</span>}
+                  {answered && i === selected && i !== currentQ.answer && <span style={{ marginLeft: "auto", color: "#fff", fontSize: 16 }}>✗</span>}
                 </button>
               );
             })}
@@ -381,8 +385,8 @@ export default function MockExam({ onBack, onPass }) {
           )}
 
           {answered && (
-            <button onClick={handleNext} style={{ width: "100%", padding: "13px", background: T.gold, color: "#000", border: "none", borderRadius: 4, fontSize: 12, fontWeight: 900, letterSpacing: 3, cursor: "pointer", fontFamily: T.font }}>
-              {qIdx < questions.length - 1 ? "NEXT →" : "FINISH EXAM →"}
+            <button onClick={handleNext} style={{ width: "100%", padding: "16px", background: T.gold, color: "#000", border: "none", borderRadius: 6, fontSize: 13, fontWeight: 900, letterSpacing: 2, cursor: "pointer", fontFamily: T.font }}>
+              {qIdx < questions.length - 1 ? "NEXT QUESTION →" : "FINISH EXAM →"}
             </button>
           )}
 

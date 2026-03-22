@@ -3,6 +3,8 @@ import { T } from "../theme.js";
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { sfx } from '../utils/sounds.js';
+import { hapticCorrect, hapticWrong } from '../utils/haptics.js';
 
 function SignImg({ src, alt, size = 130 }) {
   return (
@@ -891,6 +893,7 @@ function QuizEngine({ questions, onFinish, timed }) {
   const [selected, setSelected] = useState(null);
   const [revealed, setRevealed] = useState(false);
   const [score, setScore] = useState(0);
+  const [wrongAnswers, setWrongAnswers] = useState([]);
   const [timeLeft, setTimeLeft] = useState(timed ? 30 : null);
   const q = questions[idx];
 
@@ -899,7 +902,22 @@ function QuizEngine({ questions, onFinish, timed }) {
     setSelected(optIdx);
     setRevealed(true);
     const isCorrectSign = optIdx === q.answer;
-    if (isCorrectSign) setScore(s => s + 1);
+    if (isCorrectSign) {
+      setScore(s => s + 1);
+      sfx('correct');
+      hapticCorrect();
+    } else {
+      sfx('wrong');
+      hapticWrong();
+      setWrongAnswers(w => [...w, {
+        question: q.question,
+        img: q.img,
+        yourAnswer: optIdx === -1 ? "TIME'S UP" : q.options[optIdx],
+        correctAnswer: q.options[q.answer],
+        explanation: q.explanation,
+        category: q.category,
+      }]);
+    }
     recordResult(isCorrectSign, 'signs');
     recordAnswer(stableId(q, 'sign_'), isCorrectSign);
   }, [revealed, q]);
@@ -919,7 +937,7 @@ function QuizEngine({ questions, onFinish, timed }) {
 
   function next() {
     if (idx + 1 >= questions.length) {
-      onFinish(score + (selected === q.answer ? 1 : 0));
+      onFinish(score + (selected === q.answer ? 1 : 0), wrongAnswers);
     } else {
       setIdx(i => i + 1);
     }
@@ -932,11 +950,14 @@ function QuizEngine({ questions, onFinish, timed }) {
     <div style={{ maxWidth: 620, margin: "0 auto", padding: "0 16px 40px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
         <div style={{ color: T.dim, fontSize: 13, fontFamily: T.mono }}>Q {idx + 1} / {questions.length}</div>
-        {timed && !revealed && <div style={{ color: timeLeft <= 10 ? T.red : T.gold, fontSize: 20, fontFamily: T.mono, fontWeight: 700 }}>{timeLeft}s</div>}
-        <div style={{ color: T.dim, fontSize: 13, fontFamily: T.mono }}>Score: {score}</div>
+        {timed && !revealed && <div style={{ color: timeLeft <= 10 ? T.red : T.gold, fontSize: 24, fontFamily: T.mono, fontWeight: 900 }}>{timeLeft}s</div>}
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ color: accent, fontSize: 22, fontWeight: 900, fontFamily: T.mono, lineHeight: 1 }}>{score}</div>
+          <div style={{ color: T.dim, fontSize: 10, letterSpacing: 2 }}>SCORE</div>
+        </div>
       </div>
-      <div style={{ background: T.border, height: 4, borderRadius: 2, marginBottom: 24 }}>
-        <div style={{ width: `${((idx + 1) / questions.length) * 100}%`, height: "100%", borderRadius: 2, background: accent, transition: "width 0.3s" }} />
+      <div style={{ background: T.surface, height: 6, borderRadius: 3, marginBottom: 24 }}>
+        <div style={{ width: `${((idx + 1) / questions.length) * 100}%`, height: "100%", borderRadius: 3, background: `linear-gradient(90deg, ${T.green}, ${accent})`, transition: "width 0.3s" }} />
       </div>
       <div style={{ background: T.surface, border: `2px solid ${T.border}`, borderRadius: 8, padding: "28px 20px", marginBottom: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
         <div style={{ color: accent, fontSize: 11, letterSpacing: 3, fontFamily: T.mono, textTransform: "uppercase" }}>{cat?.label}</div>
@@ -945,15 +966,21 @@ function QuizEngine({ questions, onFinish, timed }) {
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
         {q.options.map((opt, i) => {
-          let bg = T.surface, border = T.border, color = T.text;
-          if (revealed) {
-            if (i === q.answer) { bg = "#0A2E0F"; border = T.green; color = T.green; }
-            else if (i === selected) { bg = "#2E0A0A"; border = T.red; color = T.red; }
-            else { color = T.dim; }
+          let bg, border, color;
+          if (!revealed) {
+            bg = T.surface; border = T.border; color = T.text;
+          } else if (i === q.answer) {
+            bg = T.green; border = T.green; color = "#fff";
+          } else if (i === selected) {
+            bg = T.red; border = T.red; color = "#fff";
+          } else {
+            bg = T.bg; border = T.border; color = T.border;
           }
           return (
-            <button key={i} onClick={() => handleAnswer(i)} disabled={revealed} style={{ background: bg, border: `2px solid ${border}`, borderRadius: 6, padding: "13px 16px", textAlign: "left", cursor: revealed ? "default" : "pointer", color, fontSize: 15, fontFamily: T.font, lineHeight: 1.4, transition: "border-color 0.15s, background 0.15s" }}>
-              <span style={{ color: T.dim, fontFamily: T.mono, marginRight: 10 }}>{String.fromCharCode(65 + i)}.</span>{opt}
+            <button key={i} onClick={() => handleAnswer(i)} disabled={revealed}
+              style={{ background: bg, border: `2px solid ${border}`, borderRadius: 6, padding: "14px 16px", textAlign: "left", cursor: revealed ? "default" : "pointer", color, fontSize: 15, fontFamily: T.font, lineHeight: 1.4, transition: "all 0.15s", display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+              <span style={{ background: !revealed ? 'rgba(0,122,77,0.15)' : 'transparent', color: !revealed ? T.green : color, fontFamily: T.mono, fontSize: 11, fontWeight: 900, minWidth: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 4, flexShrink: 0 }}>{String.fromCharCode(65 + i)}</span>
+              <span>{opt}</span>
             </button>
           );
         })}
@@ -979,18 +1006,42 @@ function QuizEngine({ questions, onFinish, timed }) {
 // RESULT SCREEN
 // ══════════════════════════════════════════════════════════════════════════════
 
-function ResultScreen({ score, total, onRetry, onHome }) {
+function ResultScreen({ score, total, wrongAnswers = [], onRetry, onHome }) {
   const pct = Math.round((score / total) * 100);
   const passed = pct >= 70;
   return (
-    <div style={{ maxWidth: 500, margin: "0 auto", padding: "40px 16px", textAlign: "center" }}>
-      <div style={{ fontSize: 64, fontWeight: 700, color: passed ? T.green : T.red, fontFamily: T.mono, marginBottom: 8 }}>{pct}%</div>
-      <div style={{ color: T.text, fontSize: 22, fontWeight: 700, marginBottom: 8, fontFamily: T.font }}>{score} / {total} correct</div>
-      <div style={{ color: passed ? T.green : T.red, fontSize: 16, marginBottom: 32, fontFamily: T.font }}>{passed ? "Well done — you passed!" : "Keep practising — aim for 70%+"}</div>
-      <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-        <button onClick={onRetry} style={{ padding: "12px 28px", background: T.gold, border: "none", borderRadius: 6, cursor: "pointer", color: "#000", fontSize: 15, fontWeight: 700, fontFamily: T.font }}>Try Again</button>
-        <button onClick={onHome} style={{ padding: "12px 28px", background: T.surface, border: `2px solid ${T.border}`, borderRadius: 6, cursor: "pointer", color: T.text, fontSize: 15, fontFamily: T.font }}>← Home</button>
+    <div style={{ maxWidth: 500, margin: "0 auto", padding: "40px 16px" }}>
+      <div style={{ textAlign: "center", marginBottom: 32 }}>
+        <div style={{ display: 'inline-block', background: passed ? T.green : T.red, color: '#fff', fontSize: 11, letterSpacing: 4, padding: '6px 20px', borderRadius: 99, marginBottom: 16, fontWeight: 900 }}>
+          {passed ? "✓ PASSED" : "✗ NOT PASSED"}
+        </div>
+        <div style={{ fontSize: 72, fontWeight: 700, color: passed ? T.green : T.red, fontFamily: T.mono, marginBottom: 8, lineHeight: 1 }}>{pct}%</div>
+        <div style={{ color: T.text, fontSize: 20, fontWeight: 700, marginBottom: 8, fontFamily: T.font }}>{score} / {total} correct</div>
+        <div style={{ color: T.dim, fontSize: 14, marginBottom: 28, fontFamily: T.font }}>{passed ? "Well done — you passed!" : "Keep practising — aim for 70%+"}</div>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+          <button onClick={onRetry} style={{ padding: "14px 28px", background: T.gold, border: "none", borderRadius: 6, cursor: "pointer", color: "#000", fontSize: 15, fontWeight: 700, fontFamily: T.font }}>Try Again</button>
+          <button onClick={onHome} style={{ padding: "14px 28px", background: T.surface, border: `2px solid ${T.border}`, borderRadius: 6, cursor: "pointer", color: T.text, fontSize: 15, fontFamily: T.font }}>← Home</button>
+        </div>
       </div>
+      {wrongAnswers.length > 0 && (
+        <div>
+          <div style={{ color: T.red, fontSize: 11, letterSpacing: 3, fontFamily: T.mono, marginBottom: 16 }}>✗ SIGNS TO REVIEW ({wrongAnswers.length})</div>
+          {wrongAnswers.map((w, i) => (
+            <div key={i} style={{ background: T.surface, border: `1px solid ${T.border}`, borderLeft: `4px solid ${T.red}`, borderRadius: 6, padding: "16px", marginBottom: 12 }}>
+              <div style={{ color: T.dim, fontSize: 11, fontFamily: T.mono, marginBottom: 8 }}>{w.category}</div>
+              <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+                <img src={`./signs/${w.img}`} alt="sign" style={{ width: 60, height: 60, objectFit: 'contain', flexShrink: 0 }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ color: T.text, fontSize: 14, fontWeight: 600, marginBottom: 8, lineHeight: 1.4 }}>{w.question}</div>
+                  <div style={{ color: T.red, fontSize: 13, marginBottom: 4 }}>✗ {w.yourAnswer}</div>
+                  <div style={{ color: T.green, fontSize: 13, marginBottom: 8 }}>✓ {w.correctAnswer}</div>
+                  <div style={{ color: T.dim, fontSize: 12, lineHeight: 1.6 }}>{w.explanation}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -1078,6 +1129,7 @@ export default function RoadSignsQuiz({ onBack, onPass }) {
   const [screen, setScreen] = useState("home");
   const [activeQuestions, setActiveQuestions] = useState([]);
   const [finalScore, setFinalScore] = useState(null);
+  const [finalWrongAnswers, setFinalWrongAnswers] = useState([]);
   const [timed, setTimed] = useState(false);
 
   function handleStart(mode, catId, timedMode) {
@@ -1092,8 +1144,9 @@ export default function RoadSignsQuiz({ onBack, onPass }) {
     }
   }
 
-  function handleFinish(score) {
+  function handleFinish(score, wrongAnswers = []) {
     setFinalScore(score);
+    setFinalWrongAnswers(wrongAnswers);
     if (Math.round((score / activeQuestions.length) * 100) >= 70 && onPass) onPass();
     setScreen("result");
   }
@@ -1117,7 +1170,7 @@ export default function RoadSignsQuiz({ onBack, onPass }) {
       <div style={{ paddingTop: 24 }}>
         {screen === "home" && <HomeScreen onStart={handleStart} />}
         {screen === "quiz" && <QuizEngine questions={activeQuestions} onFinish={handleFinish} timed={timed} />}
-        {screen === "result" && <ResultScreen score={finalScore} total={activeQuestions.length} onRetry={() => { setActiveQuestions(q => prepareAll(shuffle([...q]))); setScreen("quiz"); }} onHome={() => setScreen("home")} />}
+        {screen === "result" && <ResultScreen score={finalScore} total={activeQuestions.length} wrongAnswers={finalWrongAnswers} onRetry={() => { setActiveQuestions(q => prepareAll(shuffle([...q]))); setScreen("quiz"); }} onHome={() => setScreen("home")} />}
         {studyCatId && <StudyMode catId={studyCatId} onBack={() => setScreen("home")} />}
       </div>
     </div>
