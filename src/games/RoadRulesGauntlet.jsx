@@ -318,11 +318,21 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
     const waText = `🚦 K53 Road Rules Round ${activeRound}: ${correct}/${totalQ} (${pct}%) ${passed ? '✅ PASSED' : '📚 Keep drilling'} — https://k53drillmaster.co.za`;
     const waLink = `https://wa.me/?text=${encodeURIComponent(waText)}`;
     return (
-      <div style={{ minHeight: '100vh', background: T.surface, color: T.text, fontFamily: T.font, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-        <div style={{ fontSize: 60, marginBottom: 12 }}>{passed ? '🎉' : '📖'}</div>
-        <div style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>{passed ? 'Round Passed!' : 'Keep Going!'}</div>
-        <div style={{ fontSize: 20, fontWeight: 600, color: passed ? '#007A4D' : '#DE3831', marginBottom: 24 }}>
-          {correct}/{totalQ} correct ({pct}%)
+      <div style={{ minHeight: '100vh', background: '#0a0a0f', color: T.text, fontFamily: T.font, padding: 24, paddingTop: 40 }}>
+        {/* SA flag stripe */}
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 4, zIndex: 100, display: 'flex' }}>
+          {["#000000","#FFB612","#007A4D","#F5F5F0","#DE3831","#4472CA"].map((c,i) => <div key={i} style={{flex:1,background:c}} />)}
+        </div>
+        <div style={{ maxWidth: 480, margin: '0 auto' }}>
+        <div style={{ background: passed ? "rgba(0,122,77,0.08)" : "rgba(222,56,49,0.08)", border: `2px solid ${passed ? '#007A4D' : '#DE3831'}`, borderRadius: 12, padding: '36px 24px', textAlign: 'center', marginBottom: 24 }}>
+          <div style={{ display: 'inline-block', background: passed ? '#007A4D' : '#DE3831', color: '#fff', fontSize: 11, letterSpacing: 4, padding: '6px 20px', borderRadius: 99, marginBottom: 20, fontWeight: 900 }}>
+            {passed ? '✓ PASSED' : '✗ NOT PASSED'}
+          </div>
+          <div style={{ fontSize: 72, fontWeight: 900, lineHeight: 1, color: '#fff', marginBottom: 8 }}>
+            {correct}<span style={{ fontSize: 40, color: '#2a2a3a' }}>/{totalQ}</span>
+          </div>
+          <div style={{ fontSize: 28, fontWeight: 900, color: passed ? '#007A4D' : '#DE3831', marginBottom: 12 }}>{pct}%</div>
+          <div style={{ fontSize: 13, color: '#6b6b82' }}>{passed ? 'Round passed. Keep this momentum.' : 'Keep drilling — 80% to pass.'}</div>
         </div>
         <a href={waLink} target="_blank" rel="noreferrer" style={{
           display: 'block', width: '100%', maxWidth: 320, padding: '13px', background: '#25D366', color: '#fff',
@@ -332,8 +342,9 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
           📲 Share on WhatsApp
         </a>
         <div style={{ display: 'flex', gap: 12 }}>
-          <button onClick={() => startRound(activeRound)} style={{ background: '#FFB612', color: '#1a1a2e', border: 'none', borderRadius: 10, padding: '12px 20px', fontWeight: 700, fontSize: 15, cursor: 'pointer' }}>Retry</button>
-          <button onClick={() => setScreen('rounds')} style={{ background: T.surfaceAlt, color: T.text, border: `1px solid ${T.border}`, borderRadius: 10, padding: '12px 20px', fontWeight: 700, fontSize: 15, cursor: 'pointer' }}>All Rounds</button>
+          <button onClick={() => startRound(activeRound)} style={{ background: '#DE3831', color: '#fff', border: 'none', borderRadius: 6, padding: '13px 20px', fontWeight: 900, fontSize: 13, letterSpacing: 2, cursor: 'pointer' }}>RETRY</button>
+          <button onClick={() => setScreen('rounds')} style={{ background: '#FFB612', color: '#000', border: 'none', borderRadius: 6, padding: '13px 20px', fontWeight: 900, fontSize: 13, letterSpacing: 2, cursor: 'pointer' }}>ALL ROUNDS →</button>
+        </div>
         </div>
       </div>
     );
@@ -359,16 +370,16 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
       </div>
 
       <div style={{ padding: 20 }}>
-        <div style={{ background: "rgba(255,182,18,0.07)", border: "1px solid rgba(255,182,18,0.22)", borderRadius: 14, padding: 18, marginBottom: 18, fontSize: 17, lineHeight: 1.55, fontWeight: 500, color: "#F0E8C8" }}>
+        <div style={{ background: "#111118", borderLeft: '4px solid #FFB612', borderRadius: 8, padding: 18, marginBottom: 18, fontSize: 17, lineHeight: 1.55, fontWeight: 600, color: "#eeeef5" }}>
           {q?.q}
         </div>
 
         {q?.options.map((opt, idx) => {
           let bg = T.surfaceAlt, border = T.border, color = T.text;
           if (selected === idx && !confirmed) { bg = '#1a1a2e'; border = '#FFB612'; color = '#FFB612'; }
-          if (confirmed && idx === q.answer) { bg = '#003d22'; border = '#007A4D'; color = '#4ade80'; }
-          if (confirmed && selected === idx && idx !== q.answer) { bg = '#3d0000'; border = '#DE3831'; color = '#f87171'; }
-          if (confirmed && timeLeft === 0 && selected === null && idx === q.answer) { bg = '#003d22'; border = '#007A4D'; color = '#4ade80'; }
+          if (confirmed && idx === q.answer) { bg = '#007A4D'; border = '#007A4D'; color = '#ffffff'; }
+          if (confirmed && selected === idx && idx !== q.answer) { bg = '#DE3831'; border = '#DE3831'; color = '#ffffff'; }
+          if (confirmed && timeLeft === 0 && selected === null && idx === q.answer) { bg = '#007A4D'; border = '#007A4D'; color = '#ffffff'; }
 
           return (
             <button key={idx} onClick={() => handleSelect(idx)}

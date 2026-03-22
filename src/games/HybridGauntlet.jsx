@@ -897,71 +897,87 @@ export default function UltimateGauntlet({ onBack, onPass }) {
     return (
       <>
         {showGate && <FreemiumGate onClose={() => { setShowGate(false); setScreen("home"); }} />}
-      <div style={{ minHeight: "100vh", background: "#060D07", fontFamily: "'Georgia', 'Times New Roman', serif", padding: "20px 16px" }}>
+      {/* SA flag stripe */}
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 4, zIndex: 100, display: 'flex' }}>
+        {["#000000","#FFB612","#007A4D","#F5F5F0","#DE3831","#4472CA"].map((c,i) => <div key={i} style={{flex:1,background:c}} />)}
+      </div>
+      <div style={{ minHeight: "100vh", background: "#0a0a0f", fontFamily: "'Georgia', 'Times New Roman', serif", padding: "20px 16px 40px", paddingTop: 28 }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
             <div>
               <div style={{ color: activeColor, fontSize: 10, letterSpacing: 3 }}>
                 {isExamMode ? "⚡ HYBRID EXAM" : `ROUND ${currentTest.id}`}{timedMode ? " • TIMED" : ""}
               </div>
-              <div style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>
+              <div style={{ color: "#eeeef5", fontSize: 13, fontWeight: 700, marginTop: 2 }}>
                 {isExamMode ? "70-Question Final Boss" : currentTest.title.replace(`ROUND ${currentTest.id}: `, "")}
               </div>
             </div>
             <div style={{ textAlign: "right" }}>
-              <div style={{ color: "#FFB612", fontSize: 22, fontWeight: 900 }}>{score}</div>
-              <div style={{ color: "#1A3020", fontSize: 10, letterSpacing: 2 }}>SCORE</div>
+              <div style={{ color: activeColor, fontSize: 32, fontWeight: 900, lineHeight: 1 }}>{score}</div>
+              <div style={{ color: "#444", fontSize: 10, letterSpacing: 2 }}>SCORE</div>
             </div>
           </div>
 
-          <div style={{ height: 3, background: "#0D1F10", borderRadius: 2, marginBottom: timedMode ? 6 : 18 }}>
-            <div style={{ height: "100%", width: `${progress}%`, background: activeColor, borderRadius: 2, transition: "width 0.3s" }} />
+          {/* Segmented progress */}
+          <div style={{ display: 'flex', gap: 3, marginBottom: timedMode ? 8 : 20 }}>
+            {Array.from({length: totalQ}, (_, i) => (
+              <div key={i} style={{ flex: 1, height: 5, borderRadius: 3, background: i < qIndex ? '#007A4D' : i === qIndex ? activeColor : '#1a1a2a', transition: 'background 0.2s' }} />
+            ))}
           </div>
 
           {timedMode && (
-            <div style={{ height: 4, background: "#0D1F10", borderRadius: 2, marginBottom: 16, position: "relative" }}>
-              <div style={{ height: "100%", width: `${timerPct}%`, background: timerColor, borderRadius: 2, transition: "width 1s linear" }} />
-              <div style={{ position: "absolute", right: 0, top: -15, color: timerColor, fontSize: 13, fontWeight: 900 }}>{timeLeft}s</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+              <div style={{ flex: 1, height: 6, background: "#111118", borderRadius: 3, overflow: 'hidden' }}>
+                <div style={{ width: `${timerPct}%`, height: '100%', background: timerColor, borderRadius: 3, transition: "width 1s linear" }} />
+              </div>
+              <div style={{ color: timerColor, fontSize: 16, fontWeight: 900, minWidth: 36, textAlign: 'right' }}>{timeLeft}s</div>
             </div>
           )}
 
-          <div style={{ color: "#6B7A62", fontSize: 11, letterSpacing: 3, marginBottom: 12 }}>
+          <div style={{ color: "#6b6b82", fontSize: 11, letterSpacing: 3, marginBottom: 14 }}>
             Q {qIndex + 1} / {totalQ}
             {currentStreak >= 3 && <span style={{ color: "#FFB612", marginLeft: 16 }}>🔥 {currentStreak} STREAK</span>}
           </div>
 
-          <div style={{ background: "rgba(255,182,18,0.07)", border: "1px solid rgba(255,182,18,0.22)", borderRadius: 4, padding: "20px", marginBottom: 14, color: "#F0E8C8", fontSize: 14, lineHeight: 1.8, fontWeight: 600 }}>
+          {/* Question */}
+          <div style={{ background: "#111118", borderLeft: `4px solid ${activeColor}`, borderRadius: 4, padding: "22px 20px", marginBottom: 16, color: "#eeeef5", fontSize: 16, lineHeight: 1.7, fontWeight: 700 }}>
             {currentQ.q}
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 14 }}>
+          {/* Options */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
             {currentQ.options.map((opt, i) => {
-              let bc = "#122116", bg = "#0D1F10", tc = "#888";
-              if (answered) {
-                if (i === currentQ.answer) { bc = "#007A4D"; bg = "#001a12"; tc = "#007A4D"; }
-                else if (i === selected) { bc = "#DE3831"; bg = "#1a0000"; tc = "#DE3831"; }
-                else { tc = "#1A3020"; }
+              let bc, bg, tc;
+              if (!answered) {
+                bc = "#2a2a3a"; bg = "#111118"; tc = "#ccccdd";
+              } else if (i === currentQ.answer) {
+                bc = "#007A4D"; bg = "#007A4D"; tc = "#ffffff";
+              } else if (i === selected) {
+                bc = "#DE3831"; bg = "#DE3831"; tc = "#ffffff";
+              } else {
+                bc = "#1a1a2a"; bg = "#0a0a12"; tc = "#333344";
               }
               return (
                 <button key={i} onClick={() => handleSelect(i)}
-                  style={{ background: bg, border: `2px solid ${bc}`, borderRadius: 4, padding: "13px 14px", textAlign: "left", cursor: answered ? "default" : "pointer", display: "flex", gap: 10, alignItems: "flex-start", fontFamily: "'Georgia', 'Times New Roman', serif", transition: "border-color 0.1s" }}
-                  onMouseEnter={e => { if (!answered) e.currentTarget.style.borderColor = activeColor; }}
-                  onMouseLeave={e => { if (!answered) e.currentTarget.style.borderColor = "#122116"; }}>
-                  <span style={{ color: tc, fontSize: 10, fontWeight: 900, letterSpacing: 1, minWidth: 18, marginTop: 2 }}>{String.fromCharCode(65 + i)}</span>
-                  <span style={{ color: tc, fontSize: 13, lineHeight: 1.5 }}>{opt}</span>
-                  {answered && i === currentQ.answer && <span style={{ marginLeft: "auto", color: "#007A4D" }}>✓</span>}
-                  {answered && i === selected && i !== currentQ.answer && <span style={{ marginLeft: "auto", color: "#DE3831" }}>✗</span>}
+                  style={{ background: bg, border: `2px solid ${bc}`, borderRadius: 6, padding: "14px 16px", textAlign: "left", cursor: answered ? "default" : "pointer", display: "flex", gap: 12, alignItems: "flex-start", transition: "all 0.15s", fontFamily: "'Georgia', 'Times New Roman', serif" }}
+                  onMouseEnter={(e) => { if (!answered) { e.currentTarget.style.borderColor = activeColor; e.currentTarget.style.background = '#15151f'; } }}
+                  onMouseLeave={(e) => { if (!answered) { e.currentTarget.style.borderColor = "#2a2a3a"; e.currentTarget.style.background = '#111118'; } }}
+                >
+                  <span style={{ background: !answered ? 'rgba(0,122,77,0.15)' : 'transparent', color: !answered ? '#007A4D' : tc, fontSize: 11, fontWeight: 900, letterSpacing: 1, minWidth: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 4, flexShrink: 0, marginTop: 1 }}>{String.fromCharCode(65 + i)}</span>
+                  <span style={{ color: tc, fontSize: 14, lineHeight: 1.5 }}>{opt}</span>
+                  {answered && i === currentQ.answer && <span style={{ marginLeft: "auto", color: "#fff", fontSize: 16 }}>✓</span>}
+                  {answered && i === selected && i !== currentQ.answer && <span style={{ marginLeft: "auto", color: "#fff", fontSize: 16 }}>✗</span>}
                 </button>
               );
             })}
           </div>
 
           {showExplain && (
-            <div style={{ background: isCorrect ? "#001a12" : "#1a0000", border: `1px solid ${isCorrect ? "#007A4D" : "#DE3831"}`, borderRadius: 4, padding: "14px 16px", marginBottom: 14 }}>
+            <div style={{ background: isCorrect ? "rgba(0,122,77,0.1)" : "rgba(222,56,49,0.1)", border: `1px solid ${isCorrect ? "#007A4D" : "#DE3831"}`, borderLeft: `4px solid ${isCorrect ? "#007A4D" : "#DE3831"}`, borderRadius: 4, padding: "16px 18px", marginBottom: 16 }}>
               <div style={{ color: isCorrect ? "#007A4D" : "#DE3831", fontSize: 10, letterSpacing: 3, marginBottom: 8, fontWeight: 900 }}>
                 {selected === null ? "⏱ TIME'S UP — MEMORISE THIS" : isCorrect ? "✓ CORRECT" : "✗ WRONG — BURN THIS IN"}
               </div>
-              <div style={{ color: "#888", fontSize: 12, lineHeight: 1.7 }}>{currentQ.explain}</div>
+              <div style={{ color: "#bbb", fontSize: 13, lineHeight: 1.7 }}>{currentQ.explain}</div>
               {!isCorrect && answered && selected !== null && (
                 <AITutor question={currentQ.q} correctAnswer={currentQ.options[currentQ.answer]} chosenAnswer={currentQ.options[selected]} />
               )}
@@ -969,7 +985,7 @@ export default function UltimateGauntlet({ onBack, onPass }) {
           )}
 
           {answered && (
-            <button onClick={handleNext} style={{ width: "100%", padding: "14px", background: activeColor, color: "#fff", border: "none", borderRadius: 4, fontSize: 12, fontWeight: 900, letterSpacing: 3, cursor: "pointer", fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+            <button onClick={handleNext} style={{ width: "100%", padding: "14px", background: activeColor, color: activeColor === "#FFB612" ? "#000" : "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 900, letterSpacing: 3, cursor: "pointer", fontFamily: "'Georgia', 'Times New Roman', serif" }}>
               {qIndex < totalQ - 1 ? "NEXT →" : "SEE RESULTS →"}
             </button>
           )}
@@ -990,17 +1006,21 @@ export default function UltimateGauntlet({ onBack, onPass }) {
       : `🚗 K53 Hybrid Round ${currentTest?.id}: ${score}/${finalTotal} (${pct}%) ${passed ? "✅" : "📚"} — https://k53drillmaster.co.za`;
     const waLink = `https://wa.me/?text=${encodeURIComponent(waText)}`;
     return (
-      <div style={{ minHeight: "100vh", background: "#060D07", fontFamily: "'Georgia', 'Times New Roman', serif", padding: "24px 16px" }}>
+      <div style={{ minHeight: "100vh", background: "#0a0a0f", fontFamily: "'Georgia', 'Times New Roman', serif", padding: "24px 16px 40px", paddingTop: 28 }}>
+        {/* SA flag stripe */}
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 4, zIndex: 100, display: 'flex' }}>
+          {["#000000","#FFB612","#007A4D","#F5F5F0","#DE3831","#4472CA"].map((c,i) => <div key={i} style={{flex:1,background:c}} />)}
+        </div>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
-          <div style={{ background: passed ? "#001a12" : "#1a0000", border: `2px solid ${passed ? "#007A4D" : "#DE3831"}`, borderRadius: 4, padding: "28px 24px", textAlign: "center", marginBottom: 24 }}>
-            <div style={{ color: passed ? "#007A4D" : "#DE3831", fontSize: 10, letterSpacing: 4, marginBottom: 10 }}>
-              {isExamMode ? "HYBRID EXAM RESULT" : `ROUND ${currentTest?.id} RESULT`}
+          <div style={{ background: passed ? "rgba(0,122,77,0.08)" : "rgba(222,56,49,0.08)", border: `2px solid ${passed ? "#007A4D" : "#DE3831"}`, borderRadius: 12, padding: "36px 24px", textAlign: "center", marginBottom: 24 }}>
+            <div style={{ display: 'inline-block', background: passed ? "#007A4D" : "#DE3831", color: '#fff', fontSize: 11, letterSpacing: 4, padding: '6px 20px', borderRadius: 99, marginBottom: 20, fontWeight: 900 }}>
+              {passed ? "✓ PASSED" : "✗ NOT PASSED"}
             </div>
-            <div style={{ color: "#fff", fontSize: 56, fontWeight: 900, lineHeight: 1 }}>
-              {score}<span style={{ color: "#122116" }}>/{finalTotal}</span>
+            <div style={{ color: "#fff", fontSize: 72, fontWeight: 900, lineHeight: 1, marginBottom: 8 }}>
+              {score}<span style={{ color: "#2a2a3a", fontSize: 40 }}>/{finalTotal}</span>
             </div>
-            <div style={{ color: passed ? "#007A4D" : "#DE3831", fontSize: 22, fontWeight: 900, marginTop: 6 }}>{pct}%</div>
-            <div style={{ color: "#6B7A62", fontSize: 12, marginTop: 8 }}>
+            <div style={{ color: passed ? "#007A4D" : "#DE3831", fontSize: 28, fontWeight: 900, marginBottom: 12 }}>{pct}%</div>
+            <div style={{ color: "#6b6b82", fontSize: 13 }}>
               {passed
                 ? isExamMode ? "🏆 Above 77%. You are READY. Go ace that test tomorrow." : "Round passed. Solid."
                 : isExamMode ? `Need 77% on the day. You got ${pct}%. Drill your wrong answers then sleep.` : `Need ${PASS_SCORE}/10. Review your mistakes below.`}

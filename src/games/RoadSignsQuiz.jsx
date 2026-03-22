@@ -11,7 +11,7 @@ function SignImg({ src, alt, size = 130 }) {
     <img
       src={`./signs/${src}`}
       alt={alt || "road sign"}
-      style={{ width: size, height: size, objectFit: "contain", imageRendering: "crisp-edges", filter: "brightness(1.1) contrast(1.05)" }}
+      style={{ width: size, height: size, objectFit: "contain", imageRendering: "auto", filter: "brightness(1.08) contrast(1.1) saturate(1.1)" }}
     />
   );
 }
