@@ -516,4 +516,61 @@ QuizEngine was a pure `score`-returning component. Extended to `(score, wrongAns
 | Answer button feedback | Full vivid fill (all quiz games) |
 | Progress indicator | Segmented blocks (Gauntlet), gradient bar (MockExam/Signs) |
 | SA flag stripe | Fixed to quiz + result screens across all Gauntlets |
+
+---
+
+## Phase 15 — Launch Ready: Marketing Landing Page + Analytics + Google OAuth
+**2026-04-04**
+
+**Commits:** This phase
+
+### Goal
+Get the product launch-ready: marketing landing page, analytics stack, Google verification, Google OAuth, and env var consolidation.
+
+### What was built
+
+**`public/landing.html` — Standalone marketing landing page**
+- Fully self-contained HTML (no React/build step) — fast, SEO-crawlable, deployable to any CDN
+- Design system: `#0A1A08` bg, `#C9A84C` gold, Cormorant Garamond display + DM Sans body
+- Sections: Hero → Stats bar → Features (6 cards) → How It Works → Testimonials → Pricing → Final CTA → Footer
+- Mobile-first, Safari-compatible (no modern CSS unsupported by WebKit, explicit flexbox prefixes)
+- Google sign-up button → redirects to `/?auth=google` → React app handles Supabase Google OAuth
+- PostHog + GTM tracking on all CTA clicks
+- Footer: Mirembe Muse (Pty) Ltd branding, subtle designer credit
+
+**`index.html` — App shell analytics**
+- Added Google Tag Manager (GTM-KF2HMVLN) in `<head>` + `<body>` noscript
+- Added PostHog snippet (phc_IbF9… / us.i.posthog.com)
+- Added Google Site Verification meta tag
+- Added Bing/Webmaster Tools meta tag
+
+**`src/components/AuthModal.jsx` — Google OAuth**
+- Added `signInWithGoogle()` using `supabase.auth.signInWithOAuth({ provider: 'google' })`
+- Added Google sign-in button with official Google G icon above email/magic-link form
+- Divider "or sign in with email" separates the two paths
+- Only shown for returning subscriber flow (not claim flow)
+
+**`src/App.jsx` — `?auth=google` URL param handler**
+- On mount, checks `?auth=google` URL param (set by landing page CTA)
+- Clears the param from browser history, then triggers Supabase Google OAuth immediately
+- Allows landing page → Google sign-in in one redirect without any extra screen
+
+**`env.example` — Full env var inventory**
+- Documents all keys with Vite prefix rules (VITE_ = browser-safe, no prefix = server-only)
+- Covers: Supabase, OpenAI, Anthropic, PayFast, Resend, Sentry, PostHog, Google, Crisp, Arcjet
+
+### Analytics stack
+| Tool | Purpose | Integration |
+|------|---------|-------------|
+| Google Tag Manager | Container for all GTM-based tags | `index.html` + `landing.html` |
+| PostHog | Product analytics, funnels, session recording | Snippet in both HTML files |
+| Sentry | Error monitoring + CSP reporting | DSN in env, CSP Report-URI via Vercel headers |
+| Vercel Analytics | Edge + web vitals | Already integrated via `@vercel/analytics` |
+| Google Search Console | SEO indexing verification | Meta tag in `index.html` + `landing.html` |
+
+### Key decisions
+- Landing page as static HTML in `public/` (not a React route): crawlable immediately, no JS required for SEO, no bundle overhead
+- Google OAuth flow via URL param (`?auth=google`): avoids duplicating Supabase client in static landing page
+- PostHog tokens hardcoded in HTML (they are client-side public tokens, same as GTM)
+- PayFast/Resend/Arcjet/Sentry auth tokens kept server-side only, documented in env.example
 | Pricing | Free / R29 / R69 / R149 |

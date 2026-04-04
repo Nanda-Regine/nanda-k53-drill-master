@@ -198,6 +198,16 @@ export default function App() {
 
   // ── Supabase auth ───────────────────────────────────────────────────────────
   useEffect(() => {
+    // Auto-trigger Google OAuth when redirected from landing page with ?auth=google
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('auth') === 'google' && supabase) {
+      window.history.replaceState({}, '', window.location.pathname);
+      supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin },
+      });
+      return;
+    }
     if (!supabase) return;
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) { setUser(session.user); checkSubscription(session.user); }
