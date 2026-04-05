@@ -52,7 +52,7 @@ export default function handler(req, res) {
   const plan = ((req.query && req.query.plan) || 'monthly').toLowerCase();
   const config = PLANS[plan] || PLANS.monthly;
 
-  const isLive = process.env.NEXT_PUBLIC_PAYFAST_SANDBOX !== 'true';
+  const isLive = process.env.PAYFAST_SANDBOX !== 'true';
   const pfUrl  = isLive
     ? 'https://www.payfast.co.za/eng/process'
     : 'https://sandbox.payfast.co.za/eng/process';

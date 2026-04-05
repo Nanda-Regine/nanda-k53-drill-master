@@ -21,7 +21,7 @@ async function activateSubscriber(email, plan) {
   const supabase = adminClient();
   const days = PLAN_DAYS[plan] || 30;
   const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
-  const siteUrl = process.env.SITE_URL || 'https://nanda-k53-drill-master.vercel.app';
+  const siteUrl = process.env.SITE_URL || 'https://k53drillmaster.co.za';
 
   // Invite user by email — creates account if new, sends magic link either way.
   // The subscriber receives a "sign in to activate your account" email automatically.
@@ -50,7 +50,7 @@ export default async function handler(req, res) {
 
   // ── 1. Validate PayFast signature ─────────────────────────────────────────
   const { signature, ...rest } = data;
-  const isLive = process.env.NEXT_PUBLIC_PAYFAST_SANDBOX !== 'true';
+  const isLive = process.env.PAYFAST_SANDBOX !== 'true';
 
   const str = Object.entries(rest)
     .filter(([, v]) => v !== '')
