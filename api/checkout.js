@@ -63,17 +63,29 @@ export default function handler(req, res) {
 
   const token = generateToken(plan, config.days);
 
+  // Notify via universal PayFast hub (creativelynanda.co.za routes by "k53drillmaster_" prefix).
+  // Return goes directly to the app with the signed unlock token for instant localStorage activation.
+  // Cancel goes to the hub's cancel page which redirects back to k53drillmaster.co.za/upgrade.
   const data = {
     merchant_id:  process.env.PAYFAST_MERCHANT_ID,
     merchant_key: process.env.PAYFAST_MERCHANT_KEY,
     return_url:   `${baseUrl}/?unlock=${encodeURIComponent(token)}`,
-    cancel_url:   `${baseUrl}/?cancelled=true`,
-    notify_url:   `${baseUrl}/api/itn`,
-    m_payment_id: crypto.randomUUID(),
+    cancel_url:   'https://creativelynanda.co.za/payfast/cancel?app=k53drillmaster',
+    notify_url:   'https://creativelynanda.co.za/api/payfast/universal-notify',
+    m_payment_id: `k53drillmaster_${plan}_${Date.now()}`,
     amount:       config.amount,
     item_name:    config.label,
     custom_str1:  plan,
   };
+
+  // Monthly plan: recurring PayFast subscription (SUBSCR_PAYMENT fires on each renewal).
+  // Bundle/lifetime plans stay as one-time payments.
+  if (plan === 'monthly') {
+    data.subscription_type = '1';
+    data.recurring_amount  = config.amount;
+    data.frequency         = '3'; // monthly
+    data.cycles            = '0'; // indefinite
+  }
 
   data.signature = payfastSignature(
     data,

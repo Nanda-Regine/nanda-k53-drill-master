@@ -40,9 +40,9 @@ export default function handler(req, res) {
     }
 
     return res.json({
-      valid:  true,
-      plan:   data.plan,
-      expiry: data.expiry,
+      ok:         true,
+      plan:       data.plan,
+      expires_at: data.expiry,
     });
   } catch {
     return res.json({ valid: false, error: 'Parse error' });
