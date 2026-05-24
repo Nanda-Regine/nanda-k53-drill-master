@@ -54,6 +54,7 @@ export default async function handler(req, res) {
 
   const str = Object.entries(rest)
     .filter(([, v]) => v !== '')
+    .sort(([a], [b]) => a.localeCompare(b))
     .map(([k, v]) => `${k}=${encodeURIComponent(String(v).trim()).replace(/%20/g, '+')}`)
     .join('&');
 
@@ -65,7 +66,7 @@ export default async function handler(req, res) {
 
   if (computed !== signature) {
     console.error('[ITN] Invalid signature. Computed:', computed, 'Received:', signature);
-    return res.status(400).send('Invalid signature');
+    return res.status(200).send('OK');
   }
 
   // ── 2. Activate subscriber on COMPLETE ────────────────────────────────────

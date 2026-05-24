@@ -40,6 +40,7 @@ function generateToken(plan, days) {
 function payfastSignature(data, passphrase) {
   const str = Object.entries(data)
     .filter(([, v]) => v !== '')
+    .sort(([a], [b]) => a.localeCompare(b))
     .map(([k, v]) => `${k}=${encodeURIComponent(String(v).trim()).replace(/%20/g, '+')}`)
     .join('&');
   const full = passphrase
