@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev*)",
+      "Bash(npm run build*)",
+      "Bash(npm run preview*)",
+      "Bash(npx tsc --noEmit*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add src/*)",
+      "Bash(git add public/*)",
+      "Bash(git commit*)",
+      "Bash(ls*)",
+      "Bash(Get-ChildItem*)",
+      "Bash(node -e*)"
+    ],
+    "deny": [
+      "Bash(rm -rf*)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)"
+    ]
+  },
+  "model": "claude-sonnet-4-6",
+  "env": {
+    "VITE_APP_NAME": "K53 Drill Master"
+  }
+}

@@ -3,3 +3,12 @@ dist
 .DS_Store
 *.local
 .env
+.env.local
+
+.vercel
+
+# Claude Code auto-memory (machine-specific)
+memory/
+
+# Claude Code local settings (machine-specific)
+.claude/settings.local.json
