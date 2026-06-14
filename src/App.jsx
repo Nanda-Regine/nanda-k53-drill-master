@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { T as BaseT, getFontSize, setFontSize } from './theme.js';
 import { useLang } from './LangContext.jsx';
@@ -19,6 +19,7 @@ import SignShapeTrainer     from './games/SignShapeTrainer.jsx';
 import RoadMarkingsDrill    from './games/RoadMarkingsDrill.jsx';
 import ScenarioDrill       from './games/ScenarioDrill.jsx';
 import K53LearnerExam      from './games/K53LearnerExam.jsx';
+import Landing             from './components/Landing.jsx';
 import TestDayPrep          from './components/TestDayPrep.jsx';
 import MentalHealthSupport  from './components/MentalHealthSupport.jsx';
 
@@ -36,6 +37,7 @@ import NervesPanel       from './components/NervesPanel.jsx';
 
 // ── Utils ──────────────────────────────────────────────────────────────────────
 import { recordStudyDay, getStreak } from './utils/streakTracker.js';
+import { getWeakNerves } from './utils/masteryStore.js';
 import { supabase } from './supabase.js';
 import {
   getTier, getRemainingToday, hasPDPAccess, TIER_LABELS, activateTier, TIERS,
@@ -45,6 +47,31 @@ import {
 // ── Constants ──────────────────────────────────────────────────────────────────
 const ONBOARDING_KEY = 'k53_onboarding_complete';
 const CODE_PREF_KEY  = 'k53_code_pref';
+const LANDING_KEY    = 'k53_landing_seen';
+const LAST_GAME_KEY  = 'k53_last_played';
+
+const GAME_NERVE_MAP = {
+  gauntlet:'controls', hybrid:'rules', patterns:'rules', road_rules:'rules',
+  mockexam:'practical', controls:'controls', pdp:'practical', motorcycle:'controls',
+  heavy:'controls', moto_exam:'practical', roadsigns:'signs', sign_shape:'signs',
+  road_marks:'markings', scenario:'scenarios', learner_exam:'practical',
+};
+const NERVE_COLOR_MAP = {
+  signs:'#DE3831', rules:'#FFB612', controls:'#007A4D',
+  scenarios:'#4472CA', markings:'#6c47ff', practical:'#FF6B35',
+};
+const NERVE_GAME_MAP = {
+  signs:'roadsigns', rules:'road_rules', controls:'gauntlet',
+  scenarios:'scenario', markings:'road_marks', practical:'learner_exam',
+};
+const CATS = [
+  { id:'all',       label:'All',       icon:'🗂️' },
+  { id:'signs',     label:'Signs',     icon:'🚦' },
+  { id:'rules',     label:'Rules',     icon:'📋' },
+  { id:'controls',  label:'Controls',  icon:'🔩' },
+  { id:'exam',      label:'Exam',      icon:'📄' },
+  { id:'scenarios', label:'Scenarios', icon:'🎯' },
+];
 
 // SVG grainy noise — inline, zero dependencies
 const GRAIN_SVG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`;
@@ -71,21 +98,21 @@ const CODES_BASE = [
 
 // ── Games catalogue with code relevance ────────────────────────────────────────
 const GAMES_BASE = [
-  { id: 'motorcycle', icon: '🏍️', tier: 'free',    diff: 'beginner',     codes: ['code12'] },
-  { id: 'moto_exam',  icon: '📝', tier: 'free',    diff: 'intermediate', codes: ['code12'] },
-  { id: 'gauntlet',   icon: '⚡', tier: 'free',    diff: 'beginner',     codes: ['code8'] },
-  { id: 'mockexam',   icon: '📝', tier: 'free',    diff: 'intermediate', codes: ['code8'] },
-  { id: 'hybrid',     icon: '🔥', tier: 'premium', diff: 'advanced',     codes: ['code8'] },
-  { id: 'heavy',      icon: '🚛', tier: 'free',    diff: 'beginner',     codes: ['code10', 'code14'] },
-  { id: 'pdp',        icon: '🎓', tier: 'pdp',     diff: 'professional', codes: ['code10', 'code14'] },
-  { id: 'road_rules', icon: '🚦', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
-  { id: 'controls',   icon: '🔩', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
-  { id: 'patterns',   icon: '🔢', tier: 'free',    diff: 'intermediate', codes: ['code12', 'code8', 'code10', 'code14'] },
-  { id: 'roadsigns',  icon: '🛑', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
-  { id: 'sign_shape', icon: '🔷', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
-  { id: 'road_marks', icon: '🟡', tier: 'free',    diff: 'intermediate', codes: ['code12', 'code8', 'code10', 'code14'] },
-  { id: 'scenario',     icon: '🎯', tier: 'free',    diff: 'intermediate', codes: ['code12', 'code8', 'code10', 'code14'] },
-  { id: 'learner_exam', icon: '📄', tier: 'free',    diff: 'intermediate', codes: ['code8'] },
+  { id: 'motorcycle',   icon: '🏍️', tier: 'free',    diff: 'beginner',     cat: 'controls',  codes: ['code12'] },
+  { id: 'moto_exam',    icon: '📝', tier: 'free',    diff: 'intermediate', cat: 'exam',      codes: ['code12'] },
+  { id: 'gauntlet',     icon: '⚡', tier: 'free',    diff: 'beginner',     cat: 'controls',  codes: ['code8'] },
+  { id: 'mockexam',     icon: '📝', tier: 'free',    diff: 'intermediate', cat: 'exam',      codes: ['code8'] },
+  { id: 'hybrid',       icon: '🔥', tier: 'premium', diff: 'advanced',     cat: 'rules',     codes: ['code8'] },
+  { id: 'heavy',        icon: '🚛', tier: 'free',    diff: 'beginner',     cat: 'controls',  codes: ['code10', 'code14'] },
+  { id: 'pdp',          icon: '🎓', tier: 'pdp',     diff: 'professional', cat: 'exam',      codes: ['code10', 'code14'] },
+  { id: 'road_rules',   icon: '🚦', tier: 'free',    diff: 'beginner',     cat: 'rules',     codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'controls',     icon: '🔩', tier: 'free',    diff: 'beginner',     cat: 'controls',  codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'patterns',     icon: '🔢', tier: 'free',    diff: 'intermediate', cat: 'rules',     codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'roadsigns',    icon: '🛑', tier: 'free',    diff: 'beginner',     cat: 'signs',     codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'sign_shape',   icon: '🔷', tier: 'free',    diff: 'beginner',     cat: 'signs',     codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'road_marks',   icon: '🟡', tier: 'free',    diff: 'intermediate', cat: 'markings',  codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'scenario',     icon: '🎯', tier: 'free',    diff: 'intermediate', cat: 'scenarios', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'learner_exam', icon: '📄', tier: 'free',    diff: 'intermediate', cat: 'exam',      codes: ['code8'] },
 ];
 
 const DIFF_COLORS = {
@@ -95,17 +122,16 @@ const DIFF_COLORS = {
   professional: '#6c47ff',
 };
 
-// SVG nav icons — no emoji, proper design system
 const NAV_ICONS = {
   home: (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
     </svg>
   ),
-  testday: (
+  exam: (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="9" y="2" width="6" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-      <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+      <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
     </svg>
   ),
   weak: (
@@ -113,25 +139,18 @@ const NAV_ICONS = {
       <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
     </svg>
   ),
-  progress: (
+  you: (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-    </svg>
-  ),
-  settings: (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="3"/>
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
     </svg>
   ),
 };
 
 const NAV_BASE = [
-  { id: 'home',      labelKey: 'nav_home'      },
-  { id: 'testday',   labelKey: 'nav_testday'  },
-  { id: 'weak',      labelKey: 'nav_weak'     },
-  { id: 'progress',  labelKey: 'nav_progress' },
-  { id: 'settings',  labelKey: 'nav_settings' },
+  { id: 'home', labelKey: 'nav_home' },
+  { id: 'exam', labelKey: 'nav_exam' },
+  { id: 'weak', labelKey: 'nav_weak' },
+  { id: 'you',  labelKey: 'nav_you'  },
 ];
 
 const PLANS = [
@@ -185,7 +204,9 @@ export default function App() {
   const GAMES = GAMES_BASE.map(g => ({ ...g, label: t(`game_${g.id}`), desc: t(`game_${g.id}_desc`) }));
   const NAV   = NAV_BASE.map(n => ({ ...n, label: t(n.labelKey) }));
   const [T, setT]             = useState(buildLiveTheme);
+  const [showLanding, setShowLanding]       = useState(() => !localStorage.getItem(LANDING_KEY) && !localStorage.getItem(ONBOARDING_KEY));
   const [showOnboarding, setShowOnboarding] = useState(() => !localStorage.getItem(ONBOARDING_KEY));
+  const [activeCat, setActiveCat]           = useState('all');
   const [activeGame, setActiveGame]         = useState(null);
   const [navTab, setNavTab]                 = useState('home');
   const [streak, setStreak]                 = useState(() => getStreak());
@@ -302,8 +323,14 @@ export default function App() {
     if (game.tier === 'pdp' && !hasPDPAccess()) { setShowPaywall(true); return; }
     if (game.tier === 'premium' && tier === TIERS.FREE) { setShowPaywall(true); return; }
     recordStudyDay();
+    localStorage.setItem(LAST_GAME_KEY, game.id);
     setActiveGame(game.id);
   }, [tier]);
+
+  const handleNavTap = useCallback((id) => {
+    if (id === 'exam') { recordStudyDay(); localStorage.setItem(LAST_GAME_KEY, 'learner_exam'); setActiveGame('learner_exam'); return; }
+    setNavTab(id);
+  }, []);
 
   const handleFontSizeChange = useCallback((size) => {
     setFontSize(size);
@@ -317,6 +344,9 @@ export default function App() {
       {pendingBadge && <BadgeToast badgeId={pendingBadge} onDismiss={() => { setPendingBadge(null); setConfettiActive(false); }} />}
     </>
   );
+
+  // ── Landing (new users) ─────────────────────────────────────────────────────
+  if (showLanding) return <Landing onStart={() => { localStorage.setItem(LANDING_KEY, '1'); setShowLanding(false); }} />;
 
   // ── Game routes ─────────────────────────────────────────────────────────────
   if (showOnboarding) return <Onboarding onComplete={onOnboardingComplete} />;
@@ -341,120 +371,63 @@ export default function App() {
   if (navTab === 'testday')   return <TestDayPrep      onBack={() => setNavTab('home')} />;
   if (navTab === 'weak')      return <WeakSpotsReview  onBack={() => setNavTab('home')} />;
   if (navTab === 'progress')  return <ProgressHistory  onBack={() => setNavTab('home')} />;
-  if (navTab === 'settings')  return <Settings onBack={() => setNavTab('home')} onFontSizeChange={handleFontSizeChange} />;
+  if (navTab === 'settings' || navTab === 'you') return <Settings onBack={() => setNavTab('home')} onFontSizeChange={handleFontSizeChange} />;
 
   // ── Dashboard ───────────────────────────────────────────────────────────────
   const inTrial   = isInFreeTrial();
   const trialLeft = daysLeftInTrial();
-  const hasPDP    = hasBadge('pdp_ready');
-  const relevantGames = GAMES.filter(g => g.codes.includes(selectedCode));
-  const otherGames    = GAMES.filter(g => !g.codes.includes(selectedCode));
+  const weakNerves = getWeakNerves(1);
+  const weakNerve  = weakNerves[0] || null;
+  const lastGame   = localStorage.getItem(LAST_GAME_KEY);
+  const lastGameObj = GAMES.find(g => g.id === lastGame);
+  const filteredGames = GAMES
+    .filter(g => g.codes.includes(selectedCode))
+    .filter(g => activeCat === 'all' || g.cat === activeCat);
 
   return (
     <div style={{ minHeight: '100vh', background: T.bg, color: T.text, fontFamily: T.font, fontSize: T.fontSize, paddingBottom: 84 }}>
       <Confetti active={confettiActive} />
       {pendingBadge && <BadgeToast badgeId={pendingBadge} onDismiss={() => { setPendingBadge(null); setConfettiActive(false); }} />}
 
-      {/* ── Hero Header ──────────────────────────────────────────────────────── */}
-      <header style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg,#0d1f1a 0%,#0a0a0f 55%,#1a0d0d 100%)' }}>
-        {/* Grain overlay */}
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: GRAIN_SVG, backgroundRepeat: 'repeat', pointerEvents: 'none', zIndex: 1 }} />
-        {/* Glow orbs */}
-        <div style={{ position: 'absolute', top: -60, left: -40, width: 200, height: 200, background: 'radial-gradient(circle,rgba(0,122,77,0.18) 0%,transparent 70%)', pointerEvents: 'none', zIndex: 1 }} />
-        <div style={{ position: 'absolute', top: -30, right: -20, width: 160, height: 160, background: 'radial-gradient(circle,rgba(255,182,18,0.1) 0%,transparent 70%)', pointerEvents: 'none', zIndex: 1 }} />
-
-        {/* SA flag stripe */}
-        <div style={{ display: 'flex', height: 4, position: 'relative', zIndex: 2 }}>
-          {['#000','#FFB612','#007A4D','#F5F5F0','#DE3831','#4472CA'].map((c, i) => (
+      {/* ── Slim top bar ─────────────────────────────────────────────────────── */}
+      <header style={{ position: 'sticky', top: 0, zIndex: 50, background: T.surface, borderBottom: `1px solid ${T.border}` }}>
+        <div style={{ display: 'flex', height: 3 }}>
+          {['#007A4D','#FFB612','#DE3831','#4472CA','#000','#F5F5F0'].map((c,i) => (
             <div key={i} style={{ flex: 1, background: c }} />
           ))}
         </div>
-
-        <div style={{ position: 'relative', zIndex: 2, padding: '18px 20px 20px' }}>
-          {/* Top row */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 22 }}>🇿🇦</span>
-                <span style={{ fontSize: T.fontSizeXxl, fontWeight: 800, color: '#fff', letterSpacing: -0.5 }}>{t('appName')}</span>
-              </div>
-              <p style={{ color: T.dim, fontSize: T.fontSize - 1, marginTop: 2 }}>
-                {t('appTagline')}
-              </p>
-            </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowBadgeGrid(true)}
-                style={{ background: 'rgba(255,182,18,0.1)', border: '1px solid rgba(255,182,18,0.2)', borderRadius: 12, padding: '8px 12px', color: T.gold, cursor: 'pointer', fontSize: 18 }}>
-                🏅
-              </motion.button>
-              {!user ? (
-                <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowAuth(true)}
-                  style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '7px 13px', color: T.dim, cursor: 'pointer', fontSize: T.fontSize - 2, fontFamily: T.font }}>
-                  {t('signIn')}
-                </motion.button>
-              ) : (
-                <motion.button whileTap={{ scale: 0.9 }} onClick={() => { supabase?.auth.signOut(); setUser(null); setSubMsg(''); }}
-                  style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '7px 13px', color: T.dim, cursor: 'pointer', fontSize: T.fontSize - 2, fontFamily: T.font }}>
-                  {t('signOut')}
-                </motion.button>
-              )}
-            </div>
+        <div style={{ display: 'flex', alignItems: 'center', padding: '0 14px', height: 50, gap: 8 }}>
+          <span style={{ fontWeight: 800, fontSize: T.fontSizeLg, color: T.text, letterSpacing: -0.3, flex: 1 }}>
+            K53 <span style={{ fontSize: 16 }}>🇿🇦</span>
+          </span>
+          <div style={{ background: 'rgba(255,182,18,0.1)', border: '1px solid rgba(255,182,18,0.2)', borderRadius: 99, padding: '3px 9px', display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span style={{ fontSize: 13 }}>🔥</span>
+            <span style={{ color: T.gold, fontWeight: 700, fontSize: 11 }}>{streak}</span>
           </div>
-
-          {/* Stats bar */}
-          <div style={{ marginBottom: 14, display: 'flex', gap: 0, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 12, overflow: 'hidden' }}>
-            {[
-              { val: '1.2M', lbl: t('stat_learners') },
-              { val: '50%',  lbl: t('stat_fail')     },
-              { val: '1000+', lbl: t('stat_questions') },
-            ].map((s, i) => (
-              <div key={s.lbl} style={{ flex: 1, textAlign: 'center', padding: '10px 8px', borderRight: i < 2 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-                <div style={{ fontWeight: 800, fontSize: T.fontSizeLg, color: T.gold, lineHeight: 1 }}>{s.val}</div>
-                <div style={{ fontSize: 9, color: T.dim, marginTop: 3, letterSpacing: 0.3 }}>{s.lbl}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Status pills */}
-          <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
-            <div style={{ background: 'rgba(255,182,18,0.1)', border: '1px solid rgba(255,182,18,0.25)', borderRadius: 99, padding: '4px 11px', display: 'flex', alignItems: 'center', gap: 5 }}>
-              <span>🔥</span><span style={{ color: T.gold, fontWeight: 700, fontSize: T.fontSize - 2 }}>{streak} {t('dayStreak')}</span>
+          {(inTrial || tier !== TIERS.FREE) && (
+            <div style={{ background: 'rgba(0,122,77,0.15)', border: '1px solid rgba(0,122,77,0.3)', borderRadius: 99, padding: '3px 9px' }}>
+              <span style={{ color: '#4ade80', fontWeight: 700, fontSize: 10 }}>{inTrial ? `🎁 ${trialLeft}d` : '✅ PRO'}</span>
             </div>
-            {inTrial && (
-              <div style={{ background: 'rgba(0,122,77,0.12)', border: '1px solid rgba(0,122,77,0.3)', borderRadius: 99, padding: '4px 11px' }}>
-                <span style={{ color: '#4ade80', fontWeight: 600, fontSize: T.fontSize - 2 }}>🎁 {trialLeft}{t('daysFreeTrial')}</span>
-              </div>
-            )}
-            {!inTrial && tier !== TIERS.FREE && (
-              <div style={{ background: 'rgba(0,122,77,0.12)', border: '1px solid rgba(0,122,77,0.3)', borderRadius: 99, padding: '4px 11px' }}>
-                <span style={{ color: '#4ade80', fontWeight: 600, fontSize: T.fontSize - 2 }}>✅ {TIER_LABELS[tier]}</span>
-              </div>
-            )}
-            {!inTrial && tier === TIERS.FREE && (
-              <div style={{ background: 'rgba(222,56,49,0.1)', border: '1px solid rgba(222,56,49,0.25)', borderRadius: 99, padding: '4px 11px' }}>
-                <span style={{ color: '#f87171', fontWeight: 600, fontSize: T.fontSize - 2 }}>📊 {remaining} {t('questionsLeft')}</span>
-              </div>
-            )}
-            {hasPDP && (
-              <div style={{ background: 'rgba(108,71,255,0.12)', border: '1px solid rgba(108,71,255,0.3)', borderRadius: 99, padding: '4px 11px' }}>
-                <span style={{ color: '#a78bfa', fontWeight: 600, fontSize: T.fontSize - 2 }}>🎓 {t('pdpReady')}</span>
-              </div>
-            )}
-            <motion.button whileTap={{ scale: 0.95 }} onClick={() => shareWhatsApp(streak)}
-              style={{ background: 'rgba(37,211,102,0.08)', border: '1px solid rgba(37,211,102,0.2)', borderRadius: 99, padding: '4px 11px', display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer', color: '#25d366', fontWeight: 600, fontSize: T.fontSize - 2, fontFamily: T.font }}>
-              💬 {t('share')}
+          )}
+          <motion.button whileTap={{ scale: 0.88 }} onClick={() => setShowBadgeGrid(true)}
+            style={{ background: 'none', border: 'none', color: T.gold, cursor: 'pointer', fontSize: 18, lineHeight: 1, padding: 2 }}>
+            🏅
+          </motion.button>
+          {!user ? (
+            <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowAuth(true)}
+              style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${T.border}`, borderRadius: 8, padding: '4px 10px', color: T.dim, cursor: 'pointer', fontSize: 11, fontFamily: T.font }}>
+              Sign in
             </motion.button>
-          </div>
-
-          {subMsg && (
-            <div style={{ marginTop: 10, background: 'rgba(222,56,49,0.1)', border: '1px solid rgba(222,56,49,0.25)', borderRadius: 10, padding: '8px 12px', fontSize: T.fontSize - 2, color: '#f87171' }}>
-              {subMsg}
-            </div>
+          ) : (
+            <motion.button whileTap={{ scale: 0.9 }} onClick={() => { supabase?.auth.signOut(); setUser(null); setSubMsg(''); }}
+              style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${T.border}`, borderRadius: 8, padding: '4px 10px', color: T.dim, cursor: 'pointer', fontSize: 11, fontFamily: T.font }}>
+              Out
+            </motion.button>
           )}
         </div>
       </header>
 
-      <main style={{ padding: '18px 20px 0' }}>
+      <main style={{ padding: '16px 16px 0' }}>
 
         {/* ── Nervous System Panel ─────────────────────────────────────────────── */}
         <NervesPanel
@@ -462,93 +435,106 @@ export default function App() {
           onPlay={(gameId) => handleGameSelect(GAMES.find(g => g.id === gameId) || { id: gameId, tier: 'free' })}
         />
 
-        {/* ── Code picker ──────────────────────────────────────────────────────── */}
-        <div style={{ marginBottom: 18 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: T.dim, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 10 }}>
-            {t('licenceCode')}
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
-            {CODES.map(code => {
-              const active = selectedCode === code.id;
-              return (
-                <motion.button key={code.id} whileTap={{ scale: 0.94 }} onClick={() => handleCodeSelect(code.id)}
-                  style={{
-                    background: active ? 'linear-gradient(135deg,#007A4D,#005a38)' : T.surfaceAlt,
-                    border: `1px solid ${active ? '#007A4D' : T.border}`,
-                    borderRadius: T.radius, padding: '10px 6px',
-                    cursor: 'pointer', fontFamily: T.font,
-                    boxShadow: active ? '0 4px 16px rgba(0,122,77,0.3)' : 'none',
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-                    transition: 'box-shadow 0.2s',
-                  }}>
-                  <span style={{ fontSize: 20 }}>{code.icon}</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: active ? '#fff' : T.text }}>{code.label}</span>
-                  <span style={{ fontSize: 9, color: active ? 'rgba(255,255,255,0.65)' : T.dim, lineHeight: 1.2, textAlign: 'center' }}>{code.sub}</span>
-                </motion.button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ── Quick actions ─────────────────────────────────────────────────────── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 20 }}>
-          {[
-            { id: 'testday',   icon: '📋', label: t('qa_testday'),   sub: t('qa_testday_sub'),   accent: '#FFB612' },
-            { id: 'checklist', icon: '✅', label: t('qa_checklist'), sub: t('qa_checklist_sub'), accent: '#007A4D' },
-            { id: 'weak',      icon: '🎯', label: t('qa_weak'),      sub: t('qa_weak_sub'),      accent: '#DE3831' },
-            { id: 'progress',  icon: '📈', label: t('qa_progress'),  sub: t('qa_progress_sub'),  accent: '#4472CA' },
-          ].map((a, i) => (
-            <motion.div key={a.id} custom={i} variants={cardVariants} initial="hidden" animate="visible"
-              whileTap={{ scale: 0.96 }} onClick={() => setNavTab(a.id)}
-              style={{
-                background: T.surfaceAlt,
-                border: '1px solid rgba(255,255,255,0.06)',
-                borderRadius: 16, padding: '14px', cursor: 'pointer',
-                position: 'relative', overflow: 'hidden',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
-              }}>
-              {/* Top accent line */}
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${a.accent}80, transparent)` }} />
-              {/* Icon chip */}
-              <div style={{
-                width: 36, height: 36, borderRadius: 10, marginBottom: 10,
-                background: `${a.accent}15`, border: `1px solid ${a.accent}25`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
-              }}>{a.icon}</div>
-              <div style={{ fontWeight: 700, fontSize: T.fontSizeLg, lineHeight: 1.25, marginBottom: 3 }}>{a.label}</div>
-              <div style={{ fontSize: T.fontSize - 2, color: T.dim, lineHeight: 1.4 }}>{a.sub}</div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* ── Relevant games section ────────────────────────────────────────────── */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-          <div style={{ flex: 1, height: 1, background: T.border }} />
-          <div style={{ fontSize: 10, fontWeight: 700, color: T.dim, letterSpacing: 2, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-            {t('forCode')} {CODES.find(c => c.id === selectedCode)?.label}
-          </div>
-          <div style={{ flex: 1, height: 1, background: T.border }} />
-        </div>
-        {relevantGames.map((game, i) => <GameCard key={game.id} game={game} index={i} tier={tier} onSelect={handleGameSelect} />)}
-
-        {/* ── Other modes ───────────────────────────────────────────────────────── */}
-        {otherGames.length > 0 && (
-          <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '20px 0 12px' }}>
-              <div style={{ flex: 1, height: 1, background: T.border }} />
-              <div style={{ fontSize: 10, fontWeight: 700, color: T.dim, letterSpacing: 2, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                {t('otherModes')}
-              </div>
-              <div style={{ flex: 1, height: 1, background: T.border }} />
+        {/* ── Quick Start row ──────────────────────────────────────────────────── */}
+        <div style={{ overflowX: 'auto', display: 'flex', gap: 10, paddingBottom: 4, marginBottom: 18, scrollbarWidth: 'none' }}>
+          <motion.div whileTap={{ scale: 0.96 }}
+            onClick={() => handleGameSelect(GAMES.find(g => g.id === 'learner_exam') || { id: 'learner_exam', tier: 'free' })}
+            style={{ flexShrink: 0, width: 160, background: 'linear-gradient(135deg,#FF6B35,#e0521c)', borderRadius: 14, padding: '14px 14px 12px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', bottom: -10, right: -8, fontSize: 44, opacity: 0.18, lineHeight: 1 }}>📄</div>
+            <div style={{ fontWeight: 800, fontSize: 13, color: '#fff', lineHeight: 1.2, marginBottom: 4 }}>K53 Learner Exam</div>
+            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.75)', lineHeight: 1.35 }}>64 questions · Official format</div>
+            <div style={{ marginTop: 8, background: 'rgba(255,255,255,0.2)', borderRadius: 6, padding: '3px 8px', display: 'inline-block' }}>
+              <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', letterSpacing: 0.5 }}>START NOW →</span>
             </div>
-            {otherGames.map((game, i) => <GameCard key={game.id} game={game} index={i} tier={tier} onSelect={handleGameSelect} muted />)}
-          </>
+          </motion.div>
+
+          {weakNerve && (
+            <motion.div whileTap={{ scale: 0.96 }}
+              onClick={() => handleGameSelect(GAMES.find(g => g.id === NERVE_GAME_MAP[weakNerve.id]) || { id: NERVE_GAME_MAP[weakNerve.id], tier: 'free' })}
+              style={{ flexShrink: 0, width: 148, background: `linear-gradient(135deg,${weakNerve.color}cc,${weakNerve.color}88)`, borderRadius: 14, padding: '14px 14px 12px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', bottom: -10, right: -8, fontSize: 44, opacity: 0.18, lineHeight: 1 }}>⚡</div>
+              <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.75)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 3 }}>Needs work</div>
+              <div style={{ fontWeight: 800, fontSize: 13, color: '#fff', lineHeight: 1.2, marginBottom: 4 }}>{weakNerve.label}</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.75)' }}>{weakNerve.score}% mastery</div>
+              <div style={{ marginTop: 8, background: 'rgba(255,255,255,0.2)', borderRadius: 6, padding: '3px 8px', display: 'inline-block' }}>
+                <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', letterSpacing: 0.5 }}>DRILL IT →</span>
+              </div>
+            </motion.div>
+          )}
+
+          {lastGameObj && (
+            <motion.div whileTap={{ scale: 0.96 }}
+              onClick={() => handleGameSelect(lastGameObj)}
+              style={{ flexShrink: 0, width: 148, background: T.surfaceAlt, border: `1px solid ${T.border}`, borderRadius: 14, padding: '14px 14px 12px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', bottom: -10, right: -8, fontSize: 44, opacity: 0.1, lineHeight: 1 }}>{lastGameObj.icon}</div>
+              <div style={{ fontSize: 9, fontWeight: 700, color: T.dim, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 3 }}>Last played</div>
+              <div style={{ fontWeight: 800, fontSize: 13, color: T.text, lineHeight: 1.2, marginBottom: 4 }}>{lastGameObj.label}</div>
+              <div style={{ marginTop: 8, background: 'rgba(255,255,255,0.06)', border: `1px solid ${T.border}`, borderRadius: 6, padding: '3px 8px', display: 'inline-block' }}>
+                <span style={{ fontSize: 9, fontWeight: 700, color: T.dim, letterSpacing: 0.5 }}>CONTINUE →</span>
+              </div>
+            </motion.div>
+          )}
+        </div>
+
+        {/* ── Code picker ──────────────────────────────────────────────────────── */}
+        <div style={{ overflowX: 'auto', display: 'flex', gap: 8, paddingBottom: 2, marginBottom: 14, scrollbarWidth: 'none' }}>
+          {CODES.map(code => {
+            const active = selectedCode === code.id;
+            return (
+              <motion.button key={code.id} whileTap={{ scale: 0.93 }} onClick={() => handleCodeSelect(code.id)}
+                style={{
+                  flexShrink: 0, background: active ? '#007A4D' : T.surfaceAlt,
+                  border: `1px solid ${active ? '#007A4D' : T.border}`,
+                  borderRadius: 99, padding: '6px 14px', cursor: 'pointer', fontFamily: T.font,
+                  display: 'flex', alignItems: 'center', gap: 5,
+                  boxShadow: active ? '0 2px 10px rgba(0,122,77,0.3)' : 'none',
+                  transition: 'all 0.15s',
+                }}>
+                <span style={{ fontSize: 14 }}>{code.icon}</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: active ? '#fff' : T.text }}>{code.label}</span>
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* ── Category filter pills ─────────────────────────────────────────────── */}
+        <div style={{ overflowX: 'auto', display: 'flex', gap: 7, paddingBottom: 2, marginBottom: 16, scrollbarWidth: 'none' }}>
+          {CATS.map(cat => {
+            const active = activeCat === cat.id;
+            return (
+              <motion.button key={cat.id} whileTap={{ scale: 0.92 }} onClick={() => setActiveCat(cat.id)}
+                style={{
+                  flexShrink: 0, background: active ? T.gold : T.surfaceAlt,
+                  border: `1px solid ${active ? T.gold : T.border}`,
+                  borderRadius: 99, padding: '5px 12px', cursor: 'pointer', fontFamily: T.font,
+                  display: 'flex', alignItems: 'center', gap: 4, transition: 'all 0.15s',
+                }}>
+                <span style={{ fontSize: 12 }}>{cat.icon}</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: active ? '#000' : T.dim }}>{cat.label}</span>
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* ── Game list ─────────────────────────────────────────────────────────── */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: T.dim, letterSpacing: 1.5, textTransform: 'uppercase' }}>
+            {filteredGames.length} {filteredGames.length === 1 ? 'mode' : 'modes'}
+          </div>
+          <div style={{ flex: 1, height: 1, background: T.border }} />
+        </div>
+        {filteredGames.map((game, i) => <GameCard key={game.id} game={game} index={i} tier={tier} onSelect={handleGameSelect} />)}
+        {filteredGames.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '32px 20px', color: T.dim, fontSize: T.fontSize - 1 }}>
+            No modes for this filter.{' '}
+            <span style={{ cursor: 'pointer', color: T.gold }} onClick={() => setActiveCat('all')}>Show all</span>
+          </div>
         )}
 
         {/* ── Pricing strip ─────────────────────────────────────────────────────── */}
         {(tier === TIERS.FREE && !inTrial) && <PricingStrip T={T} onPlanSelect={(t) => { window.location.href = `/api/checkout?plan=${t}`; }} />}
 
-        {/* ── Upgrade nudge if in trial ─────────────────────────────────────────── */}
+        {/* ── Trial upgrade nudge ───────────────────────────────────────────────── */}
         {inTrial && (
           <motion.div whileTap={{ scale: 0.98 }} onClick={() => setShowPaywall(true)}
             style={{ background: `linear-gradient(135deg,rgba(0,122,77,0.15),rgba(255,182,18,0.08))`, border: `1px solid rgba(255,182,18,0.2)`, borderRadius: T.radiusLg, padding: '14px 16px', marginTop: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -569,9 +555,8 @@ export default function App() {
         {NAV.map(item => {
           const active = navTab === item.id;
           return (
-            <motion.button key={item.id} whileTap={{ scale: 0.88 }} onClick={() => setNavTab(item.id)}
+            <motion.button key={item.id} whileTap={{ scale: 0.88 }} onClick={() => handleNavTap(item.id)}
               style={{ flex: 1, background: 'none', border: 'none', padding: '10px 0 8px', color: active ? T.gold : T.dim, cursor: 'pointer', fontFamily: T.font, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, transition: 'color 0.2s', position: 'relative' }}>
-              {/* Active indicator dot */}
               {active && (
                 <motion.div layoutId="nav-active-dot"
                   style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 20, height: 2, background: T.gold, borderRadius: 99 }} />
@@ -647,63 +632,58 @@ export default function App() {
 }
 
 // ── Game card component ────────────────────────────────────────────────────────
-function GameCard({ game, index, tier, onSelect, muted = false }) {
+function GameCard({ game, index, tier, onSelect }) {
   const T = BaseT;
   const { t } = useLang();
+  const nerveId    = GAME_NERVE_MAP[game.id] || 'rules';
+  const nerveColor = NERVE_COLOR_MAP[nerveId] || '#FFB612';
   const locked = (game.tier === 'pdp' && !hasPDPAccess()) || (game.tier === 'premium' && tier === TIERS.FREE);
-  const dc = DIFF_COLORS[game.diff];
 
   return (
     <motion.div
       custom={index} variants={cardVariants} initial="hidden" animate="visible"
       whileTap={!locked ? { scale: 0.975 } : {}}
-      onClick={() => onSelect(game)}
+      onClick={() => !locked && onSelect(game)}
       style={{
         background: T.surfaceAlt,
-        border: `1px solid ${locked ? T.border : 'rgba(255,255,255,0.06)'}`,
+        border: `1px solid ${T.border}`,
         borderRadius: 16, marginBottom: 8,
         cursor: locked ? 'default' : 'pointer',
-        opacity: locked ? 0.45 : muted ? 0.65 : 1,
+        opacity: locked ? 0.45 : 1,
         position: 'relative', overflow: 'hidden',
-        boxShadow: !locked && !muted ? `0 1px 3px rgba(0,0,0,0.4), 0 0 0 0.5px rgba(255,255,255,0.04)` : 'none',
+        boxShadow: !locked ? `0 1px 3px rgba(0,0,0,0.4)` : 'none',
+        display: 'flex',
       }}>
-      {/* Accent gradient strip top */}
-      {!locked && !muted && (
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1.5, background: `linear-gradient(90deg, ${dc}, transparent)` }} />
-      )}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-        {/* Icon zone */}
+      <div style={{ width: 3, flexShrink: 0, background: nerveColor, borderRadius: '16px 0 0 16px', alignSelf: 'stretch' }} />
+      <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
         <div style={{
-          width: 56, height: 56, flexShrink: 0,
+          width: 52, height: 52, flexShrink: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: `${dc}12`, margin: '10px 0 10px 12px', borderRadius: 12,
-          border: `1px solid ${dc}22`,
+          background: `${nerveColor}14`, margin: '10px 0 10px 12px', borderRadius: 12,
+          border: `1px solid ${nerveColor}28`,
         }}>
           <span style={{ fontSize: 24 }}>{game.icon}</span>
         </div>
-        {/* Content */}
         <div style={{ flex: 1, minWidth: 0, padding: '12px 10px 12px 12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3, flexWrap: 'wrap' }}>
             <span style={{ fontWeight: 700, fontSize: T.fontSizeLg, lineHeight: 1.2 }}>{game.label}</span>
             <span style={{
-              background: `${dc}18`, color: dc, borderRadius: 6,
-              padding: '1px 7px', fontSize: T.fontSize - 3, fontWeight: 600,
-              letterSpacing: 0.3, textTransform: 'uppercase',
-            }}>{t(`diff_${game.diff}`)}</span>
+              background: `${nerveColor}18`, color: nerveColor, borderRadius: 6,
+              padding: '1px 6px', fontSize: 9, fontWeight: 700,
+              letterSpacing: 0.5, textTransform: 'uppercase',
+            }}>{nerveId}</span>
             {locked && (
               <span style={{
                 background: 'rgba(255,255,255,0.05)', color: T.dim, borderRadius: 6,
                 padding: '1px 7px', fontSize: T.fontSize - 3, border: `1px solid ${T.border}`,
-                letterSpacing: 0.3,
               }}>🔒 {t('upgradeLabel')}</span>
             )}
           </div>
           <div style={{ color: T.dim, fontSize: T.fontSize - 2, lineHeight: 1.45 }}>{game.desc}</div>
         </div>
-        {/* Chevron */}
         {!locked && (
-          <div style={{ paddingRight: 14, color: T.dim, flexShrink: 0 }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <div style={{ flexShrink: 0, width: 28, height: 28, borderRadius: '50%', background: `${nerveColor}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 12 }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={nerveColor} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </div>
@@ -712,6 +692,8 @@ function GameCard({ game, index, tier, onSelect, muted = false }) {
     </motion.div>
   );
 }
+
+
 
 
 // ── Inline pricing strip ──────────────────────────────────────────────────────
