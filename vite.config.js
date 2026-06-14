@@ -44,25 +44,11 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Split React runtime into its own chunk
-          vendor: ["react", "react-dom"],
-          // Split animation library
-          motion: ["framer-motion"],
-          // Split heavy game files to load on demand
-          "games-core": [
-            "./src/games/Gauntlet.jsx",
-            "./src/games/MockExam.jsx",
-            "./src/games/PatternTrainer.jsx",
-          ],
-          "games-ext": [
-            "./src/games/HybridGauntlet.jsx",
-            "./src/games/RoadRulesGauntlet.jsx",
-            "./src/games/VehicleControls.jsx",
-            "./src/games/PDPPrep.jsx",
-            "./src/games/MotorcycleGauntlet.jsx",
-            "./src/games/HeavyVehicleGauntlet.jsx",
-          ],
+        manualChunks(id) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) return 'vendor';
+          if (id.includes('node_modules/framer-motion')) return 'motion';
+          if (id.includes('/games/Gauntlet') || id.includes('/games/MockExam') || id.includes('/games/PatternTrainer')) return 'games-core';
+          if (id.includes('/games/HybridGauntlet') || id.includes('/games/RoadRulesGauntlet') || id.includes('/games/VehicleControls') || id.includes('/games/PDPPrep') || id.includes('/games/MotorcycleGauntlet') || id.includes('/games/HeavyVehicleGauntlet')) return 'games-ext';
         },
       },
     },
