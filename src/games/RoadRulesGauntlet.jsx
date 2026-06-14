@@ -168,7 +168,7 @@ const ROUNDS = [
     ],
   },
 
-  // ── ROUND 15: Load Securing (NEW) ─────────────────────────────────────────
+  // ── ROUND 15: Load Securing ────────────────────────────────────────────────
   {
     id: 15, title: 'Load Securing', icon: '📦',
     questions: [
@@ -177,6 +177,75 @@ const ROUNDS = [
       { q: 'A red flag or light is required when a load overhangs by more than:', options: ['0.3 m','0.5 m','1 m','1.5 m'], answer: 2 },
       { q: 'The centre of gravity of a loaded vehicle affects:', options: ['Only fuel consumption','Stability, cornering and rollover risk','Engine temperature','Tyre wear only'], answer: 1 },
       { q: 'Lashing straps must be rated to at least what percentage of the load\'s weight?', options: ['25%','50%','75%','100%'], answer: 3 },
+    ],
+  },
+
+  // ── ROUND 16: Licence & Documentation ─────────────────────────────────────
+  {
+    id: 16, title: 'Licence & Documentation', icon: '📋',
+    questions: [
+      { q: 'A South African learner\'s licence is valid for how long?', options: ['12 months','18 months','24 months','36 months'], answer: 3 },
+      { q: 'You hold a learner\'s licence. A licensed supervisor must sit where?', options: ['In the back seat','In the front passenger seat','Anywhere in the vehicle','They may follow in another car'], answer: 1 },
+      { q: 'Your driving licence must be renewed every:', options: ['2 years','3 years','5 years','10 years'], answer: 2 },
+      { q: 'When must you carry your driving licence while driving?', options: ['Only on long trips','At all times while driving','Only when travelling between provinces','Only if under 25'], answer: 1 },
+      { q: 'If your driving licence is suspended, you may:', options: ['Continue driving to work only','Not drive any motor vehicle on a public road','Drive only during daylight hours','Drive with a supervisor only'], answer: 1 },
+      { q: 'A Code B licence allows you to drive vehicles with a gross vehicle mass of up to:', options: ['1 750 kg','2 500 kg','3 500 kg','5 000 kg'], answer: 2 },
+      { q: 'You must be at least how old to apply for a Code B learner\'s licence?', options: ['16','17','18','21'], answer: 1 },
+    ],
+  },
+
+  // ── ROUND 17: Towing & Trailers ────────────────────────────────────────────
+  {
+    id: 17, title: 'Towing & Trailers', icon: '🚛',
+    questions: [
+      { q: 'When towing a trailer, your following distance should be:', options: ['The same as normal','At least double the normal distance','At least 50 m always','3 seconds in good conditions'], answer: 1 },
+      { q: 'A trailer with a gross vehicle mass over 750 kg must be fitted with:', options: ['Only coupling brakes','Its own brake system that can be applied from the towing vehicle','A handbrake only','No brakes are required'], answer: 1 },
+      { q: 'The maximum speed when towing most trailers on a freeway is:', options: ['80 km/h','100 km/h','120 km/h','110 km/h'], answer: 1 },
+      { q: 'Trailer sway (snake) is best corrected by:', options: ['Braking hard','Accelerating to straighten the trailer','Releasing the accelerator and steering gently straight — do not brake hard','Steering sharply against the sway'], answer: 2 },
+      { q: 'A trailer must have how many rear red reflectors?', options: ['One','Two','Four','It depends on trailer width'], answer: 1 },
+      { q: 'The coupling between a towing vehicle and trailer must be fitted with:', options: ['A safety chain or cable only','A coupling device AND a secondary safety chain or cable','Only a ball hitch','Any connection strong enough for the load'], answer: 1 },
+    ],
+  },
+
+  // ── ROUND 18: Intersections & Turning ──────────────────────────────────────
+  {
+    id: 18, title: 'Intersections & Turning', icon: '↩️',
+    questions: [
+      { q: 'When turning right at an intersection, you should position your vehicle:', options: ['As far left as possible','As far right in your lane (near the centre line) as possible','In the centre of the road','It does not matter'], answer: 1 },
+      { q: 'A U-turn is prohibited:', options: ['On any multi-lane road','Where it cannot be made safely, or where signs prohibit it','Always on a public road','Only at night'], answer: 1 },
+      { q: 'At a traffic circle without road markings, you must:', options: ['Give way to traffic on your right already in the circle','Give way to traffic on your left','Go straight through as a priority road','Always stop and check before proceeding'], answer: 0 },
+      { q: 'When may you turn left at a red traffic light in South Africa?', options: ['Always, after stopping','Only if a "left turn allowed" sign or marking is present','Never','Only between 10pm and 5am'], answer: 1 },
+      { q: 'Before turning left, you should check your mirrors and:', options: ['Check the blind spot to the left for cyclists','Check the blind spot to the right','Signal right first then signal left','No additional check is needed if mirrors are clear'], answer: 0 },
+      { q: 'How far before a turn must you signal your intention?', options: ['Immediately before turning','At least 30 m before turning in an urban area','Only in heavy traffic','At least 100 m before turning'], answer: 1 },
+      { q: 'When completing a right turn, you should end up in:', options: ['The left lane of the new road','The right lane of the new road (lane nearest the centre line)','Any available lane','The lane directly across from your starting position'], answer: 1 },
+    ],
+  },
+
+  // ── ROUND 19: Night Driving & Visibility ───────────────────────────────────
+  {
+    id: 19, title: 'Night Driving & Visibility', icon: '🌙',
+    questions: [
+      { q: 'Your dipped (low) beam headlamps must illuminate the road at least how far ahead?', options: ['30 m','45 m','60 m','100 m'], answer: 1 },
+      { q: 'Your main beam (high beam) headlamps must illuminate at least how far ahead?', options: ['45 m','60 m','100 m','150 m'], answer: 2 },
+      { q: 'You must switch from high beam to low beam when an oncoming vehicle is within:', options: ['50 m','100 m','150 m','200 m'], answer: 2 },
+      { q: 'Rear fog lights should only be used when visibility is reduced to less than:', options: ['50 m','100 m','150 m','200 m'], answer: 1 },
+      { q: 'If you are temporarily blinded by oncoming headlights, you should:', options: ['Close your eyes briefly','Slow down and look at the left edge of your lane','Speed up to pass the vehicle quickly','Switch to high beam to see better'], answer: 1 },
+      { q: 'Parking lights (side lights) may be used when parked on a road at night to:', options: ['Illuminate the road ahead','Make your parked vehicle visible to others','Allow driving at slow speed','Replace headlights in fog'], answer: 1 },
+      { q: 'At night, your stopping distance is effectively greater because:', options: ['Roads are more slippery','Your eyes take longer to adjust','You can only see as far as your headlights illuminate — reaction distance eats into that','Tyres are colder and less grippy'], answer: 2 },
+    ],
+  },
+
+  // ── ROUND 20: Special Situations ──────────────────────────────────────────
+  {
+    id: 20, title: 'Special Situations', icon: '🚨',
+    questions: [
+      { q: 'Your vehicle breaks down on a freeway. Your emergency triangle must be placed at least:', options: ['15 m behind your vehicle','30 m behind your vehicle','45 m behind your vehicle','90 m behind your vehicle'], answer: 2 },
+      { q: 'A school bus has stopped and is displaying a flashing amber light. You should:', options: ['Overtake quickly and carefully','Slow down and be prepared to stop — children may be crossing','Hoot to warn children','Stop 50 m away'], answer: 1 },
+      { q: 'When passing a stationary emergency vehicle with flashing lights on the road, you must:', options: ['Accelerate to reduce the time you are near it','Slow down and, where possible, move into a lane away from the vehicle','Keep the same speed but give a wide berth','Hoot to warn the officers'], answer: 1 },
+      { q: 'You are involved in a minor accident with no injuries. You must:', options: ['Leave immediately if you are not at fault','Exchange particulars (name, licence, registration) with the other driver','Call the police and wait regardless of severity','Move all vehicles immediately, no documentation needed'], answer: 1 },
+      { q: 'If a traffic officer signals you to stop, you must:', options: ['Stop only if you believe you have done wrong','Stop immediately and safely where directed','Stop at the next traffic light','You may ignore it and go to the nearest police station'], answer: 1 },
+      { q: 'A pedestrian in a marked crossing has right of way over:', options: ['Only cyclists','All turning vehicles','All vehicles including those with a green light','Emergency vehicles only'], answer: 1 },
+      { q: 'You are driving and your hooter (horn) must be audible at what minimum distance?', options: ['30 m','45 m','60 m','90 m'], answer: 3 },
     ],
   },
 ];
