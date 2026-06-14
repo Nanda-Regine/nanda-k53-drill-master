@@ -5,6 +5,7 @@ import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 import { recordGameAnswer } from '../utils/masteryStore.js';
 import { ROAD_SIGNS } from '../data/roadSigns.js';
+import MentalHealthSupport from '../components/MentalHealthSupport.jsx';
 
 // ── Exam structure (mirrors actual DLTC learner's test) ──────────────────────
 // Code B: 28 Road Signs + 28 Rules of Road + 8 Vehicle Controls = 64 questions
@@ -154,8 +155,9 @@ function buildSignQuestions(count = 28) {
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function K53LearnerExam({ onBack, onPass }) {
+export default function K53LearnerExam({ onBack, onPass, onGoToGame }) {
   const [screen, setScreen] = useState('intro'); // intro | exam | review | result
+  const [showSupport, setShowSupport] = useState(false);
   const [section, setSection] = useState(0); // 0=signs 1=rules 2=controls
   const [allQuestions, setAllQuestions] = useState(null);
   const [qIdx, setQIdx] = useState(0);
@@ -310,6 +312,22 @@ export default function K53LearnerExam({ onBack, onPass }) {
     </div>
   );
 
+  // ── Mental health support (shown after a fail) ────────────────────────────
+  if (screen === 'result' && showSupport) {
+    const failedSections = SECTIONS.filter((_, si) => !scores[si].pass).map(sec => sec.key);
+    const totalCorrect   = scores.reduce((sum, s) => sum + s.correct, 0);
+    return (
+      <MentalHealthSupport
+        failedSections={failedSections}
+        score={totalCorrect}
+        total={64}
+        onRetry={() => { setShowSupport(false); startExam(); }}
+        onBack={onBack}
+        onGoToGame={onGoToGame}
+      />
+    );
+  }
+
   // ── Result screen ──────────────────────────────────────────────────────────
   if (screen === 'result') return (
     <div style={{ minHeight: '100vh', background: T.bg, color: T.text, fontFamily: T.font }}>
@@ -343,6 +361,13 @@ export default function K53LearnerExam({ onBack, onPass }) {
         })}
 
         <div style={{ marginTop: 24, display: 'grid', gap: 12 }}>
+          {!allPassed && (
+            <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowSupport(true)}
+              style={{ background: 'linear-gradient(135deg,rgba(0,122,77,0.2),rgba(68,114,202,0.15))', border: '1px solid rgba(0,122,77,0.35)', borderRadius: T.radius, padding: '16px', color: T.text, fontWeight: 800, fontFamily: T.font, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+              <span style={{ fontSize: 22 }}>💙</span>
+              <span>Get Support &amp; Study Plan</span>
+            </motion.button>
+          )}
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => {
             const sigScore = scores[0]; const ruleScore = scores[1]; const ctrlScore = scores[2];
             const text = `🇿🇦 K53 Learner's Exam Simulator\n🚦 Signs: ${sigScore.correct}/28\n📋 Rules: ${ruleScore.correct}/28\n🔩 Controls: ${ctrlScore.correct}/8\n${allPassed ? '✅ PASS' : '❌ FAIL — keep practising!'}\nK53 Drill Master`;

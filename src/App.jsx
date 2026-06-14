@@ -364,7 +364,7 @@ export default function App() {
   if (activeGame === 'sign_shape')  return <>{confettiOverlay}<SignShapeTrainer       onBack={onGameBack} onPass={onGamePass} /></>;
   if (activeGame === 'road_marks')  return <>{confettiOverlay}<RoadMarkingsDrill      onBack={onGameBack} onPass={onGamePass} /></>;
   if (activeGame === 'scenario')    return <>{confettiOverlay}<ScenarioDrill          onBack={onGameBack} onPass={onGamePass} /></>;
-  if (activeGame === 'learner_exam') return <>{confettiOverlay}<K53LearnerExam         onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'learner_exam') return <>{confettiOverlay}<K53LearnerExam         onBack={onGameBack} onPass={onGamePass} onGoToGame={(gId) => handleGameSelect(GAMES.find(g => g.id === gId) || { id: gId, tier: 'free' })} /></>;
 
   // ── Tab routes ──────────────────────────────────────────────────────────────
   if (navTab === 'checklist') return <VehicleChecklist onBack={() => setNavTab('home')} />;
