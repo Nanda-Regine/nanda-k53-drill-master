@@ -750,6 +750,383 @@ const ALL_QUESTIONS = [
     ],
     explanation: 'The K53 reference point for starting parallel parking: pull alongside the parked vehicle so your vehicle\'s rear axle is level with their rear bumper. Then turn full lock left and reverse.',
   },
+
+  // ── CATEGORY: gears (expanded) ────────────────────────────────────────────
+  {
+    cat: 'gears',
+    q: 'You are driving uphill in 3rd gear and the engine starts to labour (struggle). What must you do?',
+    correct: 'Change down to 2nd gear to give the engine more power',
+    options: [
+      'Change down to 2nd gear to give the engine more power',
+      'Increase engine speed by pressing the accelerator harder in 3rd',
+      'Clutch in and coast to the top',
+      'Change up to 4th gear to reduce engine strain',
+    ],
+    explanation: 'A labouring engine lacks torque. Change DOWN to get more pulling power. Changing up when the engine is struggling causes excessive wear and may stall.',
+  },
+  {
+    cat: 'gears',
+    q: 'You are travelling at 20 km/h in 4th gear in slow traffic. What is wrong with this?',
+    correct: 'The gear is too high for the speed — the engine will labour and could stall',
+    options: [
+      'The gear is too high for the speed — the engine will labour and could stall',
+      'Nothing — any gear can be used at any speed',
+      'Only wrong if the speedometer shows red',
+      'Only a problem on diesel vehicles',
+    ],
+    explanation: 'Each gear has a speed range. At 20 km/h, 2nd gear is normally appropriate. Driving in too high a gear at low speed lugs the engine and causes premature wear.',
+  },
+  {
+    cat: 'gears',
+    q: 'When is it correct to skip a gear (e.g. change from 4th to 2nd without going through 3rd)?',
+    correct: 'When overtaking or needing a significant power increase — block gear changes are acceptable',
+    options: [
+      'When overtaking or needing a significant power increase — block gear changes are acceptable',
+      'Never — you must always change through every gear sequentially',
+      'Only in reverse situations',
+      'Only on automatic transmission vehicles',
+    ],
+    explanation: 'Block gear changes (skipping gears when downshifting) are acceptable in K53 and real driving when you need more power quickly — e.g. overtaking or emergency acceleration.',
+  },
+  {
+    cat: 'gears',
+    q: 'What does the term "bite point" refer to?',
+    correct: 'The point where the clutch plates begin to engage and the engine load increases',
+    options: [
+      'The point where the clutch plates begin to engage and the engine load increases',
+      'The maximum clutch pedal depression position',
+      'The point where the handbrake is fully applied',
+      'The first notch of the gear lever',
+    ],
+    explanation: 'The bite point is where the clutch begins to transmit drive. You feel it as a slight change in engine note and slight vehicle movement. Essential for hill starts.',
+  },
+  {
+    cat: 'gears',
+    q: 'You are approaching a bend. When must you change to a lower gear?',
+    correct: 'Before entering the bend — never change gear while in the bend',
+    options: [
+      'Before entering the bend — never change gear while in the bend',
+      'Halfway through the bend',
+      'After the bend when you are straight again',
+      'It does not matter when you change gear in a bend',
+    ],
+    explanation: 'Gear changes in a bend disturb weight balance and traction. Complete all braking and gear changes BEFORE the bend, then accelerate smoothly through and out.',
+  },
+  {
+    cat: 'gears',
+    q: 'On an automatic transmission vehicle, what does the "L" or "1" gear position do?',
+    correct: 'Locks the transmission in low gear — used for engine braking on steep descents',
+    options: [
+      'Locks the transmission in low gear — used for engine braking on steep descents',
+      'Allows the car to reverse in low speed',
+      'Overrides the engine management system',
+      'Provides maximum overdrive for fuel saving',
+    ],
+    explanation: 'On automatics, "L" or "1" prevents the gearbox from shifting up, giving continuous engine braking on steep hills. Prevents brake fade on long descents.',
+  },
+  {
+    cat: 'gears',
+    q: 'Why should you NOT leave a manual vehicle in first gear while stationary at a traffic light?',
+    correct: 'Holding the clutch down wears the release bearing — select neutral and release the clutch',
+    options: [
+      'Holding the clutch down wears the release bearing — select neutral and release the clutch',
+      'First gear damages the gearbox when stationary',
+      'The vehicle will roll forward',
+      'It is fine — this is the correct method for a quick departure',
+    ],
+    explanation: 'Holding the clutch pedal depressed for long periods wears the clutch release bearing. At a long stop, select neutral and release the clutch to protect the clutch.',
+  },
+
+  // ── CATEGORY: moving (expanded) ───────────────────────────────────────────
+  {
+    cat: 'moving',
+    q: 'Before moving off from a parked position on the LEFT side of the road, your FIRST action is:',
+    correct: 'Check the interior mirror',
+    options: [
+      'Check the interior mirror',
+      'Signal to the right',
+      'Check the right blind spot',
+      'Start the engine',
+    ],
+    explanation: 'Full move-off sequence: Interior mirror → Signal right → Right blind spot → Move off when safe → Cancel signal. Mirror ALWAYS first.',
+  },
+  {
+    cat: 'moving',
+    q: 'When moving off facing downhill, what must you do before releasing the handbrake?',
+    correct: 'Engage 1st gear (or select D for automatic) and be ready to control speed with the footbrake',
+    options: [
+      'Engage 1st gear (or select D for automatic) and be ready to control speed with the footbrake',
+      'Rev the engine high to overcome gravity',
+      'Leave in neutral and let the vehicle roll',
+      'Apply the footbrake and simultaneously release the handbrake without engaging a gear',
+    ],
+    explanation: 'Facing downhill: engage 1st (or Drive). You will roll forward anyway, so 1st gear gives you engine control. Footbrake controls speed as you release the handbrake.',
+  },
+  {
+    cat: 'moving',
+    q: 'On a hill start (uphill), the vehicle starts rolling backward before you move off. What went wrong?',
+    correct: 'You released the handbrake before reaching the bite point — always find bite point first',
+    options: [
+      'You released the handbrake before reaching the bite point — always find bite point first',
+      'You used too much revs',
+      'The tyres were wet',
+      'Normal — all vehicles roll back slightly on a hill start',
+    ],
+    explanation: 'Roll-back means you released the handbrake too early. The sequence: Clutch in → 1st gear → Find bite point → Add enough revs → THEN release handbrake smoothly.',
+  },
+  {
+    cat: 'moving',
+    q: 'You are about to move off and a cyclist is approaching in the left lane. You must:',
+    correct: 'Wait until the cyclist has passed before moving off',
+    options: [
+      'Wait until the cyclist has passed before moving off',
+      'Move off slowly — the cyclist will go around you',
+      'Hoot to warn the cyclist and move off',
+      'Move off quickly to get out of the cyclist\'s path'],
+    explanation: 'Cyclists have right of way over a stationary vehicle moving off. Always check the blind spot for cyclists before moving. Wait until it is safe.',
+  },
+  {
+    cat: 'moving',
+    q: 'When approaching a STOP sign to turn right, and there is traffic from both left and right, who do you yield to FIRST?',
+    correct: 'Traffic from the RIGHT — they have priority at an uncontrolled crossing',
+    options: [
+      'Traffic from the RIGHT — they have priority at an uncontrolled crossing',
+      'Traffic from the LEFT',
+      'You may proceed when either side is clear',
+      'Oncoming traffic always has priority over traffic from the right'],
+    explanation: 'After stopping, yield to traffic on the road you are entering. At an uncontrolled crossing yield RIGHT first. Then check left and proceed when safe to cross both lanes.',
+  },
+
+  // ── CATEGORY: weather ─────────────────────────────────────────────────────
+  {
+    cat: 'weather',
+    q: 'In heavy rain, you switch on your headlights. This is because:',
+    correct: 'Headlights make your vehicle more visible to others in poor visibility — not just to see ahead',
+    options: [
+      'Headlights make your vehicle more visible to others in poor visibility — not just to see ahead',
+      'It is required by law whenever it rains',
+      'They improve your ability to see through rain',
+      'They activate the rain sensor on wipers',
+    ],
+    explanation: 'In rain, low beams make you visible to others. This is more important than illuminating the road. SA law requires lights when visibility is poor.',
+  },
+  {
+    cat: 'weather',
+    q: 'Aquaplaning occurs when your tyres ride on a film of water. To regain control you must:',
+    correct: 'Ease off the accelerator gently and hold the steering straight — do NOT brake hard',
+    options: [
+      'Ease off the accelerator gently and hold the steering straight — do NOT brake hard',
+      'Brake hard and steer into a skid',
+      'Accelerate to break through the water film',
+      'Turn the steering wheel toward the slide'],
+    explanation: 'Aquaplaning: lift off throttle, hold straight. Hard braking or sharp steering while floating causes a spin. Allow speed to reduce until tyres regain contact.',
+  },
+  {
+    cat: 'weather',
+    q: 'You are driving in thick fog. You should use:',
+    correct: 'Dipped headlights and fog lights if fitted — high beam reflects off fog and makes it worse',
+    options: [
+      'Dipped headlights and fog lights if fitted — high beam reflects off fog and makes it worse',
+      'High beam for maximum illumination',
+      'Hazard lights only to warn others',
+      'No lights — they reduce contrast'],
+    explanation: 'High beam in fog creates a "white wall" effect by reflecting off water droplets. Use dipped headlights + fog lights. Increase following distance and reduce speed significantly.',
+  },
+  {
+    cat: 'weather',
+    q: 'Strong crosswinds are most dangerous when you are:',
+    correct: 'Emerging from behind a windbreak (building, hedge) into an exposed gap — the gust hits suddenly',
+    options: [
+      'Emerging from behind a windbreak (building, hedge) into an exposed gap — the gust hits suddenly',
+      'On a straight road with consistent wind',
+      'At low speed',
+      'Driving a low vehicle like a sports car'],
+    explanation: 'Crosswind danger is worst at gaps in windbreaks (bridges, open fields) where you go from sheltered to fully exposed instantly. High-sided vehicles and empty trucks are most vulnerable.',
+  },
+  {
+    cat: 'weather',
+    q: 'Driving on a flooded road (drift/ford): when is it safe to cross?',
+    correct: 'Only if the water is slow-moving and less than the bottom of the door — if in doubt, do NOT cross',
+    options: [
+      'Only if the water is slow-moving and less than the bottom of the door — if in doubt, do NOT cross',
+      'Any depth is fine in a 4x4',
+      'Safe if other cars have crossed recently',
+      'Safe when the water is below the bumper'],
+    explanation: 'Moving water 30 cm deep can move a car. Engine depth for most vehicles = 30–50 cm. Electrical systems fail in water. "Turn around, don\'t drown" — never drive into flooded roads.',
+  },
+
+  // ── CATEGORY: night ───────────────────────────────────────────────────────
+  {
+    cat: 'night',
+    q: 'At night, you see an oncoming vehicle on high beam. You should:',
+    correct: 'Flash once to signal them to dip, then look to the LEFT edge of your lane — not at the lights',
+    options: [
+      'Flash once to signal them to dip, then look to the LEFT edge of your lane — not at the lights',
+      'Switch to high beam to make them dip faster',
+      'Stop until they pass',
+      'Close your eyes briefly'],
+    explanation: 'Looking at oncoming headlights causes temporary blindness. Look to the LEFT verge as a reference line. Flash once to signal them — do NOT retaliate with your own high beam.',
+  },
+  {
+    cat: 'night',
+    q: 'At night your stopping distance increases because:',
+    correct: 'You can only see as far as your headlights illuminate — your reaction + braking distance may exceed visibility',
+    options: [
+      'You can only see as far as your headlights illuminate — your reaction + braking distance may exceed visibility',
+      'Roads are wetter at night',
+      'Tyres lose traction in the dark',
+      'You drive faster at night'],
+    explanation: 'At 100 km/h, your dipped beams illuminate about 45 m. Your stopping distance is ~67 m. You are "overdriving your headlights" — if anything appears you cannot stop in time.',
+  },
+  {
+    cat: 'night',
+    q: 'When you want to park at night on a road with no streetlights, you must:',
+    correct: 'Leave your parking lights (sidelights) on to make the vehicle visible to other road users',
+    options: [
+      'Leave your parking lights (sidelights) on to make the vehicle visible to other road users',
+      'Leave your headlights on full beam',
+      'No lights are needed if you are off the road',
+      'Leave your hazard lights flashing'],
+    explanation: 'Parking lights are designed exactly for this: marking a parked vehicle in low-visibility conditions. Full beam would dazzle; hazards imply a breakdown. Parking lights are correct.',
+  },
+  {
+    cat: 'night',
+    q: 'When must you switch from high beam to dipped beam?',
+    correct: 'When within 150 m of an oncoming vehicle AND when following another vehicle within 150 m',
+    options: [
+      'When within 150 m of an oncoming vehicle AND when following another vehicle within 150 m',
+      'Only when approaching oncoming vehicles',
+      'When within 100 m of any vehicle',
+      'Only in built-up areas with street lighting'],
+    explanation: 'SA law requires dipped beams within 150 m of oncoming traffic AND within 150 m of vehicles ahead (following). High beam from behind is as dangerous as from the front.',
+  },
+
+  // ── CATEGORY: fatigue ─────────────────────────────────────────────────────
+  {
+    cat: 'fatigue',
+    q: 'The ONLY safe response to driver fatigue on a long trip is:',
+    correct: 'Stop in a safe place and sleep — coffee and loud music delay fatigue temporarily but do NOT cure it',
+    options: [
+      'Stop in a safe place and sleep — coffee and loud music delay fatigue temporarily but do NOT cure it',
+      'Open the window for fresh air',
+      'Drink coffee and continue',
+      'Turn up the radio and splash water on your face'],
+    explanation: 'Fatigue is as dangerous as drunk driving. Microsleeps (1–2 second unconscious lapses) cause fatal crashes. There is no substitute for stopping and sleeping.',
+  },
+  {
+    cat: 'fatigue',
+    q: 'Signs that you are too fatigued to drive safely include:',
+    correct: 'Difficulty keeping your eyes open, missing exits, drifting across lanes, or "losing" sections of the road',
+    options: [
+      'Difficulty keeping your eyes open, missing exits, drifting across lanes, or "losing" sections of the road',
+      'Only yawning more than three times per hour',
+      'Only feeling tired at the wheel',
+      'Headache only'],
+    explanation: 'If you experience microsleeps, you are already too tired. The danger is that fatigued drivers often do not recognise how impaired they are — they feel "OK" but react as if asleep.',
+  },
+  {
+    cat: 'fatigue',
+    q: 'On a long trip, you should plan a rest stop at least every:',
+    correct: 'Every 2 hours or 200 km — whichever comes first',
+    options: [
+      'Every 2 hours or 200 km — whichever comes first',
+      'Every 4 hours',
+      'Only when you feel tired',
+      'Every 500 km'],
+    explanation: 'The "2 hour rule" is standard road safety guidance. Mental fatigue accumulates invisibly — stopping every 2 hours for 15 minutes substantially reduces crash risk on long trips.',
+  },
+
+  // ── CATEGORY: intersections (expanded) ────────────────────────────────────
+  {
+    cat: 'intersections',
+    q: 'You arrive at a four-way stop at exactly the same time as a vehicle from your right. Who has right of way?',
+    correct: 'The vehicle on the right — you must yield to them',
+    options: [
+      'The vehicle on the right — you must yield to them',
+      'You — because you intend to go straight',
+      'Whoever is facing the steepest uphill',
+      'The larger vehicle'],
+    explanation: 'At a four-way stop with simultaneous arrivals, yield to the vehicle on YOUR RIGHT. This is the universal uncontrolled intersection rule in South Africa.',
+  },
+  {
+    cat: 'intersections',
+    q: 'At a green traffic light, before entering the intersection you must:',
+    correct: 'Check that the intersection is clear — another driver may run a red light',
+    options: [
+      'Check that the intersection is clear — another driver may run a red light',
+      'Accelerate quickly to clear the intersection',
+      'Enter immediately — a green light gives unconditional right of way',
+      'Hoot to warn pedestrians'],
+    explanation: 'A green light gives you the right of way — it does NOT guarantee safety. Always scan the intersection before entering. Red-light runners cause severe T-bone collisions.',
+  },
+  {
+    cat: 'intersections',
+    q: 'You are at an intersection waiting to turn right. Oncoming traffic is heavy. When is it safe to turn?',
+    correct: 'Only when there is a safe gap in oncoming traffic AND no pedestrians are crossing your path',
+    options: [
+      'Only when there is a safe gap in oncoming traffic AND no pedestrians are crossing your path',
+      'When the oncoming vehicle flashes their lights at you',
+      'As soon as the leading oncoming vehicle passes',
+      'If you have been waiting for more than 30 seconds'],
+    explanation: 'A right turn crosses oncoming traffic AND the crossing lane for pedestrians. Both must be clear. Never turn based on another driver\'s flash — they may not speak for all traffic.',
+  },
+  {
+    cat: 'intersections',
+    q: 'What is a "box junction" and what is the rule?',
+    correct: 'A yellow cross-hatched box: you may only enter if your exit road is clear enough to drive through without stopping',
+    options: [
+      'A yellow cross-hatched box: you may only enter if your exit road is clear enough to drive through without stopping',
+      'A priority intersection marked with yellow lines',
+      'An intersection with no traffic lights where all traffic must stop',
+      'A pedestrian crossing with yellow markings'],
+    explanation: 'Box junctions prevent gridlock. Even with a green light, you must not enter the box if your exit is blocked. The only exception: turning right and blocked only by oncoming traffic.',
+  },
+  {
+    cat: 'intersections',
+    q: 'You approach a stop sign and the road you are entering is clear. You must:',
+    correct: 'Stop completely behind the stop line, check both directions, then proceed when safe',
+    options: [
+      'Stop completely behind the stop line, check both directions, then proceed when safe',
+      'Slow down to walking pace — a full stop is not required if the road is clear',
+      'Stop if any traffic is approaching',
+      'Stop, check right only (traffic comes from the right in SA)'],
+    explanation: 'A stop sign requires a complete stop regardless of visibility. Not stopping is an offence even if the road appears clear. Check BOTH directions before proceeding.',
+  },
+
+  // ── CATEGORY: freeways (expanded) ────────────────────────────────────────
+  {
+    cat: 'freeways',
+    q: 'You missed your freeway exit. You must:',
+    correct: 'Continue to the next exit — never reverse or make a U-turn on a freeway',
+    options: [
+      'Continue to the next exit — never reverse or make a U-turn on a freeway',
+      'Stop on the shoulder and wait for a gap to reverse',
+      'Cut across the gore area to reach the exit ramp',
+      'Flash your lights and slowly reverse to the exit'],
+    explanation: 'Reversing or U-turning on a freeway is extremely dangerous and illegal. Continue to the next exit. The cost of a few extra kilometres is nothing compared to a fatal collision.',
+  },
+  {
+    cat: 'freeways',
+    q: 'On a freeway, the left lane is for:',
+    correct: 'Normal travel — the right lane is for overtaking only and must be vacated after passing',
+    options: [
+      'Normal travel — the right lane is for overtaking only and must be vacated after passing',
+      'Slow vehicles only',
+      'Emergency vehicles only',
+      'Trucks and buses only'],
+    explanation: 'Keep left on a freeway. The right lane is an overtaking lane — not a "fast lane" for continuous travel. Staying in the right lane is an offence and causes danger.',
+  },
+  {
+    cat: 'freeways',
+    q: 'When merging onto a freeway from an on-ramp, you must:',
+    correct: 'Accelerate on the ramp to match freeway speed, yield to freeway traffic, and merge when a safe gap appears',
+    options: [
+      'Accelerate on the ramp to match freeway speed, yield to freeway traffic, and merge when a safe gap appears',
+      'Stop at the end of the on-ramp and wait for a gap',
+      'Force your way in — freeway traffic must yield to merging vehicles',
+      'Signal and immediately enter the freeway'],
+    explanation: 'You do NOT have right of way merging onto a freeway. Match speed on the ramp (acceleration lane), find a safe gap, and blend in smoothly. Stopping at the end is extremely dangerous.',
+  },
 ];
 
 const CATEGORIES = [
@@ -765,6 +1142,9 @@ const CATEGORIES = [
   { id: 'emergency',     label: 'Emergency & BAC',         icon: '🆘', desc: 'Emergency stop procedure, alcohol limits', count: ALL_QUESTIONS.filter(q => q.cat === 'emergency').length },
   { id: 'moving',        label: 'Moving Off & Incline',    icon: '⛰️', desc: 'Hill start, bite point, moving off from rest', count: ALL_QUESTIONS.filter(q => q.cat === 'moving').length },
   { id: 'manoeuvres',    label: 'Yard Manoeuvres',         icon: '🔄', desc: 'Alley dock, turn in road, parallel park', count: ALL_QUESTIONS.filter(q => q.cat === 'manoeuvres').length },
+  { id: 'weather',       label: 'Weather & Conditions',    icon: '🌧️', desc: 'Rain, fog, aquaplaning, crosswinds, floods', count: ALL_QUESTIONS.filter(q => q.cat === 'weather').length },
+  { id: 'night',         label: 'Night Driving',           icon: '🌙', desc: 'High beam, oncoming lights, parking at night', count: ALL_QUESTIONS.filter(q => q.cat === 'night').length },
+  { id: 'fatigue',       label: 'Fatigue & Alertness',     icon: '😴', desc: 'Rest stops, microsleeps, warning signs of fatigue', count: ALL_QUESTIONS.filter(q => q.cat === 'fatigue').length },
 ];
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }

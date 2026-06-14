@@ -49,7 +49,8 @@ export const GAME_NERVE = {
   roadsigns:  'signs',
   sign_shape: 'signs',
   road_marks: 'markings',
-  scenario:   'scenarios',
+  scenario:     'scenarios',
+  learner_exam: 'practical',
 };
 
 // ── Level ladder ───────────────────────────────────────────────────────────────

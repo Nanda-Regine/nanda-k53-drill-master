@@ -18,6 +18,7 @@ import RoadSignsQuiz        from './games/RoadSignsQuiz.jsx';
 import SignShapeTrainer     from './games/SignShapeTrainer.jsx';
 import RoadMarkingsDrill    from './games/RoadMarkingsDrill.jsx';
 import ScenarioDrill       from './games/ScenarioDrill.jsx';
+import K53LearnerExam      from './games/K53LearnerExam.jsx';
 import TestDayPrep          from './components/TestDayPrep.jsx';
 import MentalHealthSupport  from './components/MentalHealthSupport.jsx';
 
@@ -83,7 +84,8 @@ const GAMES_BASE = [
   { id: 'roadsigns',  icon: '🛑', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'sign_shape', icon: '🔷', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'road_marks', icon: '🟡', tier: 'free',    diff: 'intermediate', codes: ['code12', 'code8', 'code10', 'code14'] },
-  { id: 'scenario',   icon: '🎯', tier: 'free',    diff: 'intermediate', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'scenario',     icon: '🎯', tier: 'free',    diff: 'intermediate', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'learner_exam', icon: '📄', tier: 'free',    diff: 'intermediate', codes: ['code8'] },
 ];
 
 const DIFF_COLORS = {
@@ -332,6 +334,7 @@ export default function App() {
   if (activeGame === 'sign_shape')  return <>{confettiOverlay}<SignShapeTrainer       onBack={onGameBack} onPass={onGamePass} /></>;
   if (activeGame === 'road_marks')  return <>{confettiOverlay}<RoadMarkingsDrill      onBack={onGameBack} onPass={onGamePass} /></>;
   if (activeGame === 'scenario')    return <>{confettiOverlay}<ScenarioDrill          onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'learner_exam') return <>{confettiOverlay}<K53LearnerExam         onBack={onGameBack} onPass={onGamePass} /></>;
 
   // ── Tab routes ──────────────────────────────────────────────────────────────
   if (navTab === 'checklist') return <VehicleChecklist onBack={() => setNavTab('home')} />;

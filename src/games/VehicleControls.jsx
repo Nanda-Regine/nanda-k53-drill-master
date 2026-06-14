@@ -52,6 +52,60 @@ const QUESTIONS = [
   { id: 'vc28', cat: 'Seatbelts', q: 'Who is responsible for ensuring all passengers under 14 are belted?', options: ['The passengers themselves','The driver','The vehicle owner','Only the parent in the vehicle'], answer: 1 },
   { id: 'vc29', cat: 'Seatbelts', q: 'A seat belt must be worn:', options: ['Only on freeways','At all times in a moving vehicle where one is fitted','Only by the driver','Only over 80 km/h'], answer: 1 },
   { id: 'vc30', cat: 'Seatbelts', q: 'Wearing a seatbelt incorrectly (e.g. under the arm) is:', options: ['Acceptable if more comfortable','Dangerous — reduces protection and is still an offence','Legal in SA','Only an issue in a head-on collision'], answer: 1 },
+
+  // ── Tyres ─────────────────────────────────────────────────────────────────
+  { id: 'vc31', cat: 'Tyres', q: 'The minimum legal tread depth for tyres in South Africa is:', options: ['0.5 mm','1 mm','1.6 mm','3 mm'], answer: 2 },
+  { id: 'vc32', cat: 'Tyres', q: 'Overinflated tyres are dangerous because they:', options: ['Wear faster on the edges','Reduce the contact patch and can cause loss of control — especially in corners','Are more fuel efficient but unsafe','Cannot be patched when punctured'], answer: 1 },
+  { id: 'vc33', cat: 'Tyres', q: 'Underinflated tyres cause:', options: ['Better wet-weather grip','Excessive heat build-up, faster tread wear on edges, and risk of blowout','No significant danger','Better steering response'], answer: 1 },
+  { id: 'vc34', cat: 'Tyres', q: 'When should you check tyre pressure?', options: ['Only when a tyre looks flat','When the tyres are COLD — before a journey or after parking for at least 3 hours','Immediately after driving at high speed','Only at a petrol station'], answer: 1 },
+  { id: 'vc35', cat: 'Tyres', q: 'A front tyre blowout at speed will cause the vehicle to:', options: ['Swerve toward the blown tyre side — grip steering firmly and do NOT brake hard','Stop immediately','Swerve away from the blown tyre','Have no effect on steering'], answer: 0 },
+  { id: 'vc36', cat: 'Tyres', q: 'The correct response to a rear tyre blowout is:', options: ['Brake hard immediately','Hold the steering firmly, ease off accelerator gradually, and steer straight — brake gently only after stabilising','Accelerate to keep momentum','Swerve to the safe side of the road'], answer: 1 },
+  { id: 'vc37', cat: 'Tyres', q: 'Mixing tyres of different sizes or types on the same axle is:', options: ['Acceptable if they are close in size','Dangerous and illegal — it causes unequal braking and handling','Fine for rear wheels only','Only a problem on 4x4 vehicles'], answer: 1 },
+
+  // ── Engine checks ─────────────────────────────────────────────────────────
+  { id: 'vc38', cat: 'Engine', q: 'Engine oil must be checked:', options: ['Only at a service','On a level surface with the engine OFF for a few minutes (cold check)','While the engine is running for accuracy','Only when the warning light comes on'], answer: 1 },
+  { id: 'vc39', cat: 'Engine', q: 'The correct coolant level should be between:', options: ['As full as possible','The MIN and MAX marks on the coolant reservoir when cold','Any level is fine if the engine is not hot','Only the MAX mark'], answer: 1 },
+  { id: 'vc40', cat: 'Engine', q: 'A V-belt (fan belt) that is cracked or frayed must be:', options: ['Monitored for another few months','Replaced immediately — failure stops charging and cooling','Lubricated with belt dressing','Left until the next service'], answer: 1 },
+  { id: 'vc41', cat: 'Engine', q: 'A flat or weak battery is indicated by:', options: ['Engine surging at idle','Slow cranking or failure to start, dim lights, warning light on','High fuel consumption','Overheating engine'], answer: 1 },
+  { id: 'vc42', cat: 'Engine', q: 'Blue or grey smoke from the exhaust usually means:', options: ['The engine is cold — normal until warm','The engine is burning oil — serious mechanical fault','Too rich a fuel mixture','Water in the fuel'], answer: 1 },
+  { id: 'vc43', cat: 'Engine', q: 'White smoke from the exhaust (when warm) usually indicates:', options: ['Diesel engine — normal','Coolant burning in the engine — head gasket or cylinder head failure','Cold morning — normal','Lean fuel mixture'], answer: 1 },
+
+  // ── Gears & Clutch ────────────────────────────────────────────────────────
+  { id: 'vc44', cat: 'Gears', q: 'The correct sequence for changing up a gear is:', options: ['Clutch in → change gear → clutch out gradually → accelerate','Accelerate → clutch in → change gear → clutch out','Clutch in → accelerate → change gear','Change gear → clutch in → clutch out'], answer: 0 },
+  { id: 'vc45', cat: 'Gears', q: 'Riding the clutch (keeping your foot slightly on it while driving) causes:', options: ['Better fuel economy','Premature clutch wear and overheating — keep your foot off the clutch when not changing gear','Smoother gear changes','No harm on modern vehicles'], answer: 1 },
+  { id: 'vc46', cat: 'Gears', q: 'On a steep downhill, you should engage a lower gear to:', options: ['Save fuel','Use engine braking to reduce speed and prevent brake fade','Protect the gearbox','Keep the engine from stalling'], answer: 1 },
+  { id: 'vc47', cat: 'Gears', q: 'Coasting (rolling in neutral or with the clutch depressed) downhill is dangerous because:', options: ['It damages the gearbox','You have no engine braking, travel faster, and brake harder causing brake fade','The engine may overspeed','It is illegal at all times'], answer: 1 },
+  { id: 'vc48', cat: 'Gears', q: 'When approaching a red traffic light, you should:', options: ['Keep in top gear until just before stopping','Change to lower gears progressively as you slow, then clutch in before stopping','Put it in neutral immediately and coast','Never use the engine — brake only'], answer: 1 },
+
+  // ── Handbrake ─────────────────────────────────────────────────────────────
+  { id: 'vc49', cat: 'Handbrake', q: 'The handbrake must always be applied when:', options: ['The vehicle is stopped at a traffic light','The vehicle is parked — on a slope, apply firmly and leave in gear','Only on steep hills','The footbrake fails'], answer: 1 },
+  { id: 'vc50', cat: 'Handbrake', q: 'If the handbrake warning light stays on while driving, you should:', options: ['Ignore it — it often stays on','Check that the handbrake is fully released — if released and light persists, check brake fluid','Drive carefully to your destination','Increase brake pressure to compensate'], answer: 1 },
+  { id: 'vc51', cat: 'Handbrake', q: 'On an uphill incline start, the handbrake is released:', options: ['Before you find the bite point','After finding the bite point and just as you accelerate away','At the same time as pressing the clutch','Before pressing the accelerator'], answer: 1 },
+
+  // ── Horn ──────────────────────────────────────────────────────────────────
+  { id: 'vc52', cat: 'Horn', q: 'Your hooter (horn) must be audible at a minimum distance of:', options: ['30 m','45 m','60 m','90 m'], answer: 3 },
+  { id: 'vc53', cat: 'Horn', q: 'You may NOT use your hooter except:', options: ['To greet someone you know','To warn others of danger and to avoid an accident','Whenever you think it necessary','In a built-up area at any time'], answer: 1 },
+
+  // ── Indicators ────────────────────────────────────────────────────────────
+  { id: 'vc54', cat: 'Indicators', q: 'At minimum, how far before a turn must you signal in an urban area?', options: ['10 m','20 m','30 m','50 m'], answer: 2 },
+  { id: 'vc55', cat: 'Indicators', q: 'You MUST signal when:', options: ['Only in heavy traffic','Changing direction, changing lanes, moving off, or stopping — always indicate your intentions','Only when other vehicles are present','Only on freeways'], answer: 1 },
+  { id: 'vc56', cat: 'Indicators', q: 'Hazard lights (all four indicators flashing) may be used when:', options: ['Driving slowly in traffic as a warning','The vehicle is stationary and is a hazard to others, or to warn of a hazard ahead','Whenever it is raining','To thank another driver'], answer: 1 },
+  { id: 'vc57', cat: 'Indicators', q: 'If your turn signal fails to cancel automatically after a turn, you must:', options: ['Continue driving — it is a minor issue','Cancel it manually immediately — a signal left on misleads other drivers','Drive to a workshop before continuing','Flash your headlights to warn others'], answer: 1 },
+
+  // ── Mirrors & Visibility ──────────────────────────────────────────────────
+  { id: 'vc58', cat: 'Mirrors', q: 'You should check your mirrors approximately every:', options: ['Minute','5–8 seconds in normal driving','30 seconds','Only when you need to manoeuvre'], answer: 1 },
+  { id: 'vc59', cat: 'Mirrors', q: 'The interior (rear-view) mirror should be adjusted so you can see:', options: ['The road ahead','The full rear window without moving your head','Both side mirrors','The back seat passengers'], answer: 1 },
+  { id: 'vc60', cat: 'Mirrors', q: 'Side mirrors cannot replace the blind spot check because:', options: ['They are too far away','They have a limited field of view that leaves a blind zone beside and slightly behind the vehicle','They are only for parking','The law requires a physical check'], answer: 1 },
+  { id: 'vc61', cat: 'Mirrors', q: 'A dirty or fogged rear window must be cleared before driving because:', options: ['It reduces fuel economy','It severely limits rear visibility — illegal to drive with impaired rear vision','Only an issue at night','Traffic police check for this'], answer: 1 },
+
+  // ── Fuel system ───────────────────────────────────────────────────────────
+  { id: 'vc62', cat: 'Fuel', q: 'Running a diesel engine completely out of fuel causes:', options: ['No problem — just refuel','Air entry into the fuel system requiring bleeding — costly and time-consuming','Immediate engine cutoff with no damage','Only starter motor wear'], answer: 1 },
+  { id: 'vc63', cat: 'Fuel', q: 'A fuel leak from the vehicle is:', options: ['Only dangerous if near a flame','Extremely dangerous — fire and explosion risk. Do not start the engine. Move away from the vehicle.','A minor maintenance issue','Only relevant for petrol, not diesel'], answer: 1 },
+  { id: 'vc64', cat: 'Fuel', q: 'Filling a petrol vehicle with diesel (or vice versa) causes:', options: ['Minor engine roughness that clears','Serious engine damage — do not start the engine if misfuelled','No problem if the tank is empty first','Only affects emissions'], answer: 1 },
+
+  // ── Defrost & demisting ───────────────────────────────────────────────────
+  { id: 'vc65', cat: 'Vision', q: 'You may only drive when all windows are:', options: ['At least 50% clear','Fully clear of condensation, frost and dirt — all-round visibility is a legal requirement','Only the windscreen — rear window is optional','Clear on the driver\'s side only'], answer: 1 },
+  { id: 'vc66', cat: 'Vision', q: 'The fastest way to demist a fogged windscreen is:', options: ['Wipe it with your hand','Turn on the air conditioning (which dries the air) combined with the heater blower aimed at the screen','Open all windows fully','Leave the engine running — it clears automatically'], answer: 1 },
 ];
 
 const CATEGORIES = [...new Set(QUESTIONS.map(q => q.cat))];
