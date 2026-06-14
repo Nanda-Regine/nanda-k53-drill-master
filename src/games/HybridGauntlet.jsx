@@ -5,6 +5,7 @@ import AITutor from "../components/AITutor.jsx";
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { recordGameAnswer } from '../utils/masteryStore.js';
 
 const TESTS = [
   {
@@ -756,6 +757,7 @@ export default function UltimateGauntlet({ onBack, onPass }) {
     const correctHG = i === currentQ.answer;
     recordResult(correctHG, 'gauntlet');
     recordAnswer(stableId(currentQ, 'hg_'), correctHG);
+    recordGameAnswer('hybrid', stableId(currentQ, 'hg_'), correctHG);
     if (correctHG) {
       setScore(s => s + 1);
       const ns = currentStreak + 1;

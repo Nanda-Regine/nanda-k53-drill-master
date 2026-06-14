@@ -5,6 +5,7 @@ import AITutor from "../components/AITutor.jsx";
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { recordGameAnswer } from '../utils/masteryStore.js';
 
 // ── Code 10/14 Heavy Vehicle Question Bank ────────────────────────────────────
 const TESTS = [
@@ -348,6 +349,74 @@ const TESTS = [
       },
     ],
   },
+  {
+    id: 6,
+    title: "ROUND 6: K53 PRACTICAL MODULES — HMV",
+    subtitle: "Pre-trip inspection, signals, incline start, mirrors, steering",
+    color: "#007A4D",
+    questions: [
+      {
+        q: "What is the FIRST step of the pre-trip interior inspection for a heavy motor vehicle (K53 Module 1)?",
+        options: ["Adjust mirrors for maximum rear view vision","Ensure the parking brake is applied","Check for warning lights and gauges","Fasten your seatbelt"],
+        answer: 1,
+        explain: "K53 HMV Module 1, Step 1: Ensure (from the driver's seat) that the parking brake is applied. This is mandatory before any other interior check begins.",
+      },
+      {
+        q: "In which direction must the exterior pre-trip inspection of a heavy motor vehicle be conducted (K53 Module 2)?",
+        options: ["Clockwise, from bottom to top","Anti-clockwise, from top to bottom, left to right","Starting from the front, then rear, then sides","Any direction — thoroughness is what matters"],
+        answer: 1,
+        explain: "K53 HMV Module 2, Step 3: Inspect the vehicle preferably from top to bottom, left to right in an ANTI-CLOCKWISE direction.",
+      },
+      {
+        q: "How often must a heavy vehicle driver check the rear-view mirrors while driving (K53 Module 5)?",
+        options: ["Every 2–4 seconds","Every 5–8 seconds","Every 10–15 seconds","Only when changing lanes or turning"],
+        answer: 1,
+        explain: "K53 HMV Module 5, Step 3: Check rear-view mirrors approximately every 5–8 seconds. Consistent checking ensures the driver is always aware of traffic conditions to the rear.",
+      },
+      {
+        q: "When is it permissible to adjust the rear-view mirrors on a heavy motor vehicle (K53 Module 5)?",
+        options: ["Only whilst the vehicle is stationary (articulated vehicles must be straight)","While travelling slowly in a straight line","Any time the mirrors appear out of position","Only before starting the engine"],
+        answer: 0,
+        explain: "K53 HMV Module 5, Step 1: Adjust rear-view mirrors ONLY whilst the vehicle is stationary. Articulated vehicles must be completely straight when adjusting mirrors.",
+      },
+      {
+        q: "What is the correct hand signal for turning LEFT in a heavy motor vehicle (K53 Module 7)?",
+        options: ["Extend left arm horizontally from the window","Extend right arm sideward from shoulder, then turn forearm vertically DOWNWARD from the elbow","Extend right arm fully horizontal with palm to the front","Extend right arm with forearm vertical and upward"],
+        answer: 1,
+        explain: "K53 HMV Module 7: For a left turn, extend the RIGHT arm sideward from the shoulder, then turn the forearm VERTICALLY DOWNWARD from the elbow. Note: this differs from a motorcycle, where the left arm is extended horizontally.",
+      },
+      {
+        q: "What is the correct hand signal for turning RIGHT in a heavy motor vehicle (K53 Module 8)?",
+        options: ["Extend left arm horizontally","Extend right arm with forearm pointing downward","Extend right arm fully horizontal from shoulder with palm to the front","Wave right hand out of the window"],
+        answer: 2,
+        explain: "K53 HMV Module 8: For a right turn, extend the RIGHT arm fully horizontal from the shoulder with the palm of the hand facing to the front. Retract the arm before braking or gear selection.",
+      },
+      {
+        q: "What is the correct hand signal for stopping or sudden speed reduction in a heavy motor vehicle (K53 Module 9)?",
+        options: ["Extend right arm horizontally with palm facing backward","Extend right arm sideward from shoulder with forearm VERTICAL and UPWARD, palm to front","Extend left arm downward at an angle","Wave right arm up and down"],
+        answer: 1,
+        explain: "K53 HMV Module 9: Extend the right arm sideward from the shoulder with the forearm VERTICAL and UPWARD, palm to the front. Give this signal in good time prior to braking or sudden speed reduction.",
+      },
+      {
+        q: "What must be done BEFORE turning the ignition key to start a heavy motor vehicle with manual transmission (K53 Module 3)?",
+        options: ["Only check that the fuel gauge is not on empty","Ensure parking brake is applied and gear lever is in neutral, then check dashboard for malfunction","Signal intention and check blind spots","Adjust all mirrors and fasten the seatbelt"],
+        answer: 1,
+        explain: "K53 HMV Module 3, Steps 1–5: (1) Ensure parking brake is applied; (2) Ensure gear lever is in neutral; (3) Ensure all instruments are in non-function position; (4) Turn key to 'on' WITHOUT starting; (5) Check dashboard for malfunction. Only then start the engine.",
+      },
+      {
+        q: "When descending a steep gradient in a heavy motor vehicle, which additional technique must be used to control speed (K53 Module 20)?",
+        options: ["Ride the service brakes continuously","Use the engine or exhaust brake to assist in controlling speed","Select a higher gear to let the engine run at lower RPM","Apply the parking brake intermittently"],
+        answer: 1,
+        explain: "K53 HMV Module 20, Step 5: Make use of the engine or exhaust brake if necessary. Continuous service brake use on steep descents causes brake fade (overheating). Engine/exhaust braking protects the service brakes.",
+      },
+      {
+        q: "When performing an incline start in a heavy motor vehicle, what is the first requirement (K53 Module 18)?",
+        options: ["Rev the engine high before releasing the parking brake","Stop where indicated WITHOUT allowing the vehicle to move backwards","Signal and check mirrors before stopping on the incline","Select second gear before stopping"],
+        answer: 1,
+        explain: "K53 HMV Module 18, Step 1: Stop where indicated WITHOUT allowing the vehicle to move backwards. Rolling back even slightly is extremely dangerous given the mass of a heavy vehicle. The incline start must be completed without any rearward movement.",
+      },
+    ],
+  },
 ];
 
 const PASS_SCORE = 7;
@@ -425,6 +494,7 @@ export default function HeavyVehicleGauntlet({ onBack, onPass }) {
     const correct = i === currentQ.answer;
     recordResult(correct, 'heavy');
     recordAnswer(stableId(currentQ, 'hv_'), correct);
+    recordGameAnswer('heavy', stableId(currentQ, 'hv_'), correct);
     if (correct) {
       setScore(s => s + 1);
       const ns = currentStreak + 1;

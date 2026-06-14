@@ -3,6 +3,7 @@ import { T } from "../theme.js";
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { recordGameAnswer } from '../utils/masteryStore.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong } from '../utils/haptics.js';
 
@@ -920,6 +921,7 @@ function QuizEngine({ questions, onFinish, timed }) {
     }
     recordResult(isCorrectSign, 'signs');
     recordAnswer(stableId(q, 'sign_'), isCorrectSign);
+    recordGameAnswer('roadsigns', stableId(q, 'sign_'), isCorrectSign);
   }, [revealed, q]);
 
   useEffect(() => {

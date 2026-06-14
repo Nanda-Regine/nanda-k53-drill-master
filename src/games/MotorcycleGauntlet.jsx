@@ -5,6 +5,7 @@ import AITutor from "../components/AITutor.jsx";
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { recordGameAnswer } from '../utils/masteryStore.js';
 
 // ── Code 1 Motorcycle Question Bank ──────────────────────────────────────────
 const TESTS = [
@@ -348,6 +349,109 @@ const TESTS = [
       },
     ],
   },
+  {
+    id: 6,
+    title: "ROUND 6: K53 PRACTICAL MODULES",
+    subtitle: "Pre-trip, signals, yard test, stopping distances",
+    color: "#007A4D",
+    questions: [
+      {
+        q: "Under K53 for motorcycles, how frequently must you check your rear-view mirrors while riding?",
+        options: ["Every 3-5 seconds","Every 5-8 seconds","Every 10-12 seconds","Only when about to change lanes"],
+        answer: 1,
+        explain: "K53 Module 5: Check rear-view mirrors every 5 to 8 seconds. Looking less often means you miss developing situations behind you. Do not look for too long at a time.",
+      },
+      {
+        q: "You want to give the hand signal for turning LEFT on your motorcycle. What is the correct arm position?",
+        options: [
+          "Extend LEFT arm horizontally sidewards from the shoulder, palm facing forward",
+          "Extend RIGHT arm horizontally sidewards, palm facing forward",
+          "Extend left arm downward and wave it in a downward motion",
+          "Raise the left arm with elbow bent at 90° upward",
+        ],
+        answer: 0,
+        explain: "K53 Module 7: Turn LEFT hand signal = extend LEFT arm horizontally sidewards from the shoulder, palm facing forward. Drop arm and replace on handgrip before braking or steering.",
+      },
+      {
+        q: "You want to give the hand signal for turning RIGHT on your motorcycle. What is the correct arm position?",
+        options: [
+          "Extend LEFT arm with elbow bent upward (L-shape)",
+          "Extend RIGHT arm horizontally sidewards from the shoulder, palm facing forward",
+          "Extend RIGHT arm downward and wave it",
+          "Extend LEFT arm horizontally sidewards, palm facing backward",
+        ],
+        answer: 1,
+        explain: "K53 Module 8: Turn RIGHT hand signal = extend RIGHT arm horizontally sidewards from the shoulder, palm facing forward. This is symmetric to the left arm signal for turning left.",
+      },
+      {
+        q: "What is the correct hand signal for STOPPING or a sudden reduction of speed on a motorcycle?",
+        options: [
+          "Extend RIGHT arm downward, waving in a downward motion",
+          "Extend LEFT arm downward, palm facing backward",
+          "Extend RIGHT arm sidewards from shoulder, forearm vertically UPWARD, palm facing forward",
+          "Extend RIGHT arm horizontally sidewards and rotate wrist in circles",
+        ],
+        answer: 2,
+        explain: "K53 Module 9: Stop/speed reduction hand signal = extend RIGHT arm sidewards from shoulder with the FOREARM VERTICALLY UPWARD and palm facing forward. This is different from the turning signals — forearm points UP, not sideways.",
+      },
+      {
+        q: "Before the K53 motorcycle pre-trip inspection (on the motorcycle), what must you check regarding the gear position?",
+        options: [
+          "Gear should be in first gear ready to move off",
+          "Gear should be in neutral (green warning light on)",
+          "Gear position does not matter before starting",
+          "Select the gear matching the gradient of the road",
+        ],
+        answer: 1,
+        explain: "K53 Module 4: Before starting engine, ensure gear is in NEUTRAL — confirmed by the green warning light being on. Starting in gear risks the motorcycle lurching forward.",
+      },
+      {
+        q: "During the K53 incline start (Module 15) yard test on a motorcycle, what is the most critical requirement?",
+        options: [
+          "Reach 20 km/h within 5 metres of moving off",
+          "Move off without the motorcycle rolling backwards",
+          "Keep both feet on the ground until the motorcycle is moving forward at 10 km/h",
+          "Complete the hill in first gear only",
+        ],
+        answer: 1,
+        explain: "K53 Module 15: The incline start requires the rider to stop at the indicated point and then move off without rolling backwards. Only ONE attempt is allowed. Rolling back = immediate fail.",
+      },
+      {
+        q: "During the K53 emergency stop yard test for motorcycles, at what speed must the rider be travelling when the signal to stop is given?",
+        options: ["10 km/h","20 km/h","Approximately 25 km/h","30 km/h"],
+        answer: 2,
+        explain: "K53 Module 17: The emergency stop test requires the rider to accelerate to approximately 25 km/h before passing point B, where the signal lights activate. The rider must then stop as quickly as possible without locking wheels.",
+      },
+      {
+        q: "When stopped in traffic on a motorcycle, approximately how far behind the vehicle in front should you stop?",
+        options: ["1-2 metres","2-3 metres","Approximately 4-5 metres","At least 10 metres"],
+        answer: 2,
+        explain: "K53 Module 24: When stopping in traffic, maintain approximately 4-5 metres behind the vehicle ahead. This gives you visibility, an escape path, and space to avoid a rear-end collision if pushed from behind.",
+      },
+      {
+        q: "During pre-trip inspection of a motorcycle, in which direction should you move around the bike to inspect it?",
+        options: [
+          "Clockwise — starting from the front",
+          "Anti-clockwise — from top to bottom, left to right",
+          "Clockwise — from bottom to top",
+          "The direction does not matter as long as all sides are checked",
+        ],
+        answer: 1,
+        explain: "K53 Module 1: Inspect the motorcycle anti-clockwise, preferably from top to bottom and left to right. This systematic approach ensures nothing is missed — especially lower areas like tyres, chain, and underside.",
+      },
+      {
+        q: "When must a rider ADJUST rear-view mirrors on a motorcycle?",
+        options: [
+          "While riding — adjust as needed when traffic changes",
+          "Only whilst the motorcycle is stationary",
+          "At low speed — under 20 km/h",
+          "Immediately before entering a freeway",
+        ],
+        answer: 1,
+        explain: "K53 Module 5: Mirrors must be adjusted ONLY while the motorcycle is stationary. Adjusting while riding takes your hand off the handgrips and your eyes off the road — extremely dangerous.",
+      },
+    ],
+  },
 ];
 
 const PASS_SCORE = 7;
@@ -425,6 +529,7 @@ export default function MotorcycleGauntlet({ onBack, onPass }) {
     const correct = i === currentQ.answer;
     recordResult(correct, 'motorcycle');
     recordAnswer(stableId(currentQ, 'mg_'), correct);
+    recordGameAnswer('motorcycle', stableId(currentQ, 'mg_'), correct);
     if (correct) {
       setScore(s => s + 1);
       const ns = currentStreak + 1;

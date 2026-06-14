@@ -15,7 +15,11 @@ import MotorcycleGauntlet   from './games/MotorcycleGauntlet.jsx';
 import HeavyVehicleGauntlet from './games/HeavyVehicleGauntlet.jsx';
 import MotorcycleMockExam   from './games/MotorcycleMockExam.jsx';
 import RoadSignsQuiz        from './games/RoadSignsQuiz.jsx';
+import SignShapeTrainer     from './games/SignShapeTrainer.jsx';
+import RoadMarkingsDrill    from './games/RoadMarkingsDrill.jsx';
+import ScenarioDrill       from './games/ScenarioDrill.jsx';
 import TestDayPrep          from './components/TestDayPrep.jsx';
+import MentalHealthSupport  from './components/MentalHealthSupport.jsx';
 
 // ── Components ─────────────────────────────────────────────────────────────────
 import Onboarding        from './components/Onboarding.jsx';
@@ -27,6 +31,7 @@ import WeakSpotsReview   from './components/WeakSpotsReview.jsx';
 import VehicleChecklist  from './components/VehicleChecklist.jsx';
 import Settings          from './components/Settings.jsx';
 import Footer            from './components/Footer.jsx';
+import NervesPanel       from './components/NervesPanel.jsx';
 
 // ── Utils ──────────────────────────────────────────────────────────────────────
 import { recordStudyDay, getStreak } from './utils/streakTracker.js';
@@ -76,6 +81,9 @@ const GAMES_BASE = [
   { id: 'controls',   icon: '🔩', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'patterns',   icon: '🔢', tier: 'free',    diff: 'intermediate', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'roadsigns',  icon: '🛑', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'sign_shape', icon: '🔷', tier: 'free',    diff: 'beginner',     codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'road_marks', icon: '🟡', tier: 'free',    diff: 'intermediate', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'scenario',   icon: '🎯', tier: 'free',    diff: 'intermediate', codes: ['code12', 'code8', 'code10', 'code14'] },
 ];
 
 const DIFF_COLORS = {
@@ -189,6 +197,7 @@ export default function App() {
   const [showAuth, setShowAuth]             = useState(false);
   const [user, setUser]                     = useState(null);
   const [subMsg, setSubMsg]                 = useState('');
+  const [refreshKey, setRefreshKey]         = useState(0);
 
   // ── Persist code preference ─────────────────────────────────────────────────
   const handleCodeSelect = (codeId) => {
@@ -280,6 +289,7 @@ export default function App() {
     const newStreak = getStreak();
     setStreak(newStreak);
     refreshTier();
+    setRefreshKey(k => k + 1); // re-reads mastery store → NervesPanel updates
     const awarded = checkAndAwardBadges({ streakCount: newStreak });
     if (awarded?.length) { setPendingBadge(awarded[0]); setConfettiActive(true); }
   }, [refreshTier]);
@@ -319,6 +329,9 @@ export default function App() {
   if (activeGame === 'heavy')       return <>{confettiOverlay}<HeavyVehicleGauntlet onBack={onGameBack} onPass={onGamePass} /></>;
   if (activeGame === 'moto_exam')   return <>{confettiOverlay}<MotorcycleMockExam   onBack={onGameBack} onPass={onGamePass} /></>;
   if (activeGame === 'roadsigns')   return <>{confettiOverlay}<RoadSignsQuiz         onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'sign_shape')  return <>{confettiOverlay}<SignShapeTrainer       onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'road_marks')  return <>{confettiOverlay}<RoadMarkingsDrill      onBack={onGameBack} onPass={onGamePass} /></>;
+  if (activeGame === 'scenario')    return <>{confettiOverlay}<ScenarioDrill          onBack={onGameBack} onPass={onGamePass} /></>;
 
   // ── Tab routes ──────────────────────────────────────────────────────────────
   if (navTab === 'checklist') return <VehicleChecklist onBack={() => setNavTab('home')} />;
@@ -390,7 +403,7 @@ export default function App() {
             {[
               { val: '1.2M', lbl: t('stat_learners') },
               { val: '50%',  lbl: t('stat_fail')     },
-              { val: '600+', lbl: t('stat_questions') },
+              { val: '1000+', lbl: t('stat_questions') },
             ].map((s, i) => (
               <div key={s.lbl} style={{ flex: 1, textAlign: 'center', padding: '10px 8px', borderRight: i < 2 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
                 <div style={{ fontWeight: 800, fontSize: T.fontSizeLg, color: T.gold, lineHeight: 1 }}>{s.val}</div>
@@ -439,6 +452,12 @@ export default function App() {
       </header>
 
       <main style={{ padding: '18px 20px 0' }}>
+
+        {/* ── Nervous System Panel ─────────────────────────────────────────────── */}
+        <NervesPanel
+          refreshKey={refreshKey}
+          onPlay={(gameId) => handleGameSelect(GAMES.find(g => g.id === gameId) || { id: gameId, tier: 'free' })}
+        />
 
         {/* ── Code picker ──────────────────────────────────────────────────────── */}
         <div style={{ marginBottom: 18 }}>

@@ -5,6 +5,7 @@ import FreemiumGate from "../components/FreemiumGate.jsx";
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { recordGameAnswer } from '../utils/masteryStore.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 
@@ -226,6 +227,7 @@ export default function MockExam({ onBack, onPass }) {
     const isCorrectME = i === currentQ.answer;
     recordResult(isCorrectME, 'mockexam');
     recordAnswer(stableId(currentQ, 'me_'), isCorrectME);
+    recordGameAnswer('mockexam', stableId(currentQ, 'me_'), isCorrectME);
     if (isCorrectME) {
       sfx('correct'); hapticCorrect();
       setScore(s => s + 1);

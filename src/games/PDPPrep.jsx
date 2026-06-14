@@ -4,6 +4,7 @@ import { awardBadge } from '../components/Badges.jsx';
 import { prepareAll } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { recordGameAnswer } from '../utils/masteryStore.js';
 
 // ── Question Bank ─────────────────────────────────────────────────────────────
 // 6 modules × ~17 questions = 100 questions total
@@ -217,6 +218,7 @@ export default function PDPPrep({ onBack, onPass }) {
     const isCorrect = selected === q.answer;
     recordResult(isCorrect, 'pdp');
     recordAnswer(q.id, isCorrect);
+    recordGameAnswer('pdp', q.id, isCorrect);
     if (isCorrect) {
       setSessionCorrect(c => c + 1);
       const newProg = { ...progress, [q.id]: true };

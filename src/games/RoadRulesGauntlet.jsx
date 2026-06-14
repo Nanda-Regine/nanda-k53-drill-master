@@ -4,6 +4,7 @@ import { incrementQuestionCount, isGateHit } from '../freemium.js';
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { recordGameAnswer } from '../utils/masteryStore.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 
@@ -244,6 +245,7 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
     }
     recordResult(isCorrect, 'road_rules');
     recordAnswer(stableId(q, 'rr_'), isCorrect);
+    recordGameAnswer('road_rules', stableId(q, 'rr_'), isCorrect);
     incrementQuestionCount();
   };
 

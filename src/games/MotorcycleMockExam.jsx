@@ -5,6 +5,7 @@ import FreemiumGate from "../components/FreemiumGate.jsx";
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { recordGameAnswer } from '../utils/masteryStore.js';
 
 const EXAM_QUESTIONS = 40;
 const EXAM_SECONDS   = 30 * 60; // 30 minutes
@@ -157,6 +158,7 @@ export default function MotorcycleMockExam({ onBack, onPass }) {
     const isCorrectMME = i === currentQ.answer;
     recordResult(isCorrectMME, 'motorcycle');
     recordAnswer(stableId(currentQ, 'mme_'), isCorrectMME);
+    recordGameAnswer('moto_exam', stableId(currentQ, 'mme_'), isCorrectMME);
     if (isCorrectMME) {
       setScore(s => s + 1);
     } else {

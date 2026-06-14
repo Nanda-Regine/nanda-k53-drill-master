@@ -5,6 +5,7 @@ import AITutor from "../components/AITutor.jsx";
 import { prepareAll, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { recordGameAnswer } from '../utils/masteryStore.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 
@@ -621,6 +622,74 @@ const TESTS = [
       },
     ],
   },
+  {
+    id: 10,
+    title: "ROUND 10: K53 PRACTICAL TEST MODULES — CODE B",
+    subtitle: "Pre-trip inspection, hand signals, following distance, roundabouts, emergency stop",
+    color: "#007A4D",
+    questions: [
+      {
+        q: "What is the FIRST step of the Code B pre-trip EXTERIOR inspection (K53 Module 1)?",
+        options: ["Check the right-hand exterior mirror","Check under the vehicle on approach for obvious leaks and obstructions","Unlock all doors","Inspect the windscreen for damage"],
+        answer: 1,
+        explain: "K53 LMV Module 1, Step 1: Check UNDER the vehicle on approach for obvious leaks, obstructions, etc. — before anything else in the exterior inspection.",
+      },
+      {
+        q: "What is the FIRST step of the Code B pre-trip INTERIOR inspection (K53 Module 2)?",
+        options: ["Check for warning lights and gauges","Check for obstructions","Ensure the parking brake is applied","Adjust the seat for correct driving position"],
+        answer: 2,
+        explain: "K53 LMV Module 2, Step 1: Ensure (from the driver's seat) that the parking brake is applied. This must be confirmed first before any other interior check.",
+      },
+      {
+        q: "Before turning the ignition key to START a manual transmission vehicle (K53 Module 3), what must be true?",
+        options: ["Check tyres and lights are working","Ensure parking brake is applied and gear lever is in neutral, then check dashboard warning lights for malfunction","Signal intention and check all mirrors","Fasten seatbelt and ensure all passengers are ready"],
+        answer: 1,
+        explain: "K53 LMV Module 3: (1) Ensure parking brake is applied; (2) Gear lever in neutral; (3) Turn key to 'on' WITHOUT starting; (4) Check dashboard for malfunctions — only then start the engine.",
+      },
+      {
+        q: "When must you adjust the rear-view mirrors of a light motor vehicle (K53 Module 5)?",
+        options: ["Whilst moving slowly in a straight line","Only whilst the vehicle is stationary","After checking blind spots","Before starting the engine only"],
+        answer: 1,
+        explain: "K53 LMV Module 5, Step 1: Adjust rear-view mirrors for maximum rear-view vision ONLY whilst the vehicle is stationary. Mirrors must never be adjusted whilst moving.",
+      },
+      {
+        q: "How often must you check the rear-view mirrors while driving during the Code B test (K53 Module 5)?",
+        options: ["Every 2–4 seconds","Every 5–8 seconds","Every 10–15 seconds","Only when changing lanes or turning"],
+        answer: 1,
+        explain: "K53 LMV Module 5, Step 3: Check rear-view mirrors every 5–8 seconds to maintain awareness of traffic conditions behind the vehicle at all times.",
+      },
+      {
+        q: "What is the correct hand signal for turning LEFT in a light motor vehicle (K53 Module 7)?",
+        options: ["Extend left arm horizontally from the window","Extend right arm sideward from shoulder, then turn forearm VERTICALLY DOWNWARD from the elbow","Extend right arm fully horizontal with palm to the front","Extend right arm with forearm vertical and upward"],
+        answer: 1,
+        explain: "K53 LMV Module 7: For left turn, extend the RIGHT arm sideward from the shoulder, then turn the forearm VERTICALLY DOWNWARD from the elbow. SA hand signals are given through the driver's right-side window.",
+      },
+      {
+        q: "What is the correct hand signal for stopping or sudden speed reduction (K53 Module 9)?",
+        options: ["Extend right arm horizontally with palm backward","Extend right arm sideward from shoulder with forearm VERTICAL and UPWARD, palm to front","Extend left arm downward at an angle","Move right hand rapidly up and down"],
+        answer: 1,
+        explain: "K53 LMV Module 9: Extend the right arm sideward from the shoulder with the forearm VERTICAL and UPWARD, palm facing to the front. Give this signal in good time before braking.",
+      },
+      {
+        q: "What is the minimum following distance when following another vehicle on a public road (K53 Module 27)?",
+        options: ["1 second","2 seconds","3 seconds","4 seconds"],
+        answer: 1,
+        explain: "K53 LMV Module 27: Maintain a minimum 2-second following distance. Under adverse conditions (rain, slippery surface, poor visibility, or being followed too closely) this distance must be INCREASED.",
+      },
+      {
+        q: "At a roundabout without signs or signals, who must you yield to (K53 Module 45)?",
+        options: ["Traffic on your left","Traffic on your right and/or pedestrians unless otherwise directed by signs or signals","You have right of way as the first vehicle to arrive","You have right of way if already inside the roundabout"],
+        answer: 1,
+        explain: "K53 LMV Module 45, Step 3: Yield to traffic from the RIGHT and/or pedestrians, unless otherwise directed by road traffic signs or signals.",
+      },
+      {
+        q: "Another vehicle is overtaking you on the RIGHT side. What must you do (K53 Module 52)?",
+        options: ["Maintain or increase speed to make the overtake quicker","Steer as far LEFT as is safe and do NOT accelerate whilst being overtaken","Pull over and stop until they have passed","Sound your horn to warn the overtaking driver"],
+        answer: 1,
+        explain: "K53 LMV Module 52: When being overtaken on the right, steer to the centre of your lane or as far left as is safe, and do NOT accelerate whilst being overtaken. Accelerating during an overtake on a two-way road causes immediate test termination.",
+      },
+    ],
+  },
 ];
 
 const PASS_SCORE = 7;
@@ -707,6 +776,7 @@ export default function Code8Gauntlet({ onBack, onPass }) {
     const correct = i === currentQ.answer;
     recordResult(correct, 'gauntlet');
     recordAnswer(stableId(currentQ, 'g_'), correct);
+    recordGameAnswer('gauntlet', stableId(currentQ, 'g_'), correct);
     if (correct) {
       sfx('correct');
       hapticCorrect();

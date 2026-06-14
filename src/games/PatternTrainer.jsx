@@ -5,6 +5,7 @@ import AITutor from "../components/AITutor.jsx";
 import { prepareAllStr, stableId } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { recordGameAnswer } from '../utils/masteryStore.js';
 
 // ─── ALL PATTERNS GROUPED BY FAMILY ─────────────────────────────────────────
 const PATTERN_GROUPS = [
@@ -341,6 +342,7 @@ export default function PatternTrainer({ onBack, onPass }) {
     const isCorrectPT = opt === q.correct;
     recordResult(isCorrectPT, 'patterns');
     recordAnswer(stableId(q, 'pt_'), isCorrectPT);
+    recordGameAnswer('patterns', stableId(q, 'pt_'), isCorrectPT);
     if (isCorrectPT) {
       setScore(s => s + 1);
     } else {
@@ -365,6 +367,7 @@ export default function PatternTrainer({ onBack, onPass }) {
     const isCorrectSP = opt === card.correct;
     recordResult(isCorrectSP, 'patterns');
     recordAnswer(stableId(card, 'sp_'), isCorrectSP);
+    recordGameAnswer('patterns', stableId(card, 'sp_'), isCorrectSP);
     if (isCorrectSP) setSpeedScore(s => s + 1);
     else setSpeedWrong(w => w + 1);
   };

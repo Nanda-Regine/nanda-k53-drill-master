@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { T } from '../theme.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
+import { recordGameAnswer } from '../utils/masteryStore.js';
 import { prepareAll } from '../utils/quizHelpers.js';
 
 // ── Question bank ─────────────────────────────────────────────────────────────
@@ -109,6 +110,7 @@ export default function VehicleControls({ onBack, onPass }) {
     if (isCorrect) setCorrect(c => c + 1);
     recordResult(isCorrect, 'controls');
     recordAnswer(q.id, isCorrect);
+    recordGameAnswer('controls', q.id, isCorrect);
     setHistory(h => ({ ...h, [q.id]: isCorrect ? 'correct' : 'wrong' }));
   };
 
