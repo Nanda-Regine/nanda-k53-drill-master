@@ -248,6 +248,132 @@ const ROUNDS = [
       { q: 'You are driving and your hooter (horn) must be audible at what minimum distance?', options: ['30 m','45 m','60 m','90 m'], answer: 3 },
     ],
   },
+
+  // ── ROUND 21: Seat Belts & Child Safety ───────────────────────────────────
+  {
+    id: 21, title: 'Seat Belts & Child Safety', icon: '🪑',
+    questions: [
+      { q: 'Is wearing a seatbelt compulsory for all occupants in South Africa?', options: ['Only for the driver and front passenger','Yes — the driver and all passengers must wear seatbelts','Only for children','Only on freeways'], answer: 1 },
+      { q: 'Who is legally responsible for ensuring passengers under 14 years wear seatbelts?', options: ['The nearest adult passenger','The child\'s parent or guardian','The driver','The front passenger'], answer: 2 },
+      { q: 'A child under the age of 3 years must be secured in:', options: ['A normal seatbelt with an adult holding them','An approved child restraint (car seat)','The rear seat without any restraint','A lap belt only'], answer: 1 },
+      { q: 'Are rear-seat passengers required to wear seatbelts in South Africa?', options: ['No — seatbelts are optional in the back seat','Yes — all passengers including rear-seat occupants must wear seatbelts','Only if the journey exceeds 50 km','Only on freeways'], answer: 1 },
+      { q: 'Where should a young child NEVER be placed in a vehicle with an active airbag?', options: ['In the rear seat','In the front seat facing forward against an active airbag','In an approved child restraint','Behind the driver\'s seat'], answer: 1 },
+      { q: 'If a driver\'s seatbelt is worn incorrectly (e.g., behind the back), the driver:', options: ['Is still legally compliant','Is in breach of the NRTA and at serious risk of injury in a collision','Is compliant only at speeds below 60 km/h','Only faces a fine if involved in an accident'], answer: 1 },
+    ],
+  },
+
+  // ── ROUND 22: Mobile Phones & Distractions ────────────────────────────────
+  {
+    id: 22, title: 'Mobile Phones & Distractions', icon: '📱',
+    questions: [
+      { q: 'Using a handheld mobile phone while driving is:', options: ['Legal if you drive slowly','Illegal — prohibited under the National Road Traffic Act','Legal if you keep one hand on the wheel','Legal only on empty roads'], answer: 1 },
+      { q: 'Which of the following phone activities is LEGAL while driving?', options: ['Holding your phone to make a call','Reading text messages at a red light','Using a certified hands-free kit (Bluetooth or earphone)','Dialling a number while driving'], answer: 2 },
+      { q: 'Drowsy driving is dangerous because:', options: ['It increases fuel consumption','Reaction time and judgment are impaired — similar to driving under the influence of alcohol','Only the passenger is affected','It only becomes dangerous after 2 am'], answer: 1 },
+      { q: 'If you feel drowsy while driving, the safest action is:', options: ['Open the window and turn up the music','Drink energy drinks and continue','Pull over safely and rest before continuing','Drive in the left lane only'], answer: 2 },
+      { q: 'Eating or grooming while driving can constitute what offence under South African law?', options: ['No offence — it is not regulated','Reckless or negligent driving if it impairs vehicle control','Only a minor traffic infringement','An offence only if you cause an accident'], answer: 1 },
+    ],
+  },
+
+  // ── ROUND 23: Railway Crossings ───────────────────────────────────────────
+  {
+    id: 23, title: 'Railway Crossings', icon: '🚂',
+    questions: [
+      { q: 'A yellow "X" painted on the road surface warns you of:', options: ['A four-way stop ahead','A level crossing (railway line) ahead','A school zone','A pedestrian crossing'], answer: 1 },
+      { q: 'When a level crossing boom (barrier) is lowered, you must:', options: ['Stop and wait until the boom is fully raised and the track is completely clear','Drive around the boom if no train is visible','Stop for 5 seconds then proceed','Sound your horn and cross quickly'], answer: 0 },
+      { q: 'At a level crossing with flashing red lights and no boom, you must:', options: ['Slow down and cross if no train is visible','Stop — do not cross while the red lights are flashing','Accelerate across to avoid the train','Stop for 3 seconds then cross'], answer: 1 },
+      { q: 'Your vehicle stalls on a railway track. You should first:', options: ['Try to restart the engine','Push the vehicle off the track alone','Get all occupants out of the vehicle immediately and move well clear of the tracks','Stay in the vehicle and call for help'], answer: 2 },
+      { q: 'A train cannot stop quickly because:', options: ['Train drivers are not trained in emergency braking','A fully loaded train can take up to 1.6 km or more to stop','Trains have no braking system','Track switches prevent emergency stops'], answer: 1 },
+      { q: 'When approaching an unguarded level crossing (no boom, no lights), you must:', options: ['Maintain speed — trains will always stop','Slow down, look and listen carefully in both directions, and only cross when safe','Sound your horn loudly and cross quickly','Stop for exactly 30 seconds before crossing'], answer: 1 },
+    ],
+  },
+
+  // ── ROUND 24: Animals & Livestock ─────────────────────────────────────────
+  {
+    id: 24, title: 'Animals & Livestock', icon: '🐄',
+    questions: [
+      { q: 'You are driving at night and see cattle on the road. You should:', options: ['Hoot loudly and drive between them','Accelerate to pass them quickly','Reduce speed, switch on hazard lights and be prepared to stop','Move to the right lane only'], answer: 2 },
+      { q: 'When passing animals on or near the road, you should:', options: ['Hoot to clear them off the road','Pass slowly and avoid sudden horn use, which may startle them','Flash your lights repeatedly','Accelerate past them quickly'], answer: 1 },
+      { q: 'Your vehicle strikes and injures an animal on the road. You must:', options: ['Continue driving — you are not responsible for stray animals','Stop, try to find the owner, and if unsuccessful, report to the nearest police station','Remove the animal from the road and continue','Report by phone without stopping'], answer: 1 },
+      { q: 'A herd of cattle is slowly crossing the road ahead. You should:', options: ['Drive slowly through the herd','Hoot to speed them up','Stop and wait patiently for the herd to clear the road','Drive onto the shoulder and bypass them'], answer: 2 },
+      { q: 'Wild animals crossing the road at night are especially dangerous because:', options: ['They travel in unpredictably large herds','They may freeze or change direction suddenly in your headlights','They only cross during rain','They appear only in nature reserves'], answer: 1 },
+    ],
+  },
+
+  // ── ROUND 25: Defensive Driving ───────────────────────────────────────────
+  {
+    id: 25, title: 'Defensive Driving', icon: '🛡️',
+    questions: [
+      { q: 'Defensive driving means:', options: ['Driving aggressively to establish road space','Anticipating hazards and being prepared to react safely regardless of what other road users do','Staying in the left lane at all times','Never exceeding 80 km/h'], answer: 1 },
+      { q: 'In wet weather, your following distance should be:', options: ['The same as in dry conditions','About 2.5 seconds','At least double the normal 2-second gap (4 seconds or more)','At least 5 car lengths regardless of speed'], answer: 2 },
+      { q: 'The "2-second rule" measures:', options: ['The time to signal before turning','The minimum time gap between your vehicle and the one ahead','The time to complete a lane change','The time between mirror checks'], answer: 1 },
+      { q: 'When you notice a vehicle weaving erratically ahead, you should:', options: ['Flash your lights to warn them','Overtake as quickly as possible','Increase your following distance and be prepared for sudden changes','Match their behaviour to warn other drivers'], answer: 2 },
+      { q: 'To scan for hazards effectively in an urban area, you should look how far ahead?', options: ['About 1–2 seconds (30 m)','About 5–6 seconds (90 m)','About 12–15 seconds ahead','Only at the vehicle directly in front of you'], answer: 2 },
+      { q: 'If you are being tailgated, the safest response is:', options: ['Brake suddenly to signal your displeasure','Maintain your speed and ignore the tailgater','Ease off the accelerator to create more space ahead, allowing the tailgater to overtake','Speed up to increase the distance between you'], answer: 2 },
+    ],
+  },
+
+  // ── ROUND 26: Reversing ────────────────────────────────────────────────────
+  {
+    id: 26, title: 'Reversing', icon: '🔄',
+    questions: [
+      { q: 'Before reversing, you must:', options: ['Sound your horn twice','Check all mirrors and look over your shoulder to ensure the path is completely clear','Signal right and then reverse','Only check the interior rear-view mirror'], answer: 1 },
+      { q: 'You may NOT reverse:', options: ['On a private driveway','Into a main road from a side street, or further than is reasonably necessary','In a parking area','On a gravel road'], answer: 1 },
+      { q: 'When reversing in a straight line, you should primarily look:', options: ['Only in the rear-view mirror','Straight ahead to monitor the road','Over your shoulder through the rear window, while also checking mirrors','To the left only'], answer: 2 },
+      { q: 'Reversing on a freeway or expressway is:', options: ['Permitted only if you missed your exit','Permitted only in a genuine emergency','Permitted only at speeds below 10 km/h','Never permitted under any circumstances'], answer: 3 },
+      { q: 'When reversing from a driveway onto a road, you should:', options: ['Reverse as quickly as possible to spend less time in traffic','Hoot continuously while reversing','Reverse slowly, pause to check for traffic, and proceed only when completely safe','Reverse only during quiet traffic times'], answer: 2 },
+    ],
+  },
+
+  // ── ROUND 27: Road Rage & Aggressive Driving ───────────────────────────────
+  {
+    id: 27, title: 'Road Rage & Aggression', icon: '😤',
+    questions: [
+      { q: 'Road rage refers to:', options: ['Frustration caused by traffic congestion','Aggressive or violent behaviour by a driver triggered by conflict with other road users','Driving faster than the speed limit','Excessive use of the hooter'], answer: 1 },
+      { q: 'If another driver behaves aggressively toward you, you should:', options: ['Exit your vehicle and confront them','Speed away and make rude gestures','Avoid eye contact, do not retaliate, and drive to a safe public place or police station','Slow down suddenly to brake-check them'], answer: 2 },
+      { q: 'Tailgating is dangerous primarily because:', options: ['It causes excessive fuel consumption','It reduces your available reaction and stopping distance, greatly increasing rear-end collision risk','It causes tyre overheating','It only becomes dangerous above 120 km/h'], answer: 1 },
+      { q: 'Aggressive driving can lead to criminal charges including:', options: ['Only a traffic fine','Only demerit points','Reckless or negligent driving, assault, or even homicide charges depending on the outcome','A formal warning only'], answer: 2 },
+      { q: 'The best way to prevent road rage situations is to:', options: ['Always assert your right of way aggressively','Drive very slowly to avoid provoking others','Allow extra travel time, remain calm and not take other drivers\' mistakes personally','Avoid peak-hour roads entirely'], answer: 2 },
+    ],
+  },
+
+  // ── ROUND 28: Tyres & Wheels ──────────────────────────────────────────────
+  {
+    id: 28, title: 'Tyres & Wheels', icon: '🛞',
+    questions: [
+      { q: 'The legal minimum tread depth for tyres in South Africa is:', options: ['0.5 mm','1 mm across the full tyre width','2 mm','3 mm'], answer: 1 },
+      { q: 'A tyre blowout at high speed is best managed by:', options: ['Braking hard immediately','Gripping the wheel firmly, easing off the accelerator and steering gently to the left — do NOT brake hard','Swerving sharply to the right','Pressing the clutch and coasting freely'], answer: 1 },
+      { q: 'Incorrect tyre pressure causes:', options: ['No significant effect if within 20% of the correct value','Uneven tyre wear, higher fuel consumption, and reduced braking and handling performance','Only cosmetic sidewall damage','Faster heating but no safety effect'], answer: 1 },
+      { q: 'When should tyre pressure be checked for the most accurate reading?', options: ['Immediately after a long drive while tyres are warm','When tyres are cold — before driving or after less than 2 km','Only when the tyre warning light illuminates','Once a year at scheduled service'], answer: 1 },
+      { q: 'Regularly rotating tyres helps to:', options: ['Balance wheel weights','Ensure even wear across all four tyres, extending their lifespan','Improve fuel injection timing','Prevent rim corrosion'], answer: 1 },
+      { q: 'A vehicle fitted with a temporary spare tyre ("space saver") should:', options: ['Travel at normal speed','Not exceed the speed shown on the spare tyre (typically 80 km/h) and be replaced as soon as possible','Be driven no further than 50 km at any speed','Only be used on gravel roads'], answer: 1 },
+    ],
+  },
+
+  // ── ROUND 29: School Zones & Vulnerable Road Users ────────────────────────
+  {
+    id: 29, title: 'School Zones & Vulnerable Users', icon: '🏫',
+    questions: [
+      { q: 'When a school bus stops with flashing amber warning lights, you must:', options: ['Overtake quickly from the right','Reduce speed and be prepared to stop — children may be boarding or crossing','Sound your horn to warn children','Continue normally if no children are currently visible'], answer: 1 },
+      { q: 'A "Beware — school children" warning sign requires you to:', options: ['Stop completely and wait 5 seconds','Reduce speed and be prepared to stop for children','Flash your headlights to warn children','Continue at normal speed — warning signs are advisory only'], answer: 1 },
+      { q: 'Which road users are classified as "vulnerable" and require extra caution?', options: ['Only elderly pedestrians','Pedestrians, cyclists, motorcyclists, and children','Heavy vehicle drivers only','Only cyclists and pedestrians at night'], answer: 1 },
+      { q: 'Near a school or playground, you must NOT:', options: ['Reduce your speed','Check your mirrors more frequently','Hoot unnecessarily or drive in a way that distracts or endangers children','Be prepared to stop at any time'], answer: 2 },
+      { q: 'A cyclist extends their right arm horizontally. This signals their intention to:', options: ['Stop','Turn right','Slow down','Turn left'], answer: 1 },
+      { q: 'A cyclist extends their left arm horizontally. This signals their intention to:', options: ['Stop','Turn right','Slow down','Turn left'], answer: 3 },
+    ],
+  },
+
+  // ── ROUND 30: Vehicle Roadworthiness ──────────────────────────────────────
+  {
+    id: 30, title: 'Vehicle Roadworthiness', icon: '🔧',
+    questions: [
+      { q: 'Who is legally responsible for ensuring a vehicle is in a roadworthy condition?', options: ['The driver only','The mechanic who last serviced it','The registered owner of the vehicle','The traffic department'], answer: 2 },
+      { q: 'Your windscreen wipers fail completely in heavy rain. You should:', options: ['Continue carefully at much reduced speed','Lean out of the window to see','Pull off the road safely and wait for conditions to improve or the wipers to be repaired','Drive with hazard lights on to warn others'], answer: 2 },
+      { q: 'Which of the following makes a vehicle un-roadworthy?', options: ['A small dent on the rear bumper','A crack in the windscreen within the driver\'s field of vision','Slightly faded paintwork','A non-functional reversing camera'], answer: 1 },
+      { q: 'If a vehicle fails a roadworthy test, the owner must:', options: ['Dispose of the vehicle immediately','May drive it for up to 30 days while awaiting repairs','Have the defects repaired and the vehicle retested before it may be used on a public road','Notify the insurer and continue driving'], answer: 2 },
+      { q: 'Which lighting requirement is compulsory on a South African motor vehicle?', options: ['At least one functioning headlamp is sufficient','Both headlamps must function correctly; brake lights must be operational','Only the left headlamp needs to function if the right fails','Headlamps are optional in daylight hours'], answer: 1 },
+      { q: 'A vehicle with excessively worn brake pads that are metal-on-metal:', options: ['May still be driven carefully at reduced speed','Is not roadworthy and may not be used on a public road until repaired','May be driven only in daylight hours','Is only a roadworthy concern at the annual vehicle inspection'], answer: 1 },
+    ],
+  },
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
