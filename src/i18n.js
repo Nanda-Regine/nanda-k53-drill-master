@@ -156,6 +156,20 @@ const en = {
   game_instructor:      'Instructor Mode',
   game_instructor_desc: 'TTS questions + tap verdict · designed for in-car use',
 
+  // ── Phase C additions ──────────────────────────────────────────────────────
+  game_pass_wall:       'Pass Wall',
+  game_pass_wall_desc:  'Celebrate passes · share tips · like the community\'s wins',
+  game_study_battle:    'Study Battle',
+  game_study_battle_desc: 'Live 10Q quiz battle with your study group · fastest wins',
+  game_weekly_chall:    'Weekly Challenge',
+  game_weekly_chall_desc: '10 questions · weekly leaderboard · earn the champion badge',
+  game_dltc_tips:       'DLTC Tips',
+  game_dltc_tips_desc:  'Community insider tips for DLTC offices across South Africa',
+  game_school_dash:     'Driving School',
+  game_school_dash_desc:'Join your driving school · instructors track your progress',
+  game_community_qa:    'Community Q&A',
+  game_community_qa_desc: 'Ask K53 questions · get answers from the community',
+
   // ── Shared UI strings ──────────────────────────────────────────────────────
   share_wa:          '💬 Share on WhatsApp',
   btn_back_home:     '← Back to home',
@@ -322,6 +336,20 @@ const af = {
   game_ai_debate_desc:  'Korrigeer die KI se verkeerde stelling — 10 rondes',
   game_instructor:      'Instrukteur Modus',
   game_instructor_desc: 'TTS vrae + tik uitspraak · ontwerp vir gebruik in motor',
+
+  // ── Phase C additions ──────────────────────────────────────────────────────
+  game_pass_wall:       'Slaasmuur',
+  game_pass_wall_desc:  'Vier slae · deel wenke · hou van die gemeenskap se oorwinnings',
+  game_study_battle:    'Studiegeveg',
+  game_study_battle_desc: 'Lewendige 10V-vraaggeveg met jou studiegroep · vinnigste wen',
+  game_weekly_chall:    'Weeklikse Uitdaging',
+  game_weekly_chall_desc: '10 vrae · weeklikse ranglys · verdien die kampioensmerker',
+  game_dltc_tips:       'DLTC Wenke',
+  game_dltc_tips_desc:  'Gemeenskapswenke vir DLTC-kantore regoor Suid-Afrika',
+  game_school_dash:     'Ryskool',
+  game_school_dash_desc:'Sluit aan by jou ryskool · instrukteurs volg jou vordering',
+  game_community_qa:    'Gemeenskap V&A',
+  game_community_qa_desc: 'Vra K53-vrae · kry antwoorde van die gemeenskap',
 
   // ── Shared UI strings ──────────────────────────────────────────────────────
   share_wa:          '💬 Deel op WhatsApp',
@@ -490,6 +518,20 @@ const xh = {
   game_ai_debate_desc:  'Lungisa ingxelo engachanekanga ye-AI — iingquku eziyi-10',
   game_instructor:      'Indlela Yomfundisi',
   game_instructor_desc: 'Imibuzo ye-TTS + cofa isigwebo · yenzelwe ukusetyenziswa emotweni',
+
+  // ── Phase C additions ──────────────────────────────────────────────────────
+  game_pass_wall:       'Udonga Lwedlula',
+  game_pass_wall_desc:  'Gcoba ukudlula · yabelana ngamacebo · thanda iimpumelelo',
+  game_study_battle:    'Imfazwe Yokufunda',
+  game_study_battle_desc: 'Ukhuphiswano lwe-10Q olusebenzayo neqela lakho lokufunda',
+  game_weekly_chall:    'Inketho Yeveki',
+  game_weekly_chall_desc: 'Imibuzo eyi-10 · uluhlu lweveki · fumana ibheji yenkampiyoni',
+  game_dltc_tips:       'Amacebo e-DLTC',
+  game_dltc_tips_desc:  'Amacebo oluntu eevenkile ze-DLTC kulo lonke uMzantsi Afrika',
+  game_school_dash:     'Isikolo Sokugqitha',
+  game_school_dash_desc:'Joyina isikolo sakho · abafundisi balandela inkqubela yakho',
+  game_community_qa:    'Imibuzo Yoluntu',
+  game_community_qa_desc: 'Buza imibuzo ye-K53 · fumana iimpendulo kuluntu',
 
   // ── Shared UI strings ──────────────────────────────────────────────────────
   share_wa:          '💬 Yabelana ku-WhatsApp',

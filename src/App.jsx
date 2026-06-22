@@ -24,6 +24,14 @@ import Landing             from './components/Landing.jsx';
 import TestDayPrep          from './components/TestDayPrep.jsx';
 import MentalHealthSupport  from './components/MentalHealthSupport.jsx';
 
+// ── Phase C: Community ────────────────────────────────────────────────────────
+import PassWall          from './games/PassWall.jsx';
+import StudyGroupBattle  from './games/StudyGroupBattle.jsx';
+import DLTCTips          from './games/DLTCTips.jsx';
+import WeeklyChallenge   from './games/WeeklyChallenge.jsx';
+import SchoolDashboard   from './games/SchoolDashboard.jsx';
+import CommunityQA       from './games/CommunityQA.jsx';
+
 // ── Components ─────────────────────────────────────────────────────────────────
 import GameErrorBoundary from './components/GameErrorBoundary.jsx';
 import Onboarding        from './components/Onboarding.jsx';
@@ -58,10 +66,13 @@ const GAME_NERVE_MAP = {
   heavy:'controls', moto_exam:'practical', roadsigns:'signs', sign_shape:'signs',
   road_marks:'markings', scenario:'scenarios', learner_exam:'practical',
   voice:'signs',
+  pass_wall:'community', study_battle:'community', weekly_chall:'community',
+  dltc_tips:'community', school_dash:'community', community_qa:'community',
 };
 const NERVE_COLOR_MAP = {
   signs:'#DE3831', rules:'#FFB612', controls:'#007A4D',
   scenarios:'#4472CA', markings:'#6c47ff', practical:'#FF6B35',
+  community:'#9B59B6',
 };
 const NERVE_GAME_MAP = {
   signs:'roadsigns', rules:'road_rules', controls:'gauntlet',
@@ -74,6 +85,7 @@ const CATS = [
   { id:'controls',  label:'Controls',  icon:'🔩' },
   { id:'exam',      label:'Exam',      icon:'📄' },
   { id:'scenarios', label:'Scenarios', icon:'🎯' },
+  { id:'community', label:'Community', icon:'🤝' },
 ];
 
 // SVG grainy noise — inline, zero dependencies
@@ -117,6 +129,13 @@ const GAMES_BASE = [
   { id: 'scenario',     icon: '🎯', tier: 'free',    diff: 'intermediate', cat: 'scenarios', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'learner_exam', icon: '📄', tier: 'free',    diff: 'intermediate', cat: 'exam',      codes: ['code8'] },
   { id: 'voice',        icon: '🎙️', tier: 'premium', diff: 'advanced',     cat: 'signs',     codes: ['code12', 'code8', 'code10', 'code14'] },
+  // Phase C: Community
+  { id: 'pass_wall',    icon: '🏆', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'study_battle', icon: '⚔️', tier: 'free',    diff: 'intermediate', cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'weekly_chall', icon: '🏅', tier: 'free',    diff: 'intermediate', cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'dltc_tips',    icon: '📌', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'school_dash',  icon: '🏫', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'community_qa', icon: '❓', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
 ];
 
 const DIFF_COLORS = {
@@ -370,6 +389,14 @@ export default function App() {
   if (activeGame === 'scenario')    return <><GameErrorBoundary onBack={onGameBack} gameName="Scenario Drill"><ScenarioDrill          onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'learner_exam') return <><GameErrorBoundary onBack={onGameBack} gameName="K53 Learner's Exam"><K53LearnerExam         onBack={onGameBack} onPass={onGamePass} onGoToGame={(gId) => handleGameSelect(GAMES.find(g => g.id === gId) || { id: gId, tier: 'free' })} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'voice')        return <><GameErrorBoundary onBack={onGameBack} gameName="Voice Mode"><VoiceMode              onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+
+  // ── Phase C: Community routes ──────────────────────────────────────────────
+  if (activeGame === 'pass_wall')      return <PassWall        onBack={onGameBack} />;
+  if (activeGame === 'study_battle')   return <StudyGroupBattle onBack={onGameBack} />;
+  if (activeGame === 'dltc_tips')      return <DLTCTips         onBack={onGameBack} />;
+  if (activeGame === 'weekly_chall')   return <WeeklyChallenge  onBack={onGameBack} />;
+  if (activeGame === 'school_dash')    return <SchoolDashboard  onBack={onGameBack} />;
+  if (activeGame === 'community_qa')   return <CommunityQA      onBack={onGameBack} />;
 
   // ── Tab routes ──────────────────────────────────────────────────────────────
   if (navTab === 'checklist') return <VehicleChecklist onBack={() => setNavTab('home')} />;
