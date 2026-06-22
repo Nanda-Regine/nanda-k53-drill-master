@@ -25,7 +25,7 @@ async function _fromSupabase(type) {
       .eq('type', type)
       .is('deleted_at', null);
     if (error) throw error;
-    return data ?? _fromLocal(type);
+    return data?.length ? data : _fromLocal(type);
   } catch {
     // Network failure or DB unavailable — fall back to local data silently
     return _fromLocal(type);

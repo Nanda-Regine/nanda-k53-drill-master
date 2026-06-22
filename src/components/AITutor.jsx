@@ -40,8 +40,8 @@ function setCache(key, value) {
   } catch {}
 }
 
-function cacheKey(question, correctAnswer) {
-  return simpleHash(question + correctAnswer);
+function cacheKey(question, correctAnswer, chosenAnswer) {
+  return simpleHash(question + correctAnswer + (chosenAnswer || ''));
 }
 
 function getRateData() {
@@ -78,7 +78,7 @@ export default function AITutor({ question, correctAnswer, chosenAnswer }) {
   if (!supabase) return null;
 
   const fetchExplanation = async () => {
-    const key    = cacheKey(question, correctAnswer);
+    const key    = cacheKey(question, correctAnswer, chosenAnswer);
     const cached = getCache()[key];
     if (cached) { setExplanation(cached); return; }
 
@@ -91,8 +91,6 @@ export default function AITutor({ question, correctAnswer, chosenAnswer }) {
     setError(null);
 
     try {
-      recordAICall(); // deduct before call — prevents double-spend on retry
-
       const { data, error: fnErr } = await supabase.functions.invoke("ai-explain", {
         body: { question, correctAnswer, chosenAnswer },
       });
@@ -102,6 +100,7 @@ export default function AITutor({ question, correctAnswer, chosenAnswer }) {
       const text = data?.explanation?.trim();
       if (!text) throw new Error("Empty response");
 
+      recordAICall(); // deduct only on success — failed calls don't cost quota
       setExplanation(text);
       setCache(key, text);
     } catch {

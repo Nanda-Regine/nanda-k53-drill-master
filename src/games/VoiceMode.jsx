@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { T } from '../theme.js';
 import { useLang } from '../LangContext.jsx';
@@ -56,28 +56,42 @@ function buildSession() {
     sign,
     prompt: `What does this sign mean? Say the name or meaning.`,
     correct: sign.name,
-    altCorrect: sign.meaning, // also accept full meaning
+    altCorrect: sign.meaning,
     img: sign.img,
     hint: sign.hint || sign.meaning,
   }));
 }
 
 export default function VoiceMode({ onBack, onPass }) {
-  const { lang, t } = useLang();
-  const [screen,   setScreen]   = useState('intro'); // intro | quiz | result
+  const { lang } = useLang();
+  const [screen,    setScreen]    = useState('intro'); // intro | quiz | result
   const [questions, setQuestions] = useState([]);
-  const [qIdx,     setQIdx]     = useState(0);
-  const [score,    setScore]    = useState(0);
-  const [wrong,    setWrong]    = useState([]);
+  const [qIdx,      setQIdx]      = useState(0);
+  const [score,     setScore]     = useState(0);
+  const [wrong,     setWrong]     = useState([]);
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState('');
-  const [feedback, setFeedback] = useState(null); // null | 'correct' | 'wrong'
+  const [feedback,  setFeedback]  = useState(null); // null | 'correct' | 'wrong'
   const [spokenText, setSpokenText] = useState('');
-  const recogRef = useRef(null);
+  const recogRef   = useRef(null);
+  const isMounted  = useRef(true);
 
   const current = questions[qIdx];
 
+  // Stable MCQ options — only re-shuffle when the question changes, not on every render
+  const tapOptions = useMemo(() => {
+    if (!current) return [];
+    return shuffle([
+      current.correct,
+      ...shuffle(ROAD_SIGNS.filter(s => s.name !== current.correct)).slice(0, 3).map(s => s.name),
+    ]).slice(0, 4);
+  }, [current]);
+
   const startSession = useCallback(() => {
+    // Abort any in-flight recognition before resetting state
+    recogRef.current?.abort();
+    recogRef.current = null;
+    setListening(false);
     setQuestions(buildSession());
     setQIdx(0);
     setScore(0);
@@ -106,8 +120,9 @@ export default function VoiceMode({ onBack, onPass }) {
       recordGameAnswer('voice', qIdx, false);
     }
 
-    // Auto-advance after delay
+    // Auto-advance after delay — guard against firing on unmounted component
     setTimeout(() => {
+      if (!isMounted.current) return;
       setFeedback(null);
       setTranscript('');
       setSpokenText('');
@@ -136,13 +151,11 @@ export default function VoiceMode({ onBack, onPass }) {
     recog.onerror = () => { setListening(false); };
 
     recog.onresult = (e) => {
-      // Try all alternatives for best match
-      let bestSpoken = '';
-      for (let i = 0; i < e.results[0].length; i++) {
+      // Use highest-confidence result (index 0) as fallback; prefer first alternative that matches
+      let bestSpoken = e.results[0][0].transcript;
+      for (let i = 1; i < e.results[0].length; i++) {
         const alt = e.results[0][i].transcript;
-        if (!bestSpoken || isMatch(alt, current?.correct)) {
-          bestSpoken = alt;
-        }
+        if (isMatch(alt, current?.correct)) { bestSpoken = alt; break; }
       }
       setTranscript(bestSpoken);
       handleAnswer(bestSpoken);
@@ -150,19 +163,24 @@ export default function VoiceMode({ onBack, onPass }) {
 
     recogRef.current = recog;
     recog.start();
-  }, [SUPPORTED, listening, feedback, lang, current, handleAnswer]);
+  }, [listening, feedback, lang, current, handleAnswer]);
 
   useEffect(() => {
-    return () => { recogRef.current?.abort(); };
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+      recogRef.current?.abort();
+    };
   }, []);
 
   // ── WhatsApp Share ─────────────────────────────────────────────────────────
   const share = useCallback(() => {
-    const pct = Math.round((score / SESSION_SIZE) * 100);
-    const text = `🎙️ K53 Voice Mode: ${score}/${SESSION_SIZE} (${pct}%) — I answered K53 road sign questions verbally!\n\n📲 Try K53 Drill Master: https://k53drillmaster.co.za`;
+    const total = questions.length || SESSION_SIZE;
+    const pct = Math.round((score / total) * 100);
+    const text = `🎙️ K53 Voice Mode: ${score}/${total} (${pct}%) — I answered K53 road sign questions verbally!\n\n📲 Try K53 Drill Master: https://k53drillmaster.co.za`;
     const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank', 'noopener');
-  }, [score]);
+  }, [score, questions.length]);
 
   // ── Intro Screen ───────────────────────────────────────────────────────────
   if (screen === 'intro') return (
@@ -203,7 +221,8 @@ export default function VoiceMode({ onBack, onPass }) {
 
   // ── Result Screen ──────────────────────────────────────────────────────────
   if (screen === 'result') {
-    const pct = Math.round((score / SESSION_SIZE) * 100);
+    const total  = questions.length || SESSION_SIZE;
+    const pct    = Math.round((score / total) * 100);
     const passed = pct >= 75;
     return (
       <div style={{ minHeight: '100vh', background: T.bg, color: T.text, fontFamily: T.font, padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -213,7 +232,7 @@ export default function VoiceMode({ onBack, onPass }) {
         </div>
 
         <div style={{ fontSize: 52, marginBottom: 8 }}>{passed ? '🎙️✅' : '🎙️'}</div>
-        <div style={{ fontSize: 28, fontWeight: 800, marginBottom: 4 }}>{score}/{SESSION_SIZE}</div>
+        <div style={{ fontSize: 28, fontWeight: 800, marginBottom: 4 }}>{score}/{total}</div>
         <div style={{ fontSize: 18, color: passed ? T.green : T.red, fontWeight: 700, marginBottom: 24 }}>
           {pct}% — {passed ? 'Voice Trained!' : 'Keep Practising'}
         </div>
@@ -223,7 +242,7 @@ export default function VoiceMode({ onBack, onPass }) {
             <div style={{ fontSize: 12, color: T.dim, letterSpacing: 2, marginBottom: 12 }}>MISSED SIGNS</div>
             {wrong.map((q, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: i < wrong.length - 1 ? 12 : 0 }}>
-                <img src={`./signs/${q.sign.img}`} alt={q.sign.name} style={{ width: 36, height: 36, objectFit: 'contain' }} />
+                <img src={`/signs/${q.sign.img}`} alt={q.sign.name} style={{ width: 36, height: 36, objectFit: 'contain' }} />
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 600 }}>{q.sign.name}</div>
                   <div style={{ fontSize: 11, color: T.dim }}>{q.sign.hint || q.sign.meaning?.slice(0, 60)}</div>
@@ -259,19 +278,19 @@ export default function VoiceMode({ onBack, onPass }) {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <button onClick={onBack} style={{ background: 'none', border: 'none', color: T.dim, fontSize: 14, cursor: 'pointer' }}>← Back</button>
-        <div style={{ fontSize: 13, color: T.dim }}>{qIdx + 1} / {SESSION_SIZE}</div>
+        <div style={{ fontSize: 13, color: T.dim }}>{qIdx + 1} / {questions.length}</div>
         <div style={{ fontSize: 13, color: T.green, fontWeight: 700 }}>{score} correct</div>
       </div>
 
       {/* Progress bar */}
       <div style={{ background: T.surface, borderRadius: 4, height: 4, marginBottom: 32, overflow: 'hidden' }}>
-        <div style={{ background: T.green, height: '100%', width: `${((qIdx) / SESSION_SIZE) * 100}%`, transition: 'width 0.3s' }} />
+        <div style={{ background: T.green, height: '100%', width: `${(qIdx / questions.length) * 100}%`, transition: 'width 0.3s' }} />
       </div>
 
       {/* Sign image */}
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
         <div style={{ background: T.surface, borderRadius: 16, padding: 24, border: `2px solid ${feedback === 'correct' ? T.green : feedback === 'wrong' ? T.red : T.border}`, transition: 'border-color 0.3s' }}>
-          <img src={`./signs/${current.img}`} alt="road sign" style={{ width: 130, height: 130, objectFit: 'contain' }} />
+          <img src={`/signs/${current.img}`} alt="road sign" style={{ width: 130, height: 130, objectFit: 'contain' }} />
         </div>
       </div>
 
@@ -349,10 +368,7 @@ export default function VoiceMode({ onBack, onPass }) {
             {SUPPORTED ? 'Or tap an answer:' : 'Tap an answer:'}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 360, margin: '0 auto' }}>
-            {shuffle([
-              current.correct,
-              ...shuffle(ROAD_SIGNS.filter(s => s.name !== current.correct)).slice(0, 3).map(s => s.name),
-            ]).slice(0, 4).map((opt, i) => (
+            {tapOptions.map((opt, i) => (
               <motion.button
                 key={i}
                 whileTap={{ scale: 0.97 }}

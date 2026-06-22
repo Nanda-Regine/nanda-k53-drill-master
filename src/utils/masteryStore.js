@@ -51,6 +51,7 @@ export const GAME_NERVE = {
   road_marks: 'markings',
   scenario:     'scenarios',
   learner_exam: 'practical',
+  voice:        'signs',
 };
 
 // ── Level ladder ───────────────────────────────────────────────────────────────

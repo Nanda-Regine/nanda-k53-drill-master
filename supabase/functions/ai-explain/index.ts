@@ -8,16 +8,24 @@ Deno.serve(async (req: Request) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  let question: string, correctAnswer: string, chosenAnswer: string | undefined;
   try {
-    const { question, correctAnswer, chosenAnswer } = await req.json();
+    ({ question, correctAnswer, chosenAnswer } = await req.json());
+  } catch {
+    return new Response(
+      JSON.stringify({ error: "Invalid JSON body" }),
+      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
 
-    if (!question || !correctAnswer) {
-      return new Response(
-        JSON.stringify({ error: "question and correctAnswer are required" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+  if (!question || !correctAnswer) {
+    return new Response(
+      JSON.stringify({ error: "question and correctAnswer are required" }),
+      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
 
+  try {
     const message = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 130,

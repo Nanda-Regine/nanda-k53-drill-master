@@ -354,22 +354,22 @@ export default function App() {
 
   // ── Game routes ─────────────────────────────────────────────────────────────
   if (showOnboarding) return <Onboarding onComplete={onOnboardingComplete} />;
-  if (activeGame === 'gauntlet')    return <GameErrorBoundary onBack={onGameBack} gameName="Code 8 Gauntlet">{confettiOverlay}<Gauntlet            onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'hybrid')      return <GameErrorBoundary onBack={onGameBack} gameName="Hybrid Gauntlet">{confettiOverlay}<HybridGauntlet      onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'patterns')    return <GameErrorBoundary onBack={onGameBack} gameName="Pattern Trainer">{confettiOverlay}<PatternTrainer      onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'road_rules')  return <GameErrorBoundary onBack={onGameBack} gameName="Road Rules Gauntlet">{confettiOverlay}<RoadRulesGauntlet   onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'mockexam')    return <GameErrorBoundary onBack={onGameBack} gameName="Mock Exam">{confettiOverlay}<MockExam            onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'controls')    return <GameErrorBoundary onBack={onGameBack} gameName="Vehicle Controls">{confettiOverlay}<VehicleControls     onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'pdp')         return <GameErrorBoundary onBack={onGameBack} gameName="PDP Prep">{confettiOverlay}<PDPPrep             onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'motorcycle')  return <GameErrorBoundary onBack={onGameBack} gameName="Motorcycle Gauntlet">{confettiOverlay}<MotorcycleGauntlet  onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'heavy')       return <GameErrorBoundary onBack={onGameBack} gameName="Heavy Vehicle Gauntlet">{confettiOverlay}<HeavyVehicleGauntlet onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'moto_exam')   return <GameErrorBoundary onBack={onGameBack} gameName="Motorcycle Mock Exam">{confettiOverlay}<MotorcycleMockExam   onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'roadsigns')   return <GameErrorBoundary onBack={onGameBack} gameName="Road Signs Quiz">{confettiOverlay}<RoadSignsQuiz         onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'sign_shape')  return <GameErrorBoundary onBack={onGameBack} gameName="Sign Shape Trainer">{confettiOverlay}<SignShapeTrainer       onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'road_marks')  return <GameErrorBoundary onBack={onGameBack} gameName="Road Markings Drill">{confettiOverlay}<RoadMarkingsDrill      onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'scenario')    return <GameErrorBoundary onBack={onGameBack} gameName="Scenario Drill">{confettiOverlay}<ScenarioDrill          onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
-  if (activeGame === 'learner_exam') return <GameErrorBoundary onBack={onGameBack} gameName="K53 Learner's Exam">{confettiOverlay}<K53LearnerExam         onBack={onGameBack} onPass={onGamePass} onGoToGame={(gId) => handleGameSelect(GAMES.find(g => g.id === gId) || { id: gId, tier: 'free' })} /></GameErrorBoundary>;
-  if (activeGame === 'voice')        return <GameErrorBoundary onBack={onGameBack} gameName="Voice Mode">{confettiOverlay}<VoiceMode              onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>;
+  if (activeGame === 'gauntlet')    return <><GameErrorBoundary onBack={onGameBack} gameName="Code 8 Gauntlet"><Gauntlet            onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'hybrid')      return <><GameErrorBoundary onBack={onGameBack} gameName="Hybrid Gauntlet"><HybridGauntlet      onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'patterns')    return <><GameErrorBoundary onBack={onGameBack} gameName="Pattern Trainer"><PatternTrainer      onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'road_rules')  return <><GameErrorBoundary onBack={onGameBack} gameName="Road Rules Gauntlet"><RoadRulesGauntlet   onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'mockexam')    return <><GameErrorBoundary onBack={onGameBack} gameName="Mock Exam"><MockExam            onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'controls')    return <><GameErrorBoundary onBack={onGameBack} gameName="Vehicle Controls"><VehicleControls     onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'pdp')         return <><GameErrorBoundary onBack={onGameBack} gameName="PDP Prep"><PDPPrep             onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'motorcycle')  return <><GameErrorBoundary onBack={onGameBack} gameName="Motorcycle Gauntlet"><MotorcycleGauntlet  onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'heavy')       return <><GameErrorBoundary onBack={onGameBack} gameName="Heavy Vehicle Gauntlet"><HeavyVehicleGauntlet onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'moto_exam')   return <><GameErrorBoundary onBack={onGameBack} gameName="Motorcycle Mock Exam"><MotorcycleMockExam   onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'roadsigns')   return <><GameErrorBoundary onBack={onGameBack} gameName="Road Signs Quiz"><RoadSignsQuiz         onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'sign_shape')  return <><GameErrorBoundary onBack={onGameBack} gameName="Sign Shape Trainer"><SignShapeTrainer       onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'road_marks')  return <><GameErrorBoundary onBack={onGameBack} gameName="Road Markings Drill"><RoadMarkingsDrill      onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'scenario')    return <><GameErrorBoundary onBack={onGameBack} gameName="Scenario Drill"><ScenarioDrill          onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'learner_exam') return <><GameErrorBoundary onBack={onGameBack} gameName="K53 Learner's Exam"><K53LearnerExam         onBack={onGameBack} onPass={onGamePass} onGoToGame={(gId) => handleGameSelect(GAMES.find(g => g.id === gId) || { id: gId, tier: 'free' })} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'voice')        return <><GameErrorBoundary onBack={onGameBack} gameName="Voice Mode"><VoiceMode              onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
 
   // ── Tab routes ──────────────────────────────────────────────────────────────
   if (navTab === 'checklist') return <VehicleChecklist onBack={() => setNavTab('home')} />;
