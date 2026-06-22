@@ -131,6 +131,44 @@ const en = {
   ob3_title: "You're ready to start",
   ob3_body: "Answer questions daily to build your streak 🔥, earn badges, and track your progress by category. The more you drill, the more confident you'll be on test day.",
   ob3_cta: 'Start Drilling →',
+
+  // ── Phase A additions ──────────────────────────────────────────────────────
+  game_voice:       'Voice Mode',
+  game_voice_desc:  'Answer questions verbally · speech recognition · EN/AF/XH',
+
+  // ── Phase D additions ──────────────────────────────────────────────────────
+  game_sequence:        'Sequence Builder',
+  game_sequence_desc:   'Scrambled K53 procedure steps — tap into correct order',
+  game_confusables:     'Confusables Battle',
+  game_confusables_desc:'Two similar signs — spot the difference · 15 rounds',
+  game_flash:           'Speed Recognition',
+  game_flash_desc:      '1.5 s sign flash — identify before it disappears',
+  game_cluster:         'Context Clusters',
+  game_cluster_desc:    'Signs grouped by environment: freeway · urban · rural',
+  game_weakspot:        'Weak Spot Targeter',
+  game_weakspot_desc:   'AI-targeted drill on your 5 weakest areas',
+  game_diagnostic:      'Daily Diagnostic',
+  game_diagnostic_desc: '5 spaced-repetition questions — refreshed nightly at 7 pm',
+
+  // ── Phase G additions ──────────────────────────────────────────────────────
+  game_ai_debate:       'AI Debate Drill',
+  game_ai_debate_desc:  'Correct the AI\'s wrong statement — 10 rounds',
+  game_instructor:      'Instructor Mode',
+  game_instructor_desc: 'TTS questions + tap verdict · designed for in-car use',
+
+  // ── Shared UI strings ──────────────────────────────────────────────────────
+  share_wa:          '💬 Share on WhatsApp',
+  btn_back_home:     '← Back to home',
+  btn_try_again:     'Try Again',
+  start_drill:       'Start Drill',
+
+  // ── AI Tutor strings ───────────────────────────────────────────────────────
+  ai_tutor_btn:      '🤖 Explain This',
+  ai_tutor_thinking: 'K53 AI Tutor is thinking...',
+  ai_tutor_title:    '🤖 K53 AI TUTOR EXPLAINS',
+  ai_tutor_error:    "Couldn't load explanation. Try again.",
+  ai_tutor_retry:    'Retry',
+  ai_tutor_left:     'left today',
 };
 
 const af = {
@@ -260,6 +298,44 @@ const af = {
   ob3_title: "Jy is gereed om te begin",
   ob3_body: "Beantwoord daagliks vrae om jou streek te bou 🔥, verdien kentekens, en volg jou vordering per kategorie. Hoe meer jy oefen, hoe meer selfversekerd sal jy wees op toetsdag.",
   ob3_cta: 'Begin Boor →',
+
+  // ── Phase A additions ──────────────────────────────────────────────────────
+  game_voice:       'Stekmodus',
+  game_voice_desc:  'Beantwoord vrae mondeling · spraakherkenning · EN/AF/XH',
+
+  // ── Phase D additions ──────────────────────────────────────────────────────
+  game_sequence:        'Volgorde-bou',
+  game_sequence_desc:   'Gemengde K53-prosedure stappe — tik in korrekte volgorde',
+  game_confusables:     'Verwarringsgeveg',
+  game_confusables_desc:'Twee soortgelyke tekens — sien die verskil · 15 rondes',
+  game_flash:           'Spoedherkenning',
+  game_flash_desc:      '1.5 s teken flash — identifiseer voor dit verdwyn',
+  game_cluster:         'Konteksgroepe',
+  game_cluster_desc:    'Tekens gegroepeer per omgewing: snelweg · stedelik · landelik',
+  game_weakspot:        'Swak Plek Teiken',
+  game_weakspot_desc:   'KI-gerigte oefening op jou 5 swakste gebiede',
+  game_diagnostic:      'Daaglikse Diagnose',
+  game_diagnostic_desc: '5 gespasieerde-herhaling vrae — hernu saans 19:00',
+
+  // ── Phase G additions ──────────────────────────────────────────────────────
+  game_ai_debate:       'KI Debat Oefening',
+  game_ai_debate_desc:  'Korrigeer die KI se verkeerde stelling — 10 rondes',
+  game_instructor:      'Instrukteur Modus',
+  game_instructor_desc: 'TTS vrae + tik uitspraak · ontwerp vir gebruik in motor',
+
+  // ── Shared UI strings ──────────────────────────────────────────────────────
+  share_wa:          '💬 Deel op WhatsApp',
+  btn_back_home:     '← Terug na tuis',
+  btn_try_again:     'Probeer Weer',
+  start_drill:       'Begin Oefening',
+
+  // ── AI Tutor strings ───────────────────────────────────────────────────────
+  ai_tutor_btn:      '🤖 Verduidelik Dit',
+  ai_tutor_thinking: 'K53 KI-Tutor dink...',
+  ai_tutor_title:    '🤖 K53 KI-TUTOR VERDUIDELIK',
+  ai_tutor_error:    'Kon nie verduideliking laai nie. Probeer weer.',
+  ai_tutor_retry:    'Probeer Weer',
+  ai_tutor_left:     'oor vandag',
 };
 
 
@@ -337,7 +413,7 @@ const xh = {
   unlockSub: 'Imibuzo engangabiwe · zonke iindlela · inkqubela igcinwe ngonaphakade',
   bestValue: 'IXABISO ELONA LIHLE',
   maybeLater: 'Mhlawumbi kamva',
-  pricingTitle: 'Amaxabiso — Akukho놀ao',
+  pricingTitle: 'Amaxabiso', // TODO:XH — full "No Surprises" phrase needs native review
   pricingFooter: 'Hlawula nge-PayFast · Ikhadi · EFT · SnapScan · Ukusebenza ngoko nangoko',
   lockInTitle: 'Qinisekisa ngaphambi okuphela kokulingwa',
   lockInSub: 'Ukusuka ku-R29/inyanga — imibuzo engangabiwe ngonaphakade',
@@ -390,7 +466,60 @@ const xh = {
   ob3_title: "Ulungele ukuqala",
   ob3_body: "Phendula imibuzo yonke imihla ukwakha iziqu zakho 🔥, fumana iibheji, ulandele inkqubela ngokwezigaba.",
   ob3_cta: 'Qala Ukuqeqesha →',
+
+  // ── Phase A additions ──────────────────────────────────────────────────────
+  game_voice:       'Indlela Yezwi',
+  game_voice_desc:  'Phendula imibuzo ngomlomo · ukuqonda intetho · EN/AF/XH',
+
+  // ── Phase D additions ──────────────────────────────────────────────────────
+  game_sequence:        'Umakhi Wezinam-canda',
+  game_sequence_desc:   'Amanyathelo e-K53 axubeneyo — cofa ngokulandelana okuchanekileyo',
+  game_confusables:     'Umlo Wokudideka',
+  game_confusables_desc:'Izimpawu ezimbini ezifanayo — bona umahluko · iingquku eziyi-15',
+  game_flash:           'Ukuqiwa Ngokukhawuleza',
+  game_flash_desc:      'Impawu ikhanyisela ixesha le-1.5 s — yazi ngaphambi kokufihla',
+  game_cluster:         'Iqela Lomxholo',
+  game_cluster_desc:    'Izimpawu ngokusetyenziswa: iindlela ezinkulu · isixeko · emaphandleni',
+  game_weakspot:        'Umjolisi Weendawo Ezibuthaka',
+  game_weakspot_desc:   'Uqeqesho olujoliswe ku-AI kwiindawo zakho eziyi-5 ezibuthaka',
+  game_diagnostic:      'Uhlolo Lwemihla Ngemihla',
+  game_diagnostic_desc: 'Imibuzo eyi-5 yokufunda esikhathini — iyavuswa ebusuku ngo-19:00',
+
+  // ── Phase G additions ──────────────────────────────────────────────────────
+  game_ai_debate:       'Ingxoxo ye-AI',
+  game_ai_debate_desc:  'Lungisa ingxelo engachanekanga ye-AI — iingquku eziyi-10',
+  game_instructor:      'Indlela Yomfundisi',
+  game_instructor_desc: 'Imibuzo ye-TTS + cofa isigwebo · yenzelwe ukusetyenziswa emotweni',
+
+  // ── Shared UI strings ──────────────────────────────────────────────────────
+  share_wa:          '💬 Yabelana ku-WhatsApp',
+  btn_back_home:     '← Emuva ekhaya',
+  btn_try_again:     'Zama Kwakhona',
+  start_drill:       'Qala Uhlolisiso',
+
+  // ── AI Tutor strings ───────────────────────────────────────────────────────
+  ai_tutor_btn:      '🤖 Cacisa Oku',
+  ai_tutor_thinking: 'I-K53 AI Tutor iyacinga...',
+  ai_tutor_title:    '🤖 I-K53 AI TUTOR ICACISA',
+  ai_tutor_error:    'Ayikwazanga ukulayisha incaciso. Zama kwakhona.',
+  ai_tutor_retry:    'Zama Kwakhona',
+  ai_tutor_left:     'eseleyo namhlanje',
 };
 
 
 export const TRANSLATIONS = { en, af, xh };
+
+// ── Dev-mode translation completeness validator ────────────────────────────────
+// Call once in main.jsx or App.jsx during development to catch missing keys.
+export function validateTranslations() {
+  if (import.meta.env.PROD) return;
+  const enKeys = Object.keys(en);
+  const missing = { af: [], xh: [] };
+  enKeys.forEach(k => {
+    if (!(k in af)) missing.af.push(k);
+    if (!(k in xh)) missing.xh.push(k);
+  });
+  if (missing.af.length) console.warn('[i18n] AF missing keys:', missing.af);
+  if (missing.xh.length) console.warn('[i18n] XH missing keys:', missing.xh);
+  if (!missing.af.length && !missing.xh.length) console.log('[i18n] ✓ All translations complete');
+}
