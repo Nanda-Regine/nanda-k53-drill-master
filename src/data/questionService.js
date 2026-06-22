@@ -14,6 +14,67 @@ function _fromLocal(type) {
   }
 }
 
+// ── Row → local format transforms ─────────────────────────────────────────────
+// Games were written against the local JS data format. These adapters let the
+// Supabase path return the same shape so games need zero changes when we flip.
+
+// Real DB column names (existing schema uses img, licence_codes, is_active)
+function _opts(row) {
+  return Array.isArray(row.options) ? row.options : JSON.parse(row.options ?? '[]');
+}
+
+function _rowToSign(row) {
+  const opts = _opts(row);
+  return {
+    id:       row.external_id || row.id,
+    name:     row.correct_answer,
+    code:     row.code || row.sign_code || row.external_id || '',
+    category: row.category || 'Control',
+    img:      row.img || null,
+    meaning:  row.explanation || '',
+    action:   '',
+    hint:     row.hint || '',
+    options:  opts,
+    mnemonic: row.mnemonic || '',
+    confusableWith: [],
+  };
+}
+
+function _rowToMarking(row) {
+  const opts = _opts(row);
+  return {
+    id:       row.external_id || row.id,
+    name:     row.correct_answer,
+    code:     row.code || row.external_id || '',
+    category: row.category || 'Marking',
+    img:      row.img || null,
+    meaning:  row.explanation || '',
+    action:   '',
+    hint:     row.hint || '',
+    options:  opts,
+    mnemonic: row.mnemonic || '',
+  };
+}
+
+function _rowToGeneric(row) {
+  const opts = _opts(row);
+  return {
+    id:      row.external_id || row.id,
+    cat:     row.category || '',
+    q:       row.question_text,
+    options: opts,
+    answer:  0, // seed script normalises correct answer to index 0
+  };
+}
+
+const ROW_TRANSFORMS = {
+  signs:    _rowToSign,
+  markings: _rowToMarking,
+  controls: _rowToGeneric,
+  rules:    _rowToGeneric,
+  scenarios: _rowToGeneric,
+};
+
 // ── Supabase data source (Phase B: enable via VITE_USE_SUPABASE_QUESTIONS=true) ─
 async function _fromSupabase(type) {
   const { supabase } = await import('../supabase.js');
@@ -23,9 +84,12 @@ async function _fromSupabase(type) {
       .from('questions')
       .select('*')
       .eq('type', type)
-      .is('deleted_at', null);
+      .eq('is_active', true)
+      .neq('external_id', '__schema_version__');
     if (error) throw error;
-    return data?.length ? data : _fromLocal(type);
+    if (!data?.length) return _fromLocal(type);
+    const transform = ROW_TRANSFORMS[type] || _rowToGeneric;
+    return data.map(transform);
   } catch {
     // Network failure or DB unavailable — fall back to local data silently
     return _fromLocal(type);
