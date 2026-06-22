@@ -106,6 +106,34 @@ const QUESTIONS = [
   // ── Defrost & demisting ───────────────────────────────────────────────────
   { id: 'vc65', cat: 'Vision', q: 'You may only drive when all windows are:', options: ['At least 50% clear','Fully clear of condensation, frost and dirt — all-round visibility is a legal requirement','Only the windscreen — rear window is optional','Clear on the driver\'s side only'], answer: 1 },
   { id: 'vc66', cat: 'Vision', q: 'The fastest way to demist a fogged windscreen is:', options: ['Wipe it with your hand','Turn on the air conditioning (which dries the air) combined with the heater blower aimed at the screen','Open all windows fully','Leave the engine running — it clears automatically'], answer: 1 },
+
+  // ── Emergency Controls ────────────────────────────────────────────────────
+  { id: 'vc67', cat: 'Emergency', q: 'Your brakes fail while driving. What is the correct sequence?', options: ['Pump the brake pedal rapidly → engage a lower gear → apply the handbrake GENTLY → steer to safety','Immediately yank the handbrake hard','Switch off the ignition immediately while at speed','Sound the hooter and stop in your lane'], answer: 0 },
+  { id: 'vc68', cat: 'Emergency', q: 'Your accelerator jams in the pressed position while moving. You should:', options: ['Switch off the ignition immediately while still steering hard','Select NEUTRAL immediately, brake smoothly to a stop, then switch off the ignition','Pump the brake pedal repeatedly without changing gear','Keep steering and wait for the engine to run out of fuel'], answer: 1 },
+  { id: 'vc69', cat: 'Emergency', q: 'Aquaplaning (hydroplaning) occurs when:', options: ['The engine overheats in heavy rain','A layer of water lifts the tyres off the road surface, causing loss of steering control','The windscreen fogs up suddenly','The ABS activates on a wet surface'], answer: 1 },
+  { id: 'vc70', cat: 'Emergency', q: 'If you experience aquaplaning, you should:', options: ['Brake firmly and steer sharply to the shoulder','Ease off the accelerator gently — do NOT brake hard or steer sharply until grip returns','Accelerate through the water to break through','Immediately engage a lower gear'], answer: 1 },
+  { id: 'vc71', cat: 'Emergency', q: 'Your vehicle enters a rear-wheel skid. To regain control you must steer:', options: ['In the OPPOSITE direction to the skid','In the SAME direction the rear is sliding — this straightens the vehicle','Straight ahead and brake hard immediately','Away from traffic regardless of direction'], answer: 1 },
+  { id: 'vc72', cat: 'Emergency', q: 'Your vehicle catches fire while driving. Your FIRST action is:', options: ['Try to extinguish the fire before evacuating','Stop, switch off the ignition, evacuate everyone immediately, and move well away from the vehicle','Open the bonnet to identify the source','Drive at speed to blow out the flames'], answer: 1 },
+
+  // ── Automatic Transmission ────────────────────────────────────────────────
+  { id: 'vc73', cat: 'Automatic', q: "In an automatic gearbox, the 'P' (Park) position:", options: ['Allows the vehicle to roll freely downhill','Locks the transmission — must only be engaged when the vehicle is fully stationary','Acts as neutral for towing purposes','Engages low-range 4WD'], answer: 1 },
+  { id: 'vc74', cat: 'Automatic', q: "In an automatic, 'N' (Neutral) is correctly used when:", options: ['Driving in slow city traffic','The vehicle is temporarily stopped for a long time, or when being towed','Descending steep hills for engine braking','Reversing into a parking space'], answer: 1 },
+  { id: 'vc75', cat: 'Automatic', q: "You must NEVER select 'R' (Reverse) or 'P' (Park) while:", options: ['Idling at a red traffic light with foot on brake','The vehicle is still moving — doing so causes serious and expensive transmission damage','Parked on a flat surface','The engine is warming up'], answer: 1 },
+  { id: 'vc76', cat: 'Automatic', q: "'Kickdown' in an automatic gearbox is triggered by:", options: ['Lifting the accelerator suddenly','Pressing the accelerator pedal to the floor — it shifts to a lower gear for rapid overtaking acceleration','Pressing the brake and accelerator together','Manually pushing the gear selector down'], answer: 1 },
+  { id: 'vc77', cat: 'Automatic', q: 'When descending a steep hill in an automatic vehicle, you should select a lower gear range (D2/L) to:', options: ['Save fuel on the descent','Use engine braking to control speed and prevent brake fade — same principle as a manual vehicle','Prevent the transmission overheating in Drive','Allow faster hill descent'], answer: 1 },
+
+  // ── Suspension ────────────────────────────────────────────────────────────
+  { id: 'vc78', cat: 'Suspension', q: 'A vehicle that keeps bouncing several times after hitting a bump most likely has:', options: ['Over-inflated tyres','Worn shock absorbers — they must be replaced to restore safe handling and braking','Incorrect wheel alignment','Under-inflated tyres'], answer: 1 },
+  { id: 'vc79', cat: 'Suspension', q: 'Excessive body roll when cornering at normal speeds indicates:', options: ['Normal handling for most family cars','Worn or damaged suspension components — the vehicle must be inspected','Correct cornering at the limit of adhesion','A minor tyre pressure difference'], answer: 1 },
+  { id: 'vc80', cat: 'Suspension', q: 'A knocking or clunking from the front suspension over bumps usually means:', options: ['Normal road noise from the tyres','Worn ball joints, tie rod ends, or suspension bushings — must be inspected by a mechanic immediately','Wheel balancing is needed','Low engine oil'], answer: 1 },
+  { id: 'vc81', cat: 'Suspension', q: 'The front of your vehicle dips heavily under braking. This may indicate:', options: ['Good braking — weight transfers forward normally','Worn front shock absorbers, which reduce grip and increase stopping distance','Correct weight distribution under braking','A heavy load in the boot'], answer: 1 },
+
+  // ── Towing ────────────────────────────────────────────────────────────────
+  { id: 'vc82', cat: 'Towing', q: 'A trailer being towed on a South African public road must have:', options: ['Only a matching number plate','Functioning brake lights and indicators synchronised with the towing vehicle, plus a rear number plate','Only tail lights — indicators are not required on trailers','No lights if towed in daylight'], answer: 1 },
+  { id: 'vc83', cat: 'Towing', q: 'Safety chains between the towing vehicle and trailer are required because:', options: ['They are recommended but not compulsory','If the hitch coupling fails, the chains prevent the trailer from completely separating and becoming a runaway hazard','They act as secondary brakes for the trailer','They are only required on trailers over 750 kg'], answer: 1 },
+  { id: 'vc84', cat: 'Towing', q: 'If your trailer begins to sway (snake) at speed, you should:', options: ['Accelerate firmly to stabilise the combination','Ease off the accelerator gently and hold the steering wheel straight — do NOT brake hard or make sharp steering inputs','Brake firmly and steer into the sway','Immediately engage a lower gear'], answer: 1 },
+  { id: 'vc85', cat: 'Towing', q: 'When loading a trailer, heavy items should be positioned:', options: ['At the very rear to reduce nose weight on the hitch','Over or just ahead of the trailer axle — excessive rear weight causes trailer sway, excessive nose weight overloads the hitch','Loaded high for easy access when unloading','Spread evenly only on the left side'], answer: 1 },
+  { id: 'vc86', cat: 'Towing', q: "A trailer's number plate light must:", options: ['Be optional if the towing vehicle plate is visible','Illuminate the rear number plate so it is clearly readable — it must work with the towing vehicle\'s lights','Only be required if towing at night','Only be required for commercial trailers'], answer: 1 },
 ];
 
 const CATEGORIES = [...new Set(QUESTIONS.map(q => q.cat))];
@@ -190,7 +218,7 @@ export default function VehicleControls({ onBack, onPass }) {
             <button onClick={onBack} style={{ background: 'none', border: 'none', color: T.text, fontSize: 22, cursor: 'pointer' }}>←</button>
             <div>
               <div style={{ fontWeight: 700, fontSize: T.fontSizeXl }}>Vehicle Controls Test</div>
-              <div style={{ color: T.dim, fontSize: T.fontSize - 1, marginTop: 1 }}>{QUESTIONS.length} questions · 20 sec each</div>
+              <div style={{ color: T.dim, fontSize: T.fontSize - 1, marginTop: 1 }}>{QUESTIONS.length} questions · {CATEGORIES.length} categories · 20 sec each</div>
             </div>
           </div>
         </div>
