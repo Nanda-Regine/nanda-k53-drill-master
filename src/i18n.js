@@ -170,6 +170,20 @@ const en = {
   game_community_qa:    'Community Q&A',
   game_community_qa_desc: 'Ask K53 questions · get answers from the community',
 
+  // ── Phase D additions ──────────────────────────────────────────────────────
+  game_daily_diag:      'Daily Diagnostic',
+  game_daily_diag_desc: '10Q nerve check · once a day · shows your weak spots',
+  game_weak_target:     'Weak Spot Targeter',
+  game_weak_target_desc:'Drill your weakest nerve category · 10 focused questions',
+  game_ctx_cluster:     'Context Cluster',
+  game_ctx_cluster_desc:'Scenario + 4 linked questions · learn rules in context',
+  game_seq_builder:     'Sequence Builder',
+  game_seq_builder_desc:'Put K53 steps in the correct order — 6 procedures',
+  game_confusables:     'Confusables Battle',
+  game_confusables_desc:'Side-by-side similar signs — pick the right one · 12 rounds',
+  game_speed_recog:     'Number Flash',
+  game_speed_recog_desc:'1.5-second flash · what K53 rule uses that number?',
+
   // ── Shared UI strings ──────────────────────────────────────────────────────
   share_wa:          '💬 Share on WhatsApp',
   btn_back_home:     '← Back to home',
@@ -350,6 +364,20 @@ const af = {
   game_school_dash_desc:'Sluit aan by jou ryskool · instrukteurs volg jou vordering',
   game_community_qa:    'Gemeenskap V&A',
   game_community_qa_desc: 'Vra K53-vrae · kry antwoorde van die gemeenskap',
+
+  // ── Phase D additions ──────────────────────────────────────────────────────
+  game_daily_diag:      'Daaglikse Diagnose',
+  game_daily_diag_desc: '10V senuwee-tjek · een keer per dag · toon jou swakpunte',
+  game_weak_target:     'Swakpunt Teiken',
+  game_weak_target_desc:'Oefen jou swakste senuwee-kategorie · 10 gefokuste vrae',
+  game_ctx_cluster:     'Konteks Groep',
+  game_ctx_cluster_desc:'Scenario + 4 gekoppelde vrae · leer reëls in konteks',
+  game_seq_builder:     'Volgorde Bouer',
+  game_seq_builder_desc:'Plaas K53-stappe in die regte volgorde — 6 prosedures',
+  game_confusables:     'Verwarringsgeveg',
+  game_confusables_desc:'Soortgelyke tekens langs mekaar — kies die regte een · 12 rondes',
+  game_speed_recog:     'Nommer Flits',
+  game_speed_recog_desc:'1.5-sekonde flits · watter K53-reël gebruik daardie nommer?',
 
   // ── Shared UI strings ──────────────────────────────────────────────────────
   share_wa:          '💬 Deel op WhatsApp',
@@ -532,6 +560,20 @@ const xh = {
   game_school_dash_desc:'Joyina isikolo sakho · abafundisi balandela inkqubela yakho',
   game_community_qa:    'Imibuzo Yoluntu',
   game_community_qa_desc: 'Buza imibuzo ye-K53 · fumana iimpendulo kuluntu',
+
+  // ── Phase D additions ──────────────────────────────────────────────────────
+  game_daily_diag:      'Uvavanyo Lwemihla Ngemihla',
+  game_daily_diag_desc: '10Q yohlolo wemisipha · kanye ngemini · ibonisa iindawo ezibuhlungu',
+  game_weak_target:     'Inikezo Yendawo Ebuthathaka',
+  game_weak_target_desc:'Qhelisela umsipha wakho obuthathaka kakhulu · imibuzo eyi-10',
+  game_ctx_cluster:     'Iqela Lomxholo',
+  game_ctx_cluster_desc:'Isishwankathelo + imibuzo eyi-4 ehambelana · funda imithetho kumxholo',
+  game_seq_builder:     'Umakhi Wolandelelwano',
+  game_seq_builder_desc:'Beka amanyathelo e-K53 ngokulandelelana okuchanekileyo — iinkqubo ezi-6',
+  game_confusables:     'Imfazwe Yamaphazamiso',
+  game_confusables_desc:'Iimpawu ezilingana ecaleni ngecala — khetha eyichanekileyo · iingquku eziyi-12',
+  game_speed_recog:     'Ukubenyezela Kwenombolo',
+  game_speed_recog_desc:'Ukubenyezela kwesekonde eyi-1.5 · imithetho yani ye-K53 esebenzisa loo nombolo?',
 
   // ── Shared UI strings ──────────────────────────────────────────────────────
   share_wa:          '💬 Yabelana ku-WhatsApp',

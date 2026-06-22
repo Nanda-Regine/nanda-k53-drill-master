@@ -32,6 +32,14 @@ import WeeklyChallenge   from './games/WeeklyChallenge.jsx';
 import SchoolDashboard   from './games/SchoolDashboard.jsx';
 import CommunityQA       from './games/CommunityQA.jsx';
 
+// ── Phase D: Adaptive Drills ──────────────────────────────────────────────────
+import SequenceBuilder   from './games/SequenceBuilder.jsx';
+import ConfusablesBattle from './games/ConfusablesBattle.jsx';
+import SpeedRecognition  from './games/SpeedRecognition.jsx';
+import ContextCluster    from './games/ContextCluster.jsx';
+import WeakSpotTargeter  from './games/WeakSpotTargeter.jsx';
+import DailyDiagnostic   from './games/DailyDiagnostic.jsx';
+
 // ── Components ─────────────────────────────────────────────────────────────────
 import GameErrorBoundary from './components/GameErrorBoundary.jsx';
 import Onboarding        from './components/Onboarding.jsx';
@@ -68,6 +76,9 @@ const GAME_NERVE_MAP = {
   voice:'signs',
   pass_wall:'community', study_battle:'community', weekly_chall:'community',
   dltc_tips:'community', school_dash:'community', community_qa:'community',
+  // Phase D
+  seq_builder:'practical', confusables:'signs', speed_recog:'rules',
+  ctx_cluster:'scenarios', weak_target:'rules', daily_diag:'practical',
 };
 const NERVE_COLOR_MAP = {
   signs:'#DE3831', rules:'#FFB612', controls:'#007A4D',
@@ -132,10 +143,18 @@ const GAMES_BASE = [
   // Phase C: Community
   { id: 'pass_wall',    icon: '🏆', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'study_battle', icon: '⚔️', tier: 'free',    diff: 'intermediate', cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
+
   { id: 'weekly_chall', icon: '🏅', tier: 'free',    diff: 'intermediate', cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'dltc_tips',    icon: '📌', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'school_dash',  icon: '🏫', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'community_qa', icon: '❓', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
+  // Phase D: Adaptive Drills
+  { id: 'daily_diag',   icon: '📊', tier: 'free',    diff: 'beginner',     cat: 'exam',      codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'weak_target',  icon: '🎯', tier: 'free',    diff: 'intermediate', cat: 'scenarios', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'ctx_cluster',  icon: '🧩', tier: 'free',    diff: 'intermediate', cat: 'scenarios', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'seq_builder',  icon: '📋', tier: 'free',    diff: 'intermediate', cat: 'controls',  codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'confusables',  icon: '🥊', tier: 'free',    diff: 'intermediate', cat: 'signs',     codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'speed_recog',  icon: '⚡', tier: 'free',    diff: 'intermediate', cat: 'rules',     codes: ['code12', 'code8', 'code10', 'code14'] },
 ];
 
 const DIFF_COLORS = {
@@ -397,6 +416,14 @@ export default function App() {
   if (activeGame === 'weekly_chall') return <GameErrorBoundary onBack={onGameBack} gameName="Weekly Challenge"><WeeklyChallenge  onBack={onGameBack} /></GameErrorBoundary>;
   if (activeGame === 'school_dash')  return <GameErrorBoundary onBack={onGameBack} gameName="School Dashboard"><SchoolDashboard  onBack={onGameBack} /></GameErrorBoundary>;
   if (activeGame === 'community_qa') return <GameErrorBoundary onBack={onGameBack} gameName="Community Q&A"><CommunityQA      onBack={onGameBack} /></GameErrorBoundary>;
+
+  // ── Phase D: Adaptive Drills ─────────────────────────────────────────────────
+  if (activeGame === 'daily_diag')   return <GameErrorBoundary onBack={onGameBack} gameName="Daily Diagnostic"><DailyDiagnostic  onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'weak_target')  return <GameErrorBoundary onBack={onGameBack} gameName="Weak Spot Targeter"><WeakSpotTargeter onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'ctx_cluster')  return <GameErrorBoundary onBack={onGameBack} gameName="Context Cluster"><ContextCluster   onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'seq_builder')  return <GameErrorBoundary onBack={onGameBack} gameName="Sequence Builder"><SequenceBuilder  onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'confusables')  return <GameErrorBoundary onBack={onGameBack} gameName="Confusables Battle"><ConfusablesBattle onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'speed_recog')  return <GameErrorBoundary onBack={onGameBack} gameName="Speed Recognition"><SpeedRecognition onBack={onGameBack} /></GameErrorBoundary>;
 
   // ── Tab routes ──────────────────────────────────────────────────────────────
   if (navTab === 'checklist') return <VehicleChecklist onBack={() => setNavTab('home')} />;
