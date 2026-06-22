@@ -236,15 +236,17 @@ export default function CommunityQA({ onBack }) {
       sfx.success();
       return;
     }
+    if (!userId) throw new Error('Sign in to answer questions');
     const { error } = await supabase
       .from('community_posts')
       .update({ explanation: text, answered: true })
-      .eq('id', postId);
+      .eq('id', postId)
+      .eq('user_id', userId);
     if (error) throw new Error(error.message);
     sfx.success();
     setItems(prev => prev.map(i => i.id === postId ? { ...i, answer: text, answered: true } : i));
     setAnswerTarget(null);
-  }, [supabase]);
+  }, [supabase, userId]);
 
   const handleAsk = useCallback(async () => {
     const q = askText.trim();

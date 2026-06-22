@@ -391,12 +391,12 @@ export default function App() {
   if (activeGame === 'voice')        return <><GameErrorBoundary onBack={onGameBack} gameName="Voice Mode"><VoiceMode              onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
 
   // ── Phase C: Community routes ──────────────────────────────────────────────
-  if (activeGame === 'pass_wall')      return <PassWall        onBack={onGameBack} />;
-  if (activeGame === 'study_battle')   return <StudyGroupBattle onBack={onGameBack} />;
-  if (activeGame === 'dltc_tips')      return <DLTCTips         onBack={onGameBack} />;
-  if (activeGame === 'weekly_chall')   return <WeeklyChallenge  onBack={onGameBack} />;
-  if (activeGame === 'school_dash')    return <SchoolDashboard  onBack={onGameBack} />;
-  if (activeGame === 'community_qa')   return <CommunityQA      onBack={onGameBack} />;
+  if (activeGame === 'pass_wall')    return <GameErrorBoundary onBack={onGameBack} gameName="Pass Wall"><PassWall         onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'study_battle') return <GameErrorBoundary onBack={onGameBack} gameName="Study Battle"><StudyGroupBattle onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'dltc_tips')    return <GameErrorBoundary onBack={onGameBack} gameName="DLTC Tips"><DLTCTips          onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'weekly_chall') return <GameErrorBoundary onBack={onGameBack} gameName="Weekly Challenge"><WeeklyChallenge  onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'school_dash')  return <GameErrorBoundary onBack={onGameBack} gameName="School Dashboard"><SchoolDashboard  onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'community_qa') return <GameErrorBoundary onBack={onGameBack} gameName="Community Q&A"><CommunityQA      onBack={onGameBack} /></GameErrorBoundary>;
 
   // ── Tab routes ──────────────────────────────────────────────────────────────
   if (navTab === 'checklist') return <VehicleChecklist onBack={() => setNavTab('home')} />;

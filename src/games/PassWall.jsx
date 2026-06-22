@@ -125,7 +125,7 @@ function ComposeForm({ onPost, userId }) {
     setErr('');
     setPosting(true);
     try {
-      await onPost({ type, content: text, score: score ? parseInt(score, 10) : null, total: total ? parseInt(total, 10) : null, exam_type: type === 'pass' ? examType : null });
+      await onPost({ type, content: text, score: score !== '' ? parseInt(score, 10) : null, total: total !== '' ? parseInt(total, 10) : null, exam_type: type === 'pass' ? examType : null });
       setContent('');
       setScore('');
     } catch (e) {
@@ -280,6 +280,7 @@ export default function PassWall({ onBack }) {
         const { data, error } = await supabase
           .from('community_posts')
           .select('id,type,content,score,total,exam_type,likes,created_at')
+          .in('type', ['pass', 'tip', 'achievement'])
           .is('deleted_at', null)
           .order('created_at', { ascending: false })
           .range(currentOffset, currentOffset + PAGE_SIZE - 1);

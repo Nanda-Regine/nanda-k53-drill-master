@@ -183,7 +183,7 @@ export default function WeeklyChallenge({ onBack }) {
         setChosen(null);
       }
     }, 1400);
-  }, [chosen, challenge, qIdx, score]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [chosen, challenge, qIdx, score, submitEntry]);
 
   const submitEntry = useCallback(async (finalScore, total) => {
     sfx.success();

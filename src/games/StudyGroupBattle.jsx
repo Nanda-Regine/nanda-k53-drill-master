@@ -274,8 +274,12 @@ export default function StudyGroupBattle({ onBack }) {
   const [timeLeft, setTimeLeft] = useState(ANSWER_SECONDS);
   const [supabase, setSupabase] = useState(null);
   const [channel, setChannel]   = useState(null);
-  const timerRef  = useRef(null);
-  const isMounted = useRef(true);
+  const timerRef           = useRef(null);
+  const isMounted          = useRef(true);
+  const channelRef         = useRef(null);
+  const advanceQuestionRef = useRef(null);
+  const isAnsweredRef      = useRef(false);
+  const hasAdvancedRef     = useRef(false);
 
   useEffect(() => {
     isMounted.current = true;
@@ -285,6 +289,7 @@ export default function StudyGroupBattle({ onBack }) {
     return () => {
       isMounted.current = false;
       clearInterval(timerRef.current);
+      channelRef.current?.unsubscribe();
     };
   }, []);
 
@@ -314,7 +319,7 @@ export default function StudyGroupBattle({ onBack }) {
       const state = ch.presenceState();
       const ps = Object.values(state).flat().map(p => ({ id: p.key, name: p.name }));
       setPlayers(ps);
-      setScores(ps.map(p => ({ name: p.name, score: 0 })));
+      setScores(prev => ps.map(p => ({ name: p.name, score: prev.find(s => s.name === p.name)?.score ?? 0 })));
     });
 
     ch.on('broadcast', { event: 'start' }, ({ payload }) => {
@@ -335,6 +340,8 @@ export default function StudyGroupBattle({ onBack }) {
 
     ch.on('broadcast', { event: 'next' }, () => {
       if (!isMounted.current) return;
+      isAnsweredRef.current = false;
+      hasAdvancedRef.current = false;
       setQIdx(prev => {
         const next = prev + 1;
         if (next >= QUESTION_COUNT) {
@@ -357,6 +364,7 @@ export default function StudyGroupBattle({ onBack }) {
     });
 
     setChannel(ch);
+    channelRef.current = ch;
   }, [supabase]);
 
   const startTimer = useCallback(() => {
@@ -368,16 +376,20 @@ export default function StudyGroupBattle({ onBack }) {
       setTimeLeft(t);
       if (t <= 0) {
         clearInterval(timerRef.current);
-        advanceQuestion();
+        advanceQuestionRef.current?.();
       }
     }, 1000);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const advanceQuestion = useCallback(() => {
+    if (hasAdvancedRef.current) return;
+    hasAdvancedRef.current = true;
     if (channel && isHost) {
       channel.send({ type: 'broadcast', event: 'next', payload: {} });
     }
   }, [channel, isHost]);
+
+  useEffect(() => { advanceQuestionRef.current = advanceQuestion; }, [advanceQuestion]);
 
   const handleCreate = useCallback(() => {
     const name = nameInput.trim().slice(0, 16) || myName;
@@ -410,14 +422,17 @@ export default function StudyGroupBattle({ onBack }) {
   }, [channel, startTimer]);
 
   const handleAnswer = useCallback((opt, correct) => {
+    if (isAnsweredRef.current) return;
+    isAnsweredRef.current = true;
     if (channel) {
       channel.send({ type: 'broadcast', event: 'answer', payload: { name: myName, correct } });
-    }
-    if (correct) {
+      // Supabase echoes broadcast back to sender — 'answer' handler increments the score
+    } else if (correct) {
+      // offline solo mode — no broadcast echo
       setScores(prev => prev.map(s => s.name === myName ? { ...s, score: s.score + 1 } : s));
     }
-    setTimeout(() => advanceQuestion(), 1600);
-  }, [channel, myName, advanceQuestion]);
+    setTimeout(() => advanceQuestionRef.current?.(), 1600);
+  }, [channel, myName]);
 
   const handleLeave = useCallback(() => {
     clearInterval(timerRef.current);

@@ -254,9 +254,9 @@ export default function SchoolDashboard({ onBack }) {
     try {
       const { data, error } = await supabase
         .from('school_students')
-        .select('user_id, joined_at, display_name, email, total_questions, correct_count')
+        .select('user_id, joined_at')
         .eq('school_id', school.id)
-        .order('correct_count', { ascending: false });
+        .order('joined_at', { ascending: true });
       if (error) throw error;
       if (isMounted.current) setStudents(data || []);
     } catch {
