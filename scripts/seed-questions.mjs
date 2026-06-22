@@ -29,7 +29,13 @@ function loadEnv() {
     const raw = readFileSync(envPath, 'utf8');
     for (const line of raw.split('\n')) {
       const match = line.match(/^([^#=]+)=(.*)$/);
-      if (match) process.env[match[1].trim()] = match[2].trim().replace(/^['"]|['"]$/g, '');
+      if (match) {
+        const key = match[1].trim();
+        // Don't overwrite vars already set by CI/shell environment
+        if (!process.env[key]) {
+          process.env[key] = match[2].trim().replace(/^['"]|['"]$/g, '');
+        }
+      }
     }
   } catch {
     // .env.local not present — expect env vars to be set externally
@@ -55,6 +61,9 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: fa
  * In roadSigns.js, options[0] is always the correct answer.
  */
 function signToRow(s) {
+  if (!Array.isArray(s.options) || s.options.length === 0) {
+    throw new Error(`Sign ${s.id || s.name} has no options array — fix roadSigns.js before seeding`);
+  }
   return {
     external_id:    s.id,
     type:           'signs',
@@ -62,14 +71,14 @@ function signToRow(s) {
     sign_code:      s.code || null,
     category:       s.category || null,
     question_text:  `What does the ${s.name} sign (${s.code || s.id}) mean?`,
-    options:        s.options,                 // supabase-js serialises jsonb arrays natively
+    options:        s.options,
     correct_answer: s.options[0],
-    img:            s.img || null,             // real column name is img, not image_path
+    img:            s.img || null,
     hint:           s.hint || null,
     explanation:    s.meaning || null,
     mnemonic:       s.mnemonic || null,
     difficulty:     2,
-    licence_codes:  ['code12', 'code8', 'code10', 'code14'],  // real column name
+    licence_codes:  ['code12', 'code8', 'code10', 'code14'],
     is_active:      true,
     schema_ver:     1,
   };
@@ -80,6 +89,9 @@ function signToRow(s) {
  * In roadMarkings.js, options[0] is always the correct answer.
  */
 function markingToRow(m) {
+  if (!Array.isArray(m.options) || m.options.length === 0) {
+    throw new Error(`Marking ${m.id || m.name} has no options array — fix roadMarkings.js before seeding`);
+  }
   return {
     external_id:    m.id,
     type:           'markings',

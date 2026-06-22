@@ -16,7 +16,16 @@ CREATE UNIQUE INDEX IF NOT EXISTS questions_external_id_idx ON questions (extern
 
 -- type: question category — signs | rules | controls | scenarios | markings
 ALTER TABLE questions ADD COLUMN IF NOT EXISTS type text;
-CREATE INDEX IF NOT EXISTS questions_type_idx ON questions (type) WHERE is_active = true;
+-- Index uses is_active if the column exists (live schema), otherwise no partial clause.
+-- On a fresh deploy from migration 001 (which uses deleted_at), this index is created
+-- without a WHERE clause — safe, just slightly less selective.
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='questions' AND column_name='is_active') THEN
+    EXECUTE 'CREATE INDEX IF NOT EXISTS questions_type_idx ON questions (type) WHERE is_active = true';
+  ELSE
+    EXECUTE 'CREATE INDEX IF NOT EXISTS questions_type_idx ON questions (type) WHERE deleted_at IS NULL';
+  END IF;
+END $$;
 
 -- hint: short memory aid (distinct from full explanation)
 ALTER TABLE questions ADD COLUMN IF NOT EXISTS hint text;
@@ -98,3 +107,60 @@ CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER LANGUAGE plpgsql AS $$
 BEGIN NEW.updated_at = now(); RETURN NEW; END;
 $$;
+
+-- ── Leitner spaced repetition functions + trigger ─────────────────────────────
+-- Migration 001 created these only if user_progress didn't exist. On the live DB
+-- the table pre-existed so 001 was a no-op. Install them here unconditionally.
+
+CREATE OR REPLACE FUNCTION compute_next_review(box smallint, answered timestamptz)
+RETURNS timestamptz LANGUAGE sql IMMUTABLE AS $$
+  SELECT answered + CASE box
+    WHEN 1 THEN INTERVAL '1 day'
+    WHEN 2 THEN INTERVAL '3 days'
+    WHEN 3 THEN INTERVAL '7 days'
+    WHEN 4 THEN INTERVAL '14 days'
+    ELSE          INTERVAL '30 days'
+  END;
+$$;
+
+CREATE OR REPLACE FUNCTION user_progress_set_next_review()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+BEGIN
+  IF NEW.answered_at IS NOT NULL THEN
+    NEW.next_review = compute_next_review(NEW.box_level, NEW.answered_at);
+  END IF;
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS user_progress_before_upsert ON user_progress;
+CREATE TRIGGER user_progress_before_upsert
+  BEFORE INSERT OR UPDATE ON user_progress
+  FOR EACH ROW EXECUTE FUNCTION user_progress_set_next_review();
+
+-- answered_at DEFAULT so legacy rows get a timestamp when updated
+ALTER TABLE user_progress ALTER COLUMN answered_at SET DEFAULT now();
+
+-- study_sessions: remove permissive ALL policy, use INSERT+SELECT only
+DROP POLICY IF EXISTS sessions_own ON study_sessions;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='study_sessions' AND policyname='sessions_insert') THEN
+    CREATE POLICY sessions_insert ON study_sessions FOR INSERT WITH CHECK (auth.uid() = user_id);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='study_sessions' AND policyname='sessions_select') THEN
+    CREATE POLICY sessions_select ON study_sessions FOR SELECT USING (auth.uid() = user_id);
+  END IF;
+END $$;
+
+-- schools: add INSERT policy so clients can create schools
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='schools' AND policyname='schools_owner_insert') THEN
+    -- Column name differs between live (admin_user_id) and migration 001 (owner_id)
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='schools' AND column_name='admin_user_id') THEN
+      EXECUTE 'CREATE POLICY schools_owner_insert ON schools FOR INSERT WITH CHECK (auth.uid() = admin_user_id)';
+    ELSE
+      EXECUTE 'CREATE POLICY schools_owner_insert ON schools FOR INSERT WITH CHECK (auth.uid() = owner_id)';
+    END IF;
+  END IF;
+END $$;

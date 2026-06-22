@@ -20,7 +20,8 @@ function _fromLocal(type) {
 
 // Real DB column names (existing schema uses img, licence_codes, is_active)
 function _opts(row) {
-  return Array.isArray(row.options) ? row.options : JSON.parse(row.options ?? '[]');
+  if (Array.isArray(row.options)) return row.options;
+  try { return JSON.parse(row.options ?? '[]'); } catch { return []; }
 }
 
 function _rowToSign(row) {
@@ -58,12 +59,13 @@ function _rowToMarking(row) {
 
 function _rowToGeneric(row) {
   const opts = _opts(row);
+  const correctIdx = row.correct_answer ? opts.indexOf(row.correct_answer) : -1;
   return {
     id:      row.external_id || row.id,
     cat:     row.category || '',
     q:       row.question_text,
     options: opts,
-    answer:  0, // seed script normalises correct answer to index 0
+    answer:  correctIdx >= 0 ? correctIdx : 0,
   };
 }
 
@@ -82,16 +84,16 @@ async function _fromSupabase(type) {
   try {
     const { data, error } = await supabase
       .from('questions')
-      .select('*')
+      .select('external_id,id,correct_answer,code,sign_code,category,img,explanation,hint,mnemonic,options,question_text,type,is_active')
       .eq('type', type)
       .eq('is_active', true)
-      .neq('external_id', '__schema_version__');
+      .not('external_id', 'is', null);
     if (error) throw error;
     if (!data?.length) return _fromLocal(type);
     const transform = ROW_TRANSFORMS[type] || _rowToGeneric;
     return data.map(transform);
-  } catch {
-    // Network failure or DB unavailable — fall back to local data silently
+  } catch (err) {
+    if (import.meta.env.DEV) console.warn('[questionService] Supabase fetch failed, using local data:', err?.message);
     return _fromLocal(type);
   }
 }
