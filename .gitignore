@@ -18,3 +18,8 @@ memory/
 sartsm.txt
 
 pdf_extract/
+
+# audit scratch
+rules.txt
+controls.txt
+_audit.cjs

@@ -10,7 +10,7 @@ import { prepareAll } from '../utils/quizHelpers.js';
 // steering — all the hands-on controls tested in the K53 exam.
 const QUESTIONS = [
   // ── Lights ────────────────────────────────────────────────────────────────
-  { id: 'vc01', cat: 'Lights', q: 'When must you switch on your headlights?', options: ['Only when it is completely dark','30 minutes after sunset until 30 minutes before sunrise, and when visibility is poor','Only at night after 21:00','Only in a tunnel'], answer: 1 },
+  { id: 'vc01', cat: 'Lights', q: 'When must you switch on your headlights?', options: ['Only when it is completely dark','Between sunset and sunrise, and whenever persons or vehicles are not clearly visible at 150 m','Only at night after 21:00','Only in a tunnel'], answer: 1 },
   { id: 'vc02', cat: 'Lights', q: 'What do you use fog lights for?', options: ['Whenever it is dark','Only when visibility is seriously reduced by fog, mist or rain','As an alternative to headlights','To signal you want to overtake'], answer: 1 },
   { id: 'vc03', cat: 'Lights', q: 'When must you switch from high beam to low beam?', options: ['Only when another driver flashes you','When approaching oncoming traffic and when following another vehicle closely','On any road with street lighting','After 22:00'], answer: 1 },
   { id: 'vc04', cat: 'Lights', q: 'What does a flashing amber warning light on a stationary vehicle mean?', options: ['The vehicle is about to turn','The vehicle is a hazard — proceed with caution','The driver is lost','The vehicle is police'], answer: 1 },
@@ -54,7 +54,7 @@ const QUESTIONS = [
   { id: 'vc30', cat: 'Seatbelts', q: 'Wearing a seatbelt incorrectly (e.g. under the arm) is:', options: ['Acceptable if more comfortable','Dangerous — reduces protection and is still an offence','Legal in SA','Only an issue in a head-on collision'], answer: 1 },
 
   // ── Tyres ─────────────────────────────────────────────────────────────────
-  { id: 'vc31', cat: 'Tyres', q: 'The minimum legal tread depth for tyres in South Africa is:', options: ['0.5 mm','1 mm','1.6 mm','3 mm'], answer: 2 },
+  { id: 'vc31', cat: 'Tyres', q: 'The minimum legal tread depth for tyres in South Africa is:', options: ['0.5 mm','1 mm','1.6 mm','3 mm'], answer: 1 },
   { id: 'vc32', cat: 'Tyres', q: 'Overinflated tyres are dangerous because they:', options: ['Wear faster on the edges','Reduce the contact patch and can cause loss of control — especially in corners','Are more fuel efficient but unsafe','Cannot be patched when punctured'], answer: 1 },
   { id: 'vc33', cat: 'Tyres', q: 'Underinflated tyres cause:', options: ['Better wet-weather grip','Excessive heat build-up, faster tread wear on edges, and risk of blowout','No significant danger','Better steering response'], answer: 1 },
   { id: 'vc34', cat: 'Tyres', q: 'When should you check tyre pressure?', options: ['Only when a tyre looks flat','When the tyres are COLD — before a journey or after parking for at least 3 hours','Immediately after driving at high speed','Only at a petrol station'], answer: 1 },
@@ -87,7 +87,7 @@ const QUESTIONS = [
   { id: 'vc53', cat: 'Horn', q: 'You may NOT use your hooter except:', options: ['To greet someone you know','To warn others of danger and to avoid an accident','Whenever you think it necessary','In a built-up area at any time'], answer: 1 },
 
   // ── Indicators ────────────────────────────────────────────────────────────
-  { id: 'vc54', cat: 'Indicators', q: 'At minimum, how far before a turn must you signal in an urban area?', options: ['10 m','20 m','30 m','50 m'], answer: 2 },
+  { id: 'vc54', cat: 'Indicators', q: 'When must you signal before turning?', options: ['Exactly 10 m before','Exactly 50 m before','In good time, so other road users can clearly see your intention','Only as you start the turn'], answer: 2 },
   { id: 'vc55', cat: 'Indicators', q: 'You MUST signal when:', options: ['Only in heavy traffic','Changing direction, changing lanes, moving off, or stopping — always indicate your intentions','Only when other vehicles are present','Only on freeways'], answer: 1 },
   { id: 'vc56', cat: 'Indicators', q: 'Hazard lights (all four indicators flashing) may be used when:', options: ['Driving slowly in traffic as a warning','The vehicle is stationary and is a hazard to others, or to warn of a hazard ahead','Whenever it is raining','To thank another driver'], answer: 1 },
   { id: 'vc57', cat: 'Indicators', q: 'If your turn signal fails to cancel automatically after a turn, you must:', options: ['Continue driving — it is a minor issue','Cancel it manually immediately — a signal left on misleads other drivers','Drive to a workshop before continuing','Flash your headlights to warn others'], answer: 1 },
