@@ -1,5 +1,5 @@
 import { T } from "../theme.js";
-import { openCheckout } from "../utils/runtime.js";
+import { openCheckout, isNative } from "../utils/runtime.js";
 
 // ── FreemiumGate modal ────────────────────────────────────────────────────────
 // Props:
@@ -11,6 +11,25 @@ export default function FreemiumGate({ onClose, onUpgrade }) {
     if (onUpgrade) { onUpgrade(); return; }
     openCheckout(plan);
   };
+
+  // Native (store) build: no in-app purchase — just a friendly "come back tomorrow".
+  if (isNative()) {
+    return (
+      <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.82)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: "20px" }}>
+        <div style={{ background: T.surface, border: `2px solid ${T.gold}`, borderRadius: 8, padding: "36px 28px", maxWidth: 420, width: "100%", textAlign: "center", fontFamily: T.font, boxShadow: `0 0 60px rgba(255,182,18,0.15)` }}>
+          <div style={{ fontSize: 48, marginBottom: 16 }}>⏳</div>
+          <div style={{ color: T.gold, fontSize: 11, letterSpacing: 4, fontFamily: T.mono, textTransform: "uppercase", marginBottom: 12 }}>Daily Limit Reached</div>
+          <h2 style={{ color: T.white, fontSize: 22, fontWeight: 700, marginBottom: 14, lineHeight: 1.3 }}>That's your free questions for today!</h2>
+          <p style={{ color: T.dim, fontSize: 14, lineHeight: 1.7, marginBottom: 24 }}>
+            Your free questions reset at midnight. Come back tomorrow to keep your streak going. 🔥
+          </p>
+          <button onClick={onClose} style={{ width: "100%", padding: "15px 20px", background: T.gold, color: "#060D07", border: "none", borderRadius: 4, fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: T.font }}>
+            Got it →
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{

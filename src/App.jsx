@@ -57,7 +57,7 @@ import NervesPanel       from './components/NervesPanel.jsx';
 import { recordStudyDay, getStreak } from './utils/streakTracker.js';
 import { getWeakNerves } from './utils/masteryStore.js';
 import { supabase } from './supabase.js';
-import { apiBase, openCheckout } from './utils/runtime.js';
+import { apiBase, openCheckout, isNative } from './utils/runtime.js';
 import {
   getTier, getRemainingToday, hasPDPAccess, TIER_LABELS, activateTier, TIERS,
   storePremiumToken, isInFreeTrial, daysLeftInTrial,
@@ -364,8 +364,10 @@ export default function App() {
   const onGamePass = useCallback(() => setConfettiActive(true), []);
 
   const handleGameSelect = useCallback((game) => {
-    if (game.tier === 'pdp' && !hasPDPAccess()) { setShowPaywall(true); return; }
-    if (game.tier === 'premium' && tier === TIERS.FREE) { setShowPaywall(true); return; }
+    // Native (store) build has no in-app purchase: premium/PDP stay locked for
+    // non-subscribers, but we never surface a paywall.
+    if (game.tier === 'pdp' && !hasPDPAccess()) { if (!isNative()) setShowPaywall(true); return; }
+    if (game.tier === 'premium' && tier === TIERS.FREE) { if (!isNative()) setShowPaywall(true); return; }
     recordStudyDay();
     localStorage.setItem(LAST_GAME_KEY, game.id);
     setActiveGame(game.id);
@@ -611,10 +613,10 @@ export default function App() {
         )}
 
         {/* ── Pricing strip ─────────────────────────────────────────────────────── */}
-        {(tier === TIERS.FREE && !inTrial) && <PricingStrip T={T} onPlanSelect={(t) => openCheckout(t)} />}
+        {(tier === TIERS.FREE && !inTrial && !isNative()) && <PricingStrip T={T} onPlanSelect={(t) => openCheckout(t)} />}
 
         {/* ── Trial upgrade nudge ───────────────────────────────────────────────── */}
-        {inTrial && (
+        {inTrial && !isNative() && (
           <motion.div whileTap={{ scale: 0.98 }} onClick={() => setShowPaywall(true)}
             style={{ background: `linear-gradient(135deg,rgba(0,122,77,0.15),rgba(255,182,18,0.08))`, border: `1px solid rgba(255,182,18,0.2)`, borderRadius: T.radiusLg, padding: '14px 16px', marginTop: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ fontSize: 22 }}>🚀</span>
@@ -659,8 +661,8 @@ export default function App() {
         </div>
       </Sheet>
 
-      {/* ── Paywall sheet ─────────────────────────────────────────────────────── */}
-      <Sheet show={showPaywall} onClose={() => setShowPaywall(false)}>
+      {/* ── Paywall sheet (web only — native store build has no in-app purchase) ── */}
+      <Sheet show={showPaywall && !isNative()} onClose={() => setShowPaywall(false)}>
         <div style={{ background: T.surface, borderRadius: '20px 20px 0 0', padding: '24px 20px' }}>
           <div style={{ fontWeight: 800, fontSize: T.fontSizeXl, marginBottom: 4 }}>{t('unlockAccess')}</div>
           <div style={{ color: T.dim, fontSize: T.fontSize, marginBottom: 20 }}>

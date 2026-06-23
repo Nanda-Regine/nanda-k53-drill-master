@@ -6,6 +6,7 @@ import { resetSR } from '../utils/spacedRepetition.js';
 import { useLang } from '../LangContext.jsx';
 import { isSoundEnabled, setSoundEnabled, sfx } from '../utils/sounds.js';
 import { isPremium, isInFreeTrial, daysLeftInTrial, getRemainingToday, DAILY_LIMIT } from '../freemium.js';
+import { isNative } from '../utils/runtime.js';
 
 // ── Legal documents ────────────────────────────────────────────────────────────
 const LEGAL_DOCS = {
@@ -306,7 +307,7 @@ export default function Settings({ onBack, onFontSizeChange }) {
                 <div>• Each question you answer (correct or wrong) counts as 1.</div>
                 <div>• Counter resets at midnight every day.</div>
                 <div>• All 11 game modes share the same daily pool.</div>
-                <div style={{ marginTop: 6, color: T.gold }}>Upgrade for unlimited — from R29/month.</div>
+                {!isNative() && <div style={{ marginTop: 6, color: T.gold }}>Upgrade for unlimited — from R29/month.</div>}
               </div>
             </div>
           )}
