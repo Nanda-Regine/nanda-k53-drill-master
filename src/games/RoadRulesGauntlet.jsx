@@ -17,7 +17,7 @@ const ROUNDS = [
     questions: [
       { q: 'What is the general speed limit on a public road in a built-up area?', options: ['40 km/h','60 km/h','80 km/h','100 km/h'], answer: 1 },
       { q: 'What is the general speed limit on a freeway?', options: ['100 km/h','110 km/h','120 km/h','140 km/h'], answer: 2 },
-      { q: 'What is the minimum following distance you should maintain behind the vehicle in front?', options: ['1 second','2 seconds','3 seconds','4 seconds'], answer: 2 },
+      { q: 'What is the minimum following distance you should maintain behind the vehicle in front in a light motor vehicle?', options: ['1 second','2 seconds','3 seconds','4 seconds'], answer: 1 },
       { q: 'At 60 km/h, what is the typical stopping distance on a dry road?', options: ['18 m','36 m','54 m','72 m'], answer: 2 },
       { q: 'Which factor most increases stopping distance?', options: ['Bright sunshine','Wet road surface','Engine braking','Good tyres'], answer: 1 },
     ],
@@ -92,11 +92,11 @@ const ROUNDS = [
   {
     id: 8, title: 'Parking & Stopping', icon: '🅿️',
     questions: [
-      { q: 'You may NOT park within how many metres of a fire hydrant?', options: ['1 m','3 m','5 m','10 m'], answer: 1 },
+      { q: 'You may NOT park within how many metres of a fire hydrant?', options: ['1.5 m','3 m','5 m','9 m'], answer: 0 },
       { q: 'When parking on a hill facing downhill, your wheels should be:', options: ['Straight ahead','Turned to the right (into the kerb)','Turned to the left','It does not matter'], answer: 1 },
       { q: 'Double parking means:', options: ['Parking in two bays','Parking alongside a parked vehicle','Parking in a loading zone','Parking facing the wrong direction'], answer: 1 },
       { q: 'Before getting out of a parked vehicle you should always:', options: ['Sound the horn','Check mirrors and over your shoulder for cyclists and traffic','Open the door quickly','Leave the engine running'], answer: 1 },
-      { q: 'You must NOT stop within how many metres of an intersection?', options: ['3 m','5 m','9 m','15 m'], answer: 2 },
+      { q: 'You may NOT park within how many metres of an intersection?', options: ['3 m','5 m','9 m','15 m'], answer: 1 },
     ],
   },
   // ── ROUND 9: Hazardous Conditions ─────────────────────────────────────────
