@@ -1701,28 +1701,6 @@ export const ROAD_SIGNS = [
   // COMMAND SIGNS — BATCH 2 (additional verified signs)
   // ═══════════════════════════════════════════════════════════
   {
-    id: 'R105', name: 'Ahead or turn left only', code: 'R105', category: 'Command',
-    shape: 'circle-blue', signColor: 'blue-white',
-    img: 'r105-ahead-or-left.jpg',
-    meaning: 'You MUST go straight ahead or turn left. No other direction is permitted.',
-    action: 'Choose to go straight or turn left. You may not turn right or make a U-turn.',
-    hint: 'Blue circle with white up-arrow AND left-arrow together',
-    options: ['Ahead or turn left only', 'Turn left only', 'Keep left', 'Proceed straight only'],
-    confusableWith: ['R108', 'R110', 'R103'],
-    mnemonic: 'Blue circle = command. Two white arrows (up + left) = two options. Right is forbidden.',
-  },
-  {
-    id: 'R106', name: 'Ahead or turn right only', code: 'R106', category: 'Command',
-    shape: 'circle-blue', signColor: 'blue-white',
-    img: 'r106-ahead-or-right.jpg',
-    meaning: 'You MUST go straight ahead or turn right. No other direction is permitted.',
-    action: 'Choose to go straight or turn right. You may not turn left or make a U-turn.',
-    hint: 'Blue circle with white up-arrow AND right-arrow together',
-    options: ['Ahead or turn right only', 'Turn right only', 'Keep right', 'Proceed straight only'],
-    confusableWith: ['R109', 'R111', 'R104'],
-    mnemonic: 'Blue circle = command. Two white arrows (up + right) = two options. Left is forbidden.',
-  },
-  {
     id: 'R113', name: 'Pedal cycles only', code: 'R113', category: 'Command',
     shape: 'circle-blue', signColor: 'blue-white',
     img: 'r113-pedal-cycles-only.jpg',
@@ -1881,28 +1859,6 @@ export const ROAD_SIGNS = [
     mnemonic: 'R202 = total mass. R203 = mass per AXLE. Even if total mass is under R202, axle mass can still be violated.',
   },
   {
-    id: 'R207', name: 'No stopping on right', code: 'R207', category: 'Prohibition',
-    shape: 'circle-red', signColor: 'red-white',
-    img: 'r207-no-stopping-right.jpg',
-    meaning: 'No vehicle may stop on the right-hand side of the road in this section.',
-    action: 'Do not stop, park or wait on the right side of the road. Use the left side or designated areas.',
-    hint: 'Red-bordered circle with right arrow and red bar — stopping on right prohibited',
-    options: ['No stopping on right', 'No stopping on left', 'No parking on right', 'No entry from right'],
-    confusableWith: ['R208', 'R217'],
-    mnemonic: 'Arrow pointing RIGHT with bar = right side is where stopping is banned. Left side may be OK.',
-  },
-  {
-    id: 'R208', name: 'No stopping on left', code: 'R208', category: 'Prohibition',
-    shape: 'circle-red', signColor: 'red-white',
-    img: 'r208-no-stopping-left.jpg',
-    meaning: 'No vehicle may stop on the left-hand side of the road in this section.',
-    action: 'Do not stop, park or wait on the left side of the road. This is unusual — check for supplementary plates.',
-    hint: 'Red-bordered circle with left arrow and red bar — stopping on left prohibited',
-    options: ['No stopping on left', 'No stopping on right', 'No parking on left', 'No entry from left'],
-    confusableWith: ['R207', 'R217'],
-    mnemonic: 'Arrow pointing LEFT with bar = left side stopping banned. Less common than R207 (no stopping right).',
-  },
-  {
     id: 'R218', name: 'Parking on left only', code: 'R218', category: 'Prohibition',
     shape: 'circle-red', signColor: 'red-white',
     img: 'r218-parking-left-only.jpg',
@@ -1972,28 +1928,6 @@ export const ROAD_SIGNS = [
   // ═══════════════════════════════════════════════════════════
   // WARNING SIGNS — BATCH 2 (additional verified signs)
   // ═══════════════════════════════════════════════════════════
-  {
-    id: 'W107', name: 'Side road junction from the left', code: 'W107', category: 'Warning',
-    shape: 'triangle-red', signColor: 'yellow-black',
-    img: 'w107-t-junction-right-priority.jpg',
-    meaning: 'Another road joins your road from the left ahead — traffic may approach from that side road.',
-    action: 'Slow down so you can stop or pass the junction safely. Watch for traffic joining from the left that may not yield.',
-    hint: 'Red-bordered triangle: a straight main road with a side road joining from the left',
-    options: ['Side road junction from the left', 'Side road junction from the right', 'T-junction', 'Staggered junction'],
-    confusableWith: ['W108', 'W104'],
-    mnemonic: 'Branch coming in from the left = side road from the left. Watch that side.',
-  },
-  {
-    id: 'W110', name: 'Staggered junction (left, then right)', code: 'W110', category: 'Warning',
-    shape: 'triangle-red', signColor: 'yellow-black',
-    img: 'w110-t-junction-left-priority.jpg',
-    meaning: 'Your road is joined by another road from the left first, then by another from the right a short distance later (staggered junction).',
-    action: 'Slow down and be prepared to stop or turn at a safe speed. Watch for traffic at both junctions that may not yield.',
-    hint: 'Red-bordered triangle showing two side roads offset — from the left first, then the right',
-    options: ['Staggered junction (left, then right)', 'Staggered junction (right, then left)', 'Crossroads', 'Side road junction'],
-    confusableWith: ['W109', 'W107'],
-    mnemonic: 'Two offset side roads, left one first = staggered junction (W110). Mirror of W109.',
-  },
   {
     id: 'W111', name: 'Sharp junction (road splits)', code: 'W111', category: 'Warning',
     shape: 'triangle-red', signColor: 'yellow-black',
@@ -2169,17 +2103,6 @@ export const ROAD_SIGNS = [
     options: ['Steep descent', 'Steep ascent', 'Slippery road', 'Uneven road'],
     confusableWith: ['W323', 'W324'],
     mnemonic: 'Downhill slope in the triangle = steep descent. Gear down before, not during.',
-  },
-  {
-    id: 'W512', name: 'Arrestor bed ahead', code: 'W512', category: 'Warning',
-    shape: 'triangle-red', signColor: 'yellow-black',
-    img: 'w512-arrestor-bed.jpg',
-    meaning: 'An arrestor bed (deep gravel bed designed to stop runaway trucks) is located ahead on the right/left.',
-    action: 'For runaway vehicles: steer into the arrestor bed — it is your only safe option. For normal vehicles: do not enter.',
-    hint: 'White triangle with arrow showing a vehicle diverting into a side bed',
-    options: ['Arrestor bed ahead', 'Escape road ahead', 'Gravel road begins', 'Emergency stopping lane'],
-    confusableWith: ['W511', 'W510', 'W313'],
-    mnemonic: 'Arrestor bed = deep gravel that physically stops a runaway vehicle. Different to escape road (W510) — this is a pit.',
   },
 
   // ═══════════════════════════════════════════════════════════
