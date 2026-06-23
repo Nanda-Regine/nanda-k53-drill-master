@@ -35,7 +35,7 @@ function buildTheme(size = 'medium') {
 
     // Text
     text:        '#eeeef5',
-    dim:         '#6b6b82',
+    dim:         '#9499b0', // lifted from #6b6b82 to pass WCAG AA (~6:1 on bg) for small text
 
     // Typography — Inter for modern SaaS feel
     font:        "'Inter','Segoe UI',system-ui,sans-serif",
