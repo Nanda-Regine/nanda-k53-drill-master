@@ -16,3 +16,5 @@ memory/
 # sign-audit scratch
 *_imgs.txt
 sartsm.txt
+
+pdf_extract/
