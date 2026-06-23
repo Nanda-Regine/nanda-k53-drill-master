@@ -574,3 +574,36 @@ Get the product launch-ready: marketing landing page, analytics stack, Google ve
 - PostHog tokens hardcoded in HTML (they are client-side public tokens, same as GTM)
 - PayFast/Resend/Arcjet/Sentry auth tokens kept server-side only, documented in env.example
 | Pricing | Free / R29 / R69 / R149 |
+
+---
+
+## Phase E+ — Mobile, Content & Accuracy
+**2026-06-23 (full-day session)**
+
+### Mobile: Capacitor (not Expo)
+- Chose **Capacitor** to wrap the existing Vite/PWA build for the app stores instead of a React Native/Expo rewrite (~95% UI rewrite avoided). Added `android/` project + 7 native plugins.
+- **CI:** `.github/workflows/android.yml` builds a debug APK on every push (Node 22, JDK 21 — Capacitor 8 requires both). Signed-release AAB path gated on a keystore secret. Artifact `k53-debug-apk`.
+- `vite build --mode capacitor` strips the PWA service worker for the webview. `src/utils/runtime.js` = `isNative()/apiBase()/openCheckout()`.
+- **Native sign-in:** deep link `za.co.k53drillmaster://auth-callback` (PKCE), `src/utils/nativeAuth.js`; Supabase redirect allowlist set via Management API. (Not device-tested yet.)
+- **Store billing:** native build hides all in-app purchase UI (gated on `isNative()`) — premium unlocks for web-PayFast subscribers on sign-in. SA isn't in Google's external-links programme.
+
+### UX
+- Home reordered: "Today's session" hero first, radar below; de-duped weak-area cards.
+- WCAG-AA contrast (`theme.dim` → #9499b0); de-jargon (nav "Improve"; ExamIntro screen instead of launching a 64-Q test on tap).
+- Options normalised to exactly **4** app-wide (`quizHelpers`); pass mark **75%** (K53) across all games.
+
+### Signs
+- Dataset cleaned to ~212 correct signs (removed ~20 fabricated/duplicate, corrected ~11 mislabelled vs SARTSM). Added 34 reservation signs (R308–R335) + 9 temporary (TR) signs (filled the empty Temporary category).
+- **942-question multi-method bank**: `src/data/signQuestions.js` generates identify/meaning/action/classification questions from the dataset, gated by `src/data/signImageManifest.js` (only signs with real images → zero broken tiles). Quiz images enlarged to 210px.
+- 18 real signs still need artwork (filename→official-sign list in memory).
+
+### Accuracy audit (rules + controls) vs official DLTC docs
+Fixed ~19 wrong facts: following distance **2s** (LMV + motorcycle), hydrant **1.5m**, intersection **5m**, rear projection **1.8m**, red flag >**0.3m**, headlights **sunset–sunrise**, learner validity **24mo**, tyre tread **1mm** (not the EU 1.6mm), freeway **no min-speed**, signal **"in good time"**. Verified correct: turning radius 13.1m, helmet <14, beam 45/100/150m, hooter 90m, BAC 0.05/0.02.
+
+### Bug fix — "tests stuck on Q1"
+8 quiz/drill games called the sound helper as an object (`sfx.correct()`) but it's a function (`sfx(type)`) — the TypeError crashed the answer handler so questions never advanced. Fixed 38 calls across 12 files.
+
+### Pending (resume next session)
+1. Add more **verified** questions for each category (from the DLTC docs).
+2. Wire artwork for the 18 remaining signs.
+3. Device-test native sign-in.
