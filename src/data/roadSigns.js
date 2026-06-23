@@ -1734,17 +1734,6 @@ export const ROAD_SIGNS = [
     mnemonic: 'Blue command + TAXI = exclusive taxi lane. Similar to bus lanes but for taxis.',
   },
   {
-    id: 'R119', name: 'Motorcars only', code: 'R119', category: 'Command',
-    shape: 'circle-blue', signColor: 'blue-white',
-    img: 'r119-motorcars-only.jpg',
-    meaning: 'This road is restricted to motorcars (light motor vehicles) only.',
-    action: 'Only motorcars may use this road. Motorcycles, heavy vehicles, and other vehicle types must not enter.',
-    hint: 'Blue circle with motorcar silhouette (different to R117 variant)',
-    options: ['Motorcars only', 'Motor vehicles only', 'Light motor vehicles only', 'Motorcars and motorcycles only'],
-    confusableWith: ['R117', 'R116'],
-    mnemonic: 'Blue command + car silhouette = cars only. Check plate number — similar to R117 but different context.',
-  },
-  {
     id: 'R128', name: 'End of speed limit', code: 'R128', category: 'Command',
     shape: 'circle-blue', signColor: 'blue-white',
     img: 'r128-end-of-speed-limit.jpg',
