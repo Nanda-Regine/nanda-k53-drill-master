@@ -496,12 +496,6 @@ export default function App() {
 
       <main style={{ padding: '16px 16px 0' }}>
 
-        {/* ── Nervous System Panel ─────────────────────────────────────────────── */}
-        <NervesPanel
-          refreshKey={refreshKey}
-          onPlay={(gameId) => handleGameSelect(GAMES.find(g => g.id === gameId) || { id: gameId, tier: 'free' })}
-        />
-
         {/* ── Hero: one primary action ─────────────────────────────────────────── */}
         <motion.div whileTap={{ scale: 0.98 }}
           onClick={() => handleGameSelect(GAMES.find(g => g.id === 'daily_diag') || { id: 'daily_diag', tier: 'free' })}
@@ -548,6 +542,12 @@ export default function App() {
             )}
           </div>
         )}
+
+        {/* ── Nervous System Panel ─────────────────────────────────────────────── */}
+        <NervesPanel
+          refreshKey={refreshKey}
+          onPlay={(gameId) => handleGameSelect(GAMES.find(g => g.id === gameId) || { id: gameId, tier: 'free' })}
+        />
 
         {/* ── Code picker ──────────────────────────────────────────────────────── */}
         <div style={{ overflowX: 'auto', display: 'flex', gap: 8, paddingBottom: 2, marginBottom: 14, scrollbarWidth: 'none' }}>

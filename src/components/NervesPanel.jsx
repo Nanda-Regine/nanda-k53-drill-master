@@ -2,8 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { T } from '../theme.js';
 import {
-  getNerveMastery, getLevel, getSystemHealth, getWeakNerves,
-  getDailyStreak, NERVES, LEVELS, GAME_NERVE,
+  getNerveMastery, getLevel, getSystemHealth, NERVES,
 } from '../utils/masteryStore.js';
 
 // ── Radar geometry ─────────────────────────────────────────────────────────────
@@ -151,16 +150,12 @@ export default function NervesPanel({ onPlay, refreshKey }) {
   const [nerves,  setNerves]  = useState(() => getNerveMastery());
   const [levelD,  setLevelD]  = useState(() => getLevel());
   const [sysH,    setSysH]    = useState(() => getSystemHealth());
-  const [weakN,   setWeakN]   = useState(() => getWeakNerves(2));
-  const [streak,  setStreak]  = useState(() => getDailyStreak());
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     setNerves(getNerveMastery());
     setLevelD(getLevel());
     setSysH(getSystemHealth());
-    setWeakN(getWeakNerves(2));
-    setStreak(getDailyStreak());
   }, [refreshKey]);
 
   const isDormant = nerves.every(n => n.answered === 0);
@@ -234,60 +229,6 @@ export default function NervesPanel({ onPlay, refreshKey }) {
           </div>
         </div>
       </div>
-
-      {/* Daily pulse / weak nerve CTAs */}
-      {!isDormant && weakN.length > 0 && (
-        <div style={{ padding: '10px 16px 14px', borderTop: '1px solid rgba(255,255,255,0.04)', marginTop: 8 }}>
-          <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.3)', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 8 }}>
-            Daily Nerve Check
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            {weakN.map(nerve => (
-              <motion.button
-                key={nerve.id}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => onPlay?.(NERVE_GAME[nerve.id])}
-                style={{
-                  flex: 1,
-                  background: `${nerve.color}12`,
-                  border: `1px solid ${nerve.color}30`,
-                  borderRadius: 12,
-                  padding: '10px 8px',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  fontFamily: 'system-ui,sans-serif',
-                }}
-              >
-                <div style={{ fontSize: 9, fontWeight: 700, color: nerve.color, letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 3 }}>
-                  {nerve.short} — {nerve.score}%
-                </div>
-                <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.4)', lineHeight: 1.4 }}>
-                  {nerve.decaying ? '⚠ Fading — play now' : nerve.score < 50 ? 'Needs work' : 'Keep it strong'}
-                </div>
-                <div style={{ marginTop: 6, fontSize: 8, fontWeight: 700, color: nerve.color, opacity: 0.8 }}>
-                  Train →
-                </div>
-              </motion.button>
-            ))}
-
-            {/* Streak pill */}
-            {streak > 0 && (
-              <div style={{
-                background: 'rgba(255,182,18,0.08)',
-                border: '1px solid rgba(255,182,18,0.2)',
-                borderRadius: 12,
-                padding: '10px 8px',
-                textAlign: 'center',
-                minWidth: 48,
-              }}>
-                <div style={{ fontSize: 18, lineHeight: 1 }}>🔥</div>
-                <div style={{ fontSize: 11, fontWeight: 800, color: '#FFB612', marginTop: 4 }}>{streak}</div>
-                <div style={{ fontSize: 7, color: 'rgba(255,255,255,0.3)', marginTop: 1 }}>DAYS</div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Dormant CTA */}
       {isDormant && (
