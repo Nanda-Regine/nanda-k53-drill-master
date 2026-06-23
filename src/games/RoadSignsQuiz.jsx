@@ -288,7 +288,7 @@ const QUESTIONS = [
   { id:"w07", category:"warning", img:"left-side-road-junction-ahead.jpg",
     question:"A T-junction with the branch on the left warns of?",
     options:["Left turn mandatory","A side road joining from the left ahead","Left lane closes","Road bends left"],
-    answer:0, explanation:"This sign warns of a side road entering from the left. Watch for vehicles joining or crossing from that direction." },
+    answer:1, explanation:"This sign warns of a side road entering from the left. Watch for vehicles joining or crossing from that direction." },
 
   { id:"w08", category:"warning", img:"right-side-road-junction-ahead.jpg",
     question:"A T-junction with the branch on the right warns of?",
