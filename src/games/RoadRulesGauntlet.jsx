@@ -18,7 +18,7 @@ const ROUNDS = [
       { q: 'What is the general speed limit on a public road in a built-up area?', options: ['40 km/h','60 km/h','80 km/h','100 km/h'], answer: 1 },
       { q: 'What is the general speed limit on a freeway?', options: ['100 km/h','110 km/h','120 km/h','140 km/h'], answer: 2 },
       { q: 'What is the minimum following distance you should maintain behind the vehicle in front in a light motor vehicle?', options: ['1 second','2 seconds','3 seconds','4 seconds'], answer: 1 },
-      { q: 'At 60 km/h, what is the typical stopping distance on a dry road?', options: ['18 m','36 m','54 m','72 m'], answer: 2 },
+      { q: 'What is the general speed limit on a public road outside an urban area (not a freeway)?', options: ['80 km/h','100 km/h','120 km/h','60 km/h'], answer: 1 },
       { q: 'Which factor most increases stopping distance?', options: ['Bright sunshine','Wet road surface','Engine braking','Good tyres'], answer: 1 },
     ],
   },
@@ -49,7 +49,7 @@ const ROUNDS = [
     id: 4, title: 'Signals & Lights', icon: '💡',
     questions: [
       { q: 'When should you use your hazard lights?', options: ['When double-parking','When your vehicle is a hazard to others (breakdown, emergency stop)','Any time it is raining','When you are lost'], answer: 1 },
-      { q: 'You must use headlights from:', options: ['30 minutes after sunset to 30 minutes before sunrise','One hour after sunset','When it is dark only','Sunset to sunrise'], answer: 0 },
+      { q: 'You must switch your headlights on:', options: ['30 minutes after sunset only','One hour after sunset','When it is fully dark only','Between sunset and sunrise (and whenever persons/vehicles are not visible at 150 m)'], answer: 3 },
       { q: 'Flashing high-beam lights from an oncoming vehicle usually means:', options: ['You should speed up','There is a hazard or obstacle ahead','The driver is angry','Your lights are too bright'], answer: 1 },
       { q: 'Before changing lanes you should:', options: ['Hoot and change quickly','Check mirrors, signal, check blind spot, then change','Signal and immediately change','Change and then signal'], answer: 1 },
       { q: 'Amber traffic light means:', options: ['Speed up to clear the intersection','Stop if you can do so safely','Yield to pedestrians only','Always stop'], answer: 1 },
@@ -83,7 +83,7 @@ const ROUNDS = [
     questions: [
       { q: 'Pedestrians should walk on which side of the road when there is no pavement?', options: ['Right side facing oncoming traffic','Left side with traffic','Either side','The centre'], answer: 0 },
       { q: 'When must you yield to a pedestrian at a marked crossing?', options: ['Only when the pedestrian has a green man signal','Whenever a pedestrian is in the crossing','Only at night','Only in school zones'], answer: 1 },
-      { q: 'When passing a cyclist you should leave at least:', options: ['0.5 m','1 m','1.5 m','3 m'], answer: 2 },
+      { q: 'When overtaking a pedal cyclist, you should:', options: ['Pass as close as possible to save time','Slow down and allow a wide, safe gap before passing','Hoot continuously to warn them','Maintain full speed past them'], answer: 1 },
       { q: 'A driver must NOT park within how many metres of a pedestrian crossing?', options: ['3 m','5 m','9 m','15 m'], answer: 2 },
       { q: 'Children playing near the road require you to:', options: ['Hoot and continue at the same speed','Reduce speed and be prepared to stop','Speed up to pass quickly','Use high beams'], answer: 1 },
     ],
@@ -137,7 +137,7 @@ const ROUNDS = [
     id: 12, title: 'Motorways & Freeways', icon: '🛣️',
     questions: [
       { q: 'On a freeway, the right lane is for:', options: ['Slow vehicles','Overtaking only — not continuous travel','Heavy vehicles','Emergency vehicles'], answer: 1 },
-      { q: 'The minimum speed limit on a South African freeway is:', options: ['40 km/h','60 km/h','80 km/h','There is no minimum'], answer: 1 },
+      { q: 'Regarding a minimum speed limit on a South African freeway:', options: ['It is 40 km/h','It is 60 km/h','It is 80 km/h','There is no posted minimum speed limit, but you may not obstruct traffic by driving too slowly'], answer: 3 },
       { q: 'You may reverse on a freeway:', options: ['Only in an emergency','Never','If you missed your exit','Only to help a broken-down vehicle'], answer: 1 },
       { q: 'On a freeway, you must NOT stop except:', options: ['To take a phone call','At designated rest areas or in a genuine emergency','When you are tired','To ask for directions'], answer: 1 },
       { q: 'When leaving a freeway, you should reduce speed:', options: ['On the freeway before the exit','After turning into the off-ramp','Only on the off-ramp','Well before the exit ramp'], answer: 2 },
@@ -173,8 +173,8 @@ const ROUNDS = [
     id: 15, title: 'Load Securing', icon: '📦',
     questions: [
       { q: 'The driver is responsible for ensuring the load is:', options: ['Simply covered with a tarpaulin','Properly secured so it cannot shift or fall','Placed as high as possible','Loaded by the consignor only'], answer: 1 },
-      { q: 'The maximum overhang of a load at the rear of a vehicle in South Africa is:', options: ['1 m','1.5 m','3 m','4 m'], answer: 1 },
-      { q: 'A red flag or light is required when a load overhangs by more than:', options: ['0.3 m','0.5 m','1 m','1.5 m'], answer: 2 },
+      { q: 'The maximum a load may project beyond the rear end of a light or heavy motor vehicle is:', options: ['1.5 m','1.8 m','3 m','4 m'], answer: 1 },
+      { q: 'A red flag (day) or red reflector (night) is required when a load projects to the rear by more than:', options: ['0.3 m','0.5 m','1 m','1.5 m'], answer: 0 },
       { q: 'The centre of gravity of a loaded vehicle affects:', options: ['Only fuel consumption','Stability, cornering and rollover risk','Engine temperature','Tyre wear only'], answer: 1 },
       { q: 'Lashing straps must be rated to at least what percentage of the load\'s weight?', options: ['25%','50%','75%','100%'], answer: 3 },
     ],
@@ -184,13 +184,13 @@ const ROUNDS = [
   {
     id: 16, title: 'Licence & Documentation', icon: '📋',
     questions: [
-      { q: 'A South African learner\'s licence is valid for how long?', options: ['12 months','18 months','24 months','36 months'], answer: 3 },
+      { q: 'A South African learner\'s licence is valid for how long?', options: ['12 months','18 months','24 months','36 months'], answer: 2 },
       { q: 'You hold a learner\'s licence. A licensed supervisor must sit where?', options: ['In the back seat','In the front passenger seat','Anywhere in the vehicle','They may follow in another car'], answer: 1 },
       { q: 'Your driving licence must be renewed every:', options: ['2 years','3 years','5 years','10 years'], answer: 2 },
       { q: 'When must you carry your driving licence while driving?', options: ['Only on long trips','At all times while driving','Only when travelling between provinces','Only if under 25'], answer: 1 },
       { q: 'If your driving licence is suspended, you may:', options: ['Continue driving to work only','Not drive any motor vehicle on a public road','Drive only during daylight hours','Drive with a supervisor only'], answer: 1 },
       { q: 'A Code B licence allows you to drive vehicles with a gross vehicle mass of up to:', options: ['1 750 kg','2 500 kg','3 500 kg','5 000 kg'], answer: 2 },
-      { q: 'You must be at least how old to apply for a Code B learner\'s licence?', options: ['16','17','18','21'], answer: 1 },
+      { q: 'You must be at least how old to apply for a Code 2 (light motor vehicle) learner\'s licence?', options: ['16','17','18','21'], answer: 1 },
     ],
   },
 
@@ -216,7 +216,7 @@ const ROUNDS = [
       { q: 'At a traffic circle without road markings, you must:', options: ['Give way to traffic on your right already in the circle','Give way to traffic on your left','Go straight through as a priority road','Always stop and check before proceeding'], answer: 0 },
       { q: 'When may you turn left at a red traffic light in South Africa?', options: ['Always, after stopping','Only if a "left turn allowed" sign or marking is present','Never','Only between 10pm and 5am'], answer: 1 },
       { q: 'Before turning left, you should check your mirrors and:', options: ['Check the blind spot to the left for cyclists','Check the blind spot to the right','Signal right first then signal left','No additional check is needed if mirrors are clear'], answer: 0 },
-      { q: 'How far before a turn must you signal your intention?', options: ['Immediately before turning','At least 30 m before turning in an urban area','Only in heavy traffic','At least 100 m before turning'], answer: 1 },
+      { q: 'When must you signal your intention to turn?', options: ['Immediately before turning','In good time, so other road users can clearly see your intention','Only in heavy traffic','Only when other vehicles are nearby'], answer: 1 },
       { q: 'When completing a right turn, you should end up in:', options: ['The left lane of the new road','The right lane of the new road (lane nearest the centre line)','Any available lane','The lane directly across from your starting position'], answer: 1 },
     ],
   },
