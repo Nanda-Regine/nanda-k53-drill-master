@@ -1001,10 +1001,10 @@ export default function UltimateGauntlet({ onBack, onPass }) {
   if (screen === "result") {
     const finalTotal = isExamMode ? examQuestions.length : (currentTest?.questions.length || 10);
     const pct = Math.round((score / finalTotal) * 100);
-    const passed = isExamMode ? pct >= 77 : score >= PASS_SCORE;
+    const passed = isExamMode ? pct >= 75 : score >= PASS_SCORE;
     if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
     const waText = isExamMode
-      ? `🏆 K53 Hybrid Exam: ${score}/${finalTotal} (${pct}%) ${passed ? "ABOVE 77% — READY ✅" : "Need more drilling 📚"} — https://k53drillmaster.co.za`
+      ? `🏆 K53 Hybrid Exam: ${score}/${finalTotal} (${pct}%) ${passed ? "ABOVE 75% — READY ✅" : "Need more drilling 📚"} — https://k53drillmaster.co.za`
       : `🚗 K53 Hybrid Round ${currentTest?.id}: ${score}/${finalTotal} (${pct}%) ${passed ? "✅" : "📚"} — https://k53drillmaster.co.za`;
     const waLink = `https://wa.me/?text=${encodeURIComponent(waText)}`;
     return (
@@ -1024,8 +1024,8 @@ export default function UltimateGauntlet({ onBack, onPass }) {
             <div style={{ color: passed ? "#007A4D" : "#DE3831", fontSize: 28, fontWeight: 900, marginBottom: 12 }}>{pct}%</div>
             <div style={{ color: "#6b6b82", fontSize: 13 }}>
               {passed
-                ? isExamMode ? "🏆 Above 77%. You are READY. Go ace that test tomorrow." : "Round passed. Solid."
-                : isExamMode ? `Need 77% on the day. You got ${pct}%. Drill your wrong answers then sleep.` : `Need ${PASS_SCORE}/10. Review your mistakes below.`}
+                ? isExamMode ? "🏆 Above 75%. You are READY. Go ace that test tomorrow." : "Round passed. Solid."
+                : isExamMode ? `Need 75% on the day. You got ${pct}%. Drill your wrong answers then sleep.` : `Need ${PASS_SCORE}/10. Review your mistakes below.`}
             </div>
           </div>
 

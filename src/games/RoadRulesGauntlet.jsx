@@ -465,7 +465,7 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
 
   // ── Round Selection ────────────────────────────────────────────────────────
   if (screen === 'rounds') {
-    const totalPassed = ROUNDS.filter(r => (progress[r.id] || 0) >= 80).length;
+    const totalPassed = ROUNDS.filter(r => (progress[r.id] || 0) >= 75).length;
     return (
       <div style={{ minHeight: '100vh', background: T.surface, color: T.text, fontFamily: T.font, paddingBottom: 80 }}>
         <div style={{ background: '#1a1a2e', padding: '20px 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -478,7 +478,7 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
         <div style={{ padding: 20 }}>
           {ROUNDS.map(r => {
             const score = progress[r.id];
-            const passed = score >= 80;
+            const passed = score >= 75;
             return (
               <div key={r.id} onClick={() => startRound(r.id)}
                 style={{ background: T.surfaceAlt, border: `1px solid ${passed ? '#007A4D' : T.border}`, borderRadius: 12, padding: '14px 16px', marginBottom: 10, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}
@@ -510,7 +510,7 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
   if (screen === 'result') {
     const totalQ = questions.length;
     const pct = Math.round((correct / totalQ) * 100);
-    const passed = pct >= 80;
+    const passed = pct >= 75;
     if (passed && !passedFiredRef.current) { passedFiredRef.current = true; sfx('pass'); hapticPass(); onPass?.(); }
     const waText = `🚦 K53 Road Rules Round ${activeRound}: ${correct}/${totalQ} (${pct}%) ${passed ? '✅ PASSED' : '📚 Keep drilling'} — https://k53drillmaster.co.za`;
     const waLink = `https://wa.me/?text=${encodeURIComponent(waText)}`;
@@ -529,7 +529,7 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
             {correct}<span style={{ fontSize: 40, color: '#2a2a3a' }}>/{totalQ}</span>
           </div>
           <div style={{ fontSize: 28, fontWeight: 900, color: passed ? '#007A4D' : '#DE3831', marginBottom: 12 }}>{pct}%</div>
-          <div style={{ fontSize: 13, color: '#6b6b82' }}>{passed ? 'Round passed. Keep this momentum.' : 'Keep drilling — 80% to pass.'}</div>
+          <div style={{ fontSize: 13, color: '#6b6b82' }}>{passed ? 'Round passed. Keep this momentum.' : 'Keep drilling — 75% to pass.'}</div>
         </div>
         <a href={waLink} target="_blank" rel="noreferrer" style={{
           display: 'block', width: '100%', maxWidth: 320, padding: '13px', background: '#25D366', color: '#fff',

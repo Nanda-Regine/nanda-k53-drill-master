@@ -795,7 +795,7 @@ export default function MotorcycleGauntlet({ onBack, onPass }) {
   if (screen === "result") {
     const finalTotal = isExamMode ? examQuestions.length : (currentTest?.questions.length || 10);
     const pct = Math.round((score / finalTotal) * 100);
-    const passed = isExamMode ? pct >= 70 : score >= PASS_SCORE;
+    const passed = isExamMode ? pct >= 75 : score >= PASS_SCORE;
     if (passed && !passedFiredRef.current) { passedFiredRef.current = true; onPass?.(); }
 
     return (
@@ -814,7 +814,7 @@ export default function MotorcycleGauntlet({ onBack, onPass }) {
             </div>
             <div style={{ color: passed ? "#007A4D" : "#DE3831", fontSize: 28, fontWeight: 900, marginBottom: 12 }}>{pct}%</div>
             <div style={{ color: "#6b6b82", fontSize: 13 }}>
-              {passed ? (isExamMode ? "EXAM PASSED — Ride out and ace that test." : "Round passed. Keep this momentum.") : (isExamMode ? `Need 70% to pass — you got ${pct}%.` : `Need ${PASS_SCORE}/10 to pass. Keep drilling.`)}
+              {passed ? (isExamMode ? "EXAM PASSED — Ride out and ace that test." : "Round passed. Keep this momentum.") : (isExamMode ? `Need 75% to pass — you got ${pct}%.` : `Need ${PASS_SCORE}/10 to pass. Keep drilling.`)}
             </div>
           </div>
 
