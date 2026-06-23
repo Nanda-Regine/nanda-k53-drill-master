@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">K53 Drill Master</string>
+    <string name="title_activity_main">K53 Drill Master</string>
+    <string name="package_name">za.co.k53drillmaster</string>
+    <string name="custom_url_scheme">za.co.k53drillmaster</string>
+</resources>

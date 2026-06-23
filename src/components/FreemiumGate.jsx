@@ -1,4 +1,5 @@
 import { T } from "../theme.js";
+import { openCheckout } from "../utils/runtime.js";
 
 // ── FreemiumGate modal ────────────────────────────────────────────────────────
 // Props:
@@ -8,7 +9,7 @@ import { T } from "../theme.js";
 export default function FreemiumGate({ onClose, onUpgrade }) {
   const goCheckout = (plan) => {
     if (onUpgrade) { onUpgrade(); return; }
-    window.location.href = `/api/checkout?plan=${plan}`;
+    openCheckout(plan);
   };
 
   return (

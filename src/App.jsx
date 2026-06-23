@@ -57,6 +57,7 @@ import NervesPanel       from './components/NervesPanel.jsx';
 import { recordStudyDay, getStreak } from './utils/streakTracker.js';
 import { getWeakNerves } from './utils/masteryStore.js';
 import { supabase } from './supabase.js';
+import { apiBase, openCheckout } from './utils/runtime.js';
 import {
   getTier, getRemainingToday, hasPDPAccess, TIER_LABELS, activateTier, TIERS,
   storePremiumToken, isInFreeTrial, daysLeftInTrial,
@@ -323,7 +324,7 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     const unlock = params.get('unlock');
     if (unlock) {
-      fetch(`/api/verify?token=${unlock}`).then(r => r.json()).then(d => {
+      fetch(`${apiBase()}/api/verify?token=${unlock}`).then(r => r.json()).then(d => {
         if (d.ok) { storePremiumToken(d.plan, d.expires_at); refreshTier(); setShowAuth(true); }
       }).catch(() => {});
       window.history.replaceState({}, '', '/');
@@ -591,7 +592,7 @@ export default function App() {
         )}
 
         {/* ── Pricing strip ─────────────────────────────────────────────────────── */}
-        {(tier === TIERS.FREE && !inTrial) && <PricingStrip T={T} onPlanSelect={(t) => { window.location.href = `/api/checkout?plan=${t}`; }} />}
+        {(tier === TIERS.FREE && !inTrial) && <PricingStrip T={T} onPlanSelect={(t) => openCheckout(t)} />}
 
         {/* ── Trial upgrade nudge ───────────────────────────────────────────────── */}
         {inTrial && (
@@ -648,7 +649,7 @@ export default function App() {
           </div>
           {PLANS.map(plan => (
             <motion.div key={plan.tier} whileTap={{ scale: 0.97 }}
-              onClick={() => { window.location.href = `/api/checkout?plan=${plan.tier}`; }}
+              onClick={() => openCheckout(plan.tier)}
               style={{
                 background: plan.highlight ? 'linear-gradient(135deg,#007A4D,#005a38)' : T.surfaceAlt,
                 border: `1px solid ${plan.highlight ? '#007A4D88' : T.border}`,
@@ -670,7 +671,7 @@ export default function App() {
             </motion.div>
           ))}
           <motion.div whileTap={{ scale: 0.97 }}
-            onClick={() => { window.location.href = `/api/checkout?plan=${TIERS.LIFETIME_PDP}`; }}
+            onClick={() => openCheckout(TIERS.LIFETIME_PDP)}
             style={{ background: 'linear-gradient(135deg,#1a0d40,#0d1a40)', border: '1px solid rgba(108,71,255,0.4)', borderRadius: T.radiusLg, padding: '16px', marginBottom: 10, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14 }}>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, fontSize: T.fontSizeLg, color: '#fff' }}>Lifetime + PDP Prep 🎓</div>

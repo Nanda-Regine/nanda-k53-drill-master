@@ -1,0 +1,21 @@
+{
+  "appId": "za.co.k53drillmaster",
+  "appName": "K53 Drill Master",
+  "webDir": "dist",
+  "backgroundColor": "#0a0a0f",
+  "android": {
+    "backgroundColor": "#0a0a0f"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "backgroundColor": "#0a0a0f",
+      "showSpinner": false,
+      "androidScaleType": "CENTER_CROP"
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#0a0a0f"
+    }
+  }
+}

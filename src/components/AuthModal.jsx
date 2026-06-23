@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { T } from "../theme.js";
 import { supabase } from "../supabase.js";
+import { apiBase } from "../utils/runtime.js";
 
 // ── AuthModal ─────────────────────────────────────────────────────────────────
 // Props:
@@ -45,7 +46,7 @@ export default function AuthModal({ onClose, claimToken }) {
       // New subscriber — validate payment token, create Supabase account,
       // upsert subscriber row, and send invite/magic link, all in one call.
       try {
-        const res = await fetch("/api/claim", {
+        const res = await fetch(`${apiBase()}/api/claim`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: trimmed, claimToken }),

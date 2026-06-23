@@ -2,10 +2,14 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-export default defineConfig({
+// `vite build --mode capacitor` skips the PWA service worker so the native
+// webview doesn't fight workbox caching; the web build keeps the SW.
+export default defineConfig(({ mode }) => {
+  const isCapBuild = mode === 'capacitor';
+  return {
   plugins: [
     react(),
-    VitePWA({
+    !isCapBuild && VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["favicon.jpg", "favicon.svg", "apple-touch-icon.png"],
       manifest: {
@@ -39,7 +43,7 @@ export default defineConfig({
         ],
       },
     }),
-  ],
+  ].filter(Boolean),
   base: "./",
   build: {
     rollupOptions: {
@@ -53,4 +57,5 @@ export default defineConfig({
       },
     },
   },
+  };
 });
