@@ -12,3 +12,7 @@ memory/
 
 # Claude Code local settings (machine-specific)
 .claude/settings.local.json
+
+# sign-audit scratch
+*_imgs.txt
+sartsm.txt
