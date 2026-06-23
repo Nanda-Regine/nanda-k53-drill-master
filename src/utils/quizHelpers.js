@@ -9,6 +9,10 @@ function shuffleArr(arr) {
   return arr;
 }
 
+// Every prepared question is normalised to exactly this many options
+// (4 = standard K53 multiple-choice format).
+const MAX_OPTIONS = 4;
+
 /**
  * Prepare an index-based question for display.
  * - Picks one random distractor from pool (wrong answers of other questions).
@@ -21,25 +25,33 @@ function shuffleArr(arr) {
  */
 export function prepareQuestion(q, pool = []) {
   const correctText = q.options[q.answer];
-  const optionSet = new Set(q.options.map(o => o.trim().toLowerCase()));
+  let opts = [...q.options];
 
-  // Gather wrong-answer candidates from the pool
-  const candidates = [];
-  for (const pq of pool) {
-    if (pq === q || pq.id === q.id) continue;
-    for (let i = 0; i < (pq.options || []).length; i++) {
-      if (i !== pq.answer) {
-        const opt = pq.options[i];
-        if (!optionSet.has(opt.trim().toLowerCase())) {
-          candidates.push(opt);
+  // Trim down to 4, always keeping the correct answer.
+  if (opts.length > MAX_OPTIONS) {
+    const wrong = shuffleArr(opts.filter(o => o !== correctText));
+    opts = [correctText, ...wrong.slice(0, MAX_OPTIONS - 1)];
+  }
+
+  // Top up to 4 with distractors from other questions in the pool.
+  if (opts.length < MAX_OPTIONS) {
+    const optionSet = new Set(opts.map(o => o.trim().toLowerCase()));
+    const candidates = [];
+    for (const pq of pool) {
+      if (pq === q || pq.id === q.id) continue;
+      for (let i = 0; i < (pq.options || []).length; i++) {
+        if (i !== pq.answer) {
+          const opt = pq.options[i];
+          if (!optionSet.has(opt.trim().toLowerCase())) candidates.push(opt);
         }
       }
     }
-  }
-
-  const opts = [...q.options];
-  if (candidates.length > 0) {
-    opts.push(candidates[Math.floor(Math.random() * candidates.length)]);
+    shuffleArr(candidates);
+    for (const c of candidates) {
+      if (opts.length >= MAX_OPTIONS) break;
+      const key = c.trim().toLowerCase();
+      if (!optionSet.has(key)) { opts.push(c); optionSet.add(key); }
+    }
   }
 
   shuffleArr(opts);
@@ -64,21 +76,30 @@ export function prepareAll(questions) {
  * @param {Array}  pool - other string-based questions for distractors
  */
 export function prepareQuestionStr(q, pool = []) {
-  const optionSet = new Set(q.options.map(o => o.trim().toLowerCase()));
+  let opts = [...q.options];
 
-  const candidates = [];
-  for (const pq of pool) {
-    if (pq === q) continue;
-    for (const opt of (pq.options || [])) {
-      if (opt !== pq.correct && !optionSet.has(opt.trim().toLowerCase())) {
-        candidates.push(opt);
-      }
-    }
+  // Trim down to 4, always keeping the correct answer.
+  if (opts.length > MAX_OPTIONS) {
+    const wrong = shuffleArr(opts.filter(o => o !== q.correct));
+    opts = [q.correct, ...wrong.slice(0, MAX_OPTIONS - 1)];
   }
 
-  const opts = [...q.options];
-  if (candidates.length > 0) {
-    opts.push(candidates[Math.floor(Math.random() * candidates.length)]);
+  // Top up to 4 with distractors from the pool.
+  if (opts.length < MAX_OPTIONS) {
+    const optionSet = new Set(opts.map(o => o.trim().toLowerCase()));
+    const candidates = [];
+    for (const pq of pool) {
+      if (pq === q) continue;
+      for (const opt of (pq.options || [])) {
+        if (opt !== pq.correct && !optionSet.has(opt.trim().toLowerCase())) candidates.push(opt);
+      }
+    }
+    shuffleArr(candidates);
+    for (const c of candidates) {
+      if (opts.length >= MAX_OPTIONS) break;
+      const key = c.trim().toLowerCase();
+      if (!optionSet.has(key)) { opts.push(c); optionSet.add(key); }
+    }
   }
 
   shuffleArr(opts);

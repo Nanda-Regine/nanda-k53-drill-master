@@ -1011,7 +1011,7 @@ function QuizEngine({ questions, onFinish, timed }) {
 
 function ResultScreen({ score, total, wrongAnswers = [], onRetry, onHome }) {
   const pct = Math.round((score / total) * 100);
-  const passed = pct >= 70;
+  const passed = pct >= 75;
   return (
     <div style={{ maxWidth: 500, margin: "0 auto", padding: "40px 16px" }}>
       <div style={{ textAlign: "center", marginBottom: 32 }}>
@@ -1020,7 +1020,7 @@ function ResultScreen({ score, total, wrongAnswers = [], onRetry, onHome }) {
         </div>
         <div style={{ fontSize: 72, fontWeight: 700, color: passed ? T.green : T.red, fontFamily: T.mono, marginBottom: 8, lineHeight: 1 }}>{pct}%</div>
         <div style={{ color: T.text, fontSize: 20, fontWeight: 700, marginBottom: 8, fontFamily: T.font }}>{score} / {total} correct</div>
-        <div style={{ color: T.dim, fontSize: 14, marginBottom: 28, fontFamily: T.font }}>{passed ? "Well done — you passed!" : "Keep practising — aim for 70%+"}</div>
+        <div style={{ color: T.dim, fontSize: 14, marginBottom: 28, fontFamily: T.font }}>{passed ? "Well done — you passed!" : "Keep practising — aim for 75%+"}</div>
         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
           <button onClick={onRetry} style={{ padding: "14px 28px", background: T.gold, border: "none", borderRadius: 6, cursor: "pointer", color: "#000", fontSize: 15, fontWeight: 700, fontFamily: T.font }}>Try Again</button>
           <button onClick={onHome} style={{ padding: "14px 28px", background: T.surface, border: `2px solid ${T.border}`, borderRadius: 6, cursor: "pointer", color: T.text, fontSize: 15, fontFamily: T.font }}>← Home</button>
@@ -1099,7 +1099,7 @@ function HomeScreen({ onStart }) {
       <div style={{ background: T.surface, border: `2px solid ${T.gold}`, borderRadius: 8, padding: "22px 20px", marginBottom: 14 }}>
         <div style={{ color: T.gold, fontSize: 11, letterSpacing: 3, fontFamily: T.mono, textTransform: "uppercase", marginBottom: 8 }}>EXAM MODE</div>
         <div style={{ color: T.text, fontSize: 18, fontWeight: 700, marginBottom: 6, fontFamily: T.font }}>All Signs — Mixed Quiz</div>
-        <div style={{ color: T.dim, fontSize: 14, lineHeight: 1.6, marginBottom: 16, fontFamily: T.font }}>{QUESTIONS.length}-question bank across all categories &amp; testing styles. 40 random questions per round. Pass mark: 70%.</div>
+        <div style={{ color: T.dim, fontSize: 14, lineHeight: 1.6, marginBottom: 16, fontFamily: T.font }}>{QUESTIONS.length}-question bank across all categories &amp; testing styles. 40 random questions per round. Pass mark: 75%.</div>
         <div style={{ display: "flex", gap: 10 }}>
           <button onClick={() => onStart("exam", null, false)} style={{ padding: "10px 22px", background: T.gold, border: "none", borderRadius: 5, cursor: "pointer", color: "#000", fontSize: 14, fontWeight: 700, fontFamily: T.font }}>Start Quiz</button>
           <button onClick={() => onStart("exam", null, true)} style={{ padding: "10px 22px", background: T.surface, border: `2px solid ${T.gold}`, borderRadius: 5, cursor: "pointer", color: T.gold, fontSize: 14, fontFamily: T.font }}>⏱ Timed (30s)</button>
@@ -1156,7 +1156,7 @@ export default function RoadSignsQuiz({ onBack, onPass }) {
   function handleFinish(score, wrongAnswers = []) {
     setFinalScore(score);
     setFinalWrongAnswers(wrongAnswers);
-    if (Math.round((score / activeQuestions.length) * 100) >= 70 && onPass) onPass();
+    if (Math.round((score / activeQuestions.length) * 100) >= 75 && onPass) onPass();
     setScreen("result");
   }
 
