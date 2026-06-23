@@ -164,7 +164,7 @@ export default function DLTCTips({ onBack }) {
 
   const handleUpvote = useCallback(async (tipId) => {
     if (upvoted[tipId]) return;
-    sfx.click();
+    sfx('click');
     const newUpvoted = { ...upvoted, [tipId]: true };
     setUpvoted(newUpvoted);
     try { localStorage.setItem('k53_upvoted_tips', JSON.stringify(newUpvoted)); } catch {}
@@ -179,7 +179,7 @@ export default function DLTCTips({ onBack }) {
     }
     const { data, error } = await supabase.from('dltc_tips').insert({ ...tipData, user_id: userId }).select('id,province,city,dltc_name,tip_text,upvotes,verified,created_at').single();
     if (error) throw new Error(error.message);
-    sfx.success();
+    sfx('pass');
     setTips(prev => [data, ...prev]);
     setShowSubmit(false);
   }, [supabase, userId]);

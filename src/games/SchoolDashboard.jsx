@@ -82,7 +82,7 @@ function JoinSchoolScreen({ onJoined, supabase, userId }) {
         .upsert({ school_id: school.id, user_id: userId, joined_at: new Date().toISOString() }, { onConflict: 'school_id,user_id' });
       if (enrollErr) throw enrollErr;
 
-      sfx.success();
+      sfx('pass');
       setSuccess(true);
       setTimeout(() => onJoined(school), 1200);
     } catch (e) {
@@ -150,7 +150,7 @@ function CreateSchoolForm({ onCreated, supabase, userId }) {
         .select('id,name,join_code,province')
         .single();
       if (error) throw error;
-      sfx.success();
+      sfx('pass');
       onCreated(data);
     } catch (e) {
       setErr(e.message || 'Could not create school');
@@ -271,7 +271,7 @@ export default function SchoolDashboard({ onBack }) {
   }, [screen, role]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const copyCode = () => {
-    sfx.click();
+    sfx('click');
     navigator.clipboard?.writeText(school?.join_code || '').catch(() => {});
   };
 

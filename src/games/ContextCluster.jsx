@@ -124,8 +124,8 @@ export default function ContextCluster({ onBack }) {
     if (chosen !== null) return;
     setChosen(optIdx);
     const correct = optIdx === question.ans;
-    if (correct) { sfx.correct(); hapticCorrect(); }
-    else         { sfx.wrong(); hapticWrong(); }
+    if (correct) { sfx('correct'); hapticCorrect(); }
+    else         { sfx('wrong'); hapticWrong(); }
 
     recordAnswer(question.nerve, `ctx-${cluster.id}-q${qIdx}`, correct);
     const newResults = [...results, correct];
@@ -135,7 +135,7 @@ export default function ContextCluster({ onBack }) {
     setTimeout(() => {
       if (!isMounted.current) return;
       if (qIdx + 1 >= cluster.questions.length) {
-        sfx.success();
+        sfx('pass');
         hapticPass();
         setScreen('cluster-result');
       } else {

@@ -119,14 +119,14 @@ export default function DailyDiagnostic({ onBack }) {
     if (chosen !== null) return;
     setChosen(optIdx);
     const correct = optIdx === q.ans;
-    if (correct) { sfx.correct(); hapticCorrect(); setScore(s => s + 1); }
-    else         { sfx.wrong(); hapticWrong(); }
+    if (correct) { sfx('correct'); hapticCorrect(); setScore(s => s + 1); }
+    else         { sfx('wrong'); hapticWrong(); }
     recordAnswer(q.nerve, `diag-${q.nerve}-${qIdx}`, correct);
 
     setTimeout(() => {
       if (!isMounted.current) return;
       if (qIdx + 1 >= questions.length) {
-        sfx.success(); hapticPass();
+        sfx('pass'); hapticPass();
         const finalScore = score + (correct ? 1 : 0);
         try {
           localStorage.setItem(TODAY_KEY, getTodayKey());

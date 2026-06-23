@@ -43,7 +43,7 @@ function Avatar({ name, score, isMe }) {
 function LobbyScreen({ roomCode, players, isHost, onStart, onLeave, myName }) {
   const copyCode = () => {
     navigator.clipboard?.writeText(roomCode).catch(() => {});
-    sfx.click();
+    sfx('click');
   };
   return (
     <div style={{ textAlign: 'center', padding: '40px 24px' }}>
@@ -120,8 +120,8 @@ function BattleQuestion({ q, qIdx, total, onAnswer, timeLeft, scores, myName }) 
     if (chosen) return;
     setChosen(opt);
     const correct = opt === q.answer;
-    if (correct) { sfx.correct(); hapticCorrect(); }
-    else { sfx.wrong(); hapticWrong(); }
+    if (correct) { sfx('correct'); hapticCorrect(); }
+    else { sfx('wrong'); hapticWrong(); }
     onAnswer(opt, correct);
   }, [chosen, q.answer, onAnswer]);
 
@@ -201,7 +201,7 @@ function ResultScreen({ scores, myName, onRematch, onLeave }) {
   const winner = sorted[0];
 
   useEffect(() => {
-    sfx.success();
+    sfx('pass');
     hapticPass();
   }, []);
 

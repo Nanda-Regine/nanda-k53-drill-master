@@ -139,13 +139,13 @@ export default function ConfusablesBattle({ onBack }) {
     if (chosen) return;
     setChosen(side);
     const correct = side === round.target;
-    if (correct) { sfx.correct(); hapticCorrect(); setScore(s => s + 1); }
-    else         { sfx.wrong(); hapticWrong(); }
+    if (correct) { sfx('correct'); hapticCorrect(); setScore(s => s + 1); }
+    else         { sfx('wrong'); hapticWrong(); }
 
     setTimeout(() => {
       if (!isMounted.current) return;
       if (qIdx + 1 >= ROUNDS) {
-        sfx.success(); hapticPass();
+        sfx('pass'); hapticPass();
         setScreen('done');
       } else {
         setQIdx(i => i + 1);

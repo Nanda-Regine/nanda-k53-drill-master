@@ -168,8 +168,8 @@ export default function WeeklyChallenge({ onBack }) {
     if (chosen) return;
     setChosen(opt);
     const correct = opt === challenge.questions[qIdx].answer;
-    if (correct) { sfx.correct(); hapticCorrect(); }
-    else { sfx.wrong(); hapticWrong(); }
+    if (correct) { sfx('correct'); hapticCorrect(); }
+    else { sfx('wrong'); hapticWrong(); }
     if (correct) setScore(s => s + 1);
 
     setTimeout(() => {
@@ -186,7 +186,7 @@ export default function WeeklyChallenge({ onBack }) {
   }, [chosen, challenge, qIdx, score, submitEntry]);
 
   const submitEntry = useCallback(async (finalScore, total) => {
-    sfx.success();
+    sfx('pass');
     hapticPass();
     setMyEntry({ rank: null, name: myName, score: finalScore, total, isMe: true });
     if (!supabase || !userId || !challenge?.id || challenge.id.startsWith('local_')) return;

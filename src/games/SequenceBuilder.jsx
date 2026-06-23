@@ -189,7 +189,7 @@ export default function SequenceBuilder({ onBack }) {
   const handleTap = useCallback((shuffleIdx) => {
     if (stepStates[shuffleIdx] !== 'idle') return;
     hapticTap();
-    sfx.click();
+    sfx('click');
     const newSelected = [...selected, shuffleIdx];
     const newStates = [...stepStates];
     newStates[shuffleIdx] = 'selected';
@@ -211,8 +211,8 @@ export default function SequenceBuilder({ onBack }) {
         });
         const seqScore = correct;
         const seqTotal = seq.steps.length;
-        if (correct === seqTotal) { sfx.success(); hapticPass(); }
-        else { sfx.wrong(); hapticWrong(); }
+        if (correct === seqTotal) { sfx('pass'); hapticPass(); }
+        else { sfx('wrong'); hapticWrong(); }
         setStepStates(revealStates);
         setTotalScore(s => s + seqScore);
         setTotalPossible(p => p + seqTotal);

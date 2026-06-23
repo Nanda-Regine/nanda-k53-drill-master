@@ -311,7 +311,7 @@ export default function PassWall({ onBack }) {
   const handleLike = useCallback(async (postId) => {
     const alreadyLiked = liked[postId];
     if (alreadyLiked) return; // no unlike
-    sfx.click();
+    sfx('click');
     hapticPass();
     const newLiked = { ...liked, [postId]: true };
     setLiked(newLiked);
@@ -326,7 +326,7 @@ export default function PassWall({ onBack }) {
       // Guest: prepend to local list only
       const newPost = { id: `local_${Date.now()}`, type, content, score, total, exam_type, likes: 0, created_at: new Date().toISOString() };
       setPosts(prev => [newPost, ...prev]);
-      sfx.success();
+      sfx('pass');
       hapticPass();
       return;
     }
@@ -336,7 +336,7 @@ export default function PassWall({ onBack }) {
       .select('id,type,content,score,total,exam_type,likes,created_at')
       .single();
     if (error) throw new Error(error.message);
-    sfx.success();
+    sfx('pass');
     hapticPass();
     setPosts(prev => [data, ...prev]);
     setShowCompose(false);

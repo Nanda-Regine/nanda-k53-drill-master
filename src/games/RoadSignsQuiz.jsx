@@ -8,7 +8,7 @@ import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong } from '../utils/haptics.js';
 import { GENERATED_SIGN_QUESTIONS } from '../data/signQuestions.js';
 
-function SignImg({ src, alt, size = 130 }) {
+function SignImg({ src, alt, size = 170 }) {
   return (
     <img
       src={`./signs/${src}`}
@@ -964,7 +964,7 @@ function QuizEngine({ questions, onFinish, timed }) {
       </div>
       <div style={{ background: T.surface, border: `2px solid ${T.border}`, borderRadius: 8, padding: "28px 20px", marginBottom: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
         <div style={{ color: accent, fontSize: 11, letterSpacing: 3, fontFamily: T.mono, textTransform: "uppercase" }}>{cat?.label}</div>
-        <SignImg src={q.img} alt={q.question} size={140} />
+        <SignImg src={q.img} alt={q.question} size={210} />
         <div style={{ color: T.text, fontSize: 17, fontWeight: 600, textAlign: "center", lineHeight: 1.5, fontFamily: T.font }}>{q.question}</div>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>

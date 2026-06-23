@@ -146,14 +146,14 @@ export default function WeakSpotTargeter({ onBack }) {
     if (chosen !== null) return;
     setChosen(optIdx);
     const correct = optIdx === q.ans;
-    if (correct) { sfx.correct(); hapticCorrect(); setScore(s => s + 1); }
-    else         { sfx.wrong(); hapticWrong(); }
+    if (correct) { sfx('correct'); hapticCorrect(); setScore(s => s + 1); }
+    else         { sfx('wrong'); hapticWrong(); }
     recordAnswer(nerveInfo.id, `wst-${nerveInfo.id}-q${qIdx}`, correct);
 
     setTimeout(() => {
       if (!isMounted.current) return;
       if (qIdx + 1 >= questions.length) {
-        sfx.success(); hapticPass();
+        sfx('pass'); hapticPass();
         setScreen('done');
       } else {
         setQIdx(i => i + 1);

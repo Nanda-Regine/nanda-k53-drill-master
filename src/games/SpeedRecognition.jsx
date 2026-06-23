@@ -90,14 +90,14 @@ export default function SpeedRecognition({ onBack }) {
     setChosen(choice);
     const round = rounds[qIdx];
     const correct = choice === round.card.question;
-    if (correct) { sfx.correct(); hapticCorrect(); setScore(s => s + 1); }
-    else         { sfx.wrong(); hapticWrong(); }
+    if (correct) { sfx('correct'); hapticCorrect(); setScore(s => s + 1); }
+    else         { sfx('wrong'); hapticWrong(); }
     setPhase('feedback');
 
     timerRef.current = setTimeout(() => {
       if (!isMounted.current) return;
       if (qIdx + 1 >= ROUNDS) {
-        sfx.success(); hapticPass();
+        sfx('pass'); hapticPass();
         setScreen('done');
       } else {
         setQIdx(i => i + 1);

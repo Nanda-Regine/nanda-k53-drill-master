@@ -222,7 +222,7 @@ export default function CommunityQA({ onBack }) {
 
   const handleVote = useCallback(async (id) => {
     if (voted[id]) return;
-    sfx.click();
+    sfx('click');
     const newVoted = { ...voted, [id]: true };
     setVoted(newVoted);
     try { localStorage.setItem('k53_qa_votes', JSON.stringify(newVoted)); } catch {}
@@ -233,7 +233,7 @@ export default function CommunityQA({ onBack }) {
     if (!supabase) {
       setItems(prev => prev.map(i => i.id === postId ? { ...i, answer: text, answered: true } : i));
       setAnswerTarget(null);
-      sfx.success();
+      sfx('pass');
       return;
     }
     if (!userId) throw new Error('Sign in to answer questions');
@@ -243,7 +243,7 @@ export default function CommunityQA({ onBack }) {
       .eq('id', postId)
       .eq('user_id', userId);
     if (error) throw new Error(error.message);
-    sfx.success();
+    sfx('pass');
     setItems(prev => prev.map(i => i.id === postId ? { ...i, answer: text, answered: true } : i));
     setAnswerTarget(null);
   }, [supabase, userId]);
@@ -260,10 +260,10 @@ export default function CommunityQA({ onBack }) {
           .select('id,content,votes,answered,created_at')
           .single();
         if (error) throw error;
-        sfx.success();
+        sfx('pass');
         setItems(prev => [{ id: data.id, question: data.content, answer: null, votes: 0, answered: false, created_at: data.created_at }, ...prev]);
       } else {
-        sfx.success();
+        sfx('pass');
         setItems(prev => [{ id: `local_${Date.now()}`, question: q, answer: null, votes: 0, answered: false, created_at: new Date().toISOString() }, ...prev]);
       }
       setAskText('');

@@ -23,3 +23,5 @@ pdf_extract/
 rules.txt
 controls.txt
 _audit.cjs
+_sweep.mjs
+_diag.mjs
