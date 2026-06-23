@@ -2617,6 +2617,33 @@ export const ROAD_SIGNS = [
     confusableWith: ['R334', 'R332'],
     mnemonic: '"Begins" = the start of the all-bus reserved lane.',
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // WARNING — CHEVRON HAZARD MARKERS (W409, W410)
+  // Verified against SARTSM SA Learner Driver Manual (chevrons).
+  // ═══════════════════════════════════════════════════════════
+  {
+    id: 'W409', name: 'T-junction chevron', code: 'W409', category: 'Warning',
+    shape: 'rect', signColor: 'red-white',
+    img: 't-junction-chevron-sign.jpg',
+    meaning: 'The road ahead does not carry on straight but merges into another road (T-junction).',
+    action: 'Slow down — you must turn left or right. The road does not continue straight ahead.',
+    hint: 'Horizontal board of chevrons pointing both left and right',
+    options: ['T-junction chevron', 'Dead-end chevron', 'Sharp curve chevron', 'Staggered junction'],
+    confusableWith: ['W410'],
+    mnemonic: 'Chevrons pointing both ways = the road ends in a T, turn left or right.',
+  },
+  {
+    id: 'W410', name: 'Dead-end / road closed chevron', code: 'W410', category: 'Warning',
+    shape: 'rect', signColor: 'red-white',
+    img: 'deadend-or-road-closed-chevron-sign.jpg',
+    meaning: 'The road does not continue beyond the sign — a turn left or right must be made.',
+    action: 'Decide which way to go and slow down; you cannot proceed straight.',
+    hint: 'Chevron board marking the end of the carriageway',
+    options: ['Dead-end / road closed chevron', 'T-junction chevron', 'Sharp curve chevron', 'No entry'],
+    confusableWith: ['W409'],
+    mnemonic: 'Chevrons at the end of the road = dead-end, you must turn.',
+  },
 ];
 
 
