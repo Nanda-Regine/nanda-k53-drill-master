@@ -6,6 +6,7 @@ import { recordAnswer } from '../utils/spacedRepetition.js';
 import { recordGameAnswer } from '../utils/masteryStore.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong } from '../utils/haptics.js';
+import { GENERATED_SIGN_QUESTIONS } from '../data/signQuestions.js';
 
 function SignImg({ src, alt, size = 130 }) {
   return (
@@ -1098,7 +1099,7 @@ function HomeScreen({ onStart }) {
       <div style={{ background: T.surface, border: `2px solid ${T.gold}`, borderRadius: 8, padding: "22px 20px", marginBottom: 14 }}>
         <div style={{ color: T.gold, fontSize: 11, letterSpacing: 3, fontFamily: T.mono, textTransform: "uppercase", marginBottom: 8 }}>EXAM MODE</div>
         <div style={{ color: T.text, fontSize: 18, fontWeight: 700, marginBottom: 6, fontFamily: T.font }}>All Signs — Mixed Quiz</div>
-        <div style={{ color: T.dim, fontSize: 14, lineHeight: 1.6, marginBottom: 16, fontFamily: T.font }}>{QUESTIONS.length} questions covering all sign categories, shuffled at random. Pass mark: 70%.</div>
+        <div style={{ color: T.dim, fontSize: 14, lineHeight: 1.6, marginBottom: 16, fontFamily: T.font }}>{QUESTIONS.length}-question bank across all categories &amp; testing styles. 40 random questions per round. Pass mark: 70%.</div>
         <div style={{ display: "flex", gap: 10 }}>
           <button onClick={() => onStart("exam", null, false)} style={{ padding: "10px 22px", background: T.gold, border: "none", borderRadius: 5, cursor: "pointer", color: "#000", fontSize: 14, fontWeight: 700, fontFamily: T.font }}>Start Quiz</button>
           <button onClick={() => onStart("exam", null, true)} style={{ padding: "10px 22px", background: T.surface, border: `2px solid ${T.gold}`, borderRadius: 5, cursor: "pointer", color: T.gold, fontSize: 14, fontFamily: T.font }}>⏱ Timed (30s)</button>
@@ -1123,6 +1124,11 @@ function HomeScreen({ onStart }) {
   );
 }
 
+// Augment the curated bank with generated questions across four testing methods
+// (identify / meaning / action / classification), filtered to signs with real
+// images. Brings the sign question bank to 800+.
+QUESTIONS.push(...GENERATED_SIGN_QUESTIONS);
+
 // ══════════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ══════════════════════════════════════════════════════════════════════════════
@@ -1141,7 +1147,8 @@ export default function RoadSignsQuiz({ onBack, onPass }) {
       setActiveQuestions(pool);
       setScreen("study_" + (catId ?? "all"));
     } else {
-      setActiveQuestions(prepareAll(shuffle(pool)));
+      // Sample up to 40 questions per round from the bank.
+      setActiveQuestions(prepareAll(shuffle(pool).slice(0, 40)));
       setScreen("quiz");
     }
   }
