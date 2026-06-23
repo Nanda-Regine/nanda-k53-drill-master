@@ -54,7 +54,7 @@ const QUESTION_POOL = [
   { q: "When overtaking, what is the final and most critical check before pulling out?", options: ["Left mirror","Right indicator","Road ahead is clear for the full manoeuvre","Shoulder check right"], answer: 2, category: "Road Behaviour" },
   { q: "A solid white centre line means:", options: ["Overtake when safe","No overtaking and no crossing","Right lane for faster traffic","Caution ahead"], answer: 1, category: "Road Behaviour" },
   { q: "Is it permitted to overtake near a blind rise?", options: ["Yes, if you accelerate quickly","Yes, motorcycles are exempt","No — prohibited near crests, curves and intersections","Only if no oncoming traffic is visible"], answer: 2, category: "Road Behaviour" },
-  { q: "When following another vehicle, what is the minimum K53 following distance?", options: ["1 second","2 seconds","3 seconds","10 car lengths"], answer: 2, category: "Road Behaviour" },
+  { q: "When following another vehicle, what is the minimum K53 following distance?", options: ["1 second","2 seconds","3 seconds","10 car lengths"], answer: 1, category: "Road Behaviour" },
   { q: "A flashing red traffic light must be treated as:", options: ["A yield sign","A stop sign","A warning to slow down","An uncontrolled intersection"], answer: 1, category: "Road Behaviour" },
   { q: "At a four-way stop, two vehicles arrive simultaneously. Who goes first?", options: ["The vehicle on the left","The vehicle on the right","The larger vehicle","The first to signal"], answer: 1, category: "Road Behaviour" },
 

@@ -67,7 +67,7 @@ const QUESTION_POOL = [
   { q:"Minimum age to apply for a Code 2 learner's licence?", options:["16","17","18","21"], answer:1, category:"Numbers & Ages" },
   { q:"Direction indicators must be visible at what distance?", options:["20m","30m","45m","90m"], answer:1, category:"Numbers & Ages" },
   { q:"Number plate lamp visible at what distance?", options:["20m","30m","45m","60m"], answer:0, category:"Numbers & Ages" },
-  { q:"Minimum tyre tread depth for a light motor vehicle?", options:["0.5mm","1mm","1.6mm","2mm"], answer:2, category:"Numbers & Ages" },
+  { q:"Minimum tyre tread depth for a light motor vehicle?", options:["0.5mm","1mm","1.6mm","2mm"], answer:1, category:"Numbers & Ages" },
   { q:"A child up to what mass may use an adult seatbelt without a child seat?", options:["15kg","18kg","20kg","25kg"], answer:1, category:"Numbers & Ages" },
   { q:"At what age may a learner drive a Code 3 vehicle?", options:["16","17","18","21"], answer:2, category:"Numbers & Ages" },
   { q:"General driver blood alcohol limit (g per 100ml)?", options:["0.00","0.02","0.05","0.08"], answer:2, category:"Numbers & Ages" },
@@ -98,7 +98,7 @@ const QUESTION_POOL = [
   { q:"You must stop for a school bus with flashing amber lights?", options:["Only if it's stopped","Yes — in both directions","Only if you're behind it","Only if children are visible"], answer:1, category:"Pedestrians" },
 
   // Parking & Stopping
-  { q:"No stopping within how many metres of a fire hydrant?", options:["3m","5m","9m","12m"], answer:1, category:"Parking & Stopping" },
+  { q:"No parking within how many metres of a fire hydrant?", options:["1.5m","3m","5m","9m"], answer:0, category:"Parking & Stopping" },
   { q:"On a road with a speed limit over 60km/h — how far from the road edge must you park?", options:["Off the roadway entirely","1.5m from edge","0.5m from edge","Any safe distance"], answer:0, category:"Parking & Stopping" },
   { q:"May you park facing AGAINST the flow of traffic?", options:["Yes if space is limited","No — must face the flow","Only at night","Only with hazards on"], answer:1, category:"Parking & Stopping" },
 

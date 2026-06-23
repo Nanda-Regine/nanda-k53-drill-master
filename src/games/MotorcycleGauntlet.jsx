@@ -184,8 +184,8 @@ const TESTS = [
       {
         q: "When following another vehicle, what is the minimum safe following distance rule taught in K53?",
         options: ["At least 3 seconds behind the vehicle in front","At least 30 metres regardless of speed","At least 2 seconds — enough to stop if they brake","A 1-second gap for every 15 km/h of speed"],
-        answer: 0,
-        explain: "The K53 following distance rule: at least 3 seconds behind the vehicle in front under normal conditions. In bad weather or poor visibility, extend this gap significantly.",
+        answer: 2,
+        explain: "The K53 following distance for light motor vehicles and motorcycles is at least 2 seconds behind the vehicle in front (3 seconds for heavy vehicles). Extend it significantly in bad weather or poor visibility.",
       },
       {
         q: "You want to carry a passenger pillion. What is the legal requirement regarding foot pegs?",
