@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { T } from "../theme.js";
-import { supabase } from "../supabase.js";
 import { apiBase } from "../utils/runtime.js";
+import { signInWithGoogle, sendMagicLink } from "../utils/nativeAuth.js";
 
 // ── AuthModal ─────────────────────────────────────────────────────────────────
 // Props:
@@ -14,19 +14,12 @@ export default function AuthModal({ onClose, claimToken }) {
   const [uiState, setUiState] = useState("idle"); // "idle" | "loading" | "sent" | "error"
   const [errorMsg, setErrorMsg] = useState("");
 
-  async function signInWithGoogle() {
-    if (!supabase) {
-      setErrorMsg("Auth service unavailable. Contact us on WhatsApp.");
-      setUiState("error");
-      return;
-    }
+  async function handleGoogle() {
     setUiState("loading");
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.origin },
-    });
-    if (error) {
-      setErrorMsg(error.message);
+    try {
+      await signInWithGoogle();
+    } catch (e) {
+      setErrorMsg(e.message || "Auth service unavailable. Contact us on WhatsApp.");
       setUiState("error");
     }
   }
@@ -64,20 +57,12 @@ export default function AuthModal({ onClose, claimToken }) {
       }
     } else {
       // Returning subscriber — send a plain magic link
-      if (!supabase) {
-        setErrorMsg("Auth service unavailable. Contact us on WhatsApp.");
-        setUiState("error");
-        return;
-      }
-      const { error } = await supabase.auth.signInWithOtp({
-        email: trimmed,
-        options: { emailRedirectTo: window.location.origin },
-      });
-      if (error) {
-        setErrorMsg(error.message);
-        setUiState("error");
-      } else {
+      try {
+        await sendMagicLink(trimmed);
         setUiState("sent");
+      } catch (e) {
+        setErrorMsg(e.message);
+        setUiState("error");
       }
     }
   }
@@ -136,7 +121,7 @@ export default function AuthModal({ onClose, claimToken }) {
             {!isClaiming && (
               <>
                 <button
-                  onClick={signInWithGoogle}
+                  onClick={handleGoogle}
                   disabled={uiState === "loading"}
                   style={{
                     width: "100%", padding: "13px 20px",

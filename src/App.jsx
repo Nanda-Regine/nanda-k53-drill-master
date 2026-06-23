@@ -291,7 +291,7 @@ export default function App() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       const u = session?.user || null;
       setUser(u);
-      if (u) checkSubscription(u);
+      if (u) { checkSubscription(u); setShowAuth(false); }
     });
     return () => subscription.unsubscribe();
   }, []);

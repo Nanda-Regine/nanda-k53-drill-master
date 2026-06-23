@@ -20,6 +20,8 @@ if (Capacitor.isNativePlatform()) {
       else CapApp.exitApp();
     });
   });
+  // Complete OAuth / magic-link sign-in when the OS hands back the deep link.
+  import("./utils/nativeAuth.js").then(({ initDeepLinkAuth }) => initDeepLinkAuth());
 }
 
 createRoot(document.getElementById("root")).render(
