@@ -13,17 +13,22 @@
 import { ROAD_SIGNS } from './roadSigns.js';
 import { SIGN_IMAGES } from './signImageManifest.js';
 
-// roadSigns categories -> quiz category ids (control/prohibition/warning/guidance/temporary/markings)
+// roadSigns categories -> quiz category ids
 const CAT_MAP = {
-  Control: 'control', Command: 'control', Prohibition: 'prohibition',
-  Warning: 'warning', Reservation: 'guidance', Guidance: 'guidance',
+  Control: 'control', Command: 'command', Prohibition: 'prohibition',
+  Warning: 'warning', Reservation: 'reservation', Guidance: 'guidance',
   Temporary: 'temporary', Marking: 'markings', Markings: 'markings',
 };
 
 const CAT_LABEL = {
-  control: 'Regulatory — Control', prohibition: 'Regulatory — Prohibition',
-  warning: 'Warning', guidance: 'Guidance / Reservation',
-  temporary: 'Temporary', markings: 'Road marking',
+  control:     'Regulatory — Control',
+  command:     'Regulatory — Command',
+  prohibition: 'Regulatory — Prohibition',
+  reservation: 'Regulatory — Reservation',
+  warning:     'Warning',
+  guidance:    'Guidance / Direction',
+  temporary:   'Temporary',
+  markings:    'Road marking',
 };
 
 // Deterministic PRNG so the bank is stable between builds (no hydration churn).

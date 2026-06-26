@@ -19,10 +19,12 @@ function SignImg({ src, alt, size = 170 }) {
 }
 
 const CATEGORIES = [
-  { id: "control",     label: "Regulatory — Control",     color: T.red,     desc: "Signs you must obey — they control how and where you drive." },
-  { id: "prohibition", label: "Regulatory — Prohibition", color: "#9B59B6", desc: "Red-circle signs that prohibit specific vehicles or manoeuvres." },
-  { id: "warning",     label: "Warning Signs",            color: T.gold,    desc: "Triangular signs warning of hazards and changing conditions ahead." },
-  { id: "guidance",    label: "Guidance & Direction",     color: T.blue,    desc: "Signs providing directions, destinations and service information." },
+  { id: "control",     label: "Regulatory — Control",     color: T.red,     desc: "Signs that regulate right of way and traffic flow — Stop, Yield, No Entry, One-way." },
+  { id: "command",     label: "Regulatory — Command",     color: "#2196F3", desc: "Signs that mandate a specific action — proceed in a direction, use headlights, maintain minimum speed." },
+  { id: "prohibition", label: "Regulatory — Prohibition", color: "#9B59B6", desc: "Red-circle signs that forbid specific vehicles or manoeuvres — no U-turn, speed limits, no parking." },
+  { id: "reservation", label: "Regulatory — Reservation", color: "#8E24AA", desc: "Signs that reserve a road or lane for a specific class of vehicle — buses, cyclists, motorcycles." },
+  { id: "warning",     label: "Warning Signs",            color: T.gold,    desc: "Triangular signs warning of hazards and changing road conditions ahead." },
+  { id: "guidance",    label: "Guidance & Direction",     color: T.blue,    desc: "Signs providing directions, destinations and road information." },
   { id: "markings",    label: "Road Markings",            color: T.green,   desc: "Lines and symbols painted on the road surface." },
   { id: "temporary",   label: "Temporary Signs",          color: "#E67E22", desc: "Yellow-background signs used during roadworks — take precedence over permanent signs." },
 ];
@@ -41,12 +43,12 @@ const QUESTIONS = [
     options:["Stop completely before entering","Give way to oncoming and intersecting traffic","Sound your horn before proceeding","Flash your headlights"],
     answer:1, explanation:"A YIELD sign means give way to traffic on the major road. You may stop if needed, but a full stop is only compulsory if traffic is present." },
 
-  { id:"c03", category:"control", img:"mandatory-direction-arrow-ahead.jpg",
+  { id:"c03", category:"command", img:"mandatory-direction-arrow-ahead.jpg",
     question:"What does this sign mean?",
     options:["Recommended direction","You must travel in the direction shown — no other direction permitted","Lane for heavy vehicles","One-way road begins"],
     answer:1, explanation:"A mandatory direction sign legally requires you to travel in the direction indicated. Deviating from the arrow is prohibited." },
 
-  { id:"c04", category:"control", img:"mandatory-direction-arrows-ahead.jpg",
+  { id:"c04", category:"command", img:"mandatory-direction-arrows-ahead.jpg",
     question:"This sign shows multiple arrows. What must you do?",
     options:["Choose any direction you wish","Proceed straight only","You must travel in one of the indicated directions — no other is allowed","Slow down ahead of junction"],
     answer:2, explanation:"Multiple mandatory arrows mean you must choose one of the shown directions. Any other direction at that point is prohibited." },
@@ -86,42 +88,42 @@ const QUESTIONS = [
     options:["A YIELD-controlled intersection is ahead — be prepared to give way","Stop immediately","Traffic merging from the left","Yield to pedestrians only"],
     answer:0, explanation:"This advance warning sign tells you a YIELD sign is ahead. Reduce speed and be ready to give way to traffic on the major road." },
 
-  { id:"c12", category:"control", img:"minimum-speed.jpg",
+  { id:"c12", category:"command", img:"minimum-speed.jpg",
     question:"What does a blue circle with a speed number inside it mean?",
     options:["Maximum speed on this road","Recommended speed","Minimum speed — you must not travel slower","Advisory speed for curves"],
     answer:2, explanation:"A blue circle speed sign is a minimum speed. You must not drive slower than stated. Common on freeways to maintain safe traffic flow." },
 
-  { id:"c13", category:"control", img:"minimum-speed-limit.jpg",
+  { id:"c13", category:"command", img:"minimum-speed-limit.jpg",
     question:"This blue sign with a speed number and the word MINIMUM means?",
     options:["Maximum speed","Advisory speed for this section","The slowest you are permitted to travel on this road","Speed limit for motorcycles only"],
     answer:2, explanation:"A minimum speed limit sign means you must travel at least that fast on that section of road, for safety reasons." },
 
-  { id:"c14", category:"control", img:"motorcycles-only.jpg",
+  { id:"c14", category:"reservation", img:"motorcycles-only.jpg",
     question:"What does this sign indicate about the road or lane?",
     options:["No motorcycles allowed","This road or lane is for motorcycles only","Motorcycles must yield","Motorcycle speed limit"],
     answer:1, explanation:"A motorcycles-only sign means only motorcycles may use that road or lane. All other vehicles are excluded." },
 
-  { id:"c15", category:"control", img:"motorcars-only.jpg",
+  { id:"c15", category:"reservation", img:"motorcars-only.jpg",
     question:"What does this sign mean?",
     options:["No motor cars allowed","This road or lane is reserved for motor cars only","Motor cars must yield to buses","Speed limit for motor cars"],
     answer:1, explanation:"A motor-cars-only sign restricts that road or lane to passenger cars. Trucks, motorcycles and other vehicles are not permitted." },
 
-  { id:"c16", category:"control", img:"pedal-cycles-and-pedestrians-only.jpg",
+  { id:"c16", category:"reservation", img:"pedal-cycles-and-pedestrians-only.jpg",
     question:"A sign showing a bicycle and a pedestrian figure means?",
     options:["Cyclists and pedestrians are prohibited","This path is for pedal cycles and pedestrians only — no motor vehicles","Motor vehicles must slow down for cyclists","Shared lane warning"],
     answer:1, explanation:"This sign designates a shared path for cyclists and pedestrians only. Motor vehicles are not permitted to use it." },
 
-  { id:"c17", category:"control", img:"vehicles-conveying-dangerous-goods-only.jpg",
+  { id:"c17", category:"reservation", img:"vehicles-conveying-dangerous-goods-only.jpg",
     question:"What does this sign tell drivers of ordinary vehicles?",
     options:["All vehicles may use this road","Only vehicles carrying dangerous goods may use this road","Dangerous goods vehicles are prohibited","Speed limit for dangerous goods vehicles"],
     answer:1, explanation:"This reservation sign means only vehicles transporting dangerous goods (hazardous materials) are permitted to use that road or lane." },
 
-  { id:"c18", category:"control", img:"vehicle-exceeding-mass-only.jpg",
+  { id:"c18", category:"reservation", img:"vehicle-exceeding-mass-only.jpg",
     question:"What does this sign indicate about which vehicles may use this road?",
     options:["Only light vehicles","Only vehicles whose gross mass exceeds the stated limit","No heavy vehicles","Vehicles must not exceed stated mass"],
     answer:1, explanation:"This sign reserves the road for vehicles that exceed the stated gross mass — typically used to direct heavy vehicles to routes designed for their weight." },
 
-  { id:"c19", category:"control", img:"switch-headlights-on.jpg",
+  { id:"c19", category:"command", img:"switch-headlights-on.jpg",
     question:"What does this sign instruct you to do?",
     options:["Switch off headlights","Switch your headlights ON — dim or full beam as appropriate","Use hazard lights","Flash headlights at oncoming traffic"],
     answer:1, explanation:"A switch-headlights-on sign means you must activate your headlights. Common at the entrance to tunnels and in areas of reduced visibility." },
@@ -141,17 +143,17 @@ const QUESTIONS = [
     options:["You may park here at any time","You may only park for the duration stated during the hours shown","No parking at any time","Parking for permit holders only"],
     answer:1, explanation:"A maximum-stay time plate restricts how long you may park. Overstaying the limit is a parking contravention." },
 
-  { id:"c23", category:"control", img:"speed-limit-time-period.jpg",
+  { id:"c23", category:"prohibition", img:"speed-limit-time-period.jpg",
     question:"A speed limit sign with a time period plate below it means?",
     options:["The speed limit applies at all times","The speed limit only applies during the hours shown on the plate","The road is closed during those hours","Advisory speed for those times"],
     answer:1, explanation:"A time-period supplementary plate restricts the speed limit to specific hours — for example, school zone limits during school arrival and departure times." },
 
-  { id:"c24", category:"control", img:"speed-limit-night-time.jpg",
+  { id:"c24", category:"prohibition", img:"speed-limit-night-time.jpg",
     question:"A speed limit sign with a night condition plate means?",
     options:["The speed limit applies only during daytime","The speed limit applies only at night — different from the daytime limit","Maximum speed at all times","Floodlit road ahead"],
     answer:1, explanation:"A night-condition speed limit applies only between sunset and sunrise or as indicated. Night visibility is reduced, hence the lower limit." },
 
-  { id:"c25", category:"control", img:"no-motorcars-during-indicated-period.jpg",
+  { id:"c25", category:"prohibition", img:"no-motorcars-during-indicated-period.jpg",
     question:"What does this sign mean for private car drivers during the indicated time period?",
     options:["Cars may use this road at all times","Motor cars are prohibited from using this road during the stated hours","Motorcars must travel faster","Parking for motorcars during those hours"],
     answer:1, explanation:"This sign bans motor cars from that road during specific hours — typically peak hours to give priority to public transport." },

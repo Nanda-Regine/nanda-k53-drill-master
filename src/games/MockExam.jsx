@@ -105,6 +105,11 @@ const QUESTION_POOL = [
   // Overtaking
   { q:"May you overtake at a crest or curve?", options:["Yes if you can see ahead","No — unless not encroaching on the right side","Yes at reduced speed","Only on dual carriageway"], answer:1, category:"Overtaking" },
   { q:"You must NOT overtake a vehicle that has stopped at a pedestrian crossing?", options:["True","False — you may pass slowly","False — only if pedestrians present","True only on one-lane roads"], answer:0, category:"Overtaking" },
+
+  // Freeways & Breakdowns
+  { q:"Which action is absolutely prohibited on a freeway?", options:["Stopping in an emergency lay-by","Reversing or making a U-turn","Overtaking on the right","Using hazard lights when stationary"], answer:1, category:"Road Behaviour" },
+  { q:"Your vehicle breaks down on a freeway. What must you do first?", options:["Stay in your lane and wait for help","Drive slowly to the next exit","Move as far off the carriageway as possible and activate hazard lights","Signal and move to the right-hand lane"], answer:2, category:"Road Behaviour" },
+  { q:"At a pedestrian crossing controlled by traffic lights, a green walking figure means?", options:["Pedestrians must wait for vehicles to clear first","Pedestrians have right of way — all vehicles must stop","Pedestrians may cross at their own risk","Vehicles may proceed if no pedestrian has yet stepped onto the crossing"], answer:1, category:"Pedestrians" },
 ];
 
 function shuffle(arr) {
