@@ -134,6 +134,38 @@ const QUESTIONS = [
   { id: 'vc84', cat: 'Towing', q: 'If your trailer begins to sway (snake) at speed, you should:', options: ['Accelerate firmly to stabilise the combination','Ease off the accelerator gently and hold the steering wheel straight — do NOT brake hard or make sharp steering inputs','Brake firmly and steer into the sway','Immediately engage a lower gear'], answer: 1 },
   { id: 'vc85', cat: 'Towing', q: 'When loading a trailer, heavy items should be positioned:', options: ['At the very rear to reduce nose weight on the hitch','Over or just ahead of the trailer axle — excessive rear weight causes trailer sway, excessive nose weight overloads the hitch','Loaded high for easy access when unloading','Spread evenly only on the left side'], answer: 1 },
   { id: 'vc86', cat: 'Towing', q: "A trailer's number plate light must:", options: ['Be optional if the towing vehicle plate is visible','Illuminate the rear number plate so it is clearly readable — it must work with the towing vehicle\'s lights','Only be required if towing at night','Only be required for commercial trailers'], answer: 1 },
+
+  // ── Lights (additional) ───────────────────────────────────────────────────
+  { id: 'vc87', cat: 'Lights', q: 'Parking lights (side lights) are designed for:', options: ['Driving slowly in a well-lit residential street','Driving in fog at low speed','Making a parked or stationary vehicle visible to others — NOT for driving','Replacing low beams in urban areas'], answer: 2 },
+  { id: 'vc88', cat: 'Lights', q: 'Rear fog lights (red) should only be switched on when visibility falls below:', options: ['200 m','150 m','100 m','50 m'], answer: 2 },
+
+  // ── Horn (additional) ─────────────────────────────────────────────────────
+  { id: 'vc89', cat: 'Horn', q: 'The hooter (horn) may legally be used:', options: ['To greet a friend you recognise on the road','To warn other road users and help avoid an accident — not for general communication','When another driver has made you angry','When waiting outside a building for someone to come out'], answer: 1 },
+  { id: 'vc90', cat: 'Horn', q: 'In a built-up (urban) area, unnecessary or excessive use of the hooter is:', options: ['Permitted at any hour','Prohibited — it disturbs the public and may constitute an offence under the NRTA','Permitted during daytime hours only','Permitted only to warn pedestrians'], answer: 1 },
+
+  // ── Fuel (additional) ─────────────────────────────────────────────────────
+  { id: 'vc91', cat: 'Fuel', q: 'You must switch the engine OFF before refuelling because:', options: ['The fuel gauge reads incorrectly with the engine running','A running engine can ignite fuel vapour, causing a fire or explosion','Only relevant for older carburettor engines','It is required by the manufacturer only, not by law'], answer: 1 },
+  { id: 'vc92', cat: 'Fuel', q: 'A strong petrol smell inside the cabin while driving should make you:', options: ['Open the windows and continue — it is normal for older vehicles','Stop immediately, switch off the ignition, get everyone out and investigate — fuel leaks are a fire hazard','Check the fuel gauge and continue if the level is normal','Reduce speed and drive directly to the nearest petrol station'], answer: 1 },
+
+  // ── Vision (additional) ───────────────────────────────────────────────────
+  { id: 'vc93', cat: 'Vision', q: 'The minimum visible light transmittance (VLT) through a vehicle windscreen in South Africa is:', options: ['50%','60%','70%','80%'], answer: 2 },
+  { id: 'vc94', cat: 'Vision', q: 'Your driving seat position must ensure that:', options: ['You are as far back as possible for comfort','You can reach all pedals and controls comfortably and have a clear, unobstructed view of the road ahead','Your arms are fully extended to the steering wheel','Your head lightly touches the headlining'], answer: 1 },
+
+  // ── Seatbelts (additional) ────────────────────────────────────────────────
+  { id: 'vc95', cat: 'Seatbelts', q: 'A seatbelt worn twisted across the body:', options: ['Provides the same protection as a correctly worn belt','Reduces protection significantly — the narrow twisted material concentrates crash forces and can cause serious injury','Is only a concern for rear-seat passengers','Is acceptable if the twist occurs at the hip'], answer: 1 },
+  { id: 'vc96', cat: 'Seatbelts', q: 'Front airbags (where fitted) work most effectively when the occupant is:', options: ['Not wearing a seatbelt — the belt interferes with airbag deployment','Wearing a correctly fitted seatbelt — the belt positions the occupant for safe airbag interaction','Wearing a seatbelt only if the vehicle is travelling above 100 km/h','Seated as far back as possible from the dashboard'], answer: 1 },
+
+  // ── Handbrake (additional) ────────────────────────────────────────────────
+  { id: 'vc97', cat: 'Handbrake', q: 'A vehicle parked on a slope with ONLY the footbrake applied (engine off) is:', options: ['Safe if parked parallel to the kerb','Dangerous — brake hydraulic pressure can slowly release, allowing the vehicle to roll','Safe provided it is in first gear','Only a risk on slopes steeper than 15 degrees'], answer: 1 },
+  { id: 'vc98', cat: 'Handbrake', q: 'When parking on any incline you must:', options: ['Apply the footbrake only — it is more reliable than the handbrake','Apply the handbrake AND engage a gear (manual) or select Park (automatic)','Only apply the handbrake — gear selection is optional','Leave the engine running to power the brakes'], answer: 1 },
+
+  // ── Wipers (additional) ───────────────────────────────────────────────────
+  { id: 'vc99', cat: 'Wipers', q: 'If windscreen wipers fail completely during heavy rain, you should:', options: ['Lean out of the window to see','Continue at much reduced speed with hazard lights on','Pull over to a safe location and stop until the wipers are repaired or conditions improve','Wipe the outside of the screen with your hand periodically'], answer: 2 },
+  { id: 'vc100', cat: 'Wipers', q: 'The rear window defogger/defroster is important because:', options: ['It provides additional cabin heating on cold mornings','Clear rear visibility is essential — a misted rear window makes lane changes and reversing dangerous','It prevents the boot lock from freezing in winter','It simultaneously defrosts the door mirrors'], answer: 1 },
+
+  // ── Bonnet & Boot (additional) ────────────────────────────────────────────
+  { id: 'vc101', cat: 'Bonnet & Boot', q: 'The radiator cap must NEVER be removed when:', options: ['The engine is cold','The car is parked on a slope','The engine is hot — pressurised coolant can spray out and cause severe burns','The cap is older than 5 years'], answer: 2 },
+  { id: 'vc102', cat: 'Bonnet & Boot', q: 'Brake fluid should be checked at the:', options: ['Engine dipstick','Brake fluid reservoir under the bonnet — level must be between MIN and MAX marks','Brake caliper bleeder screw','Fuel tank filler cap'], answer: 1 },
 ];
 
 const CATEGORIES = [...new Set(QUESTIONS.map(q => q.cat))];
