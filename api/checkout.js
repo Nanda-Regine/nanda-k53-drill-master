@@ -27,9 +27,11 @@ const PLANS = {
   },
 };
 
-function generateToken(plan, days) {
+function generateToken(plan, days, ref) {
   const expiry = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
-  const payload = Buffer.from(JSON.stringify({ plan, expiry })).toString('base64url');
+  // `ref` = the m_payment_id. verify.js requires a matching ITN-confirmed payment
+  // before honouring this token, so the token alone never grants premium.
+  const payload = Buffer.from(JSON.stringify({ plan, expiry, ref })).toString('base64url');
   const sig = crypto
     .createHmac('sha256', process.env.PAYFAST_PASSPHRASE)
     .update(payload)
@@ -63,7 +65,8 @@ export default function handler(req, res) {
   const host    = req.headers.host || 'localhost:5173';
   const baseUrl = host.startsWith('localhost') ? `http://${host}` : `${proto}://${host}`;
 
-  const token = generateToken(plan, config.days);
+  const mPaymentId = `mm.k53drillmaster.${plan}.${Date.now()}`;
+  const token = generateToken(plan, config.days, mPaymentId);
 
   // Notify via the Mirembe unified hub (jarvis.mirembemuse.co.za) which validates the
   // ITN, books central Finance under the k53drillmaster stream, and forwards it back
@@ -74,7 +77,7 @@ export default function handler(req, res) {
     return_url:   `${baseUrl}/?unlock=${encodeURIComponent(token)}`,
     cancel_url:   `${baseUrl}/?cancelled=1`,
     notify_url:   process.env.PAYFAST_HUB_NOTIFY_URL || 'https://jarvis.mirembemuse.co.za/api/payfast/notify',
-    m_payment_id: `mm.k53drillmaster.${plan}.${Date.now()}`,
+    m_payment_id: mPaymentId,
     amount:       config.amount,
     item_name:    config.label,
     custom_str1:  plan,

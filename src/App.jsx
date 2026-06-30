@@ -320,16 +320,26 @@ export default function App() {
     return () => window.removeEventListener('focus', refreshTier);
   }, [refreshTier]);
 
-  // Handle unlock token from PayFast redirect
+  // Handle unlock token from PayFast redirect. The token only unlocks once the ITN
+  // (server-to-server) has CONFIRMED payment, so verify may return `pending` briefly —
+  // retry for ~30s to cover the redirect-vs-ITN race. No payment → never unlocks.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const unlock = params.get('unlock');
-    if (unlock) {
+    if (!unlock) return;
+    let attempts = 0;
+    let cancelled = false;
+    const tryVerify = () => {
+      if (cancelled) return;
       fetch(`${apiBase()}/api/verify?token=${unlock}`).then(r => r.json()).then(d => {
+        if (cancelled) return;
         if (d.ok) { storePremiumToken(d.plan, d.expires_at); refreshTier(); setShowAuth(true); }
+        else if (d.pending && attempts < 12) { attempts++; setTimeout(tryVerify, 2500); }
       }).catch(() => {});
-      window.history.replaceState({}, '', '/');
-    }
+    };
+    tryVerify();
+    window.history.replaceState({}, '', '/');
+    return () => { cancelled = true; };
   }, [refreshTier]);
 
   // Browser back button → return to home instead of exiting the app

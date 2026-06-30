@@ -76,11 +76,13 @@ export default async function handler(req, res) {
   const status = data.payment_status;
   const email  = data.email_address;
   const plan   = data.custom_str1 || 'monthly';
-  const paymentId = data.pf_payment_id || data.m_payment_id || null;
+  // Store the m_payment_id — verify.js matches the unlock token's `ref` against it to
+  // confirm a real, ITN-confirmed payment before ever granting premium.
+  const mPaymentId = data.m_payment_id || null;
 
   if (status === 'COMPLETE') {
     try {
-      await activateSubscriber(email, plan, paymentId);
+      await activateSubscriber(email, plan, mPaymentId);
     } catch (err) {
       // Log but still return 200 — PayFast retries on non-200, which we don't want
       console.error('[ITN] Activation error:', err.message);

@@ -48,18 +48,30 @@ export default async function handler(req, res) {
     return res.json({ ok: false, error: 'Token expired' });
   }
 
-  // ── 2. Invite user + upsert subscriber row ────────────────────────────────
+  // ── 2. Require an ITN-confirmed payment for this token's ref ───────────────
+  // A subscriber row with this m_payment_id is written ONLY by api/itn.js after
+  // PayFast confirms the payment server-to-server. No confirmed payment → no
+  // activation (closes the "valid token = free premium" hole).
   const supabase = createClient(
     process.env.SUPABASE_URL,
     process.env.SUPABASE_SERVICE_ROLE_KEY,
     { auth: { autoRefreshToken: false, persistSession: false } }
   );
 
-  const plan = tokenData.plan || 'monthly';
-  const days = PLAN_DAYS[plan] || 30;
-  const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
-  const siteUrl = process.env.SITE_URL || 'https://nanda-k53-drill-master.vercel.app';
+  const ref = tokenData.ref;
+  if (!ref) return res.json({ ok: false, error: 'Unconfirmable token' });
 
+  const { data: paid } = await supabase
+    .from('subscribers')
+    .select('plan, expires_at, status')
+    .eq('payfast_payment_id', ref)
+    .maybeSingle();
+  if (!paid || paid.status !== 'active') {
+    return res.json({ ok: false, pending: true, error: 'Payment not yet confirmed' });
+  }
+
+  // ── 3. Invite the user + activate with the CONFIRMED plan/expiry ───────────
+  const siteUrl = process.env.SITE_URL || 'https://k53drillmaster.co.za';
   const { data: invite, error: inviteErr } = await supabase.auth.admin.inviteUserByEmail(
     email.trim().toLowerCase(),
     { redirectTo: siteUrl }
@@ -72,7 +84,7 @@ export default async function handler(req, res) {
   const { error: dbErr } = await supabase
     .from('subscribers')
     .upsert(
-      { user_id: invite.user.id, email: invite.user.email, plan, expires_at: expiresAt },
+      { user_id: invite.user.id, email: invite.user.email, plan: paid.plan, expires_at: paid.expires_at, payfast_payment_id: ref, status: 'active' },
       { onConflict: 'user_id' }
     );
   if (dbErr) {
@@ -80,6 +92,6 @@ export default async function handler(req, res) {
     return res.json({ ok: false, error: dbErr.message });
   }
 
-  console.log(`[CLAIM] Activated: ${email} | plan=${plan} | expires=${expiresAt}`);
+  console.log(`[CLAIM] Activated: ${email} | plan=${paid.plan} | ref=${ref}`);
   return res.json({ ok: true });
 }
