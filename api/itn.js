@@ -11,7 +11,7 @@ const PLAN_DAYS = { monthly: 30, bundle: 90 };
 
 function adminClient() {
   return createClient(
-    process.env.SUPABASE_URL,
+    process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL,
     process.env.SUPABASE_SERVICE_ROLE_KEY,
     { auth: { autoRefreshToken: false, persistSession: false } }
   );
