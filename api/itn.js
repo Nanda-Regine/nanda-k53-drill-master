@@ -17,7 +17,7 @@ function adminClient() {
   );
 }
 
-async function activateSubscriber(email, plan) {
+async function activateSubscriber(email, plan, paymentId) {
   const supabase = adminClient();
   const days = PLAN_DAYS[plan] || 30;
   const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
@@ -32,13 +32,13 @@ async function activateSubscriber(email, plan) {
 
   const userId = data.user.id;
 
-  // Upsert subscriber row (handles renewals / plan changes)
+  // Upsert subscriber row (handles renewals / plan changes); store the PayFast id for audit.
   const { error: dbErr } = await supabase
     .from('subscribers')
-    .upsert({ user_id: userId, email, plan, expires_at: expiresAt }, { onConflict: 'user_id' });
+    .upsert({ user_id: userId, email, plan, expires_at: expiresAt, payfast_payment_id: paymentId ?? null }, { onConflict: 'user_id' });
   if (dbErr) throw new Error(`DB upsert failed: ${dbErr.message}`);
 
-  console.log(`[ITN] Activated: ${email} | plan=${plan} | expires=${expiresAt}`);
+  console.log(`[ITN] Activated: ${email} | plan=${plan} | expires=${expiresAt} | pf=${paymentId}`);
 }
 
 export default async function handler(req, res) {
@@ -48,35 +48,39 @@ export default async function handler(req, res) {
 
   const data = req.body || {};
 
-  // ── 1. Validate PayFast signature ─────────────────────────────────────────
-  const { signature, ...rest } = data;
-  const isLive = process.env.PAYFAST_SANDBOX !== 'true';
+  // ── 1. Authenticate ───────────────────────────────────────────────────────
+  // Mirembe hub forwards already-verified ITNs with x-hub-secret — trust those and
+  // skip the local signature check. Only direct PayFast posts are re-verified.
+  const fromHub =
+    process.env.HUB_INTERNAL_SECRET &&
+    req.headers['x-hub-secret'] === process.env.HUB_INTERNAL_SECRET;
 
-  const str = Object.entries(rest)
-    .filter(([, v]) => v !== '')
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([k, v]) => `${k}=${encodeURIComponent(String(v).trim()).replace(/%20/g, '+')}`)
-    .join('&');
-
-  const withPass = isLive && process.env.PAYFAST_PASSPHRASE
-    ? `${str}&passphrase=${encodeURIComponent(process.env.PAYFAST_PASSPHRASE.trim()).replace(/%20/g, '+')}`
-    : str;
-
-  const computed = crypto.createHash('md5').update(withPass).digest('hex');
-
-  if (computed !== signature) {
-    console.error('[ITN] Invalid signature. Computed:', computed, 'Received:', signature);
-    return res.status(200).send('OK');
+  if (!fromHub) {
+    const { signature, ...rest } = data;
+    const isLive = process.env.PAYFAST_SANDBOX !== 'true';
+    const str = Object.entries(rest)
+      .filter(([, v]) => v !== '')
+      .map(([k, v]) => `${k}=${encodeURIComponent(String(v).trim()).replace(/%20/g, '+')}`)
+      .join('&');
+    const withPass = isLive && process.env.PAYFAST_PASSPHRASE
+      ? `${str}&passphrase=${encodeURIComponent(process.env.PAYFAST_PASSPHRASE.trim()).replace(/%20/g, '+')}`
+      : str;
+    const computed = crypto.createHash('md5').update(withPass).digest('hex');
+    if (computed !== signature) {
+      console.error('[ITN] Invalid signature.');
+      return res.status(200).send('OK');
+    }
   }
 
   // ── 2. Activate subscriber on COMPLETE ────────────────────────────────────
   const status = data.payment_status;
   const email  = data.email_address;
   const plan   = data.custom_str1 || 'monthly';
+  const paymentId = data.pf_payment_id || data.m_payment_id || null;
 
   if (status === 'COMPLETE') {
     try {
-      await activateSubscriber(email, plan);
+      await activateSubscriber(email, plan, paymentId);
     } catch (err) {
       // Log but still return 200 — PayFast retries on non-200, which we don't want
       console.error('[ITN] Activation error:', err.message);

@@ -38,9 +38,10 @@ function generateToken(plan, days) {
 }
 
 function payfastSignature(data, passphrase) {
+  // PayFast verifies over the fields in SUBMITTED order (NOT alphabetical) — proven
+  // live against Mirembe merchant 17030173. Exclude empty values, append passphrase.
   const str = Object.entries(data)
     .filter(([, v]) => v !== '')
-    .sort(([a], [b]) => a.localeCompare(b))
     .map(([k, v]) => `${k}=${encodeURIComponent(String(v).trim()).replace(/%20/g, '+')}`)
     .join('&');
   const full = passphrase
@@ -64,16 +65,16 @@ export default function handler(req, res) {
 
   const token = generateToken(plan, config.days);
 
-  // Notify via universal PayFast hub (creativelynanda.co.za routes by "k53drillmaster_" prefix).
-  // Return goes directly to the app with the signed unlock token for instant localStorage activation.
-  // Cancel goes to the hub's cancel page which redirects back to k53drillmaster.co.za/upgrade.
+  // Notify via the Mirembe unified hub (jarvis.mirembemuse.co.za) which validates the
+  // ITN, books central Finance under the k53drillmaster stream, and forwards it back
+  // to /api/itn here. Return carries the signed unlock token for instant activation.
   const data = {
     merchant_id:  process.env.PAYFAST_MERCHANT_ID,
     merchant_key: process.env.PAYFAST_MERCHANT_KEY,
     return_url:   `${baseUrl}/?unlock=${encodeURIComponent(token)}`,
-    cancel_url:   'https://creativelynanda.co.za/payfast/cancel?app=k53drillmaster',
-    notify_url:   'https://creativelynanda.co.za/api/payfast/universal-notify',
-    m_payment_id: `k53drillmaster_${plan}_${Date.now()}`,
+    cancel_url:   `${baseUrl}/?cancelled=1`,
+    notify_url:   process.env.PAYFAST_HUB_NOTIFY_URL || 'https://jarvis.mirembemuse.co.za/api/payfast/notify',
+    m_payment_id: `mm.k53drillmaster.${plan}.${Date.now()}`,
     amount:       config.amount,
     item_name:    config.label,
     custom_str1:  plan,
