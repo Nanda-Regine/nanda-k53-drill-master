@@ -56,6 +56,18 @@ export default function handler(req, res) {
   const plan = ((req.query && req.query.plan) || 'monthly').toLowerCase();
   const config = PLANS[plan] || PLANS.monthly;
 
+  // ⚠️⚠️ PAYMENTS — DO NOT REVERT MONTHLY TO PAYFAST ⚠️⚠️
+  // 'monthly' is a recurring SUBSCRIPTION → Paystack (reliable; PayFast recurring failed).
+  // We send the buyer to the Paystack hosted subscription page (it collects their email and
+  // auto-renews). Paystack → Mirembe hub → /api/paystack-webhook here activates them by email.
+  // bundle / lifetime / lifetime_pdp are ONE-TIME → they keep the PayFast flow below.
+  if (plan === 'monthly') {
+    const page = process.env.PAYSTACK_K53_MONTHLY_PAGE || 'https://paystack.com/pay/1jghbovgk2';
+    res.writeHead(302, { Location: page });
+    res.end();
+    return;
+  }
+
   const isLive = process.env.PAYFAST_SANDBOX !== 'true';
   const pfUrl  = isLive
     ? 'https://www.payfast.co.za/eng/process'
