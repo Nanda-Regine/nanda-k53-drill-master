@@ -281,7 +281,7 @@ export default function WeeklyChallenge({ onBack }) {
 
             {q.img && (
               <div style={{ textAlign: 'center', marginBottom: 16 }}>
-                <img src={`/signs/${q.img}`} alt="" style={{ maxHeight: 120, borderRadius: T.radius }} />
+                <img src={`/signs/${q.img}`} alt="" style={{ maxHeight: 120, borderRadius: T.radius, imageRendering: 'pixelated' }} />
               </div>
             )}
 

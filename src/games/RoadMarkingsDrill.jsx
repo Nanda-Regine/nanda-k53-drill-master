@@ -209,7 +209,7 @@ export default function RoadMarkingsDrill({ onBack, onPass }) {
 
           {current.img && (
             <div style={{ textAlign: 'center', marginBottom: 20 }}>
-              <img src={`/signs/${current.img}`} alt="" style={{ width: 160, height: 120, objectFit: 'contain', borderRadius: 10, background: T.surface, padding: 8 }} />
+              <img src={`/signs/${current.img}`} alt="" style={{ width: 160, height: 120, objectFit: 'contain', borderRadius: 10, background: T.surface, padding: 8, imageRendering: 'pixelated' }} />
               {current.marking?.colour && (
                 <div style={{ marginTop: 8, display: 'flex', justifyContent: 'center' }}>
                   <span style={{

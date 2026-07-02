@@ -262,16 +262,16 @@ export default function SignShapeTrainer({ onBack, onPass }) {
           <div style={{ textAlign: 'center', marginBottom: 24 }}>
             {current.type === 'shape' && <ShapeSilhouette shape={current.shape} size={110} />}
             {(current.type === 'full' || current.type === 'colour') && current.img && (
-              <img src={`/signs/${current.img}`} alt="" style={{ width: 130, height: 130, objectFit: 'contain', borderRadius: 12 }} />
+              <img src={`/signs/${current.img}`} alt="" style={{ width: 130, height: 130, objectFit: 'contain', borderRadius: 12, imageRendering: 'pixelated' }} />
             )}
             {current.type === 'confusable' && (
               <div style={{ display: 'flex', gap: 20, justifyContent: 'center' }}>
                 <div style={{ textAlign: 'center' }}>
-                  <img src={`/signs/${current.imgA}`} alt="" style={{ width: 100, height: 100, objectFit: 'contain', borderRadius: 10 }} />
+                  <img src={`/signs/${current.imgA}`} alt="" style={{ width: 100, height: 100, objectFit: 'contain', borderRadius: 10, imageRendering: 'pixelated' }} />
                   <div style={{ fontSize: 11, color: T.dim, marginTop: 4 }}>A</div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                  <img src={`/signs/${current.imgB}`} alt="" style={{ width: 100, height: 100, objectFit: 'contain', borderRadius: 10 }} />
+                  <img src={`/signs/${current.imgB}`} alt="" style={{ width: 100, height: 100, objectFit: 'contain', borderRadius: 10, imageRendering: 'pixelated' }} />
                   <div style={{ fontSize: 11, color: T.dim, marginTop: 4 }}>B</div>
                 </div>
               </div>

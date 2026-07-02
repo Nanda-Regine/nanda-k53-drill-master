@@ -242,7 +242,7 @@ export default function VoiceMode({ onBack, onPass }) {
             <div style={{ fontSize: 12, color: T.dim, letterSpacing: 2, marginBottom: 12 }}>MISSED SIGNS</div>
             {wrong.map((q, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: i < wrong.length - 1 ? 12 : 0 }}>
-                <img src={`/signs/${q.sign.img}`} alt={q.sign.name} style={{ width: 36, height: 36, objectFit: 'contain' }} />
+                <img src={`/signs/${q.sign.img}`} alt={q.sign.name} style={{ width: 36, height: 36, objectFit: 'contain', imageRendering: 'pixelated' }} />
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 600 }}>{q.sign.name}</div>
                   <div style={{ fontSize: 11, color: T.dim }}>{q.sign.hint || q.sign.meaning?.slice(0, 60)}</div>
@@ -290,7 +290,7 @@ export default function VoiceMode({ onBack, onPass }) {
       {/* Sign image */}
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
         <div style={{ background: T.surface, borderRadius: 16, padding: 24, border: `2px solid ${feedback === 'correct' ? T.green : feedback === 'wrong' ? T.red : T.border}`, transition: 'border-color 0.3s' }}>
-          <img src={`/signs/${current.img}`} alt="road sign" style={{ width: 130, height: 130, objectFit: 'contain' }} />
+          <img src={`/signs/${current.img}`} alt="road sign" style={{ width: 130, height: 130, objectFit: 'contain', imageRendering: 'pixelated' }} />
         </div>
       </div>
 
