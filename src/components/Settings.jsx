@@ -7,6 +7,7 @@ import { useLang } from '../LangContext.jsx';
 import { isSoundEnabled, setSoundEnabled, sfx } from '../utils/sounds.js';
 import { isPremium, isInFreeTrial, daysLeftInTrial, getRemainingToday, DAILY_LIMIT } from '../freemium.js';
 import { isNative } from '../utils/runtime.js';
+import { supabase } from '../supabase.js';
 
 // ── Legal documents ────────────────────────────────────────────────────────────
 const LEGAL_DOCS = {
@@ -112,6 +113,9 @@ export default function Settings({ onBack, onFontSizeChange }) {
   const [resetDone, setResetDone] = useState(false);
   const [soundOn, setSoundOn] = useState(isSoundEnabled);
   const [openLegal, setOpenLegal] = useState(null); // 'privacy' | 'terms' | 'disclaimer'
+  // Subscription cancel flow: 'idle' | 'confirm' | 'working' | 'done' | 'error'
+  const [cancelState, setCancelState] = useState('idle');
+  const [cancelMsg, setCancelMsg] = useState('');
 
   const premium = isPremium();
   const inTrial = isInFreeTrial();
@@ -146,6 +150,40 @@ export default function Settings({ onBack, onFontSizeChange }) {
     setShowResetConfirm(false);
     setResetDone(true);
     setTimeout(() => setResetDone(false), 3000);
+  };
+
+  // ── Cancel subscription ────────────────────────────────────────────────────────
+  // Cancelling stops auto-renewal; the subscriber keeps premium until their paid
+  // period ends. We send the signed-in user's Supabase token to /api/cancel, which
+  // verifies it server-side and asks the Mirembe hub to disable the Paystack sub.
+  const handleCancelSubscription = async () => {
+    setCancelState('working');
+    setCancelMsg('');
+    try {
+      if (!supabase) throw new Error('unavailable');
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        setCancelState('error');
+        setCancelMsg('Please sign in with your subscription email first (Menu → Sign in), then try again.');
+        return;
+      }
+      const res = await fetch('/api/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      });
+      const body = await res.json().catch(() => ({}));
+      if (res.ok && body.success) {
+        setCancelState('done');
+        setCancelMsg("Done. Your subscription won't renew — you keep premium until the end of your current period.");
+      } else {
+        setCancelState('error');
+        setCancelMsg(body.error || 'Could not cancel right now. Please try again or email hello@creativelynanda.co.za.');
+      }
+    } catch {
+      setCancelState('error');
+      setCancelMsg('Could not reach the billing service. Please try again shortly.');
+    }
   };
 
   const SECTION = (title) => (
@@ -272,12 +310,53 @@ export default function Settings({ onBack, onFontSizeChange }) {
         {SECTION('Your Plan')}
         <div style={{ background: T.surfaceAlt, border: `1px solid ${T.border}`, borderRadius: 12, padding: '14px 16px', marginBottom: 10 }}>
           {premium && !inTrial ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ fontSize: 24 }}>⭐</span>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: T.fontSizeLg, color: T.gold }}>Premium — Unlimited</div>
-                <div style={{ fontSize: T.fontSize - 2, color: T.dim, marginTop: 2 }}>All questions, all modes, AI Tutor</div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontSize: 24 }}>⭐</span>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: T.fontSizeLg, color: T.gold }}>Premium — Unlimited</div>
+                  <div style={{ fontSize: T.fontSize - 2, color: T.dim, marginTop: 2 }}>All questions, all modes, AI Tutor</div>
+                </div>
               </div>
+
+              {/* Cancel subscription — monthly (Paystack) only. Lifetime/one-time buyers
+                  get a graceful "no active subscription" from the hub (404). Hidden on
+                  native, where billing goes through the Play Store, not Paystack. */}
+              {!isNative() && (
+                <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${T.border}` }}>
+                  {cancelState === 'done' ? (
+                    <div style={{ fontSize: T.fontSize - 1, color: '#4ade80', lineHeight: 1.6 }}>{cancelMsg}</div>
+                  ) : cancelState === 'confirm' ? (
+                    <div>
+                      <div style={{ fontSize: T.fontSize - 1, color: T.text, lineHeight: 1.6, marginBottom: 10 }}>
+                        Cancel your subscription? It won't auto-renew, and you'll keep premium until the end of your current paid period.
+                      </div>
+                      <div style={{ display: 'flex', gap: 10 }}>
+                        <button onClick={handleCancelSubscription}
+                          style={{ flex: 1, minHeight: 44, borderRadius: 10, border: 'none', background: '#DE3831', color: '#fff', fontWeight: 600, fontSize: T.fontSize, cursor: 'pointer' }}>
+                          Yes, cancel
+                        </button>
+                        <button onClick={() => { setCancelState('idle'); setCancelMsg(''); }}
+                          style={{ flex: 1, minHeight: 44, borderRadius: 10, border: `1px solid ${T.border}`, background: T.surface, color: T.text, fontWeight: 600, fontSize: T.fontSize, cursor: 'pointer' }}>
+                          Keep it
+                        </button>
+                      </div>
+                    </div>
+                  ) : cancelState === 'working' ? (
+                    <div style={{ fontSize: T.fontSize - 1, color: T.dim }}>Cancelling…</div>
+                  ) : (
+                    <>
+                      {cancelState === 'error' && (
+                        <div style={{ fontSize: T.fontSize - 1, color: T.red, lineHeight: 1.6, marginBottom: 10 }}>{cancelMsg}</div>
+                      )}
+                      <button onClick={() => { setCancelState('confirm'); setCancelMsg(''); }}
+                        style={{ background: 'none', border: 'none', color: T.dim, fontSize: T.fontSize - 1, textDecoration: 'underline', cursor: 'pointer', padding: '4px 0', minHeight: 44 }}>
+                        Cancel subscription
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           ) : inTrial ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
