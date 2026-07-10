@@ -151,7 +151,7 @@ const GAMES_BASE = [
   { id: 'school_dash',  icon: '🏫', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'community_qa', icon: '❓', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
   // Phase D: Adaptive Drills
-  { id: 'daily_diag',   icon: '📊', tier: 'free',    diff: 'beginner',     cat: 'practice',  codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'daily_diag',   icon: '📊', tier: 'free',    diff: 'beginner',     cat: 'practice',  codes: ['code12', 'code8', 'code10', 'code14'], hidden: true }, // launched from the home hero; not shown as a duplicate card
   { id: 'weak_target',  icon: '🎯', tier: 'free',    diff: 'intermediate', cat: 'practice',  codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'ctx_cluster',  icon: '🧩', tier: 'free',    diff: 'intermediate', cat: 'scenarios', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'seq_builder',  icon: '📋', tier: 'free',    diff: 'intermediate', cat: 'controls',  codes: ['code12', 'code8', 'code10', 'code14'] },
@@ -455,6 +455,7 @@ export default function App() {
   const lastGame   = localStorage.getItem(LAST_GAME_KEY);
   const lastGameObj = GAMES.find(g => g.id === lastGame);
   const filteredGames = GAMES
+    .filter(g => !g.hidden)
     .filter(g => g.codes.includes(selectedCode))
     .filter(g => activeCat === 'all' || g.cat === activeCat);
   // Progressive disclosure: on the default (all) view show a curated few; a

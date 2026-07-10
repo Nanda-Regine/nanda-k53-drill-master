@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { T } from '../theme.js';
 import { useLang } from '../LangContext.jsx';
-import { ROAD_SIGNS, SHAPE_GROUPS, getConfusablePairs } from '../data/roadSigns.js';
+import { ROAD_SIGNS, SHAPE_GROUPS } from '../data/roadSigns.js';
 
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
@@ -13,8 +13,8 @@ const PHASES = [
   { id: 'shape',      label: 'Phase 1: Shape',    desc: 'Identify the sign category from its SHAPE only.', icon: '🔷' },
   { id: 'colour',     label: 'Phase 2: Colour',   desc: 'Shape + colour — identify the sign type.', icon: '🎨' },
   { id: 'full',       label: 'Phase 3: Full Sign', desc: 'Name the sign from the complete image.', icon: '🛑' },
-  { id: 'confusable', label: 'Phase 4: Confusables', desc: 'Two similar signs — spot the difference.', icon: '⚔️' },
 ];
+// Note: confusable-pair drilling lives in its own dedicated game (ConfusablesBattle).
 
 // Shape silhouettes rendered as CSS shapes (zero images needed for phase 1)
 const SHAPE_RENDERERS = {
@@ -126,25 +126,6 @@ function buildFullSignQuestions() {
   });
 }
 
-function buildConfusableQuestions() {
-  const pairs = getConfusablePairs();
-  return shuffle(pairs).slice(0, 8).map(({ signA, signB }) => {
-    const which = Math.random() > 0.5 ? signA : signB;
-    const other = which === signA ? signB : signA;
-    return {
-      type: 'confusable',
-      sign: which,
-      pairSign: other,
-      question: `Which is "${which.name}"?`,
-      correct: which.name,
-      options: shuffle([which.name, other.name, ...shuffle(ROAD_SIGNS.filter(s => s.id !== which.id && s.id !== other.id)).slice(0, 2).map(s => s.name)]),
-      explanation: `${which.name}: ${which.mnemonic || which.hint}\n${other.name}: ${other.mnemonic || other.hint}`,
-      imgA: which.img,
-      imgB: other.img,
-    };
-  });
-}
-
 const QUESTIONS_BY_PHASE = {
   shape:      buildShapeQuestions,
   colour:     () => shuffle(ROAD_SIGNS).slice(0, 12).map(sign => ({
@@ -157,7 +138,6 @@ const QUESTIONS_BY_PHASE = {
     img: sign.img,
   })),
   full:       buildFullSignQuestions,
-  confusable: buildConfusableQuestions,
 };
 
 export default function SignShapeTrainer({ onBack, onPass }) {
