@@ -5,7 +5,7 @@ import { T } from '../theme.js';
 
 const PRIVACY = `PRIVACY POLICY (POPIA COMPLIANT)
 K53 Drill Master — Mirembe Muse (Pty) Ltd
-Last updated: June 2026
+Last updated: 10 July 2026
 
 This policy applies to the K53 Drill Master application ("the App"), operated by Mirembe Muse (Pty) Ltd ("we", "us", "our"), in accordance with the Protection of Personal Information Act 4 of 2013 (POPIA).
 
@@ -22,11 +22,11 @@ Email: hello@creativelynanda.co.za
 ───────────────────────────────────
 a) Information you provide:
    · Email address (when you sign in or subscribe)
-   · Payment details (processed by PayFast — we never store card data)
+   · Payment details (processed by our payment providers — Paystack for monthly subscriptions, PayFast for once-off payments; we never store card data)
 
 b) Information collected automatically:
    · Study progress, quiz scores, streaks, badges — stored locally on your device in browser localStorage. This data never leaves your device unless you choose to sync.
-   · Aggregate analytics via Vercel Analytics (page views, device type — no personally identifiable data).
+   · Aggregate usage analytics via Vercel Analytics, PostHog and Google Tag Manager (page views, device type, feature usage) — used only in aggregate to improve the App.
 
 c) Information we do NOT collect:
    · We do not collect ID numbers, addresses, or sensitive personal information as defined by POPIA.
@@ -55,8 +55,9 @@ We process personal information on the following grounds (POPIA section 11):
 ───────────────────────────────────
 We share personal information only with:
    · Supabase Inc. (database and authentication) — stores your email and subscription record
-   · PayFast (Pty) Ltd (payment processing) — handles all payment data
-   · Vercel Inc. (hosting) — serves the application
+   · Paystack (Pty) Ltd and PayFast (Pty) Ltd (payment processing) — handle all payment data
+   · Vercel Inc. (hosting and aggregate analytics) — serves the application
+   · PostHog and Google (Tag Manager) — aggregate, non-advertising usage analytics
 
 All third parties are contractually required to protect your data. We do not sell personal information.
 
@@ -92,7 +93,7 @@ Tel: 010 023 5200
 ───────────────────────────────────
 9. COOKIES & LOCAL STORAGE
 ───────────────────────────────────
-We use browser localStorage (not cookies) to store your study data locally. We use no advertising cookies or tracking pixels.
+We use browser localStorage to keep your study data on your device. Our analytics providers (Vercel Analytics, PostHog and Google Tag Manager) may set cookies or similar technologies to measure aggregate usage. We do not use third-party advertising networks and we do not sell tracking data.
 
 ───────────────────────────────────
 10. SECURITY
@@ -108,7 +109,7 @@ We will notify users of material changes by updating the "Last updated" date. Co
 
 const TERMS = `TERMS OF SERVICE
 K53 Drill Master — Mirembe Muse (Pty) Ltd
-Last updated: June 2026
+Last updated: 10 July 2026
 
 ───────────────────────────────────
 1. PARTIES & ACCEPTANCE
@@ -133,7 +134,7 @@ Free accounts receive up to 10 questions per day. First-time users receive 30 da
 ───────────────────────────────────
 5. PAID PLANS & PAYMENTS
 ───────────────────────────────────
-a) All payments are processed in South African Rand (ZAR) by PayFast (Pty) Ltd.
+a) All payments are processed in South African Rand (ZAR) by Paystack (monthly subscriptions) and PayFast (once-off Bundle and Lifetime payments).
 b) Monthly plans renew automatically on the same date each month.
 c) You may cancel a monthly subscription at any time; access continues until the end of the current billing period.
 d) Lifetime plans are a single one-time payment and do not renew.
@@ -185,7 +186,7 @@ East London, Eastern Cape, South Africa`;
 const PAIA = `PAIA MANUAL — SECTION 51
 Promotion of Access to Information Act 2 of 2000
 K53 Drill Master — Mirembe Muse (Pty) Ltd
-Last updated: June 2026
+Last updated: 10 July 2026
 
 ───────────────────────────────────
 A. CONTACT DETAILS OF INFORMATION OFFICER
@@ -217,7 +218,7 @@ The following categories of records are held:
 1. SUBSCRIBER & PAYMENT RECORDS
    · Email addresses of registered users
    · Subscription plan and expiry date
-   · Payment reference numbers (not card details — these are held solely by PayFast)
+   · Payment reference numbers (not card details — these are held solely by our payment providers, Paystack and PayFast)
    · Stored in: Supabase database (servers located in the European Union)
 
 2. AUTHENTICATION RECORDS
@@ -226,8 +227,8 @@ The following categories of records are held:
    · Stored in: Supabase authentication service
 
 3. ANALYTICS RECORDS
-   · Aggregate (non-personal) page view data
-   · Stored in: Vercel Analytics
+   · Aggregate (non-personal) usage and page-view data
+   · Stored in / processed by: Vercel Analytics, PostHog and Google Tag Manager
 
 4. BUSINESS RECORDS
    · Company registration documents
@@ -279,7 +280,7 @@ G. SERVICES & PRODUCTS
 ───────────────────────────────────
 Mirembe Muse (Pty) Ltd provides:
    · K53 Drill Master: educational SaaS application for South African learner's licence preparation
-   · Subscription tiers: Free, Monthly (R29/mo), Bundle (R69/3mo), Lifetime (R99), Lifetime+PDP (R199)
+   · Subscription tiers: Free, Monthly, 3-Month Bundle, Lifetime, and Lifetime + PDP (current prices are shown on the in-app pricing page)
 
 ───────────────────────────────────
 H. INFORMATION REGULATOR
@@ -295,6 +296,7 @@ Email: inforeg@justice.gov.za`;
 
 const DISCLAIMER = `EDUCATIONAL DISCLAIMER
 K53 Drill Master — Mirembe Muse (Pty) Ltd
+Last updated: 10 July 2026
 
 K53 Drill Master is an independent product and is NOT affiliated with, endorsed by, or officially associated with:
    · The South African Department of Transport
@@ -309,7 +311,7 @@ Questions and content are based on publicly available official materials:
    · The South African Road Traffic Signs Manual (SARTSM)
    · The National Road Traffic Act 93 of 1996 and its regulations
 
-While we take care to ensure accuracy, we make no warranty that the content precisely mirrors current official examination content. Learners should always study the official DLTC manuals.
+Our questions are audited against the official Rules of the Road, the K53 vehicle-controls manual and the SARTSM road-sign standard. While we take care to ensure accuracy, we make no warranty that the content precisely mirrors current official examination content. Learners should always study the official DLTC manuals.
 
 NO PASS GUARANTEE
 Use of this application does not guarantee a pass in your official learner's licence examination.
