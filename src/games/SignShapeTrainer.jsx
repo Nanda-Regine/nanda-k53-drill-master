@@ -63,6 +63,25 @@ const SHAPE_RENDERERS = {
       <rect x="5" y="15" width="70" height="50" fill="#4472CA" rx="4" />
     </svg>
   ),
+  'triangle-yellow': ({ size = 80 }) => (
+    <svg width={size} height={size} viewBox="0 0 80 80">
+      <polygon points="40,6 74,68 6,68" fill="#FFB612" stroke="#000" strokeWidth="5" strokeLinejoin="round" />
+    </svg>
+  ),
+  'octagon-plate': ({ size = 80 }) => (
+    <svg width={size} height={size} viewBox="0 0 80 80">
+      <polygon points="23,3 45,3 61,19 61,41 45,57 23,57 7,41 7,19" fill="#DE3831" stroke="#fff" strokeWidth="3" />
+      <text x="34" y="35" textAnchor="middle" fill="#fff" fontSize="11" fontWeight="bold">STOP</text>
+      <rect x="19" y="63" width="42" height="14" fill="#fff" stroke="#000" strokeWidth="2" rx="2" />
+      <text x="40" y="74" textAnchor="middle" fill="#000" fontSize="9" fontWeight="bold">3-WAY</text>
+    </svg>
+  ),
+  'circle-red-white': ({ size = 80 }) => (
+    <svg width={size} height={size} viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="35" fill="#DE3831" />
+      <rect x="17" y="34" width="46" height="12" fill="#fff" />
+    </svg>
+  ),
 };
 
 function ShapeSilhouette({ shape, size = 80 }) {
