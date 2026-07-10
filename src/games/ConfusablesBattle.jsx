@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { T } from '../theme.js';
 import { sfx } from '../utils/sounds.js';
-import { ROAD_SIGNS } from '../data/roadSigns.js';
+import { ROAD_SIGNS, CRISP_SIGNS } from '../data/roadSigns.js';
 
 const hapticCorrect = () => { try { navigator.vibrate?.(30); } catch {} };
 const hapticWrong   = () => { try { navigator.vibrate?.([60, 30, 60]); } catch {} };
@@ -14,14 +14,15 @@ const ROUNDS = 12;
 function buildPairs() {
   const signMap = {};
   ROAD_SIGNS.forEach(s => { signMap[s.id] = s; });
+  const crispIds = new Set(CRISP_SIGNS.map(s => s.id)); // only pair signs with crisp images
 
   const pairs = [];
   const seen = new Set();
 
-  ROAD_SIGNS.forEach(sign => {
+  CRISP_SIGNS.forEach(sign => {
     (sign.confusableWith || []).forEach(otherId => {
       const other = signMap[otherId];
-      if (!other) return;
+      if (!other || !crispIds.has(otherId)) return;
       const key = [sign.id, otherId].sort().join('|');
       if (!seen.has(key)) {
         seen.add(key);
@@ -38,7 +39,7 @@ function buildPairs() {
   ];
   EXTRA.forEach(([a, b]) => {
     const key = [a, b].sort().join('|');
-    if (!seen.has(key) && signMap[a] && signMap[b]) {
+    if (!seen.has(key) && signMap[a] && signMap[b] && crispIds.has(a) && crispIds.has(b)) {
       seen.add(key);
       pairs.push([signMap[a], signMap[b]]);
     }

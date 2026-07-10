@@ -4,7 +4,7 @@ import { T } from '../theme.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 import { recordGameAnswer } from '../utils/masteryStore.js';
-import { ROAD_SIGNS } from '../data/roadSigns.js';
+import { CRISP_SIGNS as ROAD_SIGNS } from '../data/roadSigns.js';
 import MentalHealthSupport from '../components/MentalHealthSupport.jsx';
 
 // ── Exam structure (mirrors actual DLTC learner's test) ──────────────────────

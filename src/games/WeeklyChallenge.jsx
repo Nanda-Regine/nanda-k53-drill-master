@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { T } from '../theme.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
-import { ROAD_SIGNS } from '../data/roadSigns.js';
+import { CRISP_SIGNS as ROAD_SIGNS } from '../data/roadSigns.js';
 
 // ── Fallback challenge (used when no Supabase challenge found) ────────────────
 function buildLocalChallenge() {

@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { T } from '../theme.js';
 import { useLang } from '../LangContext.jsx';
-import { ROAD_SIGNS, SHAPE_GROUPS } from '../data/roadSigns.js';
+import { ROAD_SIGNS, CRISP_SIGNS, SHAPE_GROUPS } from '../data/roadSigns.js';
 
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
@@ -112,8 +112,8 @@ function buildShapeQuestions() {
 }
 
 function buildFullSignQuestions() {
-  return shuffle(ROAD_SIGNS).slice(0, 15).map(sign => {
-    const wrongs = shuffle(ROAD_SIGNS.filter(s => s.id !== sign.id)).slice(0, 3).map(s => s.name);
+  return shuffle(CRISP_SIGNS).slice(0, 15).map(sign => {
+    const wrongs = shuffle(CRISP_SIGNS.filter(s => s.id !== sign.id)).slice(0, 3).map(s => s.name);
     return {
       type: 'full',
       sign,
@@ -128,7 +128,7 @@ function buildFullSignQuestions() {
 
 const QUESTIONS_BY_PHASE = {
   shape:      buildShapeQuestions,
-  colour:     () => shuffle(ROAD_SIGNS).slice(0, 12).map(sign => ({
+  colour:     () => shuffle(CRISP_SIGNS).slice(0, 12).map(sign => ({
     type: 'colour',
     sign,
     question: `A sign with ${sign.signColor?.replace('-', ' and ')} colouring means...`,

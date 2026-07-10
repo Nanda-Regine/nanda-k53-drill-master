@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { T } from '../theme.js';
 import { useLang } from '../LangContext.jsx';
-import { ROAD_SIGNS } from '../data/roadSigns.js';
+import { ROAD_SIGNS, CRISP_SIGNS } from '../data/roadSigns.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 import { recordGameAnswer } from '../utils/masteryStore.js';
@@ -51,7 +51,7 @@ function isMatch(spoken, correct) {
 
 // Build question set from road signs with valid images and names
 function buildSession() {
-  const eligible = ROAD_SIGNS.filter(s => s.img && s.name && s.meaning);
+  const eligible = CRISP_SIGNS.filter(s => s.name && s.meaning);
   return shuffle(eligible).slice(0, SESSION_SIZE).map(sign => ({
     sign,
     prompt: `What does this sign mean? Say the name or meaning.`,

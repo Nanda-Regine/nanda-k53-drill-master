@@ -1,6 +1,7 @@
 // Road Signs — SA Road Traffic Sign Manual (SARTSM)
 // All images in /public/signs/ — use descriptive filenames where available
 // Data verified against official DLTC documentation
+import { SIGN_IMAGES } from './signImageManifest.js';
 
 export const ROAD_SIGNS = [
 
@@ -2441,6 +2442,10 @@ export const SIGN_CATEGORIES = [
   { id: 'Warning',     label: 'Warning Signs',     color: '#FFB612', icon: '⚠️', description: 'Warn of hazards ahead. Prepare and reduce speed.' },
   { id: 'Reservation', label: 'Reservation Signs', color: '#4472CA', icon: '🅿️', description: 'Reserve lanes or bays for specific users.' },
 ];
+
+// Signs that have a crisp (>=250px) image — sign games use this so a low-resolution
+// sign is never displayed. Everything else about ROAD_SIGNS is unchanged.
+export const CRISP_SIGNS = ROAD_SIGNS.filter(s => s.img && SIGN_IMAGES.has(s.img));
 
 // ── Shape groups (for SignShapeTrainer) ─────────────────────────────────────────
 export const SHAPE_GROUPS = {
