@@ -67,7 +67,7 @@
 
   <!-- Subheadline -->
   <text x="80" y="345" font-family="Georgia, serif" font-size="24" fill="#6B7A62">South Africa's learner licence drill app.</text>
-  <text x="80" y="378" font-family="Georgia, serif" font-size="24" fill="#6B7A62">600+ questions. 11 game modes. 3 languages.</text>
+  <text x="80" y="378" font-family="Georgia, serif" font-size="24" fill="#6B7A62">1,000+ verified questions &#183; Official DLTC &amp; SARTSM</text>
 
   <!-- Divider -->
   <rect x="80" y="410" width="60" height="3" rx="2" fill="#FFB612"/>
@@ -75,20 +75,20 @@
   <!-- Stats row -->
   <g font-family="Georgia, serif">
     <!-- Stat 1 -->
-    <text x="80" y="460" font-size="42" font-weight="700" fill="#007A4D">600+</text>
-    <text x="80" y="490" font-size="14" fill="#6B7A62">questions</text>
+    <text x="80" y="460" font-size="42" font-weight="700" fill="#007A4D">1,000+</text>
+    <text x="80" y="490" font-size="14" fill="#6B7A62">verified questions</text>
 
     <!-- Stat 2 -->
-    <text x="260" y="460" font-size="42" font-weight="700" fill="#007A4D">11</text>
-    <text x="260" y="490" font-size="14" fill="#6B7A62">game modes</text>
+    <text x="300" y="460" font-size="42" font-weight="700" fill="#007A4D">200+</text>
+    <text x="300" y="490" font-size="14" fill="#6B7A62">road signs</text>
 
     <!-- Stat 3 -->
-    <text x="400" y="460" font-size="42" font-weight="700" fill="#007A4D">3</text>
-    <text x="400" y="490" font-size="14" fill="#6B7A62">languages</text>
+    <text x="450" y="460" font-size="42" font-weight="700" fill="#007A4D">3</text>
+    <text x="450" y="490" font-size="14" fill="#6B7A62">languages</text>
 
     <!-- Stat 4 -->
-    <text x="520" y="460" font-size="42" font-weight="700" fill="#FFB612">Free</text>
-    <text x="520" y="490" font-size="14" fill="#6B7A62">to start</text>
+    <text x="580" y="460" font-size="42" font-weight="700" fill="#FFB612">Free</text>
+    <text x="580" y="490" font-size="14" fill="#6B7A62">to start</text>
   </g>
 
   <!-- CTA button -->
