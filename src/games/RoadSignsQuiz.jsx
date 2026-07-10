@@ -7,6 +7,7 @@ import { recordGameAnswer } from '../utils/masteryStore.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong } from '../utils/haptics.js';
 import { GENERATED_SIGN_QUESTIONS } from '../data/signQuestions.js';
+import { SIGN_IMAGES } from '../data/signImageManifest.js';
 
 function SignImg({ src, alt, size = 170 }) {
   return (
@@ -1127,9 +1128,14 @@ function HomeScreen({ onStart }) {
   );
 }
 
-// Augment the curated bank with generated questions across four testing methods
-// (identify / meaning / action / classification), filtered to signs with real
-// images. Brings the sign question bank to 800+.
+// Quality gate: drop any curated question whose sign image is not crisp
+// (SIGN_IMAGES only lists images >=250px), so a low-resolution sign never appears.
+for (let i = QUESTIONS.length - 1; i >= 0; i--) {
+  if (QUESTIONS[i].img && !SIGN_IMAGES.has(QUESTIONS[i].img)) QUESTIONS.splice(i, 1);
+}
+// Augment the curated bank with generated questions across six testing methods
+// (identify / meaning / action / classification / confusable / memory-tip),
+// all restricted to crisp sign images.
 QUESTIONS.push(...GENERATED_SIGN_QUESTIONS);
 
 // ══════════════════════════════════════════════════════════════════════════════

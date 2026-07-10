@@ -107,6 +107,26 @@ export function generateSignQuestions() {
     const cd = shuffleSeeded(Object.values(CAT_LABEL).filter(l => l !== correctLabel), seed + 4).slice(0, 3);
     const { options: o, answer } = options(correctLabel, cd, seed + 44);
     out.push({ id: `gen-cat-${s.id}`, category: cat, img: s.img, question: 'What type of road sign is this?', options: o, answer, explanation: `${s.name} (${s.code}) is a ${correctLabel.toLowerCase()} sign.` });
+
+    // 5 — confusable pair (teaches the look-alikes learners get wrong)
+    if (confNames.length >= 1) {
+      const ans = confNames[0];
+      const cfd = distractors(pool.filter(x => x.name !== ans && x.name !== s.name && !confNames.includes(x.name)), 'name', ans, 3, seed + 5);
+      if (ans !== s.name && new Set([ans, ...cfd]).size === 4) {
+        const { options: o5, answer: a5 } = options(ans, cfd, seed + 55);
+        out.push({ id: `gen-conf-${s.id}`, category: cat, img: s.img, question: 'This sign is most easily confused with which of these?', options: o5, answer: a5, explanation: `${s.name} (${s.code}) is commonly confused with ${ans}. ${s.mnemonic || s.hint || ''}`.trim() });
+      }
+    }
+
+    // 6 — memory tip
+    if (s.mnemonic) {
+      const others = [...new Set(signs.filter(x => x.id !== s.id && x.mnemonic && x.mnemonic !== s.mnemonic).map(x => x.mnemonic))];
+      const mnd = shuffleSeeded(others, seed + 6).slice(0, 3);
+      if (new Set([s.mnemonic, ...mnd]).size === 4) {
+        const { options: o6, answer: a6 } = options(s.mnemonic, mnd, seed + 66);
+        out.push({ id: `gen-tip-${s.id}`, category: cat, img: s.img, question: 'Which memory tip matches this sign?', options: o6, answer: a6, explanation: `${s.name} (${s.code}): ${s.mnemonic}` });
+      }
+    }
   }
 
   return out;
