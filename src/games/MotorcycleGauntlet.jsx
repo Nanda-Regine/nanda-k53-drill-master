@@ -120,10 +120,10 @@ const TESTS = [
         explain: "Every motorcycle must have at least two independent braking systems — front and rear. Each must be able to stop the vehicle on its own if the other fails.",
       },
       {
-        q: "A motorcycle rider wishes to carry goods in a top box. The top box increases the motorcycle's width beyond normal handlebars. Is this legal?",
-        options: ["Yes — top boxes are universally permitted","No — total width must not exceed 1.5 metres for two-wheeled motorcycles","Yes — as long as weight does not exceed 100kg","No — goods may only be carried in panniers"],
+        q: "You want to carry goods on your motorcycle. What does the law require of the load?",
+        options: ["It must weigh under 5 kg","It must be securely fastened and must not obscure your lights or number plate, or project dangerously","It may only ever be carried in a factory-fitted top box","It must be carried on your lap"],
         answer: 1,
-        explain: "A motorcycle's maximum permissible width is 1.5 metres. This includes any luggage, panniers or top boxes attached.",
+        explain: "Any load on a motorcycle must be securely fastened and must not project dangerously, obscure your lights or number plate, or affect your control of the machine.",
       },
       {
         q: "Your motorcycle's stop lamp must be visible at what minimum distance in normal daylight?",
@@ -318,7 +318,7 @@ const TESTS = [
         explain: "At a four-way stop with simultaneous arrivals: the vehicle on the RIGHT has priority. Always give way to traffic on your right.",
       },
       {
-        q: "A no-overtaking sign (solid white bar in a circle with red border) means:",
+        q: "A no-overtaking sign (two vehicles side by side in a red-bordered circle) means:",
         options: ["No overtaking for the next 100 metres only","No overtaking for all vehicles in your direction until a 'derestriction' sign","No overtaking during wet weather","No overtaking by motorcycles specifically"],
         answer: 1,
         explain: "A no-overtaking sign prohibits passing other vehicles for ALL traffic in your direction from that point until a derestriction sign or the applicable distance shown on a supplementary plate.",
@@ -342,10 +342,10 @@ const TESTS = [
         explain: "First obligation at an injury accident: STOP. Render reasonable assistance to injured persons. Call emergency services (10111/112). Then secure the scene and exchange details.",
       },
       {
-        q: "A solid yellow centre line on a two-lane road means:",
+        q: "A solid white centre line on a two-lane road means:",
         options: ["Caution — slippery surface ahead","No overtaking and no crossing for vehicles in that direction","Slow lane — keep to the left","No parking within 3 metres of the line"],
         answer: 1,
-        explain: "Solid yellow (or white) centre line = NO overtaking, NO crossing for the lane on that side. Same rule as a solid white line. No crossing regardless of what is visible ahead.",
+        explain: "A solid white centre line = NO overtaking and NO crossing. In South Africa regulatory barrier lines are white; yellow lines mark road edges and temporary layouts.",
       },
     ],
   },

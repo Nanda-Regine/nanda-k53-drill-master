@@ -68,7 +68,7 @@ const QUESTION_POOL = [
   { q:"Direction indicators must be visible at what distance?", options:["20m","30m","45m","90m"], answer:1, category:"Numbers & Ages" },
   { q:"Number plate lamp visible at what distance?", options:["20m","30m","45m","60m"], answer:0, category:"Numbers & Ages" },
   { q:"Minimum tyre tread depth for a light motor vehicle?", options:["0.5mm","1mm","1.6mm","2mm"], answer:1, category:"Numbers & Ages" },
-  { q:"A child up to what mass may use an adult seatbelt without a child seat?", options:["15kg","18kg","20kg","25kg"], answer:1, category:"Numbers & Ages" },
+  { q:"A child under what age must be secured in an appropriate child restraint (car seat) where one is available?", options:["3 years","5 years","1 year","7 years"], answer:0, category:"Numbers & Ages" },
   { q:"At what age may a learner drive a Code 3 vehicle?", options:["16","17","18","21"], answer:2, category:"Numbers & Ages" },
   { q:"General driver blood alcohol limit (g per 100ml)?", options:["0.00","0.02","0.05","0.08"], answer:2, category:"Numbers & Ages" },
   { q:"Dipped beam must show objects at what distance ahead?", options:["30m","45m","100m","150m"], answer:1, category:"Numbers & Ages" },

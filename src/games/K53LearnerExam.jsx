@@ -79,7 +79,7 @@ const RULES_QUESTIONS = [
   { q: 'At a T-junction, right of way belongs to:', options: ['The vehicle turning right','Vehicles on the through/continuing road','The vehicle that arrives first','The smaller vehicle'], answer: 1 },
   { q: 'On a road too narrow for two vehicles to pass, who has priority on a gradient?', options: ['The faster vehicle','The vehicle travelling downhill — it is easier to reverse downhill','The vehicle travelling uphill — reverse is easier for the downhill vehicle','The heavier vehicle'], answer: 2 },
   { q: 'You must switch from high beam to low beam when an oncoming vehicle is within:', options: ['50 m','100 m','150 m','200 m'], answer: 2 },
-  { q: 'Rear fog lights should only be used when visibility is reduced to less than:', options: ['50 m','100 m','150 m','200 m'], answer: 1 },
+  { q: 'You may switch on your rear (red) fog lamp only when:', options: ['Visibility is seriously reduced by fog, mist or heavy rain','Driving at night on any road','It is raining lightly','A vehicle is following you too closely'], answer: 0 },
   { q: 'An orange/amber flashing beacon on a slow-moving vehicle indicates:', options: ['A police vehicle','A VIP convoy','A hazard, maintenance, or oversized vehicle — proceed with caution','A breakdown — you must stop and assist'], answer: 2 },
   { q: 'Driving while a prescribed medication impairs your ability to drive is:', options: ['Permitted — the prescription makes it legal','An offence if your ability to drive is impaired, regardless of the medication type','Only an offence if you cause an accident','Permitted for doctors and medical professionals'], answer: 1 },
   { q: 'When two vehicles approach an uncontrolled intersection simultaneously from opposite directions and one is turning right, who yields?', options: ['The vehicle turning right must yield to oncoming straight-through traffic','The oncoming vehicle must yield to the turning vehicle','The smaller vehicle yields','The slower vehicle yields'], answer: 0 },
@@ -87,7 +87,7 @@ const RULES_QUESTIONS = [
   { q: 'A white broken line on the left edge of the road marks:', options: ['A no-stopping zone','The boundary of the road — you may cross it to stop safely on the shoulder','A bicycle lane','A bus lane'], answer: 1 },
   { q: 'Before a U-turn at a traffic-light-controlled intersection, you must ensure:', options: ['The traffic light is green','A "U-turn permitted" sign or marking is present and the turn can be made safely','No pedestrians are on the pavement','You are in the right lane'], answer: 1 },
   { q: 'The right lane on a multi-lane road is for:', options: ['Continuous high-speed travel','Emergency vehicles only','Overtaking only — return to the left lane when done','Heavy vehicles only'], answer: 2 },
-  { q: 'In wet conditions, your following distance should be:', options: ['The same as in dry conditions','Slightly more than normal','At least double the dry-weather gap (4+ seconds instead of 2)','Exactly 5 car lengths regardless of speed'], answer: 2 },
+  { q: 'In wet conditions, your following distance should be:', options: ['The same as in dry conditions','Increased to at least a 3-second gap (instead of the 2-second dry gap)','Reduced to keep up with traffic','Exactly 5 car lengths regardless of speed'], answer: 1 },
   { q: 'A "Yield" sign requires you to:', options: ['Stop completely before proceeding','Slow down and give way to any approaching traffic before entering the junction','Proceed without stopping if you judge the road to be clear','Flash headlights and proceed'], answer: 1 },
   { q: 'Pedestrians in a marked crossing with a green pedestrian signal:', options: ['Must wait for all vehicles to clear before crossing','Have right of way — vehicles must stop','Share right of way equally with turning vehicles','Must wait for all vehicles to complete their turns'], answer: 1 },
   { q: 'When driving on a gravel road, the most important adjustment is:', options: ['Increase tyre pressure','Reduce speed and increase following distance — stopping distances are longer','Drive on the shoulder','Shift to a lower gear at all times'], answer: 1 },
@@ -103,7 +103,7 @@ const RULES_QUESTIONS = [
   { q: 'Reversing on a freeway is:', options: ['Permitted only if you missed your exit','Permitted in a genuine emergency','Permitted at speeds below 10 km/h','Never permitted under any circumstances'], answer: 3 },
   { q: 'Your front wheels, when parking downhill against a kerb, should be turned:', options: ['Straight ahead','Away from the kerb (to the right)','Into the kerb (to the left)','It does not matter on a downhill'], answer: 2 },
   { q: 'The purpose of a safety (secondary) chain on a trailer coupling is:', options: ['To stop the trailer swaying','To prevent the trailer from detaching and causing danger if the main coupling fails','To limit trailer speed','To connect the trailer\'s electrical system'], answer: 1 },
-  { q: 'You must NOT stop within how many metres of a railway crossing?', options: ['3 m','6 m','9 m','15 m'], answer: 1 },
+  { q: 'You may NOT stop within how many metres of a tunnel, subway or narrow bridge?', options: ['3 m','6 m','9 m','15 m'], answer: 1 },
 ];
 
 // ── Vehicle Controls questions (8 verified K53 controls questions) ────────────

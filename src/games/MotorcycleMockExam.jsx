@@ -42,7 +42,7 @@ const QUESTION_POOL = [
   { q: "Motorcycle dipped beam must allow visibility of objects at least how far ahead?", options: ["20m","30m","45m","100m"], answer: 2, category: "Equipment" },
   { q: "Must a motorcycle have both front and rear independent braking systems?", options: ["No — one system is fine","Yes — two independent braking systems","No — rear only","Only above 250cc"], answer: 1, category: "Equipment" },
   { q: "Your motorcycle's stop lamp must be visible at minimum what distance in daylight?", options: ["20m","30m","45m","90m"], answer: 1, category: "Equipment" },
-  { q: "What is the maximum width of a motorcycle (including luggage)?", options: ["1.0m","1.5m","2.0m","2.5m"], answer: 1, category: "Equipment" },
+  { q: "Goods carried on a motorcycle must:", options: ["Weigh under 10 kg","Be securely fastened and not obscure your lights or number plate","Be carried only in a sidecar","Extend no more than 2 m to each side"], answer: 1, category: "Equipment" },
   { q: "Your motorcycle's hooter must be audible from at least how far?", options: ["30m","45m","90m","150m"], answer: 2, category: "Equipment" },
   { q: "Is it compulsory for a Code 1 learner's licence holder to wear full protective riding gear (jacket, gloves, boots)?", options: ["Yes — full gear is legally compulsory","Only a helmet is legally required — other gear is recommended","Yes — at speeds above 60 km/h","No — helmet is optional on short trips"], answer: 1, category: "Equipment" },
 
@@ -74,7 +74,7 @@ const QUESTION_POOL = [
   { q: "A YIELD sign means:", options: ["Stop completely","Give way to joining road traffic — stop only if needed","Slow to 30 km/h","Give way to traffic from your right only"], answer: 1, category: "Road Signs" },
   { q: "A broken white centre line means:", options: ["No overtaking","Overtaking permitted when safe","Right lane only","No crossing ever"], answer: 1, category: "Road Signs" },
   { q: "A no-overtaking sign means:", options: ["No overtaking for 100m","No overtaking in your direction until derestriction","No overtaking in wet weather","No overtaking by heavy vehicles"], answer: 1, category: "Road Signs" },
-  { q: "A solid yellow centre line means:", options: ["Slippery surface ahead","No overtaking, no crossing for that lane","Slow lane — keep left","No parking within 3m"], answer: 1, category: "Road Signs" },
+  { q: "A solid white centre line means:", options: ["Slippery surface ahead","No overtaking, no crossing for that lane","Slow lane — keep left","No parking within 3m"], answer: 1, category: "Road Signs" },
   { q: "A flashing amber traffic light means:", options: ["Treat as stop","Proceed normally","Yield and proceed with caution","Road is closed"], answer: 2, category: "Road Signs" },
   { q: "A traffic officer's instructions override:", options: ["Nothing — signals take precedence","Only road markings","All road signs, signals AND markings","Only in emergencies"], answer: 2, category: "Road Signs" },
 
@@ -95,14 +95,14 @@ const QUESTION_POOL = [
   // ADDITIONAL ROAD BEHAVIOUR
   { q: "When being overtaken by another vehicle, you must:", options: ["Accelerate to help them complete faster","Move LEFT and do not accelerate until they have fully passed","Flash hazards to warn oncoming traffic","Hold your position and maintain speed"], answer: 1, category: "Road Behaviour" },
   { q: "You approach a railway crossing with no barriers. What must you do?", options: ["Maintain speed if no train is visible","Stop, look both ways, cross only when clear","Slow to 30 km/h — no need to stop","Sound hooter and proceed"], answer: 1, category: "Road Behaviour" },
-  { q: "At night, when must you switch from high beam to dipped beam?", options: ["When within 500m of oncoming traffic","When within 150m of oncoming traffic OR following within 150m of another vehicle","Only in fog or rain","When entering a town"], answer: 1, category: "Road Behaviour" },
+  { q: "At night, you must dip your headlight from high to low beam when:", options: ["Never — always ride on high beam at night","An oncoming vehicle approaches, or when you are following another vehicle","Only in fog or rain","Only on a freeway"], answer: 1, category: "Road Behaviour" },
   { q: "You want to make a U-turn on a public road. When is this NOT permitted?", options: ["Never on any road","When a no-U-turn sign is displayed, near crests, curves, or where it obstructs traffic","Only at traffic lights","On roads with a speed limit above 80 km/h"], answer: 1, category: "Road Behaviour" },
   { q: "Fog lamps may legally be used when?", options: ["In heavy rain","In snow, fog, mist, dust or smoke — not rain","Anytime visibility is reduced","Only at night"], answer: 1, category: "Road Behaviour" },
   { q: "You want to turn right at an intersection. Traffic is approaching from your left. Who has right of way?", options: ["You — you are on the major road","The approaching traffic — you must yield when turning across oncoming traffic","You — turning vehicles always have right of way","Whoever arrives first"], answer: 1, category: "Road Behaviour" },
   { q: "When approaching a STOP sign, where exactly must you stop?", options: ["3 metres before the sign","At the stop line, or at the edge of the intersection if no line","When you can see traffic","At the sign pole itself"], answer: 1, category: "Road Signs" },
   { q: "You are riding at night and see a vehicle's headlights ahead in your lane. It is the wrong way. You must:", options: ["Flash your lights and maintain position","Move to the left as far as possible, slow down, hoot if needed","Brake and stop in the middle of the road","Accelerate to get past quickly"], answer: 1, category: "Emergencies" },
   { q: "What does a solid white line along the LEFT edge of the road indicate?", options: ["Parking zone","No stopping or parking — often a bus lane edge","Edge of the carriageway — keep to the right of it, on the roadway","Reserved for motorcycles"], answer: 2, category: "Road Signs" },
-  { q: "You hold a Code 1 licence and want to tow a small trailer. Is this permitted?", options: ["Yes — motorcycles may tow trailers up to 750kg","No — motorcycles are not legally permitted to tow trailers","Yes, if the trailer has its own brakes","Only with a Code 2 endorsement"], answer: 1, category: "Licence & Codes" },
+  { q: "A Code 1 learner's licence does NOT permit you to:", options: ["Ride on a public road with L-plates","Carry a passenger","Ride during the day","Wear an approved helmet"], answer: 1, category: "Licence & Codes" },
 ];
 
 export default function MotorcycleMockExam({ onBack, onPass }) {

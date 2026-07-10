@@ -84,10 +84,10 @@ const TESTS = [
     color: "#DE3831",
     questions: [
       {
-        q: "A Code 10 truck must carry which fire extinguisher on board?",
-        options: ["No legal requirement — fire extinguishers are optional","At least one approved fire extinguisher in a readily accessible position","Two fire extinguishers, one in the cab and one on the chassis","A fire extinguisher only if carrying dangerous goods"],
+        q: "A vehicle transporting dangerous goods must carry:",
+        options: ["No special equipment beyond a normal load","At least one approved fire extinguisher in a readily accessible position","Extra fuel in case of a long detour","A second spare wheel"],
         answer: 1,
-        explain: "All heavy motor vehicles must carry at least one approved fire extinguisher in an easily accessible position. For dangerous goods vehicles the requirement is stricter.",
+        explain: "Vehicles conveying dangerous goods must carry approved fire-fighting equipment (a fire extinguisher) in a readily accessible position, under the dangerous-goods regulations.",
       },
       {
         q: "What is the maximum width of a heavy motor vehicle in South Africa?",
@@ -250,10 +250,10 @@ const TESTS = [
         explain: "A load projecting more than 1.8m behind the rear = abnormal load. Requires permit, markings, and often an escort vehicle. A red flag alone is not sufficient.",
       },
       {
-        q: "At what maximum rear axle load (per standard single axle) is most road infrastructure in SA designed?",
-        options: ["6 000 kg","8 000 kg","10 000 kg","12 000 kg"],
-        answer: 2,
-        explain: "Standard single axle limit = 10 000 kg (10 tonnes). Tandem axles = typically 18 000 kg combined. Exceeding these limits damages road infrastructure and requires permits.",
+        q: "A goods vehicle becomes subject to the 80 km/h speed limit once its GVM exceeds:",
+        options: ["3 500 kg","9 000 kg","12 000 kg","16 000 kg"],
+        answer: 1,
+        explain: "A goods vehicle with a GVM of more than 9 000 kg is limited to 80 km/h on all roads (Rules of the Road §6.29), because of its much longer braking distance.",
       },
       {
         q: "You need to transport a load that requires your truck to travel at less than 40 km/h. What must you do?",
@@ -294,10 +294,10 @@ const TESTS = [
         explain: "Breakdown on freeway: hazard lights ON immediately, exit safely (away from traffic), place triangles at 45m+ intervals behind the vehicle, stand on the embankment away from the road. NEVER stand between your truck and oncoming traffic.",
       },
       {
-        q: "As a professional truck driver, what is your legal obligation regarding driving hours to prevent fatigue?",
-        options: ["No specific limit — professional drivers decide for themselves","Maximum 10 consecutive driving hours then minimum 8 hours rest; never exceed 16 hours between sleep periods","Maximum 8 hours per day","Maximum 500km per driving stint"],
+        q: "What is the safest way for a professional driver to manage fatigue on a long trip?",
+        options: ["Drive through the night while roads are quiet","Take regular rest breaks and never drive while drowsy","Rely on coffee and energy drinks to stay awake","Drive faster to finish the trip sooner"],
         answer: 1,
-        explain: "South African regulations limit professional drivers: maximum 10 hours driving in a day, with mandatory rest breaks. The exact requirements are in the Hours of Driving regulations under the RTMC. Fatigue is a leading cause of truck accidents.",
+        explain: "Fatigue is a leading cause of heavy-vehicle crashes. Take regular rest breaks, share driving where possible, and never drive while drowsy — no amount of caffeine replaces sleep.",
       },
       {
         q: "You are involved in a serious accident causing injury. You are not injured. What is your FIRST obligation?",

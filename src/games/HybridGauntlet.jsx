@@ -225,10 +225,10 @@ const TESTS = [
         explain: "The Yield sign (R2) is an inverted triangle — same shape category as warning signs — but it IS a regulatory sign. Failure to yield is an offence. You cannot assume all triangles are warning signs.",
       },
       {
-        q: "Which two regulatory signs share their shape with non-regulatory sign categories?",
-        options: ["Stop (octagonal) and Yield (triangular)","Yield (triangular) and Pedestrian Priority (diamond)","Stop (octagonal) and Pedestrian Priority (diamond)","No entry (round) and Speed limit (round)"],
-        answer: 1,
-        explain: "Yield (R2) is triangular — same as warning signs. Pedestrian priority (R5) is diamond-shaped — unique. Stop (R1.1) is octagonal — also unique but doesn't share with another category. The confusable pair is Yield + Pedestrian priority.",
+        q: "Which regulatory sign shares its shape with another sign category?",
+        options: ["Yield — an inverted triangle, like the warning-sign family","Stop — a red octagon","Pedestrian priority — a diamond","No entry — a red circle"],
+        answer: 0,
+        explain: "Yield (R2) is an inverted triangle — the same triangular family as warning signs, which is why it can be confused with them. Stop (octagon), pedestrian priority (diamond) and no-entry (circle) each have a shape unique to their meaning.",
       },
       {
         q: "Sign TR201 is displayed. What does the 'T' prefix tell you — and what colour is its background?",

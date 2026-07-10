@@ -24,7 +24,7 @@ const QUESTIONS = [
 
   // ── Instrument panel ─────────────────────────────────────────────────────
   { id: 'vc10', cat: 'Instruments', q: 'A red temperature warning light means:', options: ['The heater is on','The engine is critically overheating — stop safely immediately','You need more coolant next service','Normal warm-up'], answer: 1 },
-  { id: 'vc11', cat: 'Instruments', q: 'The oil pressure warning light means:', options: ['Oil change is due','Critical oil pressure loss — stop and switch off the engine immediately','Low oil level only','Normal at start-up for a few seconds then should go out'], answer: 3 },
+  { id: 'vc11', cat: 'Instruments', q: 'The red oil-pressure warning light comes on while driving. It means:', options: ['An oil change is due','Critical oil pressure loss — stop and switch off the engine immediately','The oil level is slightly low','Normal — it always stays on while driving'], answer: 1 },
   { id: 'vc12', cat: 'Instruments', q: 'What does the ABS warning light staying on mean?', options: ['ABS is active and working','ABS system fault — normal brakes still work but ABS may be disabled','Low brake fluid','Brake pads worn'], answer: 1 },
   { id: 'vc13', cat: 'Instruments', q: 'A flashing engine management light (check engine) means:', options: ['Immediate stop required','A fault is active — have it checked soon','Oil needs topping up','Normal on cold mornings'], answer: 1 },
   { id: 'vc14', cat: 'Instruments', q: 'The speedometer must be in working order because:', options: ['It is nice to have','Drivers cannot maintain legal speeds without it','Police require it','Insurance demands it'], answer: 1 },
