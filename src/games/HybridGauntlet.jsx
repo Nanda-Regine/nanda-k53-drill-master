@@ -566,9 +566,9 @@ const TESTS = [
       },
       {
         q: "You are towing a vehicle with a rigid tow-bar (not a rope). How many passengers may travel in the towed vehicle?",
-        options: ["None — passengers in towed vehicles are always prohibited","The same restriction as rope towing — only permitted at ≤30 km/h","The tow-bar removes the passenger restriction — standard rules apply","Only one passenger, in the front seat"],
+        options: ["The same restriction as rope towing — only permitted at ≤30 km/h","None — passengers in towed vehicles are always prohibited","The tow-bar removes the passenger restriction — standard rules apply","Only one passenger, in the front seat"],
         answer: 2,
-        explain: "The 30 km/h passenger restriction applies to rope or chain towing only. With a rigid draw-bar or tow-bar, that specific speed-based restriction on passengers does not apply — standard road rules govern.",
+        explain: "Conveying persons in a towed vehicle at more than 30 km/h is prohibited UNLESS the towed vehicle is a semi-trailer (Rules of the Road §6.57). A rigid tow-bar lets you tow at normal speed, but not while carrying passengers — with passengers you are still capped at 30 km/h.",
       },
       {
         q: "Your car breaks down on the roadway. You have no emergency warning triangle. No flares. What are you legally required to do?",

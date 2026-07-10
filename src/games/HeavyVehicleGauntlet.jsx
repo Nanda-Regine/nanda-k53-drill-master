@@ -98,14 +98,14 @@ const TESTS = [
       {
         q: "A Code 10 truck must be equipped with how many warning triangles?",
         options: ["None — triangles are optional for heavy vehicles","At least two warning triangles or flares","At least three warning triangles","One triangle — placed 45 metres behind the vehicle"],
-        answer: 1,
-        explain: "Heavy motor vehicles must carry at least 2 warning triangles (or road flares). Place them at least 45 metres behind the vehicle when broken down on a road.",
+        answer: 3,
+        explain: "The law requires at least ONE emergency warning sign (triangle) to be carried, and when stationary it must be displayed at least 45 metres behind the vehicle (NRTA reg / Rules of the Road §6.24).",
       },
       {
         q: "At what maximum speed may a heavy motor vehicle travel on a freeway?",
         options: ["100 km/h","110 km/h","120 km/h","80 km/h"],
-        answer: 0,
-        explain: "Heavy motor vehicles (Code 10/14) are limited to 100 km/h on freeways. Light vehicles may travel at 120 km/h. This lower limit accounts for longer braking distances.",
+        answer: 3,
+        explain: "A goods vehicle with a GVM over 9 000 kg is limited to 80 km/h on ALL roads, including freeways (Rules of the Road §6.29). Light vehicles may travel at 120 km/h. This lower limit accounts for longer braking distances.",
       },
       {
         q: "Your truck's air brakes fail while descending a steep grade. What is the correct emergency procedure?",
@@ -128,8 +128,8 @@ const TESTS = [
       {
         q: "A Code 14 articulated truck has a total combination length of 19 metres. Is this legal?",
         options: ["No — maximum combination length is 18.5 metres","Yes — 18.5 to 22 metres is permitted for standard articulated combinations","No — maximum is 16 metres","Yes — there is no maximum length for Code 14 vehicles"],
-        answer: 1,
-        explain: "Maximum length: articulated (semi-truck) = 18.5m. Full combinations (road trains) = up to 22m with permit. Standard urban-legal articulated combination is 18.5m.",
+        answer: 0,
+        explain: "An articulated motor vehicle may not exceed 18.5 m (Rules of the Road §6.30), so 19 m is NOT legal. The 22 m limit applies only to a bus-train or a permitted combination/road-train, not a single articulated semi.",
       },
       {
         q: "What minimum tread depth is required on tyres of heavy motor vehicles?",
@@ -153,9 +153,9 @@ const TESTS = [
     questions: [
       {
         q: "You are driving a fully loaded Code 10 truck at 80 km/h. What is the minimum safe following distance?",
-        options: ["3 seconds (same as all vehicles)","4–6 seconds — heavy vehicles need more space to stop","10 car lengths","15 metres for every 10 km/h of speed"],
-        answer: 1,
-        explain: "Heavy vehicles take much longer to stop due to their mass. K53 recommends at least 4–6 seconds following distance for heavy vehicles. In wet or poor conditions, extend this even further.",
+        options: ["3 seconds — more than the 2-second car minimum","4–6 seconds — heavy vehicles need more space to stop","10 car lengths","15 metres for every 10 km/h of speed"],
+        answer: 0,
+        explain: "The K53 minimum following distance is 3 seconds for a heavy motor vehicle (2 seconds for a light vehicle). Increase it further in wet or poor conditions.",
       },
       {
         q: "You are driving a Code 14 articulated truck and want to turn left. Where should you position your truck before the turn?",
@@ -209,7 +209,7 @@ const TESTS = [
         q: "What is the maximum speed limit for heavy motor vehicles in an urban area where no other sign is posted?",
         options: ["40 km/h","60 km/h (same as all vehicles)","50 km/h","80 km/h"],
         answer: 1,
-        explain: "The default urban speed limit is 60 km/h for ALL vehicles including heavy motor vehicles. The specific open-road and freeway limits are lower for HMVs (80/100 km/h) but the urban limit remains 60 km/h.",
+        explain: "The default urban speed limit is 60 km/h for ALL vehicles including heavy motor vehicles. A goods vehicle over 9 000 kg GVM is further limited to 80 km/h on the open road and freeway, but the urban limit remains 60 km/h.",
       },
     ],
   },
@@ -343,9 +343,9 @@ const TESTS = [
       },
       {
         q: "What is the maximum length of a rigid (non-articulated) heavy motor vehicle?",
-        options: ["12 metres","13.5 metres","16 metres","18.5 metres"],
+        options: ["12.5 metres","13.5 metres","16 metres","18.5 metres"],
         answer: 0,
-        explain: "A rigid (non-articulated) heavy vehicle maximum length = 12 metres. Articulated = 18.5m. A B-train combination = 22m with permit. Rigid vehicle including any drawbar = 13.5m maximum.",
+        explain: "A rigid (non-articulated) vehicle may not exceed 12.5 m (Rules of the Road §6.30, \"any other vehicle\"). An articulated vehicle = 18.5 m; a bus-train or permitted combination = 22 m.",
       },
     ],
   },

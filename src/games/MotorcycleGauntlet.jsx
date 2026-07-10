@@ -52,16 +52,16 @@ const TESTS = [
         explain: "A full Code 1 licence covers all motorcycles, including those fitted with a sidecar. No additional code needed.",
       },
       {
-        q: "Your Code 1 learner's licence requires a supervisor. What licence must the supervisor hold?",
-        options: ["Any valid learner's licence","A Code 1 licence valid for at least 2 years","A valid Code 1 driver's licence","Any valid driver's licence of any code"],
-        answer: 2,
-        explain: "For a Code 1 learner, the supervisor must hold a valid Code 1 driver's licence. They cannot supervise from a car alongside you.",
+        q: "Does a Code 1 (motorcycle) learner's licence require you to ride under supervision?",
+        options: ["No — a motorcycle learner rides alone; a Code 1 learner may not carry a passenger, so supervision is impossible","Yes — a licensed Code 1 rider must ride beside you","Yes — a car with a licensed driver must follow you","Yes — but only for the first 3 months"],
+        answer: 0,
+        explain: "Unlike a Code 2/3 (car) learner, a Code 1 motorcycle learner has NO supervision requirement — and since a learner may not carry a passenger, supervision on the bike is impossible. You ride alone, displaying L-plates.",
       },
       {
         q: "You are 17 with a Code 1 learner's licence. You want to ride to school 3km away alone. Can you?",
-        options: ["Yes — short distances are exempt from supervision","No — a learner's licence holder must always be supervised","Yes — daylight hours are exempt","Yes — if the route is within your residential area"],
-        answer: 1,
-        explain: "Learner licence holders are ALWAYS supervised. No exceptions for distance, daylight, or familiar routes.",
+        options: ["Yes — a motorcycle learner rides unsupervised (with L-plates, obeying learner conditions)","No — a learner's licence holder must always be supervised","Only between sunrise and sunset","Only after you turn 18"],
+        answer: 0,
+        explain: "A Code 1 motorcycle learner rides unsupervised — there is no supervision requirement and no passenger may be carried. Ride with L-plates and obey the learner conditions (e.g. no freeway).",
       },
       {
         q: "You hold a Code 8 (car) driver's licence. Does this authorise you to ride a motorcycle?",

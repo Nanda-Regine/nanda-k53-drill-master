@@ -51,7 +51,7 @@ const RULES_QUESTIONS = [
   { q: 'The minimum age for a Code B learner\'s licence is:', options: ['16 years','17 years','18 years','21 years'], answer: 1 },
   { q: 'Overtaking on the left is generally:', options: ['Permitted on multi-lane roads if traffic is moving slower in the right lane','Permitted at all times on multi-lane roads','Prohibited at all times','Only permitted on freeways'], answer: 0 },
   { q: 'Before changing lanes, the correct sequence is:', options: ['Signal → Mirror → Blind spot → Move','Mirror → Signal → Blind spot → Move','Blind spot → Signal → Mirror → Move','Move → Signal → Check mirrors'], answer: 1 },
-  { q: 'When parking facing uphill with a kerb, you should turn your front wheels:', options: ['Straight ahead','Away from the kerb (to the left)','Into the kerb (to the right)','It does not matter'], answer: 2 },
+  { q: 'When parking facing uphill with a kerb, you should turn your front wheels:', options: ['Straight ahead','Away from the kerb (to the right)','Into the kerb (to the left)','It does not matter'], answer: 1 },
 
   // ── Extended bank (questions 29–78) — randomly sampled each exam ─────────
   { q: 'An amber (yellow) traffic light means:', options: ['Speed up to clear the intersection','Stop if you can do so safely','Always stop regardless of position','Yield to pedestrians only'], answer: 1 },
@@ -101,7 +101,7 @@ const RULES_QUESTIONS = [
   { q: 'Your vehicle strikes and injures an animal on the road. You must:', options: ['Continue driving — stray animals are not your legal responsibility','Stop, try to find the owner, and if not found, report the incident to the police','Remove the animal from the road and continue','Report the incident by phone without stopping'], answer: 1 },
   { q: 'A red traffic light always means:', options: ['Slow down and proceed with caution','Stop — do not proceed until the light turns green or you have a green arrow','Stop only if other vehicles are crossing','Yield to pedestrians only'], answer: 1 },
   { q: 'Reversing on a freeway is:', options: ['Permitted only if you missed your exit','Permitted in a genuine emergency','Permitted at speeds below 10 km/h','Never permitted under any circumstances'], answer: 3 },
-  { q: 'Your front wheels, when parking downhill against a kerb, should be turned:', options: ['Straight ahead','Away from the kerb (to the left)','Into the kerb (to the right)','It does not matter on a downhill'], answer: 2 },
+  { q: 'Your front wheels, when parking downhill against a kerb, should be turned:', options: ['Straight ahead','Away from the kerb (to the right)','Into the kerb (to the left)','It does not matter on a downhill'], answer: 2 },
   { q: 'The purpose of a safety (secondary) chain on a trailer coupling is:', options: ['To stop the trailer swaying','To prevent the trailer from detaching and causing danger if the main coupling fails','To limit trailer speed','To connect the trailer\'s electrical system'], answer: 1 },
   { q: 'You must NOT stop within how many metres of a railway crossing?', options: ['3 m','6 m','9 m','15 m'], answer: 1 },
 ];
@@ -113,7 +113,7 @@ const CONTROLS_QUESTIONS = [
   { q: 'The handbrake must be applied when:', options: ['Stopping at a traffic light','Parking — especially on a slope, where it must be applied firmly','Only on steep inclines','Only on automatic vehicles'], answer: 1 },
   { q: 'A spongy brake pedal that goes close to the floor indicates:', options: ['Normal on older vehicles','Air in the brake lines or low brake fluid — have it checked immediately','Brakes are overheating','Wheel alignment needed'], answer: 1 },
   { q: 'Before driving, you must ensure your seat is adjusted so that:', options: ['You are comfortable','You can fully depress all pedals and see clearly over the steering wheel','Your back is straight only','You can reach the gear lever with ease'], answer: 1 },
-  { q: 'The minimum legal tyre tread depth in South Africa is:', options: ['0.5 mm','1 mm','1.6 mm','3 mm'], answer: 2 },
+  { q: 'The minimum legal tyre tread depth in South Africa is:', options: ['0.5 mm','1 mm','1.6 mm','3 mm'], answer: 1 },
   { q: 'Who is responsible for ensuring all passengers under 14 years are wearing seatbelts?', options: ['The passengers themselves','The driver','The vehicle owner','The parents only'], answer: 1 },
   { q: 'If your hooter (horn) is not working, you:', options: ['May drive normally — the hooter is optional','Must not drive the vehicle — a functioning hooter is a legal requirement','May drive only in daytime','Must display a "No hooter" warning sign'], answer: 1 },
 

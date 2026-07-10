@@ -95,7 +95,7 @@ const QUESTION_POOL = [
 
   // Pedestrians
   { q:"At a pedestrian crossing with no traffic officer — who has right of way?", options:["Vehicles always","Pedestrian on the crossing","First to arrive","Vehicles turning"], answer:1, category:"Pedestrians" },
-  { q:"You must stop for a school bus with flashing amber lights?", options:["Only if it's stopped","Yes — in both directions","Only if you're behind it","Only if children are visible"], answer:1, category:"Pedestrians" },
+  { q:"A bus ahead is displaying flashing amber lights. You should:", options:["Reduce speed, stay alert and be ready to stop","Stop completely — traffic in both directions must stop","Ignore it — amber lights have no legal meaning","Speed up to pass before it pulls off"], answer:0, category:"Pedestrians" },
 
   // Parking & Stopping
   { q:"No parking within how many metres of a fire hydrant?", options:["1.5m","3m","5m","9m"], answer:0, category:"Parking & Stopping" },

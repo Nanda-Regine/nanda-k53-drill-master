@@ -34,7 +34,7 @@ const QUESTIONS = [
   { id: 'vc16', cat: 'Bonnet & Boot', q: 'You must check the engine oil:', options: ['Only at service intervals','Before long trips and periodically — engine cold or warm as per the manual','Only when the light comes on','Never yourself — only a mechanic'], answer: 1 },
   { id: 'vc17', cat: 'Bonnet & Boot', q: 'If coolant is needed, you should:', options: ['Add any water immediately','Wait for the engine to cool completely before opening the radiator cap','Open the cap carefully while hot','Ignore it until the next service'], answer: 1 },
   { id: 'vc18', cat: 'Bonnet & Boot', q: 'The spare tyre in the boot must be:', options: ['Flat — to save space','Inflated to the correct pressure and in good condition','Only checked at a tyre shop','Present but not necessarily roadworthy'], answer: 1 },
-  { id: 'vc19', cat: 'Bonnet & Boot', q: 'A warning triangle in the boot is:', options: ['Optional for private vehicles','Legally required — must be placed behind the vehicle in a breakdown','Only for commercial vehicles','Useful but not required'], answer: 1 },
+  { id: 'vc19', cat: 'Bonnet & Boot', q: 'A warning triangle in the boot of a private motor car is:', options: ['Useful but not legally required for a light motor vehicle','Legally required — you may not drive a car without one','Illegal to carry','Required only at night'], answer: 0 },
 
   // ── Brakes ────────────────────────────────────────────────────────────────
   { id: 'vc20', cat: 'Brakes', q: 'A spongy or low brake pedal usually means:', options: ['Normal for an old car','Air in the brake lines or low brake fluid — get it checked immediately','Brakes are overheating','The car needs wheel alignment'], answer: 1 },

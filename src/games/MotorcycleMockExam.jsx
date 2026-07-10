@@ -27,11 +27,11 @@ const QUESTION_POOL = [
   { q: "Under 18 with a Code 1 learner's licence — what is the maximum engine size you may ride?", options: ["Any size","50cc","125cc","200cc"], answer: 2, category: "Licence & Codes" },
   { q: "You hold a Code 1 learner's licence. May you carry a passenger?", options: ["Yes, with helmets","Yes, under 5km","No — passengers are prohibited","Yes, with supervisor approval"], answer: 2, category: "Licence & Codes" },
   { q: "How long is a Code 1 learner's licence valid from issue?", options: ["12 months","18 months","24 months","36 months"], answer: 2, category: "Licence & Codes" },
-  { q: "Your Code 1 learner's licence supervisor must hold which licence?", options: ["Any valid licence","Any driver's licence for 2+ years","A valid Code 1 driver's licence","A Code 8 licence"], answer: 2, category: "Licence & Codes" },
+  { q: "Does a Code 1 (motorcycle) learner's licence require a supervisor?", options: ["No — a motorcycle learner rides unsupervised","Yes — a licensed Code 1 rider must supervise","Yes — any licensed driver may supervise","Yes — a Code 8 driver must follow in a car"], answer: 0, category: "Licence & Codes" },
   { q: "Does a Code 8 (car) licence authorise you to ride a motorcycle?", options: ["Yes — higher codes include lower","No — you need a separate Code 1","Yes, under 125cc only","Yes, with a sidecar"], answer: 1, category: "Licence & Codes" },
   { q: "Which code covers motorcycles without a sidecar?", options: ["Code 1","Code 2","Code 8","Code 3"], answer: 0, category: "Licence & Codes" },
   { q: "A full Code 1 holder (18+) wishes to ride a motorcycle with a sidecar. Do they need a new licence?", options: ["Yes — Code 2 required","No — Code 1 covers all motorcycles","Yes — Code 8 required","No — but they need an endorsement"], answer: 1, category: "Licence & Codes" },
-  { q: "You are 16 with a Code 1 learner's licence. May you ride alone to school?", options: ["Yes, if under 5km","Yes, in daylight","No — always supervised","Yes, familiar routes only"], answer: 2, category: "Licence & Codes" },
+  { q: "You are 16 with a Code 1 learner's licence. May you ride alone to school?", options: ["Yes — a motorcycle learner rides unsupervised","No — a learner must always be supervised","Only if under 5km","Only in daylight"], answer: 0, category: "Licence & Codes" },
   { q: "At what blood alcohol level does a motorcycle rider commit an offence?", options: ["0.00g/100ml","0.02g/100ml","0.05g/100ml","0.08g/100ml"], answer: 2, category: "Licence & Codes" },
 
   // PROTECTIVE EQUIPMENT & LIGHTS
@@ -101,7 +101,7 @@ const QUESTION_POOL = [
   { q: "You want to turn right at an intersection. Traffic is approaching from your left. Who has right of way?", options: ["You — you are on the major road","The approaching traffic — you must yield when turning across oncoming traffic","You — turning vehicles always have right of way","Whoever arrives first"], answer: 1, category: "Road Behaviour" },
   { q: "When approaching a STOP sign, where exactly must you stop?", options: ["3 metres before the sign","At the stop line, or at the edge of the intersection if no line","When you can see traffic","At the sign pole itself"], answer: 1, category: "Road Signs" },
   { q: "You are riding at night and see a vehicle's headlights ahead in your lane. It is the wrong way. You must:", options: ["Flash your lights and maintain position","Move to the left as far as possible, slow down, hoot if needed","Brake and stop in the middle of the road","Accelerate to get past quickly"], answer: 1, category: "Emergencies" },
-  { q: "What does a solid white line along the LEFT edge of the road indicate?", options: ["Parking zone","No stopping or parking — often a bus lane edge","Edge of the carriageway — ride to the left of it","Reserved for motorcycles"], answer: 2, category: "Road Signs" },
+  { q: "What does a solid white line along the LEFT edge of the road indicate?", options: ["Parking zone","No stopping or parking — often a bus lane edge","Edge of the carriageway — keep to the right of it, on the roadway","Reserved for motorcycles"], answer: 2, category: "Road Signs" },
   { q: "You hold a Code 1 licence and want to tow a small trailer. Is this permitted?", options: ["Yes — motorcycles may tow trailers up to 750kg","No — motorcycles are not legally permitted to tow trailers","Yes, if the trailer has its own brakes","Only with a Code 2 endorsement"], answer: 1, category: "Licence & Codes" },
 ];
 

@@ -30,7 +30,7 @@ const ROUNDS = [
     id: 2, title: 'Road Signs', icon: '🚧',
     questions: [
       { q: 'A red octagonal sign means:', options: ['Yield','Stop completely','No entry','Danger ahead'], answer: 1 },
-      { q: 'A yellow diamond sign indicates:', options: ['A regulation','A warning','A guide','An information sign'], answer: 1 },
+      { q: 'A yellow diamond sign indicates:', options: ['A regulation','A warning','A guide','An information sign'], answer: 0 },
       { q: 'A circular sign with a red border is a:', options: ['Warning sign','Information sign','Prohibition sign','Guide sign'], answer: 2 },
       { q: 'A blue rectangular sign is a:', options: ['Warning','Prohibition','Command','Information sign'], answer: 3 },
       { q: 'The "yield" sign is which shape?', options: ['Rectangle','Circle','Inverted triangle','Diamond'], answer: 2 },
@@ -114,7 +114,7 @@ const ROUNDS = [
     id: 8, title: 'Parking & Stopping', icon: '🅿️',
     questions: [
       { q: 'You may NOT park within how many metres of a fire hydrant?', options: ['1.5 m','3 m','5 m','9 m'], answer: 0 },
-      { q: 'When parking on a hill facing downhill, your wheels should be:', options: ['Straight ahead','Turned to the right (into the kerb)','Turned to the left','It does not matter'], answer: 1 },
+      { q: 'When parking on a hill facing downhill, your wheels should be:', options: ['Straight ahead','Turned to the right','Turned to the left (towards the kerb)','It does not matter'], answer: 2 },
       { q: 'Double parking means:', options: ['Parking in two bays','Parking alongside a parked vehicle','Parking in a loading zone','Parking facing the wrong direction'], answer: 1 },
       { q: 'Before getting out of a parked vehicle you should always:', options: ['Sound the horn','Check mirrors and over your shoulder for cyclists and traffic','Open the door quickly','Leave the engine running'], answer: 1 },
       { q: 'You may NOT park within how many metres of an intersection?', options: ['3 m','5 m','9 m','15 m'], answer: 1 },
