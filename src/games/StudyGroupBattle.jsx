@@ -150,7 +150,7 @@ function BattleQuestion({ q, qIdx, total, onAnswer, timeLeft, scores, myName }) 
       {/* Image */}
       {q.img && (
         <div style={{ textAlign: 'center', marginBottom: 16 }}>
-          <img src={`/signs/${q.img}`} alt="" style={{ maxHeight: 120, borderRadius: T.radius, imageRendering: 'pixelated' }} />
+          <img src={`/signs/${q.img}`} alt="" style={{ maxHeight: 120, borderRadius: T.radius }} />
         </div>
       )}
 

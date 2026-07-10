@@ -440,7 +440,7 @@ export default function K53LearnerExam({ onBack, onPass, onGoToGame }) {
           {/* Sign image (signs section only) */}
           {currentSection.key === 'signs' && currentQ.img && (
             <div style={{ textAlign: 'center', marginBottom: 16 }}>
-              <img src={`/signs/${currentQ.img}`} alt="" style={{ width: 140, height: 140, objectFit: 'contain', background: T.surface, borderRadius: 12, padding: 8, imageRendering: 'pixelated' }} />
+              <img src={`/signs/${currentQ.img}`} alt="" style={{ width: 140, height: 140, objectFit: 'contain', background: T.surface, borderRadius: 12, padding: 8 }} />
               {revealed && currentQ.hint && (
                 <div style={{ marginTop: 6, color: T.dim, fontSize: T.fontSize - 2 }}>{currentQ.hint}</div>
               )}

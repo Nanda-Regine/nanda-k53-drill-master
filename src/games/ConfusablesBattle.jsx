@@ -92,7 +92,7 @@ function SignCard({ sign, state, onClick }) {
         <img
           src={`/signs/${sign.img}`}
           alt={sign.name}
-          style={{ width: '100%', height: '100%', objectFit: 'contain', imageRendering: 'pixelated' }}
+          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           onError={e => { e.target.style.display = 'none'; }}
         />
       </div>

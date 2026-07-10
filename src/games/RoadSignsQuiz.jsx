@@ -13,7 +13,7 @@ function SignImg({ src, alt, size = 170 }) {
     <img
       src={`./signs/${src}`}
       alt={alt || "road sign"}
-      style={{ width: size, height: size, objectFit: "contain", imageRendering: "pixelated", filter: "brightness(1.08) contrast(1.1) saturate(1.1)" }}
+      style={{ width: size, height: size, objectFit: "contain", filter: "brightness(1.08) contrast(1.1) saturate(1.1)" }}
     />
   );
 }
@@ -1035,7 +1035,7 @@ function ResultScreen({ score, total, wrongAnswers = [], onRetry, onHome }) {
             <div key={i} style={{ background: T.surface, border: `1px solid ${T.border}`, borderLeft: `4px solid ${T.red}`, borderRadius: 6, padding: "16px", marginBottom: 12 }}>
               <div style={{ color: T.dim, fontSize: 11, fontFamily: T.mono, marginBottom: 8 }}>{w.category}</div>
               <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                <img src={`./signs/${w.img}`} alt="sign" style={{ width: 60, height: 60, objectFit: 'contain', flexShrink: 0, imageRendering: 'pixelated' }} />
+                <img src={`./signs/${w.img}`} alt="sign" style={{ width: 60, height: 60, objectFit: 'contain', flexShrink: 0 }} />
                 <div style={{ flex: 1 }}>
                   <div style={{ color: T.text, fontSize: 14, fontWeight: 600, marginBottom: 8, lineHeight: 1.4 }}>{w.question}</div>
                   <div style={{ color: T.red, fontSize: 13, marginBottom: 4 }}>✗ {w.yourAnswer}</div>
