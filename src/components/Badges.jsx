@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { T } from "../theme.js";
 
 export const BADGE_DEFS = [
@@ -76,6 +77,31 @@ export function BadgeToast({ badgeId, onDismiss }) {
       <div style={{ color: T.dim, fontSize: 12, marginBottom: 14 }}>{def.desc}</div>
       <button onClick={onDismiss} style={{ background: T.gold, border: "none", borderRadius: 8, padding: "8px 24px", fontSize: 13, fontWeight: 700, cursor: "pointer", color: "#060D07", fontFamily: T.font }}>
         Nice!
+      </button>
+    </div>
+  );
+}
+
+export function LevelUpToast({ level, onDismiss }) {
+  useEffect(() => { const t = setTimeout(onDismiss, 4200); return () => clearTimeout(t); }, [onDismiss]);
+  if (!level) return null;
+  return (
+    <div style={{
+      position: "fixed", bottom: 88, left: "50%", transform: "translateX(-50%)",
+      background: "linear-gradient(135deg,#00351f,#060D07)", border: "2px solid #007A4D",
+      borderRadius: 16, padding: "16px 24px", zIndex: 9998, textAlign: "center", fontFamily: T.font,
+      animation: "badgeSlideUp 0.4s cubic-bezier(0.34,1.56,0.64,1)", minWidth: 270,
+      boxShadow: "0 8px 40px rgba(0,122,77,0.4), 0 0 0 1px rgba(0,122,77,0.15)",
+    }}>
+      <style>{`@keyframes badgeSlideUp { from { transform: translateX(-50%) translateY(30px); opacity:0; } to { transform: translateX(-50%) translateY(0); opacity:1; } }`}</style>
+      <div style={{ color: "#4ade80", fontSize: 9, letterSpacing: 4, fontFamily: "monospace", marginBottom: 8, textTransform: 'uppercase' }}>
+        ▲ Level Up ▲
+      </div>
+      <div style={{ fontSize: 40, marginBottom: 6 }}>{level.badge}</div>
+      <div style={{ color: "#fff", fontSize: 18, fontWeight: 800, marginBottom: 2 }}>Level {level.level}</div>
+      <div style={{ color: "#4ade80", fontSize: 14, fontWeight: 700, marginBottom: 12 }}>{level.name}</div>
+      <button onClick={onDismiss} style={{ background: "#007A4D", border: "none", borderRadius: 8, padding: "8px 24px", fontSize: 13, fontWeight: 700, cursor: "pointer", color: "#fff", fontFamily: T.font }}>
+        Let's go →
       </button>
     </div>
   );

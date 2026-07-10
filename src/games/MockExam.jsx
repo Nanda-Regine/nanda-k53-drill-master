@@ -407,7 +407,7 @@ export default function MockExam({ onBack, onPass }) {
   if (screen === "result") {
     const pct = Math.round((score / EXAM_QUESTIONS) * 100);
     const passed = pct >= PASS_MARK * 100;
-    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; sfx('pass'); hapticPass(); onPass?.(); }
+    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; sfx('pass'); hapticPass(); onPass?.({ mock: true }); }
 
     // Category breakdown
     const categoryMap = {};

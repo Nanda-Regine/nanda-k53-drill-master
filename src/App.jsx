@@ -44,7 +44,7 @@ import DailyDiagnostic   from './games/DailyDiagnostic.jsx';
 import GameErrorBoundary from './components/GameErrorBoundary.jsx';
 import Onboarding        from './components/Onboarding.jsx';
 import Confetti          from './components/Confetti.jsx';
-import { BadgeToast, BadgeGrid, checkAndAwardBadges, hasBadge } from './components/Badges.jsx';
+import { BadgeToast, BadgeGrid, LevelUpToast, checkAndAwardBadges, hasBadge } from './components/Badges.jsx';
 import AuthModal         from './components/AuthModal.jsx';
 import ProgressHistory   from './components/ProgressHistory.jsx';
 import WeakSpotsReview   from './components/WeakSpotsReview.jsx';
@@ -55,7 +55,8 @@ import NervesPanel       from './components/NervesPanel.jsx';
 
 // ── Utils ──────────────────────────────────────────────────────────────────────
 import { recordStudyDay, getStreak } from './utils/streakTracker.js';
-import { getWeakNerves } from './utils/masteryStore.js';
+import { getWeakNerves, getTotals } from './utils/masteryStore.js';
+import { sfx } from './utils/sounds.js';
 import { supabase } from './supabase.js';
 import { apiBase, openCheckout, isNative } from './utils/runtime.js';
 import {
@@ -258,6 +259,7 @@ export default function App() {
   const [remaining, setRemaining]           = useState(() => getRemainingToday());
   const [selectedCode, setSelectedCode]     = useState(() => localStorage.getItem(CODE_PREF_KEY) || 'code8');
   const [pendingBadge, setPendingBadge]     = useState(null);
+  const [pendingLevelUp, setPendingLevelUp] = useState(null);
   const [confettiActive, setConfettiActive] = useState(false);
   const [showPaywall, setShowPaywall]       = useState(false);
   const [showBadgeGrid, setShowBadgeGrid]   = useState(false);
@@ -362,17 +364,39 @@ export default function App() {
     setShowOnboarding(false);
   }, []);
 
+  // Celebrate a level-up from anywhere (recordAnswer broadcasts it).
+  useEffect(() => {
+    const onLevelUp = (e) => { setPendingLevelUp(e.detail?.level || null); setConfettiActive(true); try { sfx('pass'); } catch {} };
+    window.addEventListener('k53:levelup', onLevelUp);
+    return () => window.removeEventListener('k53:levelup', onLevelUp);
+  }, []);
+
   const onGameBack = useCallback(() => {
     setActiveGame(null);
     const newStreak = getStreak();
     setStreak(newStreak);
     refreshTier();
     setRefreshKey(k => k + 1); // re-reads mastery store → NervesPanel updates
-    const awarded = checkAndAwardBadges({ streakCount: newStreak });
+    const totals = getTotals();
+    const awarded = checkAndAwardBadges({ streakCount: newStreak, totalAnswered: totals.totalAnswered, overallAccuracy: totals.overallAccuracy });
     if (awarded?.length) { setPendingBadge(awarded[0]); setConfettiActive(true); }
   }, [refreshTier]);
 
-  const onGamePass = useCallback(() => setConfettiActive(true), []);
+  // Games call onPass({ perfect, mock, allRounds, speedAce, pdp }) on a win.
+  const onGamePass = useCallback((result = {}) => {
+    setConfettiActive(true);
+    const totals = getTotals();
+    const awarded = checkAndAwardBadges({
+      streakCount: getStreak(),
+      totalAnswered: totals.totalAnswered,
+      overallAccuracy: totals.overallAccuracy,
+      justPerfectRound: result.perfect,
+      justPassedMock: result.mock,
+      allRoundsComplete: result.allRounds,
+      speedAce: result.speedAce,
+    });
+    if (awarded?.length) setPendingBadge(awarded[0]);
+  }, []);
 
   const handleGameSelect = useCallback((game) => {
     // Native (store) build has no in-app purchase: premium/PDP stay locked for
@@ -398,6 +422,7 @@ export default function App() {
     <>
       <Confetti active={confettiActive} />
       {pendingBadge && <BadgeToast badgeId={pendingBadge} onDismiss={() => { setPendingBadge(null); setConfettiActive(false); }} />}
+      {pendingLevelUp && <LevelUpToast level={pendingLevelUp} onDismiss={() => { setPendingLevelUp(null); setConfettiActive(false); }} />}
     </>
   );
 
@@ -469,6 +494,7 @@ export default function App() {
     <div style={{ minHeight: '100vh', background: T.bg, color: T.text, fontFamily: T.font, fontSize: T.fontSize, paddingBottom: 84 }}>
       <Confetti active={confettiActive} />
       {pendingBadge && <BadgeToast badgeId={pendingBadge} onDismiss={() => { setPendingBadge(null); setConfettiActive(false); }} />}
+      {pendingLevelUp && <LevelUpToast level={pendingLevelUp} onDismiss={() => { setPendingLevelUp(null); setConfettiActive(false); }} />}
 
       {/* ── Slim top bar ─────────────────────────────────────────────────────── */}
       <header style={{ position: 'sticky', top: 0, zIndex: 50, background: T.surface, borderBottom: `1px solid ${T.border}` }}>

@@ -110,7 +110,20 @@ export function recordAnswer(nerveId, conceptId, correct) {
   const result = _addXP(xpGain);
   _touchStreak();
 
+  // Broadcast a level-up so any screen can celebrate it (centralised in App.jsx).
+  if (result.leveledUp && typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('k53:levelup', { detail: { level: result.newLevel } }));
+  }
+
   return { xpGain: result.xpGained, newXP: result.newXP, leveledUp: result.leveledUp, newLevel: result.newLevel, answerStreak: e.streak };
+}
+
+/** Lifetime totals across all nerves — used for count/accuracy badges. */
+export function getTotals() {
+  const mastery = _store.get(KEYS.mastery, {});
+  let totalAnswered = 0, totalCorrect = 0;
+  for (const k in mastery) { totalAnswered += mastery[k].total || 0; totalCorrect += mastery[k].correct || 0; }
+  return { totalAnswered, totalCorrect, overallAccuracy: totalAnswered ? Math.round((totalCorrect / totalAnswered) * 100) : 0 };
 }
 
 /** Convenience wrapper for games that know their game ID. */

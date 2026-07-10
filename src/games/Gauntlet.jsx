@@ -1095,7 +1095,7 @@ export default function Code8Gauntlet({ onBack, onPass }) {
     const finalTotal = isExamMode ? examQuestions.length : (currentTest?.questions.length || 10);
     const pct = Math.round((score / finalTotal) * 100);
     const passed = isExamMode ? pct >= 75 : score >= PASS_SCORE;
-    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; sfx('pass'); hapticPass(); onPass?.(); }
+    if (passed && !passedFiredRef.current) { passedFiredRef.current = true; sfx('pass'); hapticPass(); onPass?.({ perfect: score === finalTotal, allRounds: !isExamMode && allScores.length >= 9 }); }
     const waText = isExamMode
       ? `🚗 I scored ${score}/${finalTotal} (${pct}%) on the K53 Gauntlet Exam! ${passed ? "PASSED ✅" : "Need more practice 📚"} Train at https://k53drillmaster.co.za`
       : `🚗 K53 Round ${currentTest?.id}: ${score}/${finalTotal} (${pct}%) ${passed ? "✅ PASSED" : "📚 Keep drilling"} — https://k53drillmaster.co.za`;
