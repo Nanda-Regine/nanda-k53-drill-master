@@ -156,7 +156,7 @@ const GAMES_BASE = [
   { id: 'ctx_cluster',  icon: '🧩', tier: 'free',    diff: 'intermediate', cat: 'scenarios', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'seq_builder',  icon: '📋', tier: 'free',    diff: 'intermediate', cat: 'controls',  codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'confusables',  icon: '🥊', tier: 'free',    diff: 'intermediate', cat: 'signs',     codes: ['code12', 'code8', 'code10', 'code14'] },
-  { id: 'speed_recog',  icon: '⚡', tier: 'free',    diff: 'intermediate', cat: 'rules',     codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'speed_recog',  icon: '⚡', tier: 'free',    diff: 'intermediate', cat: 'rules',     codes: ['code12', 'code8', 'code10', 'code14'], hidden: true }, // number-drill folded into Pattern Trainer (same content, fuller format)
 ];
 
 const DIFF_COLORS = {
