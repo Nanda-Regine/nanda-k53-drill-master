@@ -1,6 +1,21 @@
 // AUTO-GENERATED from /public/signs — list of sign image files that exist on disk.
 // Used to filter generated sign questions so every question renders a real image.
 export const SIGN_IMAGES = new Set([
+  "r113-pedal-cycles-only.png",
+  "r114-animal-drawn-only.png",
+  "r115-taxis-only.png",
+  "r128-end-of-speed-limit.png",
+  "r129-end-of-no-overtaking.png",
+  "r130-end-no-overtaking-goods.png",
+  "r131-end-all-prohibitions.png",
+  "r203-axle-mass-limit.png",
+  "r222-no-goods-vehicles.png",
+  "w111-crossroads-priority.png",
+  "w113-multiple-junction.png",
+  "w114-staggered-crossroads.png",
+  "w213-double-bend-right-left.png",
+  "w311-road-works-ahead.png",
+  "w313-soft-shoulders.png",
   "abnormal-vehicle-parking-reservation-sign.jpg",
   "abnormal-vehicle-reservation-sign.jpg",
   "abnormal-vehicles-reservation.jpg",
