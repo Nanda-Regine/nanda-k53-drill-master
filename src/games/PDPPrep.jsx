@@ -28,7 +28,7 @@ const QUESTIONS = [
   { id: 'leg06', module: 'legislation', q: 'PDP holders who transport learners must be at least how old?', options: ['18','21','25','30'], answer: 1 },
   { id: 'leg07', module: 'legislation', q: 'Which Act governs the PDP requirement?', options: ['National Road Traffic Act 93 of 1996','Road Transportation Act','Public Transport Act','Motor Vehicle Act'], answer: 0 },
   { id: 'leg08', module: 'legislation', q: 'A PDP must be renewed at least how many days before expiry to avoid a lapse?', options: ['7','30','60','90'], answer: 2 },
-  { id: 'leg09', module: 'legislation', q: 'Which vehicles automatically require a PDP for any driver?', options: ['Vehicles over 10 000 kg GVM','Any vehicle carrying more than 8 persons for reward','Vehicles with a trailer','All of the above'], answer: 3 },
+  { id: 'leg09', module: 'legislation', q: 'A PrDP (professional driving permit) is required to drive a vehicle that:', options: ['Carries passengers or goods for reward, or transports dangerous goods','Has a trailer attached','Is older than 10 years','Is registered in another province'], answer: 0 },
   { id: 'leg10', module: 'legislation', q: 'Driving without a valid PDP when required carries a maximum fine of:', options: ['R500','R2 000','R10 000','R24 000'], answer: 2 },
   { id: 'leg11', module: 'legislation', q: 'A driver\'s professional driving card must be carried:', options: ['Only when crossing provincial borders','At all times while driving professionally','Only when transporting dangerous goods','At home, available on request'], answer: 1 },
   { id: 'leg12', module: 'legislation', q: 'What medical certificate is required for a PDP application?', options: ['Certificate of fitness from any GP','SADC standardised medical certificate','Occupational health certificate','No medical certificate needed'], answer: 1 },
@@ -78,7 +78,7 @@ const QUESTIONS = [
 
   // ── VEHICLE INSPECTIONS (16) ─────────────────────────────────────────────
   { id: 'vi01', module: 'vehicle', q: 'A pre-trip inspection should be done:', options: ['Monthly','Before every trip','Only after a long trip','Whenever the vehicle feels different'], answer: 1 },
-  { id: 'vi02', module: 'vehicle', q: 'Tyre tread depth for commercial vehicles must be at least:', options: ['1 mm','1.6 mm','2 mm','3 mm'], answer: 1 },
+  { id: 'vi02', module: 'vehicle', q: 'The minimum legal tyre tread depth in South Africa is:', options: ['1 mm','1.6 mm','2 mm','3 mm'], answer: 0 },
   { id: 'vi03', module: 'vehicle', q: 'What should you check in the engine bay before a long trip?', options: ['Engine oil, coolant, brake fluid, power-steering fluid','Only engine oil','Only water','Fuel level only'], answer: 0 },
   { id: 'vi04', module: 'vehicle', q: 'An air pressure gauge on air-brake trucks should read at least:', options: ['400 kPa','600 kPa','100 kPa','200 kPa'], answer: 1 },
   { id: 'vi05', module: 'vehicle', q: 'Wheel nut indicators (arrows) are used to detect:', options: ['Correct torque','Loose wheel nuts','Correct alignment','Tyre pressure'], answer: 1 },
