@@ -222,17 +222,6 @@ export const ROAD_SIGNS = [
     mnemonic: 'Same as R108 but curved right. Compulsory right turn.',
   },
   {
-    id: 'R110', name: 'Proceed straight or turn left', code: 'R110', category: 'Command',
-    shape: 'circle-blue', signColor: 'blue-white',
-    img: 'sign_034.jpg',
-    meaning: 'You may only go straight ahead or turn left. Turning right is prohibited.',
-    action: 'Choose: proceed straight or turn left. Right turn is forbidden.',
-    hint: 'Blue circle with two arrows: up and curved left',
-    options: ['Proceed straight or turn left', 'Turn left only', 'Proceed straight only', 'Right turn prohibited'],
-    confusableWith: ['R108', 'R107'],
-    mnemonic: 'Two arrows = two choices. Both go left-ish. Right is forbidden.',
-  },
-  {
     id: 'R117', name: 'Motor cars only', code: 'R117', category: 'Command',
     shape: 'circle-blue', signColor: 'blue-white',
     img: 'motorcars-only.jpg',
@@ -556,7 +545,7 @@ export const ROAD_SIGNS = [
     mnemonic: 'Figure with goods/tray crossed out = no street vendors here.',
   },
   {
-    id: 'R231', name: 'Towed vehicles prohibited', code: 'R231', category: 'Prohibition',
+    id: 'R240', name: 'Towed vehicles prohibited', code: 'R240', category: 'Prohibition',
     shape: 'circle-red', signColor: 'red-white',
     img: 'towed-vehicles-prohibited.jpg',
     meaning: 'Vehicles towing trailers or other vehicles are not permitted here.',
