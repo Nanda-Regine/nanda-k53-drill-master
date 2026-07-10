@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "validate": "node scripts/validate-questions.mjs",
+    "test": "node scripts/validate-questions.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "build:app": "vite build --mode capacitor",
