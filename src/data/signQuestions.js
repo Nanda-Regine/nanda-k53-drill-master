@@ -18,17 +18,19 @@ const CAT_MAP = {
   Control: 'control', Command: 'command', Prohibition: 'prohibition',
   Warning: 'warning', Reservation: 'reservation', Guidance: 'guidance',
   Temporary: 'temporary', Marking: 'markings', Markings: 'markings',
+  'De-restriction': 'derestriction',
 };
 
 const CAT_LABEL = {
-  control:     'Regulatory — Control',
-  command:     'Regulatory — Command',
-  prohibition: 'Regulatory — Prohibition',
-  reservation: 'Regulatory — Reservation',
-  warning:     'Warning',
-  guidance:    'Guidance / Direction',
-  temporary:   'Temporary',
-  markings:    'Road marking',
+  control:      'Regulatory — Control',
+  command:      'Regulatory — Command',
+  prohibition:  'Regulatory — Prohibition',
+  reservation:  'Regulatory — Reservation',
+  derestriction:'Regulatory — De-restriction',
+  warning:      'Warning',
+  guidance:     'Guidance / Direction',
+  temporary:    'Temporary',
+  markings:     'Road marking',
 };
 
 // Deterministic PRNG so the bank is stable between builds (no hydration churn).

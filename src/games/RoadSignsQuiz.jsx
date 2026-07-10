@@ -23,6 +23,7 @@ const CATEGORIES = [
   { id: "command",     label: "Regulatory — Command",     color: "#2196F3", desc: "Signs that mandate a specific action — proceed in a direction, use headlights, maintain minimum speed." },
   { id: "prohibition", label: "Regulatory — Prohibition", color: "#9B59B6", desc: "Red-circle signs that forbid specific vehicles or manoeuvres — no U-turn, speed limits, no parking." },
   { id: "reservation", label: "Regulatory — Reservation", color: "#8E24AA", desc: "Signs that reserve a road or lane for a specific class of vehicle — buses, cyclists, motorcycles." },
+  { id: "derestriction", label: "Regulatory — De-restriction", color: "#546E7A", desc: "Signs that cancel a previous restriction — end of speed limit, end of no-overtaking." },
   { id: "warning",     label: "Warning Signs",            color: T.gold,    desc: "Triangular signs warning of hazards and changing road conditions ahead." },
   { id: "guidance",    label: "Guidance & Direction",     color: T.blue,    desc: "Signs providing directions, destinations and road information." },
   { id: "markings",    label: "Road Markings",            color: T.green,   desc: "Lines and symbols painted on the road surface." },

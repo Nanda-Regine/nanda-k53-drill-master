@@ -1734,7 +1734,7 @@ export const ROAD_SIGNS = [
     mnemonic: 'Blue command + TAXI = exclusive taxi lane. Similar to bus lanes but for taxis.',
   },
   {
-    id: 'R201-600', name: 'End of speed limit', code: 'R201-600', category: 'Command',
+    id: 'R201-600', name: 'End of speed limit', code: 'R201-600', category: 'De-restriction',
     shape: 'circle-blue', signColor: 'blue-white',
     img: 'r128-end-of-speed-limit.png',
     meaning: 'The speed limit previously indicated no longer applies. The national default speed limit for the road type resumes.',
@@ -1745,7 +1745,7 @@ export const ROAD_SIGNS = [
     mnemonic: 'Strikethrough the speed number = that specific limit is cancelled. Default limit takes over.',
   },
   {
-    id: 'R214-600', name: 'End of prohibition of overtaking', code: 'R214-600', category: 'Command',
+    id: 'R214-600', name: 'End of prohibition of overtaking', code: 'R214-600', category: 'De-restriction',
     shape: 'circle-blue', signColor: 'blue-white',
     img: 'r129-end-of-no-overtaking.png',
     meaning: 'The prohibition on overtaking previously in force has ended. Overtaking is now permitted where safe.',
@@ -1756,7 +1756,7 @@ export const ROAD_SIGNS = [
     mnemonic: 'Same overtaking symbol as R214 but CROSSED OUT = that prohibition is now ended.',
   },
   {
-    id: 'R215-600', name: 'End of prohibition of overtaking by goods vehicles', code: 'R215-600', category: 'Command',
+    id: 'R215-600', name: 'End of prohibition of overtaking by goods vehicles', code: 'R215-600', category: 'De-restriction',
     shape: 'circle-blue', signColor: 'blue-white',
     img: 'r130-end-no-overtaking-goods.png',
     meaning: 'Goods vehicles may now overtake again — the previous R215 restriction has ended.',
@@ -1767,7 +1767,7 @@ export const ROAD_SIGNS = [
     mnemonic: 'Truck + car + diagonal strikethrough = end of the goods vehicle overtaking ban.',
   },
   {
-    id: 'R600', name: 'End of all prohibitions', code: 'R600', category: 'Command',
+    id: 'R600', name: 'End of all prohibitions', code: 'R600', category: 'De-restriction',
     shape: 'circle-blue', signColor: 'blue-white',
     img: 'r131-end-all-prohibitions.png',
     meaning: 'All previously indicated special prohibitions on this road have ended. Normal traffic rules resume.',
