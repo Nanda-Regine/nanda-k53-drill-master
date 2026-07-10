@@ -96,6 +96,7 @@ const CATS = [
   { id:'rules',     label:'Rules',     icon:'📋' },
   { id:'controls',  label:'Controls',  icon:'🔩' },
   { id:'exam',      label:'Exam',      icon:'📄' },
+  { id:'practice',  label:'Practice',  icon:'🧠' },
   { id:'scenarios', label:'Scenarios', icon:'🎯' },
   { id:'community', label:'Community', icon:'🤝' },
 ];
@@ -137,7 +138,7 @@ const GAMES_BASE = [
   { id: 'patterns',     icon: '🔢', tier: 'free',    diff: 'intermediate', cat: 'rules',     codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'roadsigns',    icon: '🛑', tier: 'free',    diff: 'beginner',     cat: 'signs',     codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'sign_shape',   icon: '🔷', tier: 'free',    diff: 'beginner',     cat: 'signs',     codes: ['code12', 'code8', 'code10', 'code14'] },
-  { id: 'road_marks',   icon: '🟡', tier: 'free',    diff: 'intermediate', cat: 'markings',  codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'road_marks',   icon: '🟡', tier: 'free',    diff: 'intermediate', cat: 'signs',     codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'scenario',     icon: '🎯', tier: 'free',    diff: 'intermediate', cat: 'scenarios', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'learner_exam', icon: '📄', tier: 'free',    diff: 'intermediate', cat: 'exam',      codes: ['code8'] },
   { id: 'voice',        icon: '🎙️', tier: 'premium', diff: 'advanced',     cat: 'signs',     codes: ['code12', 'code8', 'code10', 'code14'] },
@@ -150,8 +151,8 @@ const GAMES_BASE = [
   { id: 'school_dash',  icon: '🏫', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'community_qa', icon: '❓', tier: 'free',    diff: 'beginner',     cat: 'community', codes: ['code12', 'code8', 'code10', 'code14'] },
   // Phase D: Adaptive Drills
-  { id: 'daily_diag',   icon: '📊', tier: 'free',    diff: 'beginner',     cat: 'exam',      codes: ['code12', 'code8', 'code10', 'code14'] },
-  { id: 'weak_target',  icon: '🎯', tier: 'free',    diff: 'intermediate', cat: 'scenarios', codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'daily_diag',   icon: '📊', tier: 'free',    diff: 'beginner',     cat: 'practice',  codes: ['code12', 'code8', 'code10', 'code14'] },
+  { id: 'weak_target',  icon: '🎯', tier: 'free',    diff: 'intermediate', cat: 'practice',  codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'ctx_cluster',  icon: '🧩', tier: 'free',    diff: 'intermediate', cat: 'scenarios', codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'seq_builder',  icon: '📋', tier: 'free',    diff: 'intermediate', cat: 'controls',  codes: ['code12', 'code8', 'code10', 'code14'] },
   { id: 'confusables',  icon: '🥊', tier: 'free',    diff: 'intermediate', cat: 'signs',     codes: ['code12', 'code8', 'code10', 'code14'] },
