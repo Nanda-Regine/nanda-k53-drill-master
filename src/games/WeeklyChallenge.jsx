@@ -67,7 +67,7 @@ function LeaderRow({ rank, name, score, total, isMe }) {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function WeeklyChallenge({ onBack }) {
+export default function WeeklyChallenge({ onBack, onPass }) {
   const [screen, setScreen]       = useState('info');   // info | quiz | result
   const [challenge, setChallenge] = useState(null);
   const [loading, setLoading]     = useState(true);
@@ -164,27 +164,6 @@ export default function WeeklyChallenge({ onBack }) {
     })();
   }, [supabase, userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleAnswer = useCallback((opt) => {
-    if (chosen) return;
-    setChosen(opt);
-    const correct = opt === challenge.questions[qIdx].answer;
-    if (correct) { sfx('correct'); hapticCorrect(); }
-    else { sfx('wrong'); hapticWrong(); }
-    if (correct) setScore(s => s + 1);
-
-    setTimeout(() => {
-      if (!isMounted.current) return;
-      const next = qIdx + 1;
-      if (next >= challenge.questions.length) {
-        setScreen('result');
-        submitEntry(score + (correct ? 1 : 0), challenge.questions.length);
-      } else {
-        setQIdx(next);
-        setChosen(null);
-      }
-    }, 1400);
-  }, [chosen, challenge, qIdx, score, submitEntry]);
-
   const submitEntry = useCallback(async (finalScore, total) => {
     sfx('pass');
     hapticPass();
@@ -197,6 +176,29 @@ export default function WeeklyChallenge({ onBack }) {
       total,
     }, { onConflict: 'challenge_id,user_id' }).catch(() => {});
   }, [supabase, userId, challenge, myName]);
+
+  const handleAnswer = useCallback((opt) => {
+    if (chosen) return;
+    setChosen(opt);
+    const correct = opt === challenge.questions[qIdx].answer;
+    if (correct) { sfx('correct'); hapticCorrect(); }
+    else { sfx('wrong'); hapticWrong(); }
+    if (correct) setScore(s => s + 1);
+
+    setTimeout(() => {
+      if (!isMounted.current) return;
+      const next = qIdx + 1;
+      if (next >= challenge.questions.length) {
+        const finalScore = score + (correct ? 1 : 0);
+        setScreen('result');
+        submitEntry(finalScore, challenge.questions.length);
+        if (finalScore / challenge.questions.length >= 0.75) onPass?.(); // Weekly Champion — celebrate
+      } else {
+        setQIdx(next);
+        setChosen(null);
+      }
+    }, 1400);
+  }, [chosen, challenge, qIdx, score, submitEntry]);
 
   const share = useCallback(() => {
     if (!myEntry) return;

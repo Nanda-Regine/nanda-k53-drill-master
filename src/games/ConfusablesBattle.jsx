@@ -121,7 +121,7 @@ function SignCard({ sign, state, onClick }) {
 }
 
 // ── Main component ─────────────────────────────────────────────────────────────
-export default function ConfusablesBattle({ onBack }) {
+export default function ConfusablesBattle({ onBack, onPass }) {
   const [rounds, setRounds]       = useState(() => buildRounds(ROUNDS));
   const [qIdx, setQIdx]           = useState(0);
   const [chosen, setChosen]       = useState(null);   // 'left' | 'right' | null
@@ -147,6 +147,7 @@ export default function ConfusablesBattle({ onBack }) {
       if (!isMounted.current) return;
       if (qIdx + 1 >= ROUNDS) {
         sfx('pass'); hapticPass();
+        onPass?.();
         setScreen('done');
       } else {
         setQIdx(i => i + 1);

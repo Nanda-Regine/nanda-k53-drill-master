@@ -194,7 +194,7 @@ function BattleQuestion({ q, qIdx, total, onAnswer, timeLeft, scores, myName }) 
 }
 
 // ── Result screen ─────────────────────────────────────────────────────────────
-function ResultScreen({ scores, myName, onRematch, onLeave }) {
+function ResultScreen({ scores, myName, onRematch, onLeave, onWin }) {
   const sorted = [...scores].sort((a, b) => b.score - a.score);
   const myRank = sorted.findIndex(s => s.name === myName) + 1;
   const myScore = scores.find(s => s.name === myName)?.score || 0;
@@ -203,6 +203,7 @@ function ResultScreen({ scores, myName, onRematch, onLeave }) {
   useEffect(() => {
     sfx('pass');
     hapticPass();
+    if (myRank === 1) onWin?.(); // you won the battle — celebrate
   }, []);
 
   const share = () => {
@@ -260,7 +261,7 @@ function ResultScreen({ scores, myName, onRematch, onLeave }) {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function StudyGroupBattle({ onBack }) {
+export default function StudyGroupBattle({ onBack, onPass }) {
   const [screen, setScreen]     = useState('join'); // join | lobby | battle | result
   const [myName, setMyName]     = useState(() => localStorage.getItem('k53_battle_name') || '');
   const [nameInput, setNameInput] = useState('');
@@ -548,6 +549,7 @@ export default function StudyGroupBattle({ onBack }) {
               myName={myName || nameInput}
               onRematch={handleRematch}
               onLeave={handleLeave}
+              onWin={onPass}
             />
           </motion.div>
         )}

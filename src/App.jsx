@@ -450,19 +450,19 @@ export default function App() {
 
   // ── Phase C: Community routes ──────────────────────────────────────────────
   if (activeGame === 'pass_wall')    return <GameErrorBoundary onBack={onGameBack} gameName="Pass Wall"><PassWall         onBack={onGameBack} /></GameErrorBoundary>;
-  if (activeGame === 'study_battle') return <GameErrorBoundary onBack={onGameBack} gameName="Study Battle"><StudyGroupBattle onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'study_battle') return <><GameErrorBoundary onBack={onGameBack} gameName="Study Battle"><StudyGroupBattle onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'dltc_tips')    return <GameErrorBoundary onBack={onGameBack} gameName="DLTC Tips"><DLTCTips          onBack={onGameBack} /></GameErrorBoundary>;
-  if (activeGame === 'weekly_chall') return <GameErrorBoundary onBack={onGameBack} gameName="Weekly Challenge"><WeeklyChallenge  onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'weekly_chall') return <><GameErrorBoundary onBack={onGameBack} gameName="Weekly Challenge"><WeeklyChallenge  onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'school_dash')  return <GameErrorBoundary onBack={onGameBack} gameName="School Dashboard"><SchoolDashboard  onBack={onGameBack} /></GameErrorBoundary>;
   if (activeGame === 'community_qa') return <GameErrorBoundary onBack={onGameBack} gameName="Community Q&A"><CommunityQA      onBack={onGameBack} /></GameErrorBoundary>;
 
   // ── Phase D: Adaptive Drills ─────────────────────────────────────────────────
-  if (activeGame === 'daily_diag')   return <GameErrorBoundary onBack={onGameBack} gameName="Daily Diagnostic"><DailyDiagnostic  onBack={onGameBack} /></GameErrorBoundary>;
-  if (activeGame === 'weak_target')  return <GameErrorBoundary onBack={onGameBack} gameName="Weak Spot Targeter"><WeakSpotTargeter onBack={onGameBack} /></GameErrorBoundary>;
-  if (activeGame === 'ctx_cluster')  return <GameErrorBoundary onBack={onGameBack} gameName="Context Cluster"><ContextCluster   onBack={onGameBack} /></GameErrorBoundary>;
-  if (activeGame === 'seq_builder')  return <GameErrorBoundary onBack={onGameBack} gameName="Sequence Builder"><SequenceBuilder  onBack={onGameBack} /></GameErrorBoundary>;
-  if (activeGame === 'confusables')  return <GameErrorBoundary onBack={onGameBack} gameName="Confusables Battle"><ConfusablesBattle onBack={onGameBack} /></GameErrorBoundary>;
-  if (activeGame === 'speed_recog')  return <GameErrorBoundary onBack={onGameBack} gameName="Speed Recognition"><SpeedRecognition onBack={onGameBack} /></GameErrorBoundary>;
+  if (activeGame === 'daily_diag')   return <><GameErrorBoundary onBack={onGameBack} gameName="Daily Diagnostic"><DailyDiagnostic  onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'weak_target')  return <><GameErrorBoundary onBack={onGameBack} gameName="Weak Spot Targeter"><WeakSpotTargeter onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'ctx_cluster')  return <><GameErrorBoundary onBack={onGameBack} gameName="Context Cluster"><ContextCluster   onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'seq_builder')  return <><GameErrorBoundary onBack={onGameBack} gameName="Sequence Builder"><SequenceBuilder  onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'confusables')  return <><GameErrorBoundary onBack={onGameBack} gameName="Confusables Battle"><ConfusablesBattle onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'speed_recog')  return <><GameErrorBoundary onBack={onGameBack} gameName="Speed Recognition"><SpeedRecognition onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
 
   // ── Tab routes ──────────────────────────────────────────────────────────────
   if (navTab === 'exam') return <ExamIntro onBack={() => setNavTab('home')} onStart={() => { setNavTab('home'); handleGameSelect(GAMES.find(g => g.id === 'learner_exam') || { id: 'learner_exam', tier: 'free' }); }} />;
