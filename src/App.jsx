@@ -248,11 +248,12 @@ export default function App() {
   const CODES = CODES_BASE.map(c => ({ ...c, sub: t(c.subKey) }));
   const GAMES = GAMES_BASE.map(g => ({ ...g, label: t(`game_${g.id}`), desc: t(`game_${g.id}_desc`) }));
   const NAV   = NAV_BASE.map(n => ({ ...n, label: t(n.labelKey) }));
+  const _deepGame = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('game') : null;
   const [T, setT]             = useState(buildLiveTheme);
-  const [showLanding, setShowLanding]       = useState(() => !localStorage.getItem(LANDING_KEY) && !localStorage.getItem(ONBOARDING_KEY));
-  const [showOnboarding, setShowOnboarding] = useState(() => !localStorage.getItem(ONBOARDING_KEY));
+  const [showLanding, setShowLanding]       = useState(() => !_deepGame && !localStorage.getItem(LANDING_KEY) && !localStorage.getItem(ONBOARDING_KEY));
+  const [showOnboarding, setShowOnboarding] = useState(() => !_deepGame && !localStorage.getItem(ONBOARDING_KEY));
   const [activeCat, setActiveCat]           = useState('all');
-  const [activeGame, setActiveGame]         = useState(null);
+  const [activeGame, setActiveGame]         = useState(_deepGame || null);
   const [navTab, setNavTab]                 = useState('home');
   const [streak, setStreak]                 = useState(() => getStreak());
   const [tier, setTier]                     = useState(() => getTier());
@@ -344,6 +345,15 @@ export default function App() {
     window.history.replaceState({}, '', '/');
     return () => { cancelled = true; };
   }, [refreshTier]);
+
+  // Deep-link: a topic landing page opens the app at /?game=<id>; state is
+  // seeded from it above — clean the param out of the URL and mark seen.
+  useEffect(() => {
+    if (!_deepGame) return;
+    localStorage.setItem(LANDING_KEY, '1');
+    localStorage.setItem(ONBOARDING_KEY, '1');
+    window.history.replaceState({}, '', '/');
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Browser back button → return to home instead of exiting the app
   useEffect(() => {
