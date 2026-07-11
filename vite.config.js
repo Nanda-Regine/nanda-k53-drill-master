@@ -51,8 +51,8 @@ export default defineConfig(({ mode }) => {
         manualChunks(id) {
           if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) return 'vendor';
           if (id.includes('node_modules/framer-motion')) return 'motion';
-          if (id.includes('/games/Gauntlet') || id.includes('/games/MockExam') || id.includes('/games/PatternTrainer')) return 'games-core';
-          if (id.includes('/games/HybridGauntlet') || id.includes('/games/RoadRulesGauntlet') || id.includes('/games/VehicleControls') || id.includes('/games/PDPPrep') || id.includes('/games/MotorcycleGauntlet') || id.includes('/games/HeavyVehicleGauntlet')) return 'games-ext';
+          // Games are lazy-loaded (React.lazy in App.jsx) — Rollup emits one
+          // on-demand chunk per game automatically; no manual grouping needed.
         },
       },
     },

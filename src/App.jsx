@@ -1,44 +1,46 @@
-﻿import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { T as BaseT, getFontSize, setFontSize } from './theme.js';
 import { useLang } from './LangContext.jsx';
 
 // ── Games ──────────────────────────────────────────────────────────────────────
-import Gauntlet            from './games/Gauntlet.jsx';
-import HybridGauntlet      from './games/HybridGauntlet.jsx';
-import PatternTrainer      from './games/PatternTrainer.jsx';
-import RoadRulesGauntlet   from './games/RoadRulesGauntlet.jsx';
-import MockExam            from './games/MockExam.jsx';
-import VehicleControls     from './games/VehicleControls.jsx';
-import PDPPrep             from './games/PDPPrep.jsx';
-import MotorcycleGauntlet   from './games/MotorcycleGauntlet.jsx';
-import HeavyVehicleGauntlet from './games/HeavyVehicleGauntlet.jsx';
-import MotorcycleMockExam   from './games/MotorcycleMockExam.jsx';
-import RoadSignsQuiz        from './games/RoadSignsQuiz.jsx';
-import SignShapeTrainer     from './games/SignShapeTrainer.jsx';
-import RoadMarkingsDrill    from './games/RoadMarkingsDrill.jsx';
-import ScenarioDrill       from './games/ScenarioDrill.jsx';
-import K53LearnerExam      from './games/K53LearnerExam.jsx';
-import VoiceMode           from './games/VoiceMode.jsx';
+// Lazy-loaded so each game ships as its own on-demand chunk (kept out of the
+// initial bundle). The <Suspense> boundary lives inside GameErrorBoundary.
+const Gauntlet            = lazy(() => import('./games/Gauntlet.jsx'));
+const HybridGauntlet      = lazy(() => import('./games/HybridGauntlet.jsx'));
+const PatternTrainer      = lazy(() => import('./games/PatternTrainer.jsx'));
+const RoadRulesGauntlet   = lazy(() => import('./games/RoadRulesGauntlet.jsx'));
+const MockExam            = lazy(() => import('./games/MockExam.jsx'));
+const VehicleControls     = lazy(() => import('./games/VehicleControls.jsx'));
+const PDPPrep             = lazy(() => import('./games/PDPPrep.jsx'));
+const MotorcycleGauntlet   = lazy(() => import('./games/MotorcycleGauntlet.jsx'));
+const HeavyVehicleGauntlet = lazy(() => import('./games/HeavyVehicleGauntlet.jsx'));
+const MotorcycleMockExam   = lazy(() => import('./games/MotorcycleMockExam.jsx'));
+const RoadSignsQuiz        = lazy(() => import('./games/RoadSignsQuiz.jsx'));
+const SignShapeTrainer     = lazy(() => import('./games/SignShapeTrainer.jsx'));
+const RoadMarkingsDrill    = lazy(() => import('./games/RoadMarkingsDrill.jsx'));
+const ScenarioDrill       = lazy(() => import('./games/ScenarioDrill.jsx'));
+const K53LearnerExam      = lazy(() => import('./games/K53LearnerExam.jsx'));
+const VoiceMode           = lazy(() => import('./games/VoiceMode.jsx'));
 import Landing             from './components/Landing.jsx';
 import TestDayPrep          from './components/TestDayPrep.jsx';
 import MentalHealthSupport  from './components/MentalHealthSupport.jsx';
 
 // ── Phase C: Community ────────────────────────────────────────────────────────
-import PassWall          from './games/PassWall.jsx';
-import StudyGroupBattle  from './games/StudyGroupBattle.jsx';
-import DLTCTips          from './games/DLTCTips.jsx';
-import WeeklyChallenge   from './games/WeeklyChallenge.jsx';
-import SchoolDashboard   from './games/SchoolDashboard.jsx';
-import CommunityQA       from './games/CommunityQA.jsx';
+const PassWall          = lazy(() => import('./games/PassWall.jsx'));
+const StudyGroupBattle  = lazy(() => import('./games/StudyGroupBattle.jsx'));
+const DLTCTips          = lazy(() => import('./games/DLTCTips.jsx'));
+const WeeklyChallenge   = lazy(() => import('./games/WeeklyChallenge.jsx'));
+const SchoolDashboard   = lazy(() => import('./games/SchoolDashboard.jsx'));
+const CommunityQA       = lazy(() => import('./games/CommunityQA.jsx'));
 
 // ── Phase D: Adaptive Drills ──────────────────────────────────────────────────
-import SequenceBuilder   from './games/SequenceBuilder.jsx';
-import ConfusablesBattle from './games/ConfusablesBattle.jsx';
-import SpeedRecognition  from './games/SpeedRecognition.jsx';
-import ContextCluster    from './games/ContextCluster.jsx';
-import WeakSpotTargeter  from './games/WeakSpotTargeter.jsx';
-import DailyDiagnostic   from './games/DailyDiagnostic.jsx';
+const SequenceBuilder   = lazy(() => import('./games/SequenceBuilder.jsx'));
+const ConfusablesBattle = lazy(() => import('./games/ConfusablesBattle.jsx'));
+const SpeedRecognition  = lazy(() => import('./games/SpeedRecognition.jsx'));
+const ContextCluster    = lazy(() => import('./games/ContextCluster.jsx'));
+const WeakSpotTargeter  = lazy(() => import('./games/WeakSpotTargeter.jsx'));
+const DailyDiagnostic   = lazy(() => import('./games/DailyDiagnostic.jsx'));
 
 // ── Components ─────────────────────────────────────────────────────────────────
 import GameErrorBoundary from './components/GameErrorBoundary.jsx';

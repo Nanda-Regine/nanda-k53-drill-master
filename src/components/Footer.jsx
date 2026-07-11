@@ -5,7 +5,7 @@ import { T } from '../theme.js';
 
 const PRIVACY = `PRIVACY POLICY (POPIA COMPLIANT)
 K53 Drill Master — Mirembe Muse (Pty) Ltd
-Last updated: 10 July 2026
+Last updated: 11 July 2026
 
 This policy applies to the K53 Drill Master application ("the App"), operated by Mirembe Muse (Pty) Ltd ("we", "us", "our"), in accordance with the Protection of Personal Information Act 4 of 2013 (POPIA).
 
@@ -26,7 +26,7 @@ a) Information you provide:
 
 b) Information collected automatically:
    · Study progress, quiz scores, streaks, badges — stored locally on your device in browser localStorage. This data never leaves your device unless you choose to sync.
-   · Aggregate usage analytics via Vercel Analytics, PostHog and Google Tag Manager (page views, device type, feature usage) — used only in aggregate to improve the App.
+   · Aggregate usage analytics via Vercel Analytics, PostHog, Google Analytics 4 and Google Tag Manager (page views, device type, feature usage) — used only in aggregate to improve the App.
 
 c) Information we do NOT collect:
    · We do not collect ID numbers, addresses, or sensitive personal information as defined by POPIA.
@@ -57,7 +57,7 @@ We share personal information only with:
    · Supabase Inc. (database and authentication) — stores your email and subscription record
    · Paystack (Pty) Ltd and PayFast (Pty) Ltd (payment processing) — handle all payment data
    · Vercel Inc. (hosting and aggregate analytics) — serves the application
-   · PostHog and Google (Tag Manager) — aggregate, non-advertising usage analytics
+   · PostHog and Google (Analytics 4 & Tag Manager) — aggregate, non-advertising usage analytics
 
 All third parties are contractually required to protect your data. We do not sell personal information.
 
@@ -93,7 +93,7 @@ Tel: 010 023 5200
 ───────────────────────────────────
 9. COOKIES & LOCAL STORAGE
 ───────────────────────────────────
-We use browser localStorage to keep your study data on your device. Our analytics providers (Vercel Analytics, PostHog and Google Tag Manager) may set cookies or similar technologies to measure aggregate usage. We do not use third-party advertising networks and we do not sell tracking data.
+We use browser localStorage to keep your study data on your device. Our analytics providers (Vercel Analytics, PostHog, Google Analytics 4 and Google Tag Manager) may set cookies or similar technologies to measure aggregate usage. We do not use third-party advertising networks and we do not sell tracking data.
 
 ───────────────────────────────────
 10. SECURITY
@@ -186,7 +186,7 @@ East London, Eastern Cape, South Africa`;
 const PAIA = `PAIA MANUAL — SECTION 51
 Promotion of Access to Information Act 2 of 2000
 K53 Drill Master — Mirembe Muse (Pty) Ltd
-Last updated: 10 July 2026
+Last updated: 11 July 2026
 
 ───────────────────────────────────
 A. CONTACT DETAILS OF INFORMATION OFFICER
@@ -228,7 +228,7 @@ The following categories of records are held:
 
 3. ANALYTICS RECORDS
    · Aggregate (non-personal) usage and page-view data
-   · Stored in / processed by: Vercel Analytics, PostHog and Google Tag Manager
+   · Stored in / processed by: Vercel Analytics, PostHog, Google Analytics 4 and Google Tag Manager
 
 4. BUSINESS RECORDS
    · Company registration documents
