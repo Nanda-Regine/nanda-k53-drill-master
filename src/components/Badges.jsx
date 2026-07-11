@@ -55,6 +55,14 @@ export function checkAndAwardBadges({ totalAnswered, streakCount, justPerfectRou
   return newBadges;
 }
 
+export function shareBadge(def) {
+  const text = `${def.emoji} I just earned the "${def.label}" badge on K53 Drill Master — ${def.desc}! Prepping for my learner's licence 🚗🇿🇦 Practise free: k53drillmaster.co.za`;
+  try {
+    if (navigator.share) navigator.share({ text }).catch(() => {});
+    else window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  } catch { window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank'); }
+}
+
 export function BadgeToast({ badgeId, onDismiss }) {
   if (!badgeId) return null;
   const def = BADGE_DEFS.find(b => b.id === badgeId);
@@ -75,9 +83,14 @@ export function BadgeToast({ badgeId, onDismiss }) {
       <div style={{ fontSize: 36, marginBottom: 6 }}>{def.emoji}</div>
       <div style={{ color: "#fff", fontSize: 17, fontWeight: 700, marginBottom: 4 }}>{def.label}</div>
       <div style={{ color: T.dim, fontSize: 12, marginBottom: 14 }}>{def.desc}</div>
-      <button onClick={onDismiss} style={{ background: T.gold, border: "none", borderRadius: 8, padding: "8px 24px", fontSize: 13, fontWeight: 700, cursor: "pointer", color: "#060D07", fontFamily: T.font }}>
-        Nice!
-      </button>
+      <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+        <button onClick={() => shareBadge(def)} style={{ background: "#25D366", border: "none", borderRadius: 8, padding: "8px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer", color: "#fff", fontFamily: T.font }}>
+          Share 📲
+        </button>
+        <button onClick={onDismiss} style={{ background: T.gold, border: "none", borderRadius: 8, padding: "8px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer", color: "#060D07", fontFamily: T.font }}>
+          Nice!
+        </button>
+      </div>
     </div>
   );
 }
