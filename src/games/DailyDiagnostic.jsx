@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { T } from '../theme.js';
 import { sfx } from '../utils/sounds.js';
-import { getNerveMastery, recordAnswer, NERVES, getDailyStreak } from '../utils/masteryStore.js';
+import { getNerveMastery, recordAnswer, NERVES } from '../utils/masteryStore.js';
+import { getStreak } from '../utils/streakTracker.js';
 
 const hapticCorrect = () => { try { navigator.vibrate?.(30); } catch {} };
 const hapticWrong   = () => { try { navigator.vibrate?.([60, 30, 60]); } catch {} };
@@ -102,7 +103,7 @@ export default function DailyDiagnostic({ onBack }) {
   const [score, setScore]   = useState(0);
   const [screen, setScreen] = useState(alreadyDoneToday ? 'results' : 'play');
   const [nerveData, setNerveData] = useState(() => getNerveMastery());
-  const [streak]            = useState(() => getDailyStreak());
+  const [streak]            = useState(() => getStreak()); // single source of truth (same as home header)
   const [prevScore]         = useState(() => {
     try { return parseInt(localStorage.getItem(SCORE_KEY) || '0', 10); } catch { return 0; }
   });

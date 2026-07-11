@@ -110,9 +110,10 @@ export function recordAnswer(nerveId, conceptId, correct) {
   const result = _addXP(xpGain);
   _touchStreak();
 
-  // Broadcast a level-up so any screen can celebrate it (centralised in App.jsx).
-  if (result.leveledUp && typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('k53:levelup', { detail: { level: result.newLevel } }));
+  // Broadcast the XP gain (floating "+10 XP") and any level-up so any screen can react.
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('k53:xp', { detail: { gain: xpGain, combo: combo > 0 } }));
+    if (result.leveledUp) window.dispatchEvent(new CustomEvent('k53:levelup', { detail: { level: result.newLevel } }));
   }
 
   return { xpGain: result.xpGained, newXP: result.newXP, leveledUp: result.leveledUp, newLevel: result.newLevel, answerStreak: e.streak };

@@ -44,7 +44,7 @@ import DailyDiagnostic   from './games/DailyDiagnostic.jsx';
 import GameErrorBoundary from './components/GameErrorBoundary.jsx';
 import Onboarding        from './components/Onboarding.jsx';
 import Confetti          from './components/Confetti.jsx';
-import { BadgeToast, BadgeGrid, LevelUpToast, checkAndAwardBadges, hasBadge } from './components/Badges.jsx';
+import { BadgeToast, BadgeGrid, LevelUpToast, XpFlash, checkAndAwardBadges, hasBadge } from './components/Badges.jsx';
 import AuthModal         from './components/AuthModal.jsx';
 import ProgressHistory   from './components/ProgressHistory.jsx';
 import WeakSpotsReview   from './components/WeakSpotsReview.jsx';
@@ -421,6 +421,7 @@ export default function App() {
   const confettiOverlay = (
     <>
       <Confetti active={confettiActive} />
+      <XpFlash />
       {pendingBadge && <BadgeToast badgeId={pendingBadge} onDismiss={() => { setPendingBadge(null); setConfettiActive(false); }} />}
       {pendingLevelUp && <LevelUpToast level={pendingLevelUp} onDismiss={() => { setPendingLevelUp(null); setConfettiActive(false); }} />}
     </>

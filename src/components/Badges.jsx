@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { T } from "../theme.js";
 
 export const BADGE_DEFS = [
@@ -78,6 +78,29 @@ export function BadgeToast({ badgeId, onDismiss }) {
       <button onClick={onDismiss} style={{ background: T.gold, border: "none", borderRadius: 8, padding: "8px 24px", fontSize: 13, fontWeight: 700, cursor: "pointer", color: "#060D07", fontFamily: T.font }}>
         Nice!
       </button>
+    </div>
+  );
+}
+
+// Floating "+10 XP" that rises and fades on every answer (listens for k53:xp).
+export function XpFlash() {
+  const [flash, setFlash] = useState(null);
+  useEffect(() => {
+    let n = 0;
+    const on = (e) => { const gain = e.detail?.gain || 0; if (gain < 1) return; n += 1; setFlash({ id: n, gain, combo: e.detail?.combo }); };
+    window.addEventListener('k53:xp', on);
+    return () => window.removeEventListener('k53:xp', on);
+  }, []);
+  useEffect(() => { if (!flash) return; const t = setTimeout(() => setFlash(null), 850); return () => clearTimeout(t); }, [flash]);
+  if (!flash) return null;
+  return (
+    <div key={flash.id} style={{
+      position: 'fixed', top: '30%', left: '50%', zIndex: 9996, pointerEvents: 'none',
+      color: flash.combo ? '#FFB612' : '#4ade80', fontWeight: 900, fontSize: flash.combo ? 26 : 20,
+      fontFamily: T.font, textShadow: '0 2px 10px rgba(0,0,0,0.55)', animation: 'xpFloat 0.85s ease-out forwards',
+    }}>
+      <style>{`@keyframes xpFloat { 0%{opacity:0;transform:translateX(-50%) translateY(12px) scale(0.8);} 25%{opacity:1;transform:translateX(-50%) translateY(0) scale(1.1);} 100%{opacity:0;transform:translateX(-50%) translateY(-46px) scale(1);} }`}</style>
+      +{flash.gain} XP{flash.combo ? ' 🔥' : ''}
     </div>
   );
 }
