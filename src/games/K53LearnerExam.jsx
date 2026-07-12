@@ -140,19 +140,29 @@ const CONTROLS_QUESTIONS = [
 function buildSignQuestions(count = 28) {
   const eligible = ROAD_SIGNS.filter(s => s.options && s.options.length >= 4 && s.name && s.img);
   const shuffled = [...eligible].sort(() => Math.random() - 0.5).slice(0, count);
-  return shuffled.map(sign => ({
-    signId: sign.id,
-    img: sign.img,
-    name: sign.name,
-    hint: sign.hint,
-    q: `What does this road sign mean?`,
-    options: sign.options,
-    answer: 0, // options[0] is always correct in ROAD_SIGNS
-    explanation: sign.meaning + (sign.action ? ' ' + sign.action : ''),
-  }));
+  return shuffled.map(sign => {
+    const correct = sign.options[0];
+    const opts = [...sign.options].sort(() => Math.random() - 0.5);
+    return {
+      signId: sign.id,
+      img: sign.img,
+      name: sign.name,
+      hint: sign.hint,
+      q: `What does this road sign mean?`,
+      options: opts,
+      answer: opts.indexOf(correct),
+      explanation: sign.meaning + (sign.action ? ' ' + sign.action : ''),
+    };
+  });
 }
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+function shuffleOptions(q) {
+  const correct = q.options[q.answer];
+  const opts = shuffle(q.options);
+  return { ...q, options: opts, answer: opts.indexOf(correct) };
+}
 
 // ── Main component ────────────────────────────────────────────────────────────
 export default function K53LearnerExam({ onBack, onPass, onGoToGame }) {
@@ -176,8 +186,8 @@ export default function K53LearnerExam({ onBack, onPass, onGoToGame }) {
 
   const startExam = useCallback(() => {
     const signQs = buildSignQuestions(28);
-    const rulesQs = shuffle([...RULES_QUESTIONS]).slice(0, 28);
-    const controlsQs = shuffle([...CONTROLS_QUESTIONS]).slice(0, 8);
+    const rulesQs = shuffle([...RULES_QUESTIONS]).slice(0, 28).map(shuffleOptions);
+    const controlsQs = shuffle([...CONTROLS_QUESTIONS]).slice(0, 8).map(shuffleOptions);
     setAllQuestions({ signs: signQs, rules: rulesQs, controls: controlsQs });
     setSection(0);
     setQIdx(0);
