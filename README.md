@@ -29,14 +29,14 @@ Every year, hundreds of thousands of South Africans pay R225 to sit a test they 
 
 A mobile-first, offline-capable drill platform covering all K53 vehicle codes — built specifically for the device profiles, connectivity constraints, and languages of the South African learner driver.
 
-- **600+ curated questions** verified against 2024 DLTC examiner guidelines
-- **11 distinct game modes** engineered for different learning stages and codes
-- **3 languages**: English, Afrikaans, isiXhosa (more coming)
-- **Real sign images** extracted from the official SA Learner Driver Manual PDF
+- **600+ curated questions**, CI-validated against 2024 DLTC examiner guidelines
+- **25+ game modes** engineered for different learning stages, licence codes and study styles
+- **3 languages**: English, Afrikaans, isiXhosa (native-speaker reviewed)
+- **Real sign images** extracted from the official SA Learner Driver Manual PDF (2024)
 - **Spaced repetition** (SM-2 algorithm) to target weak spots
 - **Full Mock Exam** conditions: 68Q, 45 minutes, 75% pass threshold — exactly the real thing
-- **PWA offline support** — works without internet after first load
-- **Freemium model** that converts without friction
+- **Dual delivery** — PWA offline support **+ native Android (Capacitor)** for low-end phones on 3G
+- **Freemium model** that converts without friction: 30-day unlimited trial, then 10 questions/day free
 
 ---
 
@@ -91,7 +91,7 @@ A mobile-first, offline-capable drill platform covering all K53 vehicle codes �
 │    ├── activeGame: null | "gauntlet" | "mockexam" | ...         │
 │    ├── navTab: "home" | "checklist" | "weak" | "progress" | ... │
 │    │                                                             │
-│    ├── /src/games/          ← 11 self-contained game components  │
+│    ├── /src/games/          ← 25+ self-contained game components │
 │    ├── /src/components/     ← Cross-cutting UI                   │
 │    └── /src/utils/          ← Pure functions                     │
 │          streakTracker.js   (localStorage k53_streak_v2)         │
@@ -201,7 +201,17 @@ Magic link → session → checkSubscription() → storePremiumToken()
 Unlimited access
 ```
 
-Plans: **R29/month · R69/3-month · R149 lifetime**
+**Pricing:**
+
+| Plan | Price | Gateway |
+|------|-------|---------|
+| Monthly | **R29/month** | Paystack (recurring) |
+| 3-Month | **R69** once | PayFast (one-time) |
+| Lifetime | **R149** once | PayFast (one-time) |
+| Lifetime + PDP | **R199** once | PayFast (one-time) |
+| Group / School | Custom | — |
+
+_Rule of thumb across the portfolio: **Paystack = subscriptions, PayFast = one-time**._ New users get a **30-day unlimited free trial**, then fall back to 10 questions/day free until they upgrade.
 
 The freemium gate is client-side localStorage. A technical user can bypass it. We'd rather lose that one user than add 80ms of latency to every answer click for the 99% who don't.
 
@@ -277,17 +287,19 @@ CREATE POLICY "service_insert" ON subscribers FOR INSERT WITH CHECK (auth.role()
 
 ## Roadmap
 
-### Q2 2026
-- [ ] Next.js 14 landing page (App Router, Tailwind, Edge SSG)
+### Shipped ✅
+- [x] SEO landing pages + GA4 analytics
+- [x] Native **Android app (Capacitor)** alongside the PWA
+- [x] CI question-integrity validator (accuracy gate on every commit)
+- [x] Shareable badge / viral pass-wall loop
+- [x] 139 crisp official signs re-exported + mis-coded answers corrected
+
+### Next
 - [ ] WhatsApp study group score sharing
 - [ ] Code 3 (light delivery vehicle) question bank
 - [ ] Instructor mode — shareable progress report
-- [ ] Supabase Edge Function for AITutor (move API key server-side)
 - [ ] Backend progress sync (currently localStorage-only)
-
-### Q3 2026
-- [ ] React Native mobile app (iOS + Android)
-- [ ] isiZulu + Mandarin language support
+- [ ] isiZulu language support
 - [ ] Driving school B2B seat licensing
 
 ### Q4 2026
