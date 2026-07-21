@@ -14,8 +14,11 @@ This policy applies to the K53 Drill Master application ("the App"), operated by
 ───────────────────────────────────
 Mirembe Muse (Pty) Ltd
 East London, Eastern Cape, South Africa
-Information Officer: Nandawula Regine
-Email: hello@creativelynanda.co.za
+POPIA / Information Regulator Registration No. 2026-005658 (registered 3 April 2026)
+Information Officer: Nandawula Kabali-Kagwa
+Email: privacy@mirembemuse.co.za
+
+Note on learners under 18: Some learner-drivers are minors. Where we knowingly process a child's personal information we require the consent of a competent person (parent or legal guardian). Under-18 users should use the App with a parent or guardian's permission, who may contact us any time to access, correct or delete the child's information. We do not use children's data for marketing.
 
 ───────────────────────────────────
 2. PERSONAL INFORMATION WE COLLECT
