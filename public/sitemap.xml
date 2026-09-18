@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       HOMEPAGE — with all road sign images for image-search indexing
+       ═══════════════════════════════════════════════════════════════════ -->
   <url>
     <loc>https://k53drillmaster.co.za/</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
       <image:image>
@@ -922,76 +926,414 @@
         <image:caption>The road narrows to a single lane ahead used by both directions. You must yield.</image:caption>
       </image:image>
   </url>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       TOPIC LANDING PAGES — Pre-rendered static HTML pages
+       ═══════════════════════════════════════════════════════════════════ -->
   <url>
     <loc>https://k53drillmaster.co.za/k53-road-signs.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://k53drillmaster.co.za/k53-mock-exam.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://k53drillmaster.co.za/k53-learners-test.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://k53drillmaster.co.za/k53-road-rules.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://k53drillmaster.co.za/k53-vehicle-controls.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://k53drillmaster.co.za/k53-motorcycle.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://k53drillmaster.co.za/k53-code-10-14.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://k53drillmaster.co.za/k53-pdp.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://k53drillmaster.co.za/k53-road-markings.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://k53drillmaster.co.za/k53-scenarios.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://k53drillmaster.co.za/landing.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://k53drillmaster.co.za/pricing.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/privacy.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       LICENCE CODE FILTER PAGES — filtered game views by code
+       /?code= opens the game list pre-filtered to that licence class
+       ═══════════════════════════════════════════════════════════════════ -->
+  <url>
+    <loc>https://k53drillmaster.co.za/?code=code8</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?code=code12</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?code=code10</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?code=code14</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       GAME DEEP-LINKS — /?game=<id> opens that game mode directly
+       Code 8 games
+       ═══════════════════════════════════════════════════════════════════ -->
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=mockexam</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=learner_exam</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=gauntlet</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=hybrid</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Code 1/2 motorcycle games -->
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=motorcycle</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=moto_exam</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Code 10/14 heavy vehicle games -->
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=heavy</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=pdp</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- All-codes games — road rules, controls, signs, markings, scenarios -->
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=road_rules</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=controls</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=roadsigns</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=sign_shape</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=road_marks</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=scenario</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=patterns</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=confusables</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Adaptive drill games -->
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=weak_target</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=daily_diag</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=ctx_cluster</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=seq_builder</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=speed_recog</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=voice</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Community games -->
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=pass_wall</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=study_battle</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=weekly_chall</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=dltc_tips</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=school_dash</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=community_qa</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       QUESTION-SET SUBPAGES — game + code combinations
+       High-value exam search combinations indexed here
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <!-- Code 8 (light motor vehicle) exam question sets -->
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=mockexam&amp;code=code8</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=learner_exam&amp;code=code8</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=road_rules&amp;code=code8</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=roadsigns&amp;code=code8</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=controls&amp;code=code8</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=gauntlet&amp;code=code8</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=scenario&amp;code=code8</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Code 1/2 (motorcycle) exam question sets -->
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=moto_exam&amp;code=code12</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=motorcycle&amp;code=code12</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=road_rules&amp;code=code12</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=roadsigns&amp;code=code12</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Code 10 (heavy vehicle) exam question sets -->
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=heavy&amp;code=code10</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=pdp&amp;code=code10</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=road_rules&amp;code=code10</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Code 14 (extra-heavy vehicle) exam question sets -->
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=heavy&amp;code=code14</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=pdp&amp;code=code14</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://k53drillmaster.co.za/?game=road_rules&amp;code=code14</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
 </urlset>
