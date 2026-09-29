@@ -41,7 +41,7 @@ Render: `<img src={/signs/filename.jpg} />`
 - Learner's test (all codes): 64Q = 28 signs/signals/markings (pass 23) + 28 rules (pass 22) + 8 controls (pass 6); EVERY section must pass (source: updated-official-DLTC-docs/dltc-eng.pdf §5.4)
 - Exam questions live in src/data/learnerTestBank.js (each cites its source section) — the single source of truth
 - Urban speed limit: 60 km/h | Freeway: 120 km/h | Outside urban: 100 km/h
-- Following distance: 2 seconds minimum (3 seconds wet)
+- Following distance: 2 seconds minimum (LMV + motorcycle), 3 seconds HMV; "increase" in adverse conditions (no fixed number in the manuals)
 - BAC limit: 0.05g/100ml (non-professional) | 0.02g/100ml (professional)
 - Emergency triangle: minimum 45m behind vehicle
 - Dipped beam: 45m ahead | Main beam: 100m ahead | Hooter: 90m audible
@@ -58,7 +58,6 @@ Render: `<img src={/signs/filename.jpg} />`
 - PDPPrep.jsx — PDP professional driving prep
 - MotorcycleGauntlet.jsx — Code 1/2 gauntlet
 - HeavyVehicleGauntlet.jsx — Code 10/14 gauntlet
-- MotorcycleMockExam.jsx — 40Q Code 1 exam
 - RoadSignsQuiz.jsx — signs quiz (uses roadSigns.js)
 - SignShapeTrainer.jsx — shape/pattern recognition (NEW)
 - RoadMarkingsDrill.jsx — road markings quiz (NEW)

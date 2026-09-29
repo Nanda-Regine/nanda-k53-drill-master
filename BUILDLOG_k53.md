@@ -607,3 +607,53 @@ Fixed ~19 wrong facts: following distance **2s** (LMV + motorcycle), hydrant **1
 1. Add more **verified** questions for each category (from the DLTC docs).
 2. Wire artwork for the 18 remaining signs.
 3. Device-test native sign-in.
+
+---
+
+## Phase 16 — Official-Docs Re-Audit & One Exam Engine
+**Commit:** `9a30d71` (branch `fix/official-docs-audit`) | **2026-09-29**
+
+`fix(content): audit every game against the official DLTC/K53 docs`
+
+### Why
+Learners reported "a lot of mistakes". A line-by-line re-audit against `updated-official-DLTC-docs/` (K53 practical manuals Vol 1–4, DLTC Minimum Requirements, RTSigns chart) plus the Rules of the Road and Road Traffic Signs manuals showed the July audit had badly under-counted: most wrong answers were **foreign (US/UK/EU) rules or invented numbers**, repeated across banks.
+
+### Test setup (the biggest error)
+- The mock exams claimed **68 questions / 75% overall** (Code 8) and **40 questions** (Code 1). The official format (DLTC Minimum Requirements §5.4) is **64 questions: 28 signs/signals/markings (pass 23), 28 rules (pass 22), 8 controls (pass 6) — every section must be passed**. The "75% across all games" note in Phase E+ was wrong.
+- **One exam engine:** `K53LearnerExam.jsx` (variant `lmv` | `mc`) now serves `learner_exam`, `mockexam` (card hidden, deep link kept) and `moto_exam`. `MockExam.jsx` and `MotorcycleMockExam.jsx` deleted.
+- Exam mode (answers at the end, change answers until submit) + practice mode; review screen shows every mistake with its source.
+- **`src/data/learnerTestBank.js`**: about 200 questions, each citing its manual section (`ref`), correct option first, shuffled at runtime.
+
+### Content corrections (representative)
+- No "yield to the right" when vehicles arrive together at a 4-way stop or uncontrolled intersection (first to stop goes first).
+- Traffic circles are **clockwise** (SGN R137).
+- Fog lamps are **not** for rain.
+- Tread is **1 mm**, not 1.6 mm.
+- Freeway drivers **must let merging vehicles in** (RoR §6.56).
+- K53 turn-in-the-road is **3 movements**; parking wheels go **toward the kerb** (Module 31).
+- Wet-weather following distance is "increased", not an invented number.
+- Banks corrected: Road Rules (58 fixes), Scenario (34), Motorcycle (24), Heavy (21), Hybrid (13), Vehicle Controls (15), ContextCluster, Gauntlet, PatternTrainer, RoadSignsQuiz.
+- Daily Diagnostic + Weak Spot rebuilt on the verified bank (`src/data/drillBank.js`); Sequence Builder rewritten from the K53 modules.
+- Road markings rebuilt from SGN §7 with correct SARTSM codes and the drawings that actually match (e.g. RM12 red = no stopping, RM13 yellow = no parking); UK zig-zag / cycle-box / kerb-colour entries removed.
+- Signs:
+  - 95 distractors that were synonyms of the right answer replaced.
+  - Width/length codes fixed (R239/R205).
+  - The European yellow-diamond priority sign removed.
+  - The generator no longer produces two correct options.
+- Fabricated community tips/posts shown when offline removed (store-policy risk).
+
+### Engineering
+- Unbiased Fisher–Yates shuffle app-wide (`shuffleCopy`); Scenario options no longer re-shuffle on every render.
+- `scripts/validate-questions.mjs` now also checks:
+  - the official exam format
+  - that every exam question has a `ref`
+  - road markings and the `correct`-string banks
+  - a **banned-claims list**, so the foreign rules can't come back
+
+  2,460 items pass. Build and `tsc --noEmit` are green.
+
+### Pending
+1. Merge the branch to `main` (deploys).
+2. Re-check PDP questions and the SEO topic pages' facts.
+3. Decide on the unverified landing testimonials and the "87% pass" claim.
+4. Store prep: signed release AAB, Huawei (no Google services) push guard, listings and data-safety forms.
