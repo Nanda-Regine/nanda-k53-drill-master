@@ -156,6 +156,22 @@ for (const dir of ['src/games', 'src/data', 'src/components']) {
   }
 }
 
+// ---- marketing pages: no fabricated ratings, testimonials or unsourced statistics ----
+const PAGE_BANNED = [
+  [/aggregateRating/, 'no self-declared star ratings in structured data (no verifiable reviews)'],
+  [/testimonial-card|TESTIMONIALS\s*=/, 'no testimonials until real, verifiable reviews exist'],
+  [/\b87%|pass first try|failure rate (is|exceeds)|pass rate is around/i, 'unsourced pass/failure-rate statistic'],
+  [/\b68Q\b|\b68 questions\b|45-?min/i, 'learner test is 64 questions; no official time limit'],
+];
+const pages = ['index.html', ...fs.readdirSync(path.join(ROOT, 'public')).filter(f => f.endsWith('.html')).map(f => 'public/' + f), 'src/components/Landing.jsx', 'src/components/MentalHealthSupport.jsx'];
+for (const p of pages) {
+  const text = fs.readFileSync(path.join(ROOT, p), 'utf8');
+  for (const [re, why] of PAGE_BANNED) {
+    const m = text.match(re);
+    if (m) err(`${p}:${text.slice(0, m.index).split('\n').length}`, `"${m[0]}" — ${why}`);
+  }
+}
+
 // ---- report ----
 console.log(`Validated ${qCount} questions/signs across banks.`);
 if (errors.length) {

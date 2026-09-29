@@ -657,3 +657,28 @@ Learners reported "a lot of mistakes". A line-by-line re-audit against `updated-
 2. Re-check PDP questions and the SEO topic pages' facts.
 3. Decide on the unverified landing testimonials and the "87% pass" claim.
 4. Store prep: signed release AAB, Huawei (no Google services) push guard, listings and data-safety forms.
+
+---
+
+## Phase 16b — PDP, SEO pages & unverified claims
+**2026-09-29**
+
+- **PDP (no PDP source in the docs folder; checked against NRTA/NLTA facts):**
+  - leg13 "suspended at 12 demerit points" (AARTO points not in force) replaced with the PrDP categories G/P/D.
+  - acc12 muddled the SAPS accident report and a RAF claim; it's now the 24-hour police report rule.
+  - ps15 now names the National Land Transport Act 5 of 2009 as the Act that regulates operators.
+- **SEO topic pages** (visible text and FAQ structured data):
+  - The Scenarios FAQ taught the foreign "yield to the right at uncontrolled intersections" rule. It now teaches the K53 Module 39 look-and-proceed-when-safe procedure.
+  - "3 s wet" became "longer in bad conditions".
+  - Barrier-line wording became RM1/RM2 per SGN, and the painted-island exceptions were added.
+  - The learners-test FAQ now lists the real application requirements and pass marks.
+  - Leftover "40-question", "17 of 68" and "68Q, 45min" text removed; a garbled character in index.html fixed.
+  - Sign-image counts corrected to 160 real images (212 signs in the data).
+- **Unverified claims removed (owner decision):**
+  - "87% pass first try / nearly double the national average"
+  - all testimonials (in-app landing and landing.html)
+  - the self-declared 4.9★/47 `aggregateRating` in index.html
+  - "SA first-attempt pass rate ~50%" and "failure rate over 60%"
+
+  They were replaced with verifiable trust copy (the official format, answers checked against the DoT manuals).
+- `validate-questions.mjs` now also fails on rating markup, testimonials, unsourced pass-rate stats and 68Q/45-min wording in the marketing pages.

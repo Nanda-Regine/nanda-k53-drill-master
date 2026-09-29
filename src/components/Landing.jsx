@@ -69,11 +69,6 @@ const DEMO = [
   },
 ];
 
-const TESTIMONIALS = [
-  { text: 'Passed first attempt after one week of drills. The nervous system shows you exactly what to focus on.', name: 'Thabo M.', city: 'Johannesburg', initial: 'T', color: '#007A4D' },
-  { text: 'Failed twice before this app. The mock exam is identical to the real DLTC test — nothing surprises you on test day.', name: 'Priya N.', city: 'Durban', initial: 'P', color: '#FFB612' },
-  { text: 'The WhatsApp share got my whole friend group competing. We all passed the same month.', name: 'Aimée D.', city: 'Cape Town', initial: 'A', color: '#4472CA' },
-];
 
 const FEATURES = [
   {
@@ -185,7 +180,7 @@ export default function Landing({ onStart }) {
           {/* Solution */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.22 }}
             style={{ fontSize: 15, fontWeight: 700, color: '#4ade80', marginBottom: 28, letterSpacing: 0.1, lineHeight: 1.5 }}>
-            Our users pass at <strong style={{ color: '#4ade80' }}>87%</strong>. Ten minutes a day is all it takes.
+            Every answer checked against the official Department of Transport manuals. Ten minutes a day is all it takes.
           </motion.div>
 
           {/* CTA */}
@@ -261,52 +256,24 @@ export default function Landing({ onStart }) {
         </AnimatePresence>
       </div>
 
-      {/* ── PASS RATE BANNER ──────────────────────────────────────────────────── */}
+      {/* ── TRUST PANEL (verifiable facts only) ──────────────────────────────── */}
       <div style={{ padding: '0 20px 36px' }}>
         <div style={{ background: 'linear-gradient(135deg, rgba(0,122,77,0.1) 0%, rgba(68,114,202,0.06) 100%)', border: '1px solid rgba(0,122,77,0.2)', borderRadius: 18, padding: '22px 20px', display: 'flex', alignItems: 'center', gap: 20 }}>
           <div style={{ flexShrink: 0 }}>
-            <div style={{ fontSize: 56, fontWeight: 900, color: '#4ade80', lineHeight: 1, letterSpacing: -2.5, fontVariantNumeric: 'tabular-nums' }}>87%</div>
-            <div style={{ fontSize: 10, color: 'rgba(232,234,242,0.35)', marginTop: 4, letterSpacing: 0.3 }}>pass first try</div>
+            <div style={{ fontSize: 56, fontWeight: 900, color: '#4ade80', lineHeight: 1, letterSpacing: -2.5, fontVariantNumeric: 'tabular-nums' }}>64</div>
+            <div style={{ fontSize: 10, color: 'rgba(232,234,242,0.35)', marginTop: 4, letterSpacing: 0.3 }}>question mock exam</div>
           </div>
           <div>
             <div style={{ fontSize: 14, color: TEXT, fontWeight: 600, lineHeight: 1.55, marginBottom: 4 }}>
-              Nearly double the national average.
+              The official DLTC format — 23/28 signs, 22/28 rules, 6/8 controls.
             </div>
             <div style={{ fontSize: 12, color: DIM, lineHeight: 1.5 }}>
-              K53 Drill Master users walk into the DLTC knowing exactly what to expect.
+              Every answer is checked against the Department of Transport's Rules of the Road, road-sign manual and K53 test manuals.
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── TESTIMONIALS ──────────────────────────────────────────────────────── */}
-      <div style={{ marginBottom: 36 }}>
-        <div style={{ padding: '0 20px 14px', fontSize: 10, fontWeight: 800, color: 'rgba(255,255,255,0.3)', letterSpacing: 2, textTransform: 'uppercase' }}>
-          From our students
-        </div>
-        <div style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '4px 20px 12px', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}>
-          {TESTIMONIALS.map((t, i) => (
-            <motion.div key={i}
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.07, duration: 0.35 }}
-              style={{ flex: '0 0 278px', background: SURFACE, borderRadius: 16, padding: '18px', scrollSnapAlign: 'start', borderLeft: `3px solid ${t.color}` }}>
-              <div style={{ display: 'flex', gap: 1, marginBottom: 12 }}>
-                {[0, 1, 2, 3, 4].map(s => <span key={s} style={{ color: GOLD, fontSize: 12 }}>★</span>)}
-              </div>
-              <div style={{ fontSize: 13, lineHeight: 1.7, color: 'rgba(232,234,242,0.82)', marginBottom: 16 }}>"{t.text}"</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 34, height: 34, borderRadius: 99, background: t.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 14, color: '#fff', flexShrink: 0, boxShadow: `0 0 0 2px ${BG}, 0 0 0 3px ${t.color}66` }}>{t.initial}</div>
-                <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: TEXT }}>{t.name}</div>
-                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.33)' }}>{t.city}</div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
 
       {/* ── FEATURES ──────────────────────────────────────────────────────────── */}
       <div style={{ padding: '0 20px 36px' }}>

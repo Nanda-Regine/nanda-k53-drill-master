@@ -47,20 +47,20 @@ const SECTION_STUDY_PLANS = {
 };
 
 const ENCOURAGEMENT_EN = [
-  { text: 'The SA K53 first-attempt pass rate is around 50%. You are not alone.', sub: 'Half of test-takers don\'t pass the first time.' },
-  { text: 'Every world-class driver failed their first test at some point.', sub: 'Failure is the data you need to succeed.' },
+  { text: 'Many people need more than one attempt. You are not alone.', sub: 'You can rebook the learner\'s test and try again.' },
+  { text: 'A practice fail costs nothing — it shows you what to study before the real test.', sub: 'Failure is the data you need to succeed.' },
   { text: 'Nelson Mandela spent 27 years in prison before changing the world.', sub: 'Persistence is the most South African virtue there is.' },
   { text: 'You now know exactly what to study. That\'s more valuable than guessing.', sub: 'The test showed you the map to your blind spots.' },
 ];
 
 const ENCOURAGEMENT_AF = [
-  { text: 'Die eerste-poging-slaagkoers vir K53 in SA is ongeveer 50%. Jy is nie alleen nie.', sub: 'Die helfte van toetskandidaate slaag nie die eerste keer nie.' },
-  { text: 'Elke wêreldklas-bestuurder het eendag by sy eerste toets gedruip.', sub: 'Mislukking is die data wat jy nodig het om te slaag.' },
+  { text: 'Baie mense het meer as een poging nodig. Jy is nie alleen nie.', sub: 'Jy kan weer vir die leerlingtoets bespreek.' },
+  { text: '’n Oefentoets wat jy druip, kos niks — dit wys jou wat om te leer.', sub: 'Mislukking is die data wat jy nodig het om te slaag.' },
 ];
 
 const ENCOURAGEMENT_XH = [
-  { text: 'Umyinge wokuphumelela okuqala e-K53 e-SA ungama-50%. Awukho wedwa.', sub: 'Abahlanu kwabathandathu abaphasi okokuqala.' },
-  { text: 'Bonke abachweli abakhulu bakhe bahluleka kuvavanyo labo lokuqala.', sub: 'Ukuhluleka yidatha oyidingayo ukuphumelela.' },
+  { text: 'Abantu abaninzi bafuna ngaphezu kwelinge elinye. Awukho wedwa.', sub: 'Ungabhukisha kwakhona uvavanyo.' },
+  { text: 'Ukuhluleka kuvavanyo lokuziqhelanisa akubizi nto — kukubonisa into ekufuneka uyifunde.', sub: 'Ukuhluleka yidatha oyidingayo ukuphumelela.' },
 ];
 
 export default function MentalHealthSupport({ failedSections = [], score, total, onRetry, onBack, onGoToGame }) {
@@ -108,8 +108,8 @@ export default function MentalHealthSupport({ failedSections = [], score, total,
         {/* SA context */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 32 }}>
           {[
-            { val: '~50%', lbl: 'SA first-attempt pass rate' },
-            { val: '2nd+', lbl: 'Most people pass on attempt 2' },
+            { val: '64', lbl: 'Questions — 3 sections' },
+            { val: '23·22·6', lbl: 'Pass marks per section' },
             { val: 'You', lbl: 'Know exactly what to fix now' },
             { val: 'Next', lbl: 'Test will be your best performance' },
           ].map(s => (
