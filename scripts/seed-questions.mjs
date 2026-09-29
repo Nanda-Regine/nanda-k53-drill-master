@@ -88,21 +88,21 @@ function signToRow(s) {
  * Transform a roadMarkings.js entry → questions row.
  * In roadMarkings.js, options[0] is always the correct answer.
  */
-function markingToRow(m) {
-  if (!Array.isArray(m.options) || m.options.length === 0) {
-    throw new Error(`Marking ${m.id || m.name} has no options array — fix roadMarkings.js before seeding`);
-  }
+function markingToRow(m, all) {
+  // Meaning question: correct meaning first + 3 meanings of unrelated markings.
+  const others = all.filter(o => o.id !== m.id && !(o.img && o.img === m.img) && !(o.family && o.family === m.family));
+  const options = [m.meaning, ...others.slice(0, 3).map(o => o.meaning)];
   return {
     external_id:    m.id,
     type:           'markings',
     code:           m.code || null,
     category:       m.category || null,
     question_text:  `What does the ${m.name} road marking mean?`,
-    options:        m.options,
-    correct_answer: m.options[0],
+    options,
+    correct_answer: options[0],
     img:            m.img || null,
-    hint:           m.hint || null,
-    explanation:    m.meaning || null,
+    hint:           m.action || null,
+    explanation:    `${m.meaning} (${m.ref})`,
     difficulty:     2,
     licence_codes:  ['code12', 'code8', 'code10', 'code14'],
     is_active:      true,
@@ -143,7 +143,7 @@ async function loadData() {
   const { ROAD_MARKINGS } = await import(join(dataDir, 'roadMarkings.js'));
 
   const signs    = ROAD_SIGNS.map(signToRow);
-  const markings = ROAD_MARKINGS.map(markingToRow);
+  const markings = ROAD_MARKINGS.map(m => markingToRow(m, ROAD_MARKINGS));
 
   return { signs, markings };
 }

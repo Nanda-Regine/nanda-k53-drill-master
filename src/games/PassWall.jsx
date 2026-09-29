@@ -9,12 +9,9 @@ const EXAM_LABELS = { code8: 'Code 8', code10: 'Code 10', code14: 'Code 14', cod
 const PAGE_SIZE = 15;
 
 // ── Local mock data (used when Supabase unavailable) ─────────────────────────
-const MOCK_POSTS = [
-  { id: 'm1', type: 'pass', content: 'Just passed my Code 8! 🎉', score: 55, total: 68, exam_type: 'code8', likes: 12, created_at: new Date(Date.now() - 3600000).toISOString() },
-  { id: 'm2', type: 'tip', content: 'Remember: 45m emergency triangle, 2s following distance. Drill it daily!', score: null, total: null, exam_type: null, likes: 34, created_at: new Date(Date.now() - 7200000).toISOString() },
-  { id: 'm3', type: 'pass', content: 'Finally! Third attempt but I did it. Code 14 done!', score: 78, total: 90, exam_type: 'code14', likes: 28, created_at: new Date(Date.now() - 86400000).toISOString() },
-  { id: 'm4', type: 'achievement', content: 'Hit 100 question streak on VehicleControls 🔥', score: null, total: null, exam_type: null, likes: 9, created_at: new Date(Date.now() - 172800000).toISOString() },
-];
+// No placeholder content: when the backend is unreachable (e.g. offline) the
+// screen shows its honest empty state instead of fabricated community posts.
+const MOCK_POSTS = [];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function timeAgo(iso) {

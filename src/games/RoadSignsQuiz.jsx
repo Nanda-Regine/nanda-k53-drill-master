@@ -55,15 +55,15 @@ const QUESTIONS = [
     options:["Choose any direction you wish","Proceed straight only","You must travel in one of the indicated directions — no other is allowed","Slow down ahead of junction"],
     answer:2, explanation:"Multiple mandatory arrows mean you must choose one of the shown directions. Any other direction at that point is prohibited." },
 
-  { id:"c05", category:"control", img:"mini-circle.jpg",
-    question:"What does this blue circular sign with a circular arrow mean?",
-    options:["U-turns permitted here","Mini-roundabout ahead — give way to traffic in the circle","Traffic circle, no entry","Drive around the block"],
-    answer:1, explanation:"The mini-circle sign indicates a mini-roundabout. Traffic already circling has priority — give way before entering." },
+  { id:"c05", category:"markings", img:"mini-circle.jpg",
+    question:"These arrows (RM15) are painted around a mini-circle. What must you do?",
+    options:["Drive around in either direction","Drive around only in the direction of the arrows, and yield to traffic that reaches its yield line first","Drive straight over the circle","Stop in the circle to let others pass"],
+    answer:1, explanation:"SGN RM15: only drive around the circle in the direction shown by the arrows (clockwise). At a mini-circle, yield to traffic that reaches its yield line before you reach yours." },
 
-  { id:"c06", category:"control", img:"right-of-way-sign.jpg",
-    question:"What does a yellow diamond-shaped sign mean?",
-    options:["You must give way to all traffic","You have right of way on this road","Caution — hazardous road","Priority road ends"],
-    answer:1, explanation:"The yellow diamond right-of-way sign means you are on a priority road. Traffic joining from side roads must yield to you." },
+  { id:"c06", category:"control", img:"sign_022.jpg",
+    question:"What does this diamond-shaped sign (R5) mean?",
+    options:["You have right of way on this road","Pedestrian priority — only emergency, delivery and maintenance vehicles may enter, at max 15 km/h","Caution — hazardous road","Priority road ends"],
+    answer:1, explanation:"SGN R5 (pedestrian priority): pedestrians have priority; only emergency, loading/off-loading and maintenance vehicles may drive here, at a maximum of 15 km/h. (The yellow 'priority road' diamond used in Europe is NOT a South African sign.)" },
 
   { id:"c07", category:"control", img:"priority-crossroad-sign.jpg",
     question:"This sign shows a thick road with thin crossing roads. What does it mean?",
@@ -71,9 +71,9 @@ const QUESTIONS = [
     answer:1, explanation:"The priority crossroad sign shows which road has right of way (the thicker line). You are on the major road and have priority over crossing traffic." },
 
   { id:"c08", category:"control", img:"de-striction.jpg",
-    question:"What does a white circle with diagonal grey lines mean?",
-    options:["Start of speed restriction","No passing zone begins","End of a restriction — speed limit or no-overtaking no longer applies","Road ends ahead"],
-    answer:2, explanation:"The de-restriction sign cancels the previous restriction. After a 60 km/h zone, national speed limits resume." },
+    question:"A restriction sign crossed out with this red cross (R600 series) means?",
+    options:["Start of speed restriction","No passing zone begins","End of that restriction — you no longer have to comply with it","Road ends ahead"],
+    answer:2, explanation:"SGN R600: a de-restriction sign shows the restriction symbol with a red cross — from here you no longer have to comply with that restriction (e.g. after R201-600 the general speed limit applies again)." },
 
   { id:"c09", category:"control", img:"camera-speed-limit.jpg",
     question:"What does a speed limit sign with a camera symbol indicate?",
@@ -93,7 +93,7 @@ const QUESTIONS = [
   { id:"c12", category:"command", img:"minimum-speed.jpg",
     question:"What does a blue circle with a speed number inside it mean?",
     options:["Maximum speed on this road","Recommended speed","Minimum speed — you must not travel slower","Advisory speed for curves"],
-    answer:2, explanation:"A blue circle speed sign is a minimum speed. You must not drive slower than stated. Common on freeways to maintain safe traffic flow." },
+    answer:2, explanation:"A blue circular (command) speed sign is a minimum speed (R101): you must not drive slower than the speed shown, unless it is unsafe to do so." },
 
   { id:"c13", category:"command", img:"minimum-speed-limit.jpg",
     question:"This blue sign with a speed number and the word MINIMUM means?",
@@ -136,9 +136,9 @@ const QUESTIONS = [
     answer:1, explanation:"A STOP/GO sign held by a traffic controller has the same authority as a STOP or YIELD sign. When STOP faces you, you must stop completely until GO is shown." },
 
   { id:"c21", category:"control", img:"motorgate-sign.jpg",
-    question:"What is a motorgate?",
-    options:["A road reserved for motorcycles","A controlled-access point on a toll road where you stop and pay","An emergency gate for vehicles","A highway on-ramp"],
-    answer:1, explanation:"A motorgate is a gated toll entry point. You must stop, pay the toll, and wait for the boom to lift before proceeding." },
+    question:"What does the motor gate warning sign (W315–W317) tell you?",
+    options:["A road reserved for motorcycles","There is a motor gate to the left, right or in the middle of the road — slow down and check for oncoming traffic using the same gate","A toll booth where you must pay","A highway on-ramp"],
+    answer:1, explanation:"SGN W315–W317: a motor gate is ahead, especially on rural roads. Slow down and make sure no oncoming vehicle is about to cross the same gate." },
 
   { id:"c22", category:"control", img:"maximum-stay-during-time-limits.jpg",
     question:"What does this supplementary plate (time limit) below a parking sign mean?",
@@ -161,26 +161,26 @@ const QUESTIONS = [
     answer:1, explanation:"This sign bans motor cars from that road during specific hours — typically peak hours to give priority to public transport." },
 
   { id:"c26", category:"control", img:"pay-toll-sign.jpg",
-    question:"What does this sign warn you about?",
-    options:["Free road — no charge","A toll plaza ahead — have payment ready","Heavy vehicle lane","Road under construction"],
-    answer:1, explanation:"A toll sign warns of an upcoming toll barrier. Have your e-tag, coins, or card ready before you reach the plaza to avoid delaying traffic." },
+    question:"What does this blue sign with a 'T' (R132) instruct you to do?",
+    options:["Nothing — the road is free","Pay toll — you must pay the toll to use this road","Use the heavy vehicle lane","Take the next exit"],
+    answer:1, explanation:"R132 (pay toll) is a regulatory command sign: toll must be paid to use this road. It is often combined with guidance signs at toll plazas." },
 
   { id:"c27", category:"control", img:"maximum-number-of-vehicle.jpg",
     question:"What does a sign showing a number with vehicles mean in a lane context?",
     options:["Minimum number of passengers required","Maximum number of vehicles permitted in that lane or area at one time","Speed limit for heavy vehicles","Vehicle classification code"],
-    answer:1, explanation:"A maximum-number-of-vehicles sign limits how many vehicles may be in that lane, bay, or area simultaneously — used in parking areas and controlled zones." },
+    answer:1, explanation:"SGN R540 (maximum number of vehicles) is mounted below a regulatory sign: do not enter the area if there would then be more vehicles than the number shown." },
 
   // ── REGULATORY — PROHIBITION ──────────────────────────────────────────────
 
   { id:"p01", category:"prohibition", img:"overtaking-prohibited.jpg",
     question:"What does this sign prohibit?",
     options:["Parking on this road","Overtaking another vehicle","U-turns","Hooting"],
-    answer:1, explanation:"The no-overtaking sign means you must not pass the vehicle ahead while this restriction is in force. It ends at a de-restriction sign." },
+    answer:1, explanation:"SGN R214: do not overtake any vehicle for the next 500 m." },
 
   { id:"p02", category:"prohibition", img:"overtaking-by-goods-vehicle-prohibited.jpg",
     question:"A truck with a red prohibition symbol means?",
-    options:["No goods vehicles on this road","Goods vehicles may not overtake other vehicles","Trucks must use left lane","No stopping for trucks"],
-    answer:1, explanation:"This sign specifically prohibits goods vehicles (trucks) from overtaking. Private vehicles may still overtake where safe and legal." },
+    options:["No goods vehicles on this road","Heavy vehicles may not overtake other heavy vehicles","Trucks must use left lane","No stopping for trucks"],
+    answer:1, explanation:"SGN R215: if you are driving a heavy motor vehicle, do not overtake another heavy vehicle (for the next 500 m). Other vehicles may still overtake where safe and legal." },
 
   { id:"p03", category:"prohibition", img:"left-turn-prohibited.jpg",
     question:"What does this sign mean at an intersection?",
@@ -266,8 +266,8 @@ const QUESTIONS = [
 
   { id:"w02", category:"warning", img:"secondary-crossroad-sign.jpg",
     question:"A crossroad warning with thinner crossing lines means?",
-    options:["Priority crossroad — you have right of way","A secondary crossroad — the crossing roads are minor roads","Railway crossing","Dangerous intersection"],
-    answer:1, explanation:"The secondary crossroad sign shows a crossroad where the crossing roads are minor/secondary roads. You are still on the major road." },
+    options:["Priority crossroad — you have right of way","A secondary crossroad — you must yield to the crossing traffic","Railway crossing","Dangerous intersection"],
+    answer:1, explanation:"SGN W103: you are approaching an intersection where you have to yield to cross-traffic (the thicker leg shows which road has priority). Yield to traffic from the left or right." },
 
   { id:"w03", category:"warning", img:"t-junction-ahead.jpg",
     question:"What does this warning sign indicate?",
@@ -309,15 +309,15 @@ const QUESTIONS = [
     options:["Normal T-junction ahead","A side road enters from the upper right at a sharp angle — merging traffic has limited sight lines","Road narrows from the right","Roundabout ahead"],
     answer:1, explanation:"Sharp-junction signs depict the exact geometry of the upcoming junction. The acute angle means reduced visibility — reduce speed and watch for joining traffic." },
 
-  { id:"w11", category:"warning", img:"roundabout-sign.jpg",
-    question:"A circular arrow inside a triangle means?",
-    options:["U-turns permitted","A traffic circle or roundabout ahead — yield to traffic in the circle","One-way system begins","No-entry roundabout"],
-    answer:1, explanation:"A roundabout warning sign means a traffic circle is ahead. Yield to traffic already in the circle before entering." },
+  { id:"w11", category:"command", img:"roundabout-sign.jpg",
+    question:"What does this blue round sign with circular arrows (R137) mean?",
+    options:["U-turns permitted","Roundabout — move clockwise and yield to vehicles approaching from your right within the roundabout","One-way system begins","No-entry roundabout"],
+    answer:1, explanation:"SGN R137 (roundabout): you must move in a clockwise direction and yield right of way to vehicles approaching from the right within the roundabout." },
 
   { id:"w12", category:"warning", img:"traffic-circle-ahead-mini-circle-or-roundabout-sign.jpg",
     question:"What does this roundabout/mini-circle warning sign indicate?",
-    options:["U-turns allowed","A traffic circle, mini-circle, or roundabout is ahead — slow down and yield to circulating traffic","End of one-way system","Sharp curve ahead"],
-    answer:1, explanation:"This sign warns of a traffic circle ahead of any size. Give way to vehicles already in the circle." },
+    options:["U-turns allowed","A traffic circle is ahead — slow down and be ready to yield to traffic from your right","End of one-way system","Sharp curve ahead"],
+    answer:1, explanation:"W201 warns of a traffic circle ahead. At a traffic circle, yield to traffic approaching from your right (RoR §6.46); at a mini-circle, the first to cross the yield line goes first." },
 
   { id:"w13", category:"warning", img:"traffic-lights-ahead-sign.jpg",
     question:"Traffic lights inside a triangle warn of?",
@@ -327,12 +327,12 @@ const QUESTIONS = [
   { id:"w14", category:"warning", img:"co-ordinated-traffic-signals.jpg",
     question:"What does a co-ordinated traffic signals sign tell you?",
     options:["Traffic lights ahead are faulty","A series of traffic lights are timed (green wave) — keep to the indicated speed to catch green lights","Traffic lights are temporary","Emergency vehicle signal system"],
-    answer:1, explanation:"Co-ordinated signals are timed so that drivers travelling at the prescribed speed pass through successive intersections on green. Maintain the indicated speed." },
+    answer:1, explanation:"SGN IN14: signals on this route are co-ordinated — they will be green at subsequent intersections if you keep the indicated speed. That speed is a recommendation, not a limit, and you must still check each intersection is safe." },
 
   { id:"w15", category:"warning", img:"multi-phase-traffic-signals.jpg",
     question:"What does a multi-phase traffic signal sign warn you about?",
-    options:["Traffic lights cycle only red and green","Traffic lights ahead operate in multiple phases — pedestrian, turning and straight-through movements are controlled separately","Traffic lights are faulty","Emergency signal ahead"],
-    answer:1, explanation:"Multi-phase signals have separate phases for different movements (e.g., left turn, pedestrian, straight-through). Be aware of which phase applies to your movement." },
+    options:["Traffic lights cycle only red and green","The signals do not follow the normal sequence — your light may stay red while the opposite direction gets green","Traffic lights are faulty","Emergency signal ahead"],
+    answer:1, explanation:"SGN IN15: at this intersection your signal may remain red while the signal in the opposite direction changes to green. Wait for YOUR green." },
 
   { id:"w16", category:"warning", img:"two-way-traffic-sign.jpg",
     question:"Two opposite arrows in a triangle warn of?",
@@ -536,7 +536,7 @@ const QUESTIONS = [
 
   { id:"w56", category:"warning", img:"winding-road-ahead-starting-to-the-left.jpg",
     question:"A series of bends in a triangle means?",
-    options:["Single sharp bend","Winding road with multiple bends ahead — reduce speed","U-turn permitted","Zigzag road markings ahead"],
+    options:["Single sharp bend","Winding road with multiple bends ahead — reduce speed","U-turn permitted","Road narrows ahead"],
     answer:1, explanation:"A winding road sign warns of a series of bends. Reduce speed, do not overtake, and keep full control through the bends." },
 
   { id:"w57", category:"warning", img:"winding-road-ahead-starting-to-the-right.jpg",
@@ -769,14 +769,14 @@ const QUESTIONS = [
   // ── ROAD MARKINGS ─────────────────────────────────────────────────────────
 
   { id:"m01", category:"markings", img:"no-parking-line.jpg",
-    question:"A yellow broken line along the edge of the road means?",
-    options:["Edge of the road — parking permitted","No parking — vehicles must not park alongside this line","No stopping at any time","Edge of a bus lane"],
-    answer:1, explanation:"A yellow broken edge line means no parking alongside it. You may stop briefly to load or unload passengers, but you may not park." },
+    question:"This yellow line along the road (RM13) means?",
+    options:["Edge of the road — parking permitted","No parking — you may stop briefly, but may not park","No stopping at any time","Edge of a bus lane"],
+    answer:1, explanation:"SGN RM13 (no-parking line): except in an emergency you may stop for short periods, but may not park." },
 
   { id:"m02", category:"markings", img:"no-stopping-line.jpg",
-    question:"A yellow continuous line along the edge of the road means?",
-    options:["Parking permitted on the edge","No stopping — not even briefly — alongside this line","No parking during peak hours","Edge of a bicycle lane"],
-    answer:1, explanation:"A continuous yellow edge line means no vehicle may stop here at any time — not even to pick up or drop off a passenger." },
+    question:"This red line along the road (RM12) means?",
+    options:["Parking permitted on the edge","No stopping — except in an emergency","No parking during peak hours only","Edge of a bicycle lane"],
+    answer:1, explanation:"SGN RM12 (no-stopping line): except in an emergency, do not stop at this line. A broken line applies during the times shown on a sign." },
 
   { id:"m03", category:"markings", img:"pedestrian-crossing-lines.jpg",
     question:"White parallel stripes across the road mark?",
@@ -784,9 +784,9 @@ const QUESTIONS = [
     answer:1, explanation:"A zebra crossing is marked by broad white stripes. You must yield to pedestrians who are on or clearly intending to cross. Do not park on or block a crossing." },
 
   { id:"m04", category:"markings", img:"pedestrian-crossing-ahead-lines.jpg",
-    question:"Zigzag lines painted on the road approaching a pedestrian crossing mean?",
-    options:["Slippery road surface","No parking or stopping — you are in the approach zone to a pedestrian crossing","Speed bump area","Bicycle lane begins"],
-    answer:1, explanation:"Zigzag lines mark the approach to a pedestrian crossing. No vehicle may park or stop on these lines — the crossing approach must remain clear for visibility." },
+    question:"These pedestrian-crossing-ahead lines (RM11) mean?",
+    options:["Slippery road surface","Do not overtake here, and do not stop except for pedestrians or behind a vehicle already stopped","Speed bump area","Bicycle lane begins"],
+    answer:1, explanation:"SGN RM11: you may not stop in this area except for pedestrians or a vehicle that has already stopped, and you may not overtake inside it." },
 
   { id:"m05", category:"markings", img:"bicycle-crossing-guide-lines.jpg",
     question:"Dashed lines shaped like a bicycle path across an intersection mark?",
@@ -809,14 +809,14 @@ const QUESTIONS = [
     answer:1, explanation:"Dashed white lane lines divide lanes of traffic. You may cross them to change lanes when it is safe. Do not change lanes where the dashes are replaced by a continuous line." },
 
   { id:"m09", category:"markings", img:"continuity-line.jpg",
-    question:"A broken white line across the road at an intersection (wider gaps) indicates?",
-    options:["A stop line","A give-way (yield) line — slow and give way if necessary, but stop only if required","A pedestrian crossing","An advanced stop line"],
-    answer:1, explanation:"Continuity lines at intersections mark the give-way position. You do not have to stop unless traffic on the major road makes it necessary." },
+    question:"These continuity lines (WM2) warn you that:",
+    options:["A stop line is ahead","A lane with this line on one side will soon turn off the road — yield to traffic changing lanes","A pedestrian crossing is ahead","The road ends"],
+    answer:1, explanation:"SGN WM2: a break (intersection or off-ramp) is coming; the lane marked by the line will soon turn off. Yield to traffic that wants to change lanes." },
 
   { id:"m10", category:"markings", img:"furication-arrows-bifurication-arrows.jpg",
-    question:"Directional arrows painted on the road at a fork indicate?",
-    options:["Speed limit direction","Which lane continues in which direction — position yourself in the correct lane before the fork","Overtaking is permitted","No lane changing beyond this point"],
-    answer:1, explanation:"Bifurcation (fork) arrows on the road surface show which lane leads to which route at a fork. Get into the correct lane before the fork to avoid last-minute weaving." },
+    question:"Bifurcation arrows (GM3) painted on the road indicate?",
+    options:["Speed limit direction","The number of lanes increases ahead — do not straddle lane markings","Overtaking is permitted","No lane changing beyond this point"],
+    answer:1, explanation:"SGN GM3: bifurcation arrows indicate an increase in the number of lanes ahead. Make sure you do not straddle any lane markings." },
 
   // ── TEMPORARY SIGNS (YELLOW) ──────────────────────────────────────────────
 

@@ -34,7 +34,7 @@ A mobile-first, offline-capable drill platform covering all K53 vehicle codes �
 - **3 languages**: English, Afrikaans, isiXhosa (native-speaker reviewed)
 - **Real sign images** extracted from the official SA Learner Driver Manual PDF (2024)
 - **Spaced repetition** (SM-2 algorithm) to target weak spots
-- **Full Mock Exam** conditions: 68Q, 45 minutes, 75% pass threshold — exactly the real thing
+- **Full Mock Exam** in the official DLTC format: 64Q — 28 signs (pass 23), 28 rules (pass 22), 8 controls (pass 6); every section must be passed
 - **Dual delivery** — PWA offline support **+ native Android (Capacitor)** for low-end phones on 3G
 - **Freemium model** that converts without friction: 30-day unlimited trial, then 10 questions/day free
 
@@ -49,7 +49,7 @@ A mobile-first, offline-capable drill platform covering all K53 vehicle codes �
 | Road Signs Quiz (172Q, real images) | 10Q/day | Unlimited |
 | Pattern Trainer (3 modes) | 10Q/day | Unlimited |
 | Vehicle Controls (30Q) | 10Q/day | Unlimited |
-| Mock Exam (68Q, 45min) | ✗ | ✓ |
+| Mock Exam (64Q, official format) | ✗ | ✓ |
 | Hybrid Gauntlet (100Q) | ✗ | ✓ |
 | Weak Spots Review (SM-2) | ✓ | ✓ |
 | Progress History + Heatmap | ✓ | ✓ |

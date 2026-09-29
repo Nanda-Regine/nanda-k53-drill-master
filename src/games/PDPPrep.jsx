@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import T from '../theme.js';
 import { awardBadge } from '../components/Badges.jsx';
-import { prepareAll } from '../utils/quizHelpers.js';
+import { prepareAll, shuffleCopy } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
 import { recordGameAnswer } from '../utils/masteryStore.js';
@@ -196,7 +196,7 @@ export default function PDPPrep({ onBack, onPass }) {
 
   const startModule = useCallback((moduleId) => {
     const qs = moduleQuestions(moduleId);
-    const shuffled = prepareAll([...qs].sort(() => Math.random() - 0.5));
+    const shuffled = prepareAll(shuffleCopy(qs));
     setActiveModule(moduleId);
     setQuestions(shuffled);
     setQIndex(0);

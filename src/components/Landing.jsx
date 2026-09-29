@@ -39,8 +39,8 @@ function SignSpeed({ n }) {
 function SignYield() {
   return (
     <svg width="72" height="80" viewBox="0 0 76 84">
-      <polygon points="38,3 73,81 3,81" fill="white" stroke="#C0392B" strokeWidth="4" strokeLinejoin="round"/>
-      <polygon points="38,20 63,71 13,71" fill="#C0392B"/>
+      {/* SA yield sign (R2): inverted triangle, red border, white centre */}
+      <polygon points="5,5 71,5 38,79" fill="white" stroke="#C0392B" strokeWidth="9" strokeLinejoin="round"/>
     </svg>
   );
 }
@@ -58,7 +58,7 @@ const DEMO = [
     q: 'What does this sign tell you?',
     options: ['Maximum speed is 60 km/h', 'Minimum speed is 60 km/h', 'Recommended speed 60 km/h', 'End of 60 km/h zone'],
     correct: 0,
-    ref: 'R210 — Speed Limit · Built-up areas',
+    ref: 'R201 — Speed limit',
   },
   {
     sign: <SignYield />,

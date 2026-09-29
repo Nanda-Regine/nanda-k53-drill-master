@@ -9,6 +9,11 @@ function shuffleArr(arr) {
   return arr;
 }
 
+/** Unbiased Fisher–Yates shuffle that returns a NEW array (input untouched). */
+export function shuffleCopy(arr) {
+  return shuffleArr([...arr]);
+}
+
 // Every prepared question is normalised to exactly this many options
 // (4 = standard K53 multiple-choice format).
 const MAX_OPTIONS = 4;

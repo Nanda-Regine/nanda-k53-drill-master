@@ -21,6 +21,8 @@ const CAT_MAP = {
   'De-restriction': 'derestriction',
 };
 
+const REGULATORY = new Set(['Control', 'Command', 'Prohibition', 'Reservation', 'De-restriction']);
+
 const CAT_LABEL = {
   control:      'Regulatory — Control',
   command:      'Regulatory — Command',
@@ -70,8 +72,14 @@ export function generateSignQuestions() {
 
   for (const s of signs) {
     const cat = CAT_MAP[s.category] || 'warning';
-    const sameCat = signs.filter(o => o.category === s.category && o.id !== s.id);
-    const pool = sameCat.length >= 3 ? sameCat : signs.filter(o => o.id !== s.id);
+    // Distractor pool: never use a look-alike, a same-named sign or an identical
+    // meaning as a "wrong" answer — that would create two correct options.
+    const related = new Set([...(s.confusableWith || []), ...signs.filter(o => (o.confusableWith || []).includes(s.id)).map(o => o.id)]);
+    const nm = s.name.toLowerCase();
+    const sameFamily = (o) => { const on = o.name.toLowerCase(); return on.includes(nm) || nm.includes(on); }; // e.g. Stop / 3-way stop
+    const eligible = signs.filter(o => o.id !== s.id && !related.has(o.id) && !sameFamily(o) && o.meaning !== s.meaning);
+    const sameCat = eligible.filter(o => o.category === s.category);
+    const pool = sameCat.length >= 3 ? sameCat : eligible;
     const seed = strSeed(s.id);
 
     // 1 — identify the sign (prefer confusable signs as distractors)
@@ -93,8 +101,9 @@ export function generateSignQuestions() {
       out.push({ id: `gen-mean-${s.id}`, category: cat, img: s.img, question: 'What does this sign mean?', options: o, answer, explanation: `${s.name} (${s.code}): ${s.meaning}` });
     }
 
-    // 3 — required action
-    if (s.action) {
+    // 3 — required action (regulatory signs only: warning-sign actions are all
+    //     variations of "slow down and be careful", which makes options ambiguous)
+    if (s.action && REGULATORY.has(s.category)) {
       const ad = distractors(pool.filter(o => o.action), 'action', s.action, 3, seed + 3);
       if (new Set([s.action, ...ad]).size === 4) {
         const { options: o, answer } = options(s.action, ad, seed + 33);
@@ -102,11 +111,15 @@ export function generateSignQuestions() {
       }
     }
 
-    // 4 — classification
+    // 4 — classification (skipped for temporary signs: they are BOTH temporary and
+    //     warning/regulatory, so two labels would be correct)
+    const isTemporary = /^T/.test(s.code || '') || /temp/i.test(s.id) || /temporary/i.test(s.name);
     const correctLabel = CAT_LABEL[cat];
-    const cd = shuffleSeeded(Object.values(CAT_LABEL).filter(l => l !== correctLabel), seed + 4).slice(0, 3);
-    const { options: o, answer } = options(correctLabel, cd, seed + 44);
-    out.push({ id: `gen-cat-${s.id}`, category: cat, img: s.img, question: 'What type of road sign is this?', options: o, answer, explanation: `${s.name} (${s.code}) is a ${correctLabel.toLowerCase()} sign.` });
+    if (!isTemporary || cat === 'temporary') {
+      const cd = shuffleSeeded(Object.values(CAT_LABEL).filter(l => l !== correctLabel), seed + 4).slice(0, 3);
+      const { options: o, answer } = options(correctLabel, cd, seed + 44);
+      out.push({ id: `gen-cat-${s.id}`, category: cat, img: s.img, question: 'What type of road sign is this?', options: o, answer, explanation: `${s.name} (${s.code}) is a ${correctLabel.toLowerCase()} sign.` });
+    }
 
     // 5 — confusable pair (teaches the look-alikes learners get wrong)
     if (confNames.length >= 1) {

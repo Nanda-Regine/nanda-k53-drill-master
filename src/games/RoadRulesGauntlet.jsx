@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import T from '../theme.js';
 import { incrementQuestionCount, isGateHit } from '../freemium.js';
-import { prepareAll, stableId } from '../utils/quizHelpers.js';
+import { prepareAll, stableId, shuffleCopy } from '../utils/quizHelpers.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
 import { recordGameAnswer } from '../utils/masteryStore.js';
@@ -30,24 +30,24 @@ const ROUNDS = [
     id: 2, title: 'Road Signs', icon: '🚧',
     questions: [
       { q: 'A red octagonal sign means:', options: ['Yield','Stop completely','No entry','Danger ahead'], answer: 1 },
-      { q: 'A yellow diamond sign indicates:', options: ['A regulation','A warning','A guide','An information sign'], answer: 0 },
+      { q: "A diamond-shaped sign such as \"pedestrian priority\" (R5) belongs to which group?", options: ["Regulatory signs","Warning signs","Guidance signs","Temporary signs"], answer: 0 },
       { q: 'A circular sign with a red border is a:', options: ['Warning sign','Information sign','Prohibition sign','Guide sign'], answer: 2 },
-      { q: 'A blue rectangular sign is a:', options: ['Warning','Prohibition','Command','Information sign'], answer: 3 },
+      { q: "According to the signs manual, guidance signs are usually which shape?", options: ["Round","Triangular","Rectangular","Octagonal"], answer: 2 },
       { q: 'The "yield" sign is which shape?', options: ['Rectangle','Circle','Inverted triangle','Diamond'], answer: 2 },
-      { q: 'A white circle with a diagonal grey stripe (de-restriction sign) means:', options: ['No entry to this road','A previous restriction has ended — normal speed limits now apply','No overtaking for 500 m','Private road — enter at own risk'], answer: 1 },
+      { q: "A de-restriction sign (R600 series — the restriction symbol with a red cross) means:", options: ["No entry to this road","The restriction shown on the sign ends here","No overtaking for 500 m","Private road — enter at own risk"], answer: 1 },
       { q: 'Which is the ONLY octagonal (8-sided) sign on South African roads?', options: ['Yield','Speed limit sign','Stop (R1)','No entry'], answer: 2 },
-      { q: 'A yellow diamond sign (right-of-way sign) tells you:', options: ['There is danger ahead — slow down','You must yield to all traffic at the next junction','You are on a priority road — side road traffic must yield to you','You may accelerate — you have right of way everywhere'], answer: 2 },
+      { q: "Regulatory signs are usually round. Which are the exceptions?", options: ["Stop, no entry and speed limit","Stop (octagon), yield (triangle) and pedestrian priority (diamond)","Yield, one-way and keep left","Only the 4-way stop sign"], answer: 1 },
     ],
   },
   // ── ROUND 3: Right of Way ──────────────────────────────────────────────────
   {
     id: 3, title: 'Right of Way', icon: '🛑',
     questions: [
-      { q: 'At a four-way stop with simultaneous arrivals, who goes first?', options: ['The vehicle on the left','The vehicle on the right','The largest vehicle','The vehicle going straight'], answer: 1 },
+      { q: "At a four-way stop, several vehicles have stopped. Which one may move off first?", options: ["The vehicle on the right","The largest vehicle","The vehicle that stopped first","The vehicle going straight"], answer: 2 },
       { q: 'When must you yield to a pedestrian?', options: ['Never on a busy road','Only at zebra crossings','When they are in or about to enter a pedestrian crossing','Only at traffic lights'], answer: 2 },
       { q: 'An emergency vehicle with sirens must be given right of way by:', options: ['Moving to the left and stopping if necessary','Speeding up to get out of the way','Hooting and continuing','Pulling to the right'], answer: 0 },
-      { q: 'When joining a freeway, you must yield to:', options: ['Traffic on the on-ramp','Traffic already on the freeway','Emergency vehicles only','No one — you have right of way'], answer: 1 },
-      { q: 'At an uncontrolled intersection, you must yield to:', options: ['Traffic approaching from your left','Traffic on the road to your right','Traffic from ahead','All traffic'], answer: 1 },
+      { q: "You are on a freeway and a vehicle on the on-ramp wants to merge ahead of you. You must:", options: ["Allow it to merge in front of you","Keep your speed — it must wait","Move closer to the car ahead","Flash your lights so it stops"], answer: 0 },
+      { q: "At a traffic circle (no other signs), you must yield to:", options: ["Traffic from your left","No one — you entered first","Traffic approaching from your right within the circle","Only heavy vehicles"], answer: 2 },
       { q: 'When entering a traffic circle, you must yield to traffic approaching from:', options: ['Your left within the circle','Your right within the circle','Any direction — first in first out','Only vehicles past the halfway mark'], answer: 1 },
       { q: 'You must give immediate and absolute right of way to a vehicle that is:', options: ['Larger than your vehicle','Sounding a siren or bell (emergency vehicle)','Travelling in the same direction as you','Flashing its headlights at you'], answer: 1 },
       { q: 'On a road divided into two separate carriageways, you must drive on:', options: ['The right-hand carriageway unless a sign says otherwise','The left-hand carriageway','Either carriageway, depending on traffic density','The carriageway with fewer vehicles'], answer: 1 },
@@ -59,8 +59,8 @@ const ROUNDS = [
     questions: [
       { q: 'When should you use your hazard lights?', options: ['When double-parking','When your vehicle is a hazard to others (breakdown, emergency stop)','Any time it is raining','When you are lost'], answer: 1 },
       { q: 'You must switch your headlights on:', options: ['30 minutes after sunset only','One hour after sunset','When it is fully dark only','Between sunset and sunrise (and whenever persons/vehicles are not visible at 150 m)'], answer: 3 },
-      { q: 'Flashing high-beam lights from an oncoming vehicle usually means:', options: ['You should speed up','There is a hazard or obstacle ahead','The driver is angry','Your lights are too bright'], answer: 1 },
-      { q: 'Before changing lanes you should:', options: ['Hoot and change quickly','Check mirrors, signal, check blind spot, then change','Signal and immediately change','Change and then signal'], answer: 1 },
+      { q: "You are not in the left lane and the driver behind you flashes the headlights. This means the driver:", options: ["Intends to overtake you","Warns of a speed trap","Is angry with you","Wants you to stop"], answer: 0 },
+      { q: "The K53 lane-changing procedure is:", options: ["Signal, then change immediately","Check mirrors and blind spot → signal → check blind spot again → steer into the lane if safe","Change lanes, then signal","Hoot, then change quickly"], answer: 1 },
       { q: 'Amber traffic light means:', options: ['Speed up to clear the intersection','Stop if you can do so safely','Yield to pedestrians only','Always stop'], answer: 1 },
       { q: 'Direction indicators must be clearly visible in normal daylight at a minimum distance of:', options: ['10 m','20 m','30 m','50 m'], answer: 2 },
       { q: 'Using your direction indicator when turning left, turning right, or changing lanes is:', options: ['Recommended but not compulsory in light traffic','Compulsory — required by law every time','Required only in heavy traffic','Required only at speeds above 60 km/h'], answer: 1 },
@@ -74,8 +74,8 @@ const ROUNDS = [
       { q: 'The legal blood alcohol limit for a professional driver in South Africa is:', options: ['0.05 g/100 ml','0.02 g/100 ml','0 g/100 ml','0.08 g/100 ml'], answer: 1 },
       { q: 'The legal blood alcohol limit for a non-professional driver is:', options: ['0.05 g/100 ml','0.02 g/100 ml','0 g/100 ml','0.08 g/100 ml'], answer: 0 },
       { q: 'How does alcohol affect driving?', options: ['Improves reaction time','Impairs judgment and slows reaction time','Has no effect at low levels','Makes drivers more alert'], answer: 1 },
-      { q: 'A breathalyser test can be required by a traffic officer:', options: ['Only after an accident','At any time','Only at roadblocks','Only if you are swerving'], answer: 1 },
-      { q: 'Refusing a breathalyser test in South Africa is:', options: ['Your legal right','A criminal offence','Allowed if you feel fine','Only an offence at night'], answer: 1 },
+      { q: "You sit in the driver's seat with the engine running, under the influence of alcohol, but the car is not moving. This is:", options: ["An offence","Legal, because you are not driving","Legal on private property","An offence only at night"], answer: 0 },
+      { q: "For a non-professional driver, driving with a blood-alcohol level of EXACTLY 0.05 g per 100 ml is:", options: ["Legal — the limit is 0.05","An offence — the limit is 0.05 g OR MORE","Legal outside urban areas","Only an offence if you cause an accident"], answer: 1 },
       { q: 'After being involved in a road accident, you may NOT drink alcohol until:', options: ['You feel calm again','You have exchanged details with the other driver','You have reported the accident — unless medical instructions require it beforehand','You have reached a safe location'], answer: 2 },
       { q: 'If prescribed medication causes drowsiness or impaired concentration, you should:', options: ['Drive at reduced speed with hazard lights on','Not drive until the effects have fully worn off','Take a strong coffee and continue your trip','Drive only on quiet back roads'], answer: 1 },
       { q: 'The safest way to eliminate alcohol from your body before driving is:', options: ['Drink strong coffee','Eat a large meal','Exercise vigorously','Wait — only time reduces blood alcohol concentration'], answer: 3 },
@@ -86,10 +86,10 @@ const ROUNDS = [
     id: 6, title: 'Overtaking', icon: '🚗',
     questions: [
       { q: 'You may NOT overtake when:', options: ['On a straight road','Approaching the crest of a hill','On a wide road','The vehicle ahead is slow'], answer: 1 },
-      { q: 'When overtaking, you should:', options: ['Move to the right, accelerate, pass and return promptly','Move to the left to get a better view then overtake','Flash lights and hoot first','Overtake slowly'], answer: 0 },
+      { q: "When overtaking another vehicle, you must:", options: ["Pass to its left if it is slow","Pass to the right at a safe distance and return left only when safely clear","Stay close behind it first to see past","Hoot continuously while passing"], answer: 1 },
       { q: 'You must NOT overtake on a solid white centre line because:', options: ['You may not cross it','It indicates a no-hoot zone','It marks a school zone','It means a bus stop ahead'], answer: 0 },
       { q: 'What should you do before overtaking a large truck?', options: ['Get very close to see past it','Ensure you can see the road is clear ahead and have enough speed','Hoot continuously','Flash headlights from behind'], answer: 1 },
-      { q: 'After overtaking, you should return to the left lane when:', options: ['You can see the overtaken vehicle in your rear-view mirror','Immediately after passing','As soon as possible regardless of visibility','The road widens'], answer: 0 },
+      { q: "After overtaking, you may return to the left side of the road when:", options: ["You are safely clear of the vehicle you passed","Immediately after passing its front bumper","After exactly 100 m","When the other driver flashes you"], answer: 0 },
       { q: 'When overtaking, you may NEVER pass by driving on the:', options: ['Right side of the road','Shoulder or verge of the road','Left in a one-way urban multi-lane road','Acceleration lane of a freeway on-ramp'], answer: 1 },
       { q: 'When the vehicle behind you wants to overtake, you must:', options: ['Hold your speed — a predictable pace is safer','Speed up briefly so they spend less time in danger','Move to the left and do NOT accelerate until they have fully passed you','Flash your hazard lights to acknowledge them'], answer: 2 },
       { q: 'On any public road you must keep LEFT and overtake to the:', options: ['Left','Right','Either side if the road is wide enough','Designated fast lane only'], answer: 1 },
@@ -99,7 +99,7 @@ const ROUNDS = [
   {
     id: 7, title: 'Pedestrians & Cyclists', icon: '🚶',
     questions: [
-      { q: 'Pedestrians should walk on which side of the road when there is no pavement?', options: ['Right side facing oncoming traffic','Left side with traffic','Either side','The centre'], answer: 0 },
+      { q: "The red pedestrian figure starts FLASHING. A pedestrian who has not yet stepped into the road must:", options: ["Cross quickly","Wait until the green figure is shown","Cross if no car is near","Wait on the centre island"], answer: 1 },
       { q: 'When must you yield to a pedestrian at a marked crossing?', options: ['Only when the pedestrian has a green man signal','Whenever a pedestrian is in the crossing','Only at night','Only in school zones'], answer: 1 },
       { q: 'When overtaking a pedal cyclist, you should:', options: ['Pass as close as possible to save time','Slow down and allow a wide, safe gap before passing','Hoot continuously to warn them','Maintain full speed past them'], answer: 1 },
       { q: 'A driver must NOT park within how many metres of a pedestrian crossing?', options: ['3 m','5 m','9 m','15 m'], answer: 2 },
@@ -114,7 +114,7 @@ const ROUNDS = [
     id: 8, title: 'Parking & Stopping', icon: '🅿️',
     questions: [
       { q: 'You may NOT park within how many metres of a fire hydrant?', options: ['1.5 m','3 m','5 m','9 m'], answer: 0 },
-      { q: 'When parking on a hill facing downhill, your wheels should be:', options: ['Straight ahead','Turned to the right','Turned to the left (towards the kerb)','It does not matter'], answer: 2 },
+      { q: "When parking against a kerb on a gradient, K53 says turn the front wheels:", options: ["Straight ahead","Away from the kerb","In the direction of the kerb","It does not matter"], answer: 2 },
       { q: 'Double parking means:', options: ['Parking in two bays','Parking alongside a parked vehicle','Parking in a loading zone','Parking facing the wrong direction'], answer: 1 },
       { q: 'Before getting out of a parked vehicle you should always:', options: ['Sound the horn','Check mirrors and over your shoulder for cyclists and traffic','Open the door quickly','Leave the engine running'], answer: 1 },
       { q: 'You may NOT park within how many metres of an intersection?', options: ['3 m','5 m','9 m','15 m'], answer: 1 },
@@ -142,12 +142,12 @@ const ROUNDS = [
     id: 10, title: 'Vehicle Controls', icon: '🔩',
     questions: [
       { q: 'ABS (Anti-lock Braking System) allows you to:', options: ['Brake harder on wet roads without skidding and maintain steering','Stop in half the distance','Brake automatically in an emergency','Accelerate faster'], answer: 0 },
-      { q: 'What does EBD stand for?', options: ['Electronic Brake Distribution','Engine Braking Device','Emergency Braking Display','Extended Battery Duration'], answer: 0 },
+      { q: "Which brakes must every light motor vehicle be equipped with?", options: ["A service brake only","A service brake, a parking brake and an emergency brake (the last two may be the same brake)","ABS and a handbrake","Front brakes and a handbrake"], answer: 1 },
       { q: 'A flashing oil pressure light means:', options: ['Oil change is due','Stop the engine immediately — serious oil pressure loss','Oil level is slightly low','Normal at start-up only'], answer: 1 },
-      { q: 'The purpose of a differential is to:', options: ['Lock wheels during braking','Allow driven wheels to rotate at different speeds when cornering','Distribute weight evenly','Control engine speed'], answer: 1 },
-      { q: 'Power steering fluid should be checked:', options: ['Only when the car pulls to one side','Monthly and during routine services','Annually only','Never — it is sealed'], answer: 1 },
-      { q: 'The maximum turning radius permitted for any motor vehicle on a South African public road is:', options: ['10 m','11.5 m','13.1 m','15 m'], answer: 2 },
-      { q: 'You may NOT leave a vehicle unattended on a public road without:', options: ['The engine running for security','Applying the brakes (and a gear in a manual) to prevent rolling','Leaving hazard lights on','Locking all doors'], answer: 1 },
+      { q: "A motor vehicle may not be used on a public road if its turning radius exceeds:", options: ["10 m","11.5 m","13.1 m","15 m"], answer: 2 },
+      { q: "The windscreen of a light motor vehicle must allow at least how much visible light through?", options: ["50%","60%","70%","80%"], answer: 2 },
+      { q: "Which vehicles must be fitted with a speedometer in good working order?", options: ["Only heavy vehicles","Vehicles designed for or capable of 60 km/h or more","Only vehicles used on freeways","All vehicles, including pedal cycles"], answer: 1 },
+      { q: "You may NOT leave a vehicle unattended on a public road without:", options: ["Leaving the engine running","Setting its brake, or using another method that prevents it from moving","Leaving the hazard lights on","Leaving a note on the dashboard"], answer: 1 },
       { q: 'While a vehicle is in motion on a public road, a portion of the body may protrude beyond the vehicle only for the purpose of:', options: ['Waving at a pedestrian or cyclist','Giving a hand signal','Receiving a parking ticket from an attendant','Checking a blind spot manually'], answer: 1 },
     ],
   },
@@ -169,10 +169,10 @@ const ROUNDS = [
   {
     id: 12, title: 'Motorways & Freeways', icon: '🛣️',
     questions: [
-      { q: 'On a freeway, the right lane is for:', options: ['Slow vehicles','Overtaking only — not continuous travel','Heavy vehicles','Emergency vehicles'], answer: 1 },
+      { q: "On a freeway you must:", options: ["Keep left and overtake to the right","Use the right lane for continuous travel","Overtake on either side","Keep to the centre lane"], answer: 0 },
       { q: 'Regarding a minimum speed limit on a South African freeway:', options: ['It is 40 km/h','It is 60 km/h','It is 80 km/h','There is no posted minimum speed limit, but you may not obstruct traffic by driving too slowly'], answer: 3 },
-      { q: 'You may reverse on a freeway:', options: ['Only in an emergency','Never','If you missed your exit','Only to help a broken-down vehicle'], answer: 1 },
-      { q: 'On a freeway, you must NOT stop except:', options: ['To take a phone call','At designated rest areas or in a genuine emergency','When you are tired','To ask for directions'], answer: 1 },
+      { q: "On a freeway, you may give a hand signal:", options: ["Whenever you change lanes","Only for a reason beyond your control","At any time","Only when your indicators fail at night"], answer: 1 },
+      { q: "You may stop on a freeway only:", options: ["To take a phone call","When a sign or traffic officer directs you, in an area reserved for stopping, or for a reason beyond your control","When you feel tired","To pick up a passenger"], answer: 1 },
       { q: 'When leaving a freeway, you should reduce speed:', options: ['On the freeway before the exit','After turning into the off-ramp','Only on the off-ramp','Well before the exit ramp'], answer: 2 },
       { q: 'Which of the following vehicles is PROHIBITED from using a South African freeway?', options: ['A motorcycle with an engine exceeding 50cc','A pedal cycle','A minibus taxi','A vehicle towing a single trailer'], answer: 1 },
       { q: 'Pedestrians walking along a freeway are:', options: ['Permitted on the hard shoulder only','Prohibited under normal circumstances','Permitted between 06:00 and 18:00','Permitted if wearing high-visibility clothing'], answer: 1 },
@@ -188,7 +188,7 @@ const ROUNDS = [
       { q: 'An Emergency Information Panel (EIP) must be displayed:', options: ['Only at the rear','Front and rear of the vehicle','Only on the driver\'s door','On all four sides'], answer: 1 },
       { q: 'A HAZCHEM code provides:', options: ['The driver\'s hazard rating','Emergency action instructions for first responders','The insurance category','Route guidance'], answer: 1 },
       { q: 'When a dangerous goods vehicle is involved in a spillage, the driver must:', options: ['Continue to destination and report later','Stop, warn traffic and contact emergency services','Move goods to the roadside','Dilute the spill with water'], answer: 1 },
-      { q: 'Dangerous goods vehicles may NOT park overnight within how many metres of inhabited buildings?', options: ['50 m','100 m','200 m','500 m'], answer: 1 },
+      { q: "Dangerous-goods placards may be excluded from a vehicle's overall width by up to how much on each side?", options: ["30 mm","150 mm","300 mm","0 mm — they always count"], answer: 0 },
       { q: 'UN Dangerous Goods Class 1 covers:', options: ['Flammable liquids','Explosives','Toxic and infectious substances','Radioactive material'], answer: 1 },
       { q: 'UN Dangerous Goods Class 6 covers:', options: ['Corrosive substances','Explosive substances','Toxic and infectious substances','Flammable solids'], answer: 2 },
       { q: 'Documentation carried in a dangerous goods vehicle must:', options: ['Only be available at the depot','Be in the vehicle and describe what is being transported, so emergency services can respond correctly','Only be required for loads over 500 kg','Be kept by the consignor only'], answer: 1 },
@@ -216,12 +216,12 @@ const ROUNDS = [
     questions: [
       { q: 'The driver is responsible for ensuring the load is:', options: ['Simply covered with a tarpaulin','Properly secured so it cannot shift or fall','Placed as high as possible','Loaded by the consignor only'], answer: 1 },
       { q: 'The maximum a load may project beyond the rear end of a light or heavy motor vehicle is:', options: ['1.5 m','1.8 m','3 m','4 m'], answer: 1 },
-      { q: 'A red flag (day) or red reflector (night) is required when a load projects to the rear by more than:', options: ['0.3 m','0.5 m','1 m','1.5 m'], answer: 0 },
+      { q: "A load must be marked (red flag by day, retro-reflectors at night) if it projects to the rear by more than:", options: ["0.3 m","0.5 m","1 m","1.5 m"], answer: 0 },
       { q: 'The centre of gravity of a loaded vehicle affects:', options: ['Only fuel consumption','Stability, cornering and rollover risk','Engine temperature','Tyre wear only'], answer: 1 },
       { q: 'A load projecting more than 300 mm behind your vehicle must be marked in daytime with:', options: ['A red flag of at least 300 mm × 300 mm','A white cloth of any size','A yellow warning triangle','Nothing — only night marking is required'], answer: 0 },
       { q: 'The maximum distance a load may project beyond the FRONT of a light motor vehicle is:', options: ['150 mm','300 mm','600 mm','1.8 m'], answer: 1 },
-      { q: 'A load projecting more than 150 mm to the SIDE of a vehicle must be marked with:', options: ['Orange traffic cones alongside the road','A red flag (day) and red retro-reflectors (night)','A yellow warning light','No marking is required if travelling below 80 km/h'], answer: 1 },
-      { q: 'The maximum permitted width of goods being transported on a South African public road is:', options: ['2 m','2.5 m','3 m','4 m'], answer: 1 },
+      { q: "A load projecting more than 150 mm to the SIDE of a vehicle must be marked with:", options: ["Orange cones","A red flag by day, and retro-reflectors at night (white to the front, red to the rear)","A yellow flashing light","Nothing below 80 km/h"], answer: 1 },
+      { q: "For most vehicles (not a bus or a goods vehicle of 12 000 kg or more), goods may not project more than how far either side of the centre-line?", options: ["1 m","1.25 m (so the load is at most 2.5 m wide)","1.5 m","2 m"], answer: 1 },
     ],
   },
 
@@ -230,8 +230,8 @@ const ROUNDS = [
     id: 16, title: 'Licence & Documentation', icon: '📋',
     questions: [
       { q: 'A South African learner\'s licence is valid for how long?', options: ['12 months','18 months','24 months','36 months'], answer: 2 },
-      { q: 'You hold a learner\'s licence. A licensed supervisor must sit where?', options: ['In the back seat','In the front passenger seat','Anywhere in the vehicle','They may follow in another car'], answer: 1 },
-      { q: 'Your driving licence must be renewed every:', options: ['2 years','3 years','5 years','10 years'], answer: 2 },
+      { q: "A Code 2 learner's licence holder may drive only:", options: ["With an \"L\" plate, alone","Under the direct supervision of a person who holds a driving licence for that class of vehicle","With any adult passenger","During daylight only"], answer: 1 },
+      { q: "An applicant for a learner's licence who is 65 or older must also provide:", options: ["A police clearance","A medical certificate (form MC)","A letter from a family member","Nothing extra"], answer: 1 },
       { q: 'When must you carry your driving licence while driving?', options: ['Only on long trips','At all times while driving','Only when travelling between provinces','Only if under 25'], answer: 1 },
       { q: 'If your driving licence is suspended, you may:', options: ['Continue driving to work only','Not drive any motor vehicle on a public road','Drive only during daylight hours','Drive with a supervisor only'], answer: 1 },
       { q: 'A Code B licence allows you to drive vehicles with a gross vehicle mass of up to:', options: ['1 750 kg','2 500 kg','3 500 kg','5 000 kg'], answer: 2 },
@@ -243,12 +243,12 @@ const ROUNDS = [
   {
     id: 17, title: 'Towing & Trailers', icon: '🚛',
     questions: [
-      { q: 'When towing a trailer, your following distance should be:', options: ['The same as normal','At least double the normal distance','At least 50 m always','3 seconds in good conditions'], answer: 1 },
-      { q: 'A trailer with a gross vehicle mass over 750 kg must be fitted with:', options: ['Only coupling brakes','Its own brake system that can be applied from the towing vehicle','A handbrake only','No brakes are required'], answer: 1 },
-      { q: 'The maximum speed when towing most trailers on a freeway is:', options: ['80 km/h','100 km/h','120 km/h','110 km/h'], answer: 1 },
+      { q: "The maximum length of a tow-rope, chain or tow-bar between two vehicles is:", options: ["2.5 m","3.5 m","5 m","1.8 m"], answer: 1 },
+      { q: "A combination of motor vehicles may consist of a drawing vehicle and at most:", options: ["One trailer","Two trailers","Three trailers","Any number of trailers"], answer: 1 },
+      { q: "A breakdown vehicle that is towing another vehicle may travel at a maximum of:", options: ["60 km/h","80 km/h","100 km/h","120 km/h"], answer: 1 },
       { q: 'Trailer sway (snake) is best corrected by:', options: ['Braking hard','Accelerating to straighten the trailer','Releasing the accelerator and steering gently straight — do not brake hard','Steering sharply against the sway'], answer: 2 },
-      { q: 'A trailer must have how many rear red reflectors?', options: ['One','Two','Four','It depends on trailer width'], answer: 1 },
-      { q: 'The coupling between a towing vehicle and trailer must be fitted with:', options: ['A safety chain or cable only','A coupling device AND a secondary safety chain or cable','Only a ball hitch','Any connection strong enough for the load'], answer: 1 },
+      { q: "Which vehicles must display a number plate at the BACK only?", options: ["Motorcycles, motor tricycles and trailers","Motor cars","Minibuses","All vehicles"], answer: 0 },
+      { q: "A towed vehicle is carrying passengers. The maximum speed is:", options: ["30 km/h (unless it is a semi-trailer)","60 km/h","80 km/h","Passengers are never allowed"], answer: 0 },
     ],
   },
 
@@ -259,10 +259,10 @@ const ROUNDS = [
       { q: 'When turning right at an intersection, you should position your vehicle:', options: ['As far left as possible','As far right in your lane (near the centre line) as possible','In the centre of the road','It does not matter'], answer: 1 },
       { q: 'A U-turn is prohibited:', options: ['On any multi-lane road','Where it cannot be made safely, or where signs prohibit it','Always on a public road','Only at night'], answer: 1 },
       { q: 'At a traffic circle without road markings, you must:', options: ['Give way to traffic on your right already in the circle','Give way to traffic on your left','Go straight through as a priority road','Always stop and check before proceeding'], answer: 0 },
-      { q: 'When may you turn left at a red traffic light in South Africa?', options: ['Always, after stopping','Only if a "left turn allowed" sign or marking is present','Never','Only between 10pm and 5am'], answer: 1 },
+      { q: "A FLASHING RED arrow to the left means:", options: ["Turn left without stopping","After stopping, you may turn left if safe, yielding to pedestrians and other traffic","No left turn","Only buses may turn left"], answer: 1 },
       { q: 'Before turning left, you should check your mirrors and:', options: ['Check the blind spot to the left for cyclists','Check the blind spot to the right','Signal right first then signal left','No additional check is needed if mirrors are clear'], answer: 0 },
       { q: 'When must you signal your intention to turn?', options: ['Immediately before turning','In good time, so other road users can clearly see your intention','Only in heavy traffic','Only when other vehicles are nearby'], answer: 1 },
-      { q: 'When completing a right turn, you should end up in:', options: ['The left lane of the new road','The right lane of the new road (lane nearest the centre line)','Any available lane','The lane directly across from your starting position'], answer: 1 },
+      { q: "When waiting to turn right at an intersection, K53 says you should position your vehicle:", options: ["As far left as possible","As close as possible towards the centre of the intersection, with due care for approaching vehicles","Behind the stop line until it is completely clear","On the shoulder"], answer: 1 },
     ],
   },
 
@@ -272,10 +272,10 @@ const ROUNDS = [
     questions: [
       { q: 'Your dipped (low) beam headlamps must illuminate the road at least how far ahead?', options: ['30 m','45 m','60 m','100 m'], answer: 1 },
       { q: 'Your main beam (high beam) headlamps must illuminate at least how far ahead?', options: ['45 m','60 m','100 m','150 m'], answer: 2 },
-      { q: 'You must switch from high beam to low beam when an oncoming vehicle is within:', options: ['50 m','100 m','150 m','200 m'], answer: 2 },
-      { q: 'You may switch on your rear (red) fog lamp only when:', options: ['Visibility is seriously reduced by fog, mist or heavy rain','Driving at night on any road','It is raining lightly','A vehicle is following you too closely'], answer: 0 },
+      { q: "You must dip your main beam:", options: ["Only when an oncoming driver flashes you","For oncoming traffic and when following another vehicle","Only in urban areas","Only when it is raining"], answer: 1 },
+      { q: "Fog lamps may be used only when visibility is poor because of:", options: ["Heavy rain","Darkness on unlit roads","Snow, fog, mist, dust or smoke","Any reduced visibility"], answer: 2 },
       { q: 'If you are temporarily blinded by oncoming headlights, you should:', options: ['Close your eyes briefly','Slow down and look at the left edge of your lane','Speed up to pass the vehicle quickly','Switch to high beam to see better'], answer: 1 },
-      { q: 'Parking lights (side lights) may be used when parked on a road at night to:', options: ['Illuminate the road ahead','Make your parked vehicle visible to others','Allow driving at slow speed','Replace headlights in fog'], answer: 1 },
+      { q: "May a vehicle be driven with only its parking lamps lit?", options: ["Yes, in urban areas","No — never while the vehicle is moving","Yes, in fog","Yes, below 40 km/h"], answer: 1 },
       { q: 'At night, your stopping distance is effectively greater because:', options: ['Roads are more slippery','Your eyes take longer to adjust','You can only see as far as your headlights illuminate — reaction distance eats into that','Tyres are colder and less grippy'], answer: 2 },
     ],
   },
@@ -285,11 +285,11 @@ const ROUNDS = [
     id: 20, title: 'Special Situations', icon: '🚨',
     questions: [
       { q: 'Your vehicle breaks down on a freeway. Your emergency triangle must be placed at least:', options: ['15 m behind your vehicle','30 m behind your vehicle','45 m behind your vehicle','90 m behind your vehicle'], answer: 2 },
-      { q: 'A school bus has stopped and is displaying a flashing amber light. You should:', options: ['Overtake quickly and carefully','Slow down and be prepared to stop — children may be crossing','Hoot to warn children','Stop 50 m away'], answer: 1 },
-      { q: 'When passing a stationary emergency vehicle with flashing lights on the road, you must:', options: ['Accelerate to reduce the time you are near it','Slow down and, where possible, move into a lane away from the vehicle','Keep the same speed but give a wide berth','Hoot to warn the officers'], answer: 1 },
+      { q: "You want to pass a bus that has stopped to let passengers on and off. You must:", options: ["Hoot and pass quickly","Pass with due care for people approaching or leaving the bus","Pass on its left","Always stop until it pulls away"], answer: 1 },
+      { q: "Which colour warning light is displayed by a traffic officer's vehicle on duty?", options: ["Red","Green","Blue","Amber"], answer: 2 },
       { q: 'You are involved in a minor accident with no injuries. You must:', options: ['Leave immediately if you are not at fault','Exchange particulars (name, licence, registration) with the other driver','Call the police and wait regardless of severity','Move all vehicles immediately, no documentation needed'], answer: 1 },
       { q: 'If a traffic officer signals you to stop, you must:', options: ['Stop only if you believe you have done wrong','Stop immediately and safely where directed','Stop at the next traffic light','You may ignore it and go to the nearest police station'], answer: 1 },
-      { q: 'A pedestrian in a marked crossing has right of way over:', options: ['Only cyclists','All turning vehicles','All vehicles including those with a green light','Emergency vehicles only'], answer: 1 },
+      { q: "A pedestrian is crossing within a pedestrian crossing. You must:", options: ["Hoot to warn the pedestrian","Yield right of way — slow down or stop if necessary","Continue if you have a green light","Pass behind the pedestrian"], answer: 1 },
       { q: 'You are driving and your hooter (horn) must be audible at what minimum distance?', options: ['30 m','45 m','60 m','90 m'], answer: 3 },
     ],
   },
@@ -300,7 +300,7 @@ const ROUNDS = [
     questions: [
       { q: 'Is wearing a seatbelt compulsory for all occupants in South Africa?', options: ['Only for the driver and front passenger','Yes — the driver and all passengers must wear seatbelts','Only for children','Only on freeways'], answer: 1 },
       { q: 'Who is legally responsible for ensuring passengers under 14 years wear seatbelts?', options: ['The nearest adult passenger','The child\'s parent or guardian','The driver','The front passenger'], answer: 2 },
-      { q: 'A child under the age of 3 years must be secured in:', options: ['A normal seatbelt with an adult holding them','An approved child restraint (car seat)','The rear seat without any restraint','A lap belt only'], answer: 1 },
+      { q: "If a child restraint is available in the vehicle, a child passenger must:", options: ["Wear an adult seatbelt","Use the child restraint","Sit on an adult's lap","Sit in the front seat"], answer: 1 },
       { q: 'Are rear-seat passengers required to wear seatbelts in South Africa?', options: ['No — seatbelts are optional in the back seat','Yes — all passengers including rear-seat occupants must wear seatbelts','Only if the journey exceeds 50 km','Only on freeways'], answer: 1 },
       { q: 'Where should a young child NEVER be placed in a vehicle with an active airbag?', options: ['In the rear seat','In the front seat facing forward against an active airbag','In an approved child restraint','Behind the driver\'s seat'], answer: 1 },
       { q: 'If a driver\'s seatbelt is worn incorrectly (e.g., behind the back), the driver:', options: ['Is still legally compliant','Is in breach of the NRTA and at serious risk of injury in a collision','Is compliant only at speeds below 60 km/h','Only faces a fine if involved in an accident'], answer: 1 },
@@ -315,7 +315,7 @@ const ROUNDS = [
       { q: 'Which of the following phone activities is LEGAL while driving?', options: ['Holding your phone to make a call','Reading text messages at a red light','Using a certified hands-free kit (Bluetooth or earphone)','Dialling a number while driving'], answer: 2 },
       { q: 'Drowsy driving is dangerous because:', options: ['It increases fuel consumption','Reaction time and judgment are impaired — similar to driving under the influence of alcohol','Only the passenger is affected','It only becomes dangerous after 2 am'], answer: 1 },
       { q: 'If you feel drowsy while driving, the safest action is:', options: ['Open the window and turn up the music','Drink energy drinks and continue','Pull over safely and rest before continuing','Drive in the left lane only'], answer: 2 },
-      { q: 'Eating or grooming while driving can constitute what offence under South African law?', options: ['No offence — it is not regulated','Reckless or negligent driving if it impairs vehicle control','Only a minor traffic infringement','An offence only if you cause an accident'], answer: 1 },
+      { q: "Holding your cellphone between your shoulder and ear while driving is:", options: ["Legal — your hands are free","Illegal — you may not hold it with any part of your body","Legal below 60 km/h","Legal at a red light"], answer: 1 },
       { q: 'You may NOT allow the engine to run while petrol or other flammable fuel is being put into the tank because:', options: ['It causes the fuel gauge to read incorrectly','It creates a fire and explosion risk — fuel vapour near a running engine can ignite','It prevents an accurate fill level','Only relevant for diesel vehicles'], answer: 1 },
       { q: 'Research consistently shows that talking on a hands-free phone while driving:', options: ['Is completely safe — your hands remain on the wheel','Still causes significant cognitive distraction and increases crash risk','Is only dangerous at speeds above 100 km/h','Is safer than talking to a passenger'], answer: 1 },
       { q: 'The only safe time to look at or reply to a message on your phone while driving is:', options: ['At a red traffic light','When the road is straight and clear','Never — you must pull completely off the road first','When travelling below 40 km/h'], answer: 2 },
@@ -326,12 +326,12 @@ const ROUNDS = [
   {
     id: 23, title: 'Railway Crossings', icon: '🚂',
     questions: [
-      { q: 'A yellow "X" painted on the road surface warns you of:', options: ['A four-way stop ahead','A level crossing (railway line) ahead','A school zone','A pedestrian crossing'], answer: 1 },
+      { q: "The \"railway crossing ahead\" road marking (WM1) tells you to:", options: ["Speed up and cross","Slow down and, if necessary, stop before the crossing","Park before the crossing","Hoot continuously"], answer: 1 },
       { q: 'When a level crossing boom (barrier) is lowered, you must:', options: ['Stop and wait until the boom is fully raised and the track is completely clear','Drive around the boom if no train is visible','Stop for 5 seconds then proceed','Sound your horn and cross quickly'], answer: 0 },
       { q: 'At a level crossing with flashing red lights and no boom, you must:', options: ['Slow down and cross if no train is visible','Stop — do not cross while the red lights are flashing','Accelerate across to avoid the train','Stop for 3 seconds then cross'], answer: 1 },
       { q: 'Your vehicle stalls on a railway track. You should first:', options: ['Try to restart the engine','Push the vehicle off the track alone','Get all occupants out of the vehicle immediately and move well clear of the tracks','Stay in the vehicle and call for help'], answer: 2 },
-      { q: 'A train cannot stop quickly because:', options: ['Train drivers are not trained in emergency braking','A fully loaded train can take up to 1.6 km or more to stop','Trains have no braking system','Track switches prevent emergency stops'], answer: 1 },
-      { q: 'When approaching an unguarded level crossing (no boom, no lights), you must:', options: ['Maintain speed — trains will always stop','Slow down, look and listen carefully in both directions, and only cross when safe','Sound your horn loudly and cross quickly','Stop for exactly 30 seconds before crossing'], answer: 1 },
+      { q: "Where may you NOT stop your vehicle?", options: ["Within the railway reserve at a level crossing","In a demarcated parking bay","In an area reserved for stopping","On the left edge of a wide road"], answer: 0 },
+      { q: "At an unguarded level crossing, K53 says that if you must stop, stop at a safe distance or at least how far from the nearest rail?", options: ["1 m","5 m","15 m","45 m"], answer: 1 },
     ],
   },
 
@@ -339,14 +339,14 @@ const ROUNDS = [
   {
     id: 24, title: 'Animals & Livestock', icon: '🐄',
     questions: [
-      { q: 'You are driving at night and see cattle on the road. You should:', options: ['Hoot loudly and drive between them','Accelerate to pass them quickly','Reduce speed, switch on hazard lights and be prepared to stop','Move to the right lane only'], answer: 2 },
+      { q: "A person leading cattle across the road signals you to stop. You must:", options: ["Drive slowly between the animals","Stop, and move on only when all the animals have crossed and it is safe","Hoot to hurry them","Ignore it — only officers may stop you"], answer: 1 },
       { q: 'When passing animals on or near the road, you should:', options: ['Hoot to clear them off the road','Pass slowly and avoid sudden horn use, which may startle them','Flash your lights repeatedly','Accelerate past them quickly'], answer: 1 },
-      { q: 'Your vehicle strikes and injures an animal on the road. You must:', options: ['Continue driving — you are not responsible for stray animals','Stop, try to find the owner, and if unsuccessful, report to the nearest police station','Remove the animal from the road and continue','Report by phone without stopping'], answer: 1 },
+      { q: "Animals are crossing the road ahead (no one is leading them). You must:", options: ["Stop, and drive on only when all the animals have crossed and the road is safe","Drive around them on the shoulder","Hoot and keep going","Flash your lights"], answer: 0 },
       { q: 'A herd of cattle is slowly crossing the road ahead. You should:', options: ['Drive slowly through the herd','Hoot to speed them up','Stop and wait patiently for the herd to clear the road','Drive onto the shoulder and bypass them'], answer: 2 },
       { q: 'Wild animals crossing the road at night are especially dangerous because:', options: ['They travel in unpredictably large herds','They may freeze or change direction suddenly in your headlights','They only cross during rain','They appear only in nature reserves'], answer: 1 },
       { q: 'A driver MUST stop and wait when requested by a person leading or driving which animals across the road?', options: ['Any farm animal, regardless of size','A bovine animal, horse, donkey, mule, sheep, goat, pig or ostrich','Only cattle when crossing in a large herd','Only horses on a designated bridleway'], answer: 1 },
       { q: 'After animals begin crossing the road ahead, you may only proceed when:', options: ['You can see a clear path through the animals','You have waited at least 30 seconds','All the animals have crossed and the road is completely safe','The person leading them waves you through'], answer: 2 },
-      { q: 'If your vehicle strikes and injures an animal on a public road, you must:', options: ['Continue driving — you are not legally responsible for stray animals','Stop, try to find the owner and if unsuccessful report to the nearest police station','Stop for 5 minutes and then continue','Report by telephone without stopping at the scene'], answer: 1 },
+      { q: "You must stop when requested by a person leading which animals?", options: ["Only cattle","A bovine animal, horse, donkey, mule, sheep, goat, pig or ostrich","Only horses","Only animals crossing a freeway"], answer: 1 },
     ],
   },
 
@@ -355,10 +355,10 @@ const ROUNDS = [
     id: 25, title: 'Defensive Driving', icon: '🛡️',
     questions: [
       { q: 'Defensive driving means:', options: ['Driving aggressively to establish road space','Anticipating hazards and being prepared to react safely regardless of what other road users do','Staying in the left lane at all times','Never exceeding 80 km/h'], answer: 1 },
-      { q: 'In wet weather, your following distance should be:', options: ['The same as in dry conditions','About 2.5 seconds','At least double the normal 2-second gap (4 seconds or more)','At least 5 car lengths regardless of speed'], answer: 2 },
+      { q: "In rain or on a slippery surface, your following distance must be:", options: ["The same 2 seconds","Increased beyond the 2-second minimum","Reduced to see the car ahead","Exactly 5 car lengths"], answer: 1 },
       { q: 'The "2-second rule" measures:', options: ['The time to signal before turning','The minimum time gap between your vehicle and the one ahead','The time to complete a lane change','The time between mirror checks'], answer: 1 },
       { q: 'When you notice a vehicle weaving erratically ahead, you should:', options: ['Flash your lights to warn them','Overtake as quickly as possible','Increase your following distance and be prepared for sudden changes','Match their behaviour to warn other drivers'], answer: 2 },
-      { q: 'To scan for hazards effectively in an urban area, you should look how far ahead?', options: ['About 1–2 seconds (30 m)','About 5–6 seconds (90 m)','About 12–15 seconds ahead','Only at the vehicle directly in front of you'], answer: 2 },
+      { q: "K53: how often should you check your rear-view mirrors while driving?", options: ["Every 5 to 8 seconds","Every 30 seconds","Only when changing lanes","Once a minute"], answer: 0 },
       { q: 'If you are being tailgated, the safest response is:', options: ['Brake suddenly to signal your displeasure','Maintain your speed and ignore the tailgater','Ease off the accelerator to create more space ahead, allowing the tailgater to overtake','Speed up to increase the distance between you'], answer: 2 },
     ],
   },
@@ -368,11 +368,11 @@ const ROUNDS = [
     id: 26, title: 'Reversing', icon: '🔄',
     questions: [
       { q: 'Before reversing, you must:', options: ['Sound your horn twice','Check all mirrors and look over your shoulder to ensure the path is completely clear','Signal right and then reverse','Only check the interior rear-view mirror'], answer: 1 },
-      { q: 'You may NOT reverse:', options: ['On a private driveway','Into a main road from a side street, or further than is reasonably necessary','In a parking area','On a gravel road'], answer: 1 },
+      { q: "You may cause your vehicle to travel backwards only:", options: ["On a freeway if you missed your exit","If it can be done in safety","At night","In a one-way street"], answer: 1 },
       { q: 'When reversing in a straight line, you should primarily look:', options: ['Only in the rear-view mirror','Straight ahead to monitor the road','Over your shoulder through the rear window, while also checking mirrors','To the left only'], answer: 2 },
-      { q: 'Reversing on a freeway or expressway is:', options: ['Permitted only if you missed your exit','Permitted only in a genuine emergency','Permitted only at speeds below 10 km/h','Never permitted under any circumstances'], answer: 3 },
+      { q: "Before reversing, you should:", options: ["Sound the hooter twice","Check all mirrors and look over your shoulder to make sure the path is clear","Rely on the interior mirror only","Signal right"], answer: 1 },
       { q: 'When reversing from a driveway onto a road, you should:', options: ['Reverse as quickly as possible to spend less time in traffic','Hoot continuously while reversing','Reverse slowly, pause to check for traffic, and proceed only when completely safe','Reverse only during quiet traffic times'], answer: 2 },
-      { q: 'You may NOT reverse a vehicle into a main road from a side street because:', options: ['It is technically legal but not recommended','It creates a blind-spot hazard — you cannot safely see approaching main road traffic while reversing into it','It causes gearbox wear','Reversing on any road is prohibited'], answer: 1 },
+      { q: "A person is standing directly behind your reversing car. You must:", options: ["Continue slowly","Stop and wait until the person is completely clear","Hoot and continue","Reverse faster to get past"], answer: 1 },
       { q: 'A pedestrian approaches directly behind your reversing vehicle. You must:', options: ['Continue reversing — it is their responsibility to watch for reversing vehicles','Stop immediately and wait until they have completely cleared the area','Sound the horn once and continue slowly','Ask a passenger to guide you past them'], answer: 1 },
       { q: 'Before reversing in a parking area, you must specifically check for:', options: ['Other drivers waiting for your space','Pedestrians, cyclists, children and all obstacles behind and to the sides of your vehicle','Only vehicles approaching from directly behind','Only if your reversing camera or sensors have not activated'], answer: 1 },
     ],
@@ -410,7 +410,7 @@ const ROUNDS = [
   {
     id: 29, title: 'School Zones & Vulnerable Users', icon: '🏫',
     questions: [
-      { q: 'When a school bus stops with flashing amber warning lights, you must:', options: ['Overtake quickly from the right','Reduce speed and be prepared to stop — children may be boarding or crossing','Sound your horn to warn children','Continue normally if no children are currently visible'], answer: 1 },
+      { q: "Sign W307 (pedestrians) warns that pedestrians may be crossing for the next:", options: ["500 m","1 km","2 km","5 km"], answer: 2 },
       { q: 'A "Beware — school children" warning sign requires you to:', options: ['Stop completely and wait 5 seconds','Reduce speed and be prepared to stop for children','Flash your headlights to warn children','Continue at normal speed — warning signs are advisory only'], answer: 1 },
       { q: 'Which road users are classified as "vulnerable" and require extra caution?', options: ['Only elderly pedestrians','Pedestrians, cyclists, motorcyclists, and children','Heavy vehicle drivers only','Only cyclists and pedestrians at night'], answer: 1 },
       { q: 'Near a school or playground, you must NOT:', options: ['Reduce your speed','Check your mirrors more frequently','Hoot unnecessarily or drive in a way that distracts or endangers children','Be prepared to stop at any time'], answer: 2 },
@@ -423,11 +423,11 @@ const ROUNDS = [
   {
     id: 30, title: 'Vehicle Roadworthiness', icon: '🔧',
     questions: [
-      { q: 'Who is legally responsible for ensuring a vehicle is in a roadworthy condition?', options: ['The driver only','The mechanic who last serviced it','The registered owner of the vehicle','The traffic department'], answer: 2 },
+      { q: "The owner of a vehicle is also responsible for offences committed with it when:", options: ["Never — only the driver is responsible","The owner permitted the use of the vehicle","Only for parking fines","Only if the owner is a passenger"], answer: 1 },
       { q: 'Your windscreen wipers fail completely in heavy rain. You should:', options: ['Continue carefully at much reduced speed','Lean out of the window to see','Pull off the road safely and wait for conditions to improve or the wipers to be repaired','Drive with hazard lights on to warn others'], answer: 2 },
       { q: 'Which of the following makes a vehicle un-roadworthy?', options: ['A small dent on the rear bumper','A crack in the windscreen within the driver\'s field of vision','Slightly faded paintwork','A non-functional reversing camera'], answer: 1 },
       { q: 'If a vehicle fails a roadworthy test, the owner must:', options: ['Dispose of the vehicle immediately','May drive it for up to 30 days while awaiting repairs','Have the defects repaired and the vehicle retested before it may be used on a public road','Notify the insurer and continue driving'], answer: 2 },
-      { q: 'Which lighting requirement is compulsory on a South African motor vehicle?', options: ['At least one functioning headlamp is sufficient','Both headlamps must function correctly; brake lights must be operational','Only the left headlamp needs to function if the right fails','Headlamps are optional in daylight hours'], answer: 1 },
+      { q: "All lamps fitted to a light motor vehicle must be:", options: ["Only the headlamps need to work","Undamaged, unobscured, properly secured and capable of being lit at all times","Working only at night","Replaced every year"], answer: 1 },
       { q: 'A vehicle with excessively worn brake pads that are metal-on-metal:', options: ['May still be driven carefully at reduced speed','Is not roadworthy and may not be used on a public road until repaired','May be driven only in daylight hours','Is only a roadworthy concern at the annual vehicle inspection'], answer: 1 },
     ],
   },
@@ -467,7 +467,7 @@ export default function RoadRulesGauntlet({ onBack, onPass }) {
 
   const startRound = useCallback((roundId) => {
     const round = ROUNDS.find(r => r.id === roundId);
-    const shuffled = [...round.questions].sort(() => Math.random() - 0.5);
+    const shuffled = shuffleCopy(round.questions);
     setActiveRound(roundId);
     setQuestions(prepareAll(shuffled));
     setQIndex(0);

@@ -7,54 +7,54 @@ import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 import { recordGameAnswer } from '../utils/masteryStore.js';
 
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
 // Build multi-format questions from road markings data
 function buildQuestions() {
   const qs = [];
 
+  // Distractors never come from the same image or "family" (e.g. RTM3/RTM4 share
+  // a drawing and the same action) so there is always exactly one correct answer.
+  const others = (marking) => ROAD_MARKINGS.filter(m => m.id !== marking.id
+    && !(m.img && m.img === marking.img)
+    && !(m.family && m.family === marking.family));
+  const src = (m) => `${m.name} (${m.code}) — ${m.ref}`;
+
   ROAD_MARKINGS.forEach(marking => {
-    // Q1: What is this marking called?
-    const wrongNames = shuffle(ROAD_MARKINGS.filter(m => m.id !== marking.id)).slice(0, 3).map(m => m.name);
+    // Q1: identify the marking — only when its official drawing is shown
+    if (marking.img) {
+      qs.push({
+        marking,
+        qtype: 'name',
+        question: 'What is this road marking called?',
+        correct: marking.name,
+        options: shuffle([marking.name, ...shuffle(others(marking)).slice(0, 3).map(m => m.name)]),
+        explanation: `${marking.meaning} Source: ${src(marking)}`,
+        img: marking.img,
+      });
+    }
+
+    // Q2: meaning
     qs.push({
       marking,
-      qtype: 'name',
-      question: `What is this road marking called?`,
-      correct: marking.name,
-      options: shuffle([marking.name, ...wrongNames]),
-      explanation: marking.meaning,
+      qtype: 'meaning',
+      question: marking.img ? 'What does this road marking mean?' : `What does the "${marking.name}" marking (${marking.code}) mean?`,
+      correct: marking.meaning,
+      options: shuffle([marking.meaning, ...shuffle(others(marking)).slice(0, 3).map(m => m.meaning)]),
+      explanation: `${marking.action} Source: ${src(marking)}`,
       img: marking.img,
     });
 
-    // Q2: What does the colour mean? (for colour-coded markings)
-    if (marking.colour && marking.colour !== 'White') {
-      qs.push({
-        marking,
-        qtype: 'colour',
-        question: `A ${marking.colour.toLowerCase()} line or kerb on the road means:`,
-        correct: marking.meaning,
-        options: shuffle([
-          marking.meaning,
-          ...shuffle(ROAD_MARKINGS.filter(m => m.colour !== marking.colour)).slice(0, 3).map(m => m.meaning.slice(0, 60) + '...')
-        ]).slice(0, 4),
-        explanation: `${marking.colour} markings: ${marking.meaning}`,
-        img: marking.img,
-      });
-    }
-
-    // Q3: What must you do?
-    if (marking.action && marking.action.length > 10) {
-      const wrongActions = shuffle(ROAD_MARKINGS.filter(m => m.id !== marking.id && m.action?.length > 10)).slice(0, 3).map(m => m.action.slice(0, 70));
-      qs.push({
-        marking,
-        qtype: 'action',
-        question: `You see ${marking.name} on the road. What must you do?`,
-        correct: marking.action.slice(0, 70),
-        options: shuffle([marking.action.slice(0, 70), ...wrongActions]),
-        explanation: marking.action,
-        img: marking.img,
-      });
-    }
+    // Q3: required action
+    qs.push({
+      marking,
+      qtype: 'action',
+      question: `You see the "${marking.name}" marking (${marking.code}). What must you do?`,
+      correct: marking.action,
+      options: shuffle([marking.action, ...shuffle(others(marking)).slice(0, 3).map(m => m.action)]),
+      explanation: `${marking.meaning} Source: ${src(marking)}`,
+      img: marking.img,
+    });
   });
 
   // Colour rule questions
@@ -62,9 +62,9 @@ function buildQuestions() {
     const wrongMeanings = KEY_MARKING_COLOURS.filter(c => c.colour !== colour).map(c => c.meaning);
     qs.push({
       qtype: 'colour-rule',
-      question: `What do ${colour.toLowerCase()} road markings or kerb lines mean?`,
+      question: `Which markings are painted ${colour.toLowerCase()}?`,
       correct: meaning,
-      options: shuffle([meaning, ...wrongMeanings, 'Guidance only — no legal restriction']).slice(0, 4),
+      options: shuffle([meaning, ...wrongMeanings]),
       explanation: `${colour} markings: ${meaning}`,
     });
   });
@@ -72,30 +72,25 @@ function buildQuestions() {
   // Box junction specific
   qs.push({
     qtype: 'rule',
-    question: 'You may enter a yellow box junction ONLY if:',
-    correct: 'Your exit road is clear and you can drive straight through without stopping.',
+    question: 'You may enter a box junction (RM10) ONLY if:',
+    correct: 'You will be able to drive through without stopping inside the box.',
     options: shuffle([
-      'Your exit road is clear and you can drive straight through without stopping.',
-      'The traffic light is green.',
-      'You intend to turn and the way is clear.',
+      'You will be able to drive through without stopping inside the box.',
+      'The traffic light is green, even if your exit is blocked.',
+      'You hoot first.',
       'No pedestrians are crossing.',
     ]),
-    explanation: 'A box junction prevents gridlock. You may only enter if you can EXIT immediately. Even with a green light, you must wait outside if the exit is blocked.',
+    explanation: 'SGN RM10: do not stop in the demarcated box, and make sure you can drive through the intersection before entering it — even on a green light.',
     img: 'box-junction.jpg',
   });
 
   // Parking near crossing
   qs.push({
     qtype: 'rule',
-    question: 'How far from a pedestrian crossing may you NOT park?',
-    correct: 'Within 9 metres of the crossing lines',
-    options: shuffle([
-      'Within 9 metres of the crossing lines',
-      'Within 5 metres',
-      'Within 1.5 metres',
-      'Within 3 metres',
-    ]),
-    explanation: 'You may not park within 9 m of a pedestrian crossing. This ensures pedestrians are visible to drivers before they reach the crossing.',
+    question: 'In an urban area, you may not park within how far of the side of a pedestrian crossing from which you approach?',
+    correct: '9 metres',
+    options: shuffle(['9 metres', '5 metres', '1.5 metres', '3 metres']),
+    explanation: 'Rules of the Road §6.47: no parking within 9 m of the side from which you approach a pedestrian crossing (5 m from an intersection, 1.5 m from a fire hydrant).',
   });
 
   return shuffle(qs);

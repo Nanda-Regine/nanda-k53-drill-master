@@ -21,7 +21,7 @@ export default function Onboarding({ onComplete }) {
           <li><strong style={{ color: "#E8EDE0" }}>Know Your Numbers</strong> — memorise the critical K53 values first</li>
           <li><strong style={{ color: "#E8EDE0" }}>Standard Gauntlet</strong> — drill all 9 rounds until you pass each</li>
           <li><strong style={{ color: "#E8EDE0" }}>Hybrid Gauntlet</strong> — master the tricky "EXCEPT" traps</li>
-          <li><strong style={{ color: "#FFB612" }}>Mock Exam</strong> — 68 questions, real test format, 45 minutes</li>
+          <li><strong style={{ color: "#FFB612" }}>Mock Exam</strong> — 64 questions in the official format: 28 signs, 28 rules, 8 controls</li>
         </ol>
       ),
       cta: t('ob2_cta'),

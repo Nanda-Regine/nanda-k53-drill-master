@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { T } from '../theme.js';
 import { sfx } from '../utils/sounds.js';
 import { ROAD_SIGNS, CRISP_SIGNS } from '../data/roadSigns.js';
+import { shuffleCopy } from '../utils/quizHelpers.js';
 
 const hapticCorrect = () => { try { navigator.vibrate?.(30); } catch {} };
 const hapticWrong   = () => { try { navigator.vibrate?.([60, 30, 60]); } catch {} };
@@ -52,7 +53,7 @@ const ALL_PAIRS = buildPairs();
 
 function buildRounds(n) {
   const rounds = [];
-  const shuffled = [...ALL_PAIRS].sort(() => Math.random() - 0.5);
+  const shuffled = shuffleCopy(ALL_PAIRS);
 
   for (let i = 0; i < n; i++) {
     const pair = shuffled[i % shuffled.length];

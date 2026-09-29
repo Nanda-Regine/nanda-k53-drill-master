@@ -10,7 +10,7 @@ export const BADGE_DEFS = [
   { id: "streak_3",          emoji: "🔥", label: "3-Day Streak",      desc: "Practised 3 days in a row" },
   { id: "streak_7",          emoji: "🏆", label: "7-Day Warrior",     desc: "Practised 7 days in a row" },
   { id: "streak_30",         emoji: "👑", label: "30-Day Legend",     desc: "Practised 30 days in a row" },
-  { id: "mock_pass",         emoji: "📋", label: "Ready for DLTC",    desc: "Passed the Mock Exam (75%+)" },
+  { id: "mock_pass",         emoji: "📋", label: "Ready for DLTC",    desc: "Passed every section of a full mock exam" },
   { id: "all_rounds",        emoji: "🎖️", label: "Gauntlet Complete", desc: "Completed all rounds in any gauntlet" },
   { id: "speed_ace",         emoji: "⚡", label: "Speed Ace",          desc: "85%+ in Speed Match" },
   { id: "accuracy_master",   emoji: "🎯", label: "Accuracy Master",   desc: "80%+ overall accuracy (50+ questions)" },

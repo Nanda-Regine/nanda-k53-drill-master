@@ -38,8 +38,8 @@ Render: `<img src={/signs/filename.jpg} />`
 ```
 
 ## Key K53 Facts (for questions)
-- Code 8 exam: 68Q total (17 signs + 24 rules + 27 controls) | Pass: 75% per section
-- Code 1 exam: 40Q total (13 signs + 13 rules + 14 controls) | Pass: 75% per section
+- Learner's test (all codes): 64Q = 28 signs/signals/markings (pass 23) + 28 rules (pass 22) + 8 controls (pass 6); EVERY section must pass (source: updated-official-DLTC-docs/dltc-eng.pdf §5.4)
+- Exam questions live in src/data/learnerTestBank.js (each cites its source section) — the single source of truth
 - Urban speed limit: 60 km/h | Freeway: 120 km/h | Outside urban: 100 km/h
 - Following distance: 2 seconds minimum (3 seconds wet)
 - BAC limit: 0.05g/100ml (non-professional) | 0.02g/100ml (professional)
@@ -53,7 +53,7 @@ Render: `<img src={/signs/filename.jpg} />`
 - HybridGauntlet.jsx — mixed all-topics
 - PatternTrainer.jsx — numbers/distances pattern flash
 - RoadRulesGauntlet.jsx — 15 rounds, road rules
-- MockExam.jsx — 68Q timed exam (Code 8)
+- K53LearnerExam.jsx — the ONE exam engine (variant lmv|mc); learner_exam, mockexam and moto_exam all route here
 - VehicleControls.jsx — vehicle controls only
 - PDPPrep.jsx — PDP professional driving prep
 - MotorcycleGauntlet.jsx — Code 1/2 gauntlet

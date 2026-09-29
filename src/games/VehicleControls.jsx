@@ -3,7 +3,7 @@ import { T } from '../theme.js';
 import { recordResult } from '../utils/progressHistory.js';
 import { recordAnswer } from '../utils/spacedRepetition.js';
 import { recordGameAnswer } from '../utils/masteryStore.js';
-import { prepareAll } from '../utils/quizHelpers.js';
+import { prepareAll, shuffleCopy } from '../utils/quizHelpers.js';
 
 // ── Question bank ─────────────────────────────────────────────────────────────
 // Covers lights, wipers, bonnet/boot checks, instrument panel, brakes,
@@ -11,8 +11,8 @@ import { prepareAll } from '../utils/quizHelpers.js';
 const QUESTIONS = [
   // ── Lights ────────────────────────────────────────────────────────────────
   { id: 'vc01', cat: 'Lights', q: 'When must you switch on your headlights?', options: ['Only when it is completely dark','Between sunset and sunrise, and whenever persons or vehicles are not clearly visible at 150 m','Only at night after 21:00','Only in a tunnel'], answer: 1 },
-  { id: 'vc02', cat: 'Lights', q: 'What do you use fog lights for?', options: ['Whenever it is dark','Only when visibility is seriously reduced by fog, mist or rain','As an alternative to headlights','To signal you want to overtake'], answer: 1 },
-  { id: 'vc03', cat: 'Lights', q: 'When must you switch from high beam to low beam?', options: ['Only when another driver flashes you','When approaching oncoming traffic and when following another vehicle closely','On any road with street lighting','After 22:00'], answer: 1 },
+  { id: 'vc02', cat: 'Lights', q: 'What do you use fog lights for?', options: ['Whenever it is dark','Only in poor visibility caused by snow, fog, mist, dust or smoke — not rain','As an alternative to headlights','To signal you want to overtake'], answer: 1 },
+  { id: 'vc03', cat: 'Lights', q: 'When must you switch from high beam to low beam?', options: ['Only when another driver flashes you','For oncoming traffic and when following another vehicle','On any road with street lighting','After 22:00'], answer: 1 },
   { id: 'vc04', cat: 'Lights', q: 'What does a flashing amber warning light on a stationary vehicle mean?', options: ['The vehicle is about to turn','The vehicle is a hazard — proceed with caution','The driver is lost','The vehicle is police'], answer: 1 },
   { id: 'vc05', cat: 'Lights', q: 'Parking lights are used to:', options: ['Illuminate the road ahead','Mark a parked vehicle in low visibility — they are NOT for driving','Replace headlights in fog','Replace indicators'], answer: 1 },
   { id: 'vc06', cat: 'Lights', q: 'A broken tail light means:', options: ['You must drive only in daytime','You must repair it before driving at night — other drivers cannot see you','It is a minor issue, drive carefully','Only applies to trucks'], answer: 1 },
@@ -44,23 +44,23 @@ const QUESTIONS = [
 
   // ── Steering & vision ─────────────────────────────────────────────────────
   { id: 'vc24', cat: 'Steering', q: 'Excessive steering wheel play (before wheels respond) indicates:', options: ['Normal for older vehicles','Wear in steering components — must be checked by a mechanic','Power steering running low','Wheel alignment only'], answer: 1 },
-  { id: 'vc25', cat: 'Steering', q: 'Before moving off, you should check mirrors in which order?', options: ['Left, right, left','Interior mirror, right side mirror, left side mirror, over shoulder','Right, left, right','Side mirrors only'], answer: 1 },
+  { id: "vc25", q: "K53: before moving off you must first:", options: ["Check the rear-view mirror(s) and the appropriate blind spot","Hoot to warn others","Signal for 5 seconds only","Look in the interior mirror only"], answer: 0, cat: "Steering" },
   { id: 'vc26', cat: 'Steering', q: 'Adjusting your seat before driving is important because:', options: ['It is a comfort preference only','You must be able to reach all controls, see over the steering wheel and use pedals fully','It is required by law','Only matters for long trips'], answer: 1 },
   { id: 'vc27', cat: 'Steering', q: 'A vibrating steering wheel at high speed usually indicates:', options: ['Normal','Tyre imbalance or worn suspension — have it checked','Engine misfiring','Low fuel'], answer: 1 },
 
   // ── Seatbelts ─────────────────────────────────────────────────────────────
   { id: 'vc28', cat: 'Seatbelts', q: 'Who is responsible for ensuring all passengers under 14 are belted?', options: ['The passengers themselves','The driver','The vehicle owner','Only the parent in the vehicle'], answer: 1 },
   { id: 'vc29', cat: 'Seatbelts', q: 'A seat belt must be worn:', options: ['Only on freeways','At all times in a moving vehicle where one is fitted','Only by the driver','Only over 80 km/h'], answer: 1 },
-  { id: 'vc30', cat: 'Seatbelts', q: 'Wearing a seatbelt incorrectly (e.g. under the arm) is:', options: ['Acceptable if more comfortable','Dangerous — reduces protection and is still an offence','Legal in SA','Only an issue in a head-on collision'], answer: 1 },
+  { id: 'vc30', cat: 'Seatbelts', q: 'Wearing a seatbelt incorrectly (e.g. under the arm) is:', options: ['Acceptable if more comfortable','Dangerous — it greatly reduces the protection the belt gives','Legal in SA','Only an issue in a head-on collision'], answer: 1 },
 
   // ── Tyres ─────────────────────────────────────────────────────────────────
   { id: 'vc31', cat: 'Tyres', q: 'The minimum legal tread depth for tyres in South Africa is:', options: ['0.5 mm','1 mm','1.6 mm','3 mm'], answer: 1 },
   { id: 'vc32', cat: 'Tyres', q: 'Overinflated tyres are dangerous because they:', options: ['Wear faster on the edges','Reduce the contact patch and can cause loss of control — especially in corners','Are more fuel efficient but unsafe','Cannot be patched when punctured'], answer: 1 },
   { id: 'vc33', cat: 'Tyres', q: 'Underinflated tyres cause:', options: ['Better wet-weather grip','Excessive heat build-up, faster tread wear on edges, and risk of blowout','No significant danger','Better steering response'], answer: 1 },
-  { id: 'vc34', cat: 'Tyres', q: 'When should you check tyre pressure?', options: ['Only when a tyre looks flat','When the tyres are COLD — before a journey or after parking for at least 3 hours','Immediately after driving at high speed','Only at a petrol station'], answer: 1 },
+  { id: 'vc34', cat: 'Tyres', q: 'When should you check tyre pressure?', options: ['Only when a tyre looks flat','When the tyres are cold — before a journey','Immediately after driving at high speed','Only at a petrol station'], answer: 1 },
   { id: 'vc35', cat: 'Tyres', q: 'A front tyre blowout at speed will cause the vehicle to:', options: ['Swerve toward the blown tyre side — grip steering firmly and do NOT brake hard','Stop immediately','Swerve away from the blown tyre','Have no effect on steering'], answer: 0 },
   { id: 'vc36', cat: 'Tyres', q: 'The correct response to a rear tyre blowout is:', options: ['Brake hard immediately','Hold the steering firmly, ease off accelerator gradually, and steer straight — brake gently only after stabilising','Accelerate to keep momentum','Swerve to the safe side of the road'], answer: 1 },
-  { id: 'vc37', cat: 'Tyres', q: 'Mixing tyres of different sizes or types on the same axle is:', options: ['Acceptable if they are close in size','Dangerous and illegal — it causes unequal braking and handling','Fine for rear wheels only','Only a problem on 4x4 vehicles'], answer: 1 },
+  { id: 'vc37', cat: 'Tyres', q: 'Mixing tyres of different sizes or types on the same axle is:', options: ['Acceptable if they are close in size','Dangerous — it causes unequal braking and handling','Fine for rear wheels only','Only a problem on 4x4 vehicles'], answer: 1 },
 
   // ── Engine checks ─────────────────────────────────────────────────────────
   { id: 'vc38', cat: 'Engine', q: 'Engine oil must be checked:', options: ['Only at a service','On a level surface with the engine OFF for a few minutes (cold check)','While the engine is running for accuracy','Only when the warning light comes on'], answer: 1 },
@@ -71,11 +71,11 @@ const QUESTIONS = [
   { id: 'vc43', cat: 'Engine', q: 'White smoke from the exhaust (when warm) usually indicates:', options: ['Diesel engine — normal','Coolant burning in the engine — head gasket or cylinder head failure','Cold morning — normal','Lean fuel mixture'], answer: 1 },
 
   // ── Gears & Clutch ────────────────────────────────────────────────────────
-  { id: 'vc44', cat: 'Gears', q: 'The correct sequence for changing up a gear is:', options: ['Clutch in → change gear → clutch out gradually → accelerate','Accelerate → clutch in → change gear → clutch out','Clutch in → accelerate → change gear','Change gear → clutch in → clutch out'], answer: 0 },
+  { id: "vc44", q: "K53: when changing UP a gear in a manual car, you:", options: ["Depress the clutch while releasing the accelerator, select the gear, then release the clutch while accelerating smoothly","Accelerate hard, then change gear without the clutch","Change gear first, then press the clutch","Press the clutch and accelerator together"], answer: 0, cat: "Gears" },
   { id: 'vc45', cat: 'Gears', q: 'Riding the clutch (keeping your foot slightly on it while driving) causes:', options: ['Better fuel economy','Premature clutch wear and overheating — keep your foot off the clutch when not changing gear','Smoother gear changes','No harm on modern vehicles'], answer: 1 },
-  { id: 'vc46', cat: 'Gears', q: 'On a steep downhill, you should engage a lower gear to:', options: ['Save fuel','Use engine braking to reduce speed and prevent brake fade','Protect the gearbox','Keep the engine from stalling'], answer: 1 },
+  { id: "vc46", q: "Going down a steep hill your speed keeps rising and you must brake continuously. K53 says:", options: ["Brake to a suitable speed first, then engage a lower gear","Select neutral to save fuel","Switch the engine off","Use only the handbrake"], answer: 0, cat: "Gears" },
   { id: 'vc47', cat: 'Gears', q: 'Coasting (rolling in neutral or with the clutch depressed) downhill is dangerous because:', options: ['It damages the gearbox','You have no engine braking, travel faster, and brake harder causing brake fade','The engine may overspeed','It is illegal at all times'], answer: 1 },
-  { id: 'vc48', cat: 'Gears', q: 'When approaching a red traffic light, you should:', options: ['Keep in top gear until just before stopping','Change to lower gears progressively as you slow, then clutch in before stopping','Put it in neutral immediately and coast','Never use the engine — brake only'], answer: 1 },
+  { id: "vc48", q: "K53: approaching a red traffic light in a manual car, you should:", options: ["Check mirrors, brake smoothly and disengage the clutch just before the car stops","Change down through every gear to slow the car","Select neutral early and coast","Keep your foot on the clutch the whole way"], answer: 0, cat: "Gears" },
 
   // ── Handbrake ─────────────────────────────────────────────────────────────
   { id: 'vc49', cat: 'Handbrake', q: 'The handbrake must always be applied when:', options: ['The vehicle is stopped at a traffic light','The vehicle is parked — on a slope, apply firmly and leave in gear','Only on steep hills','The footbrake fails'], answer: 1 },
@@ -87,7 +87,7 @@ const QUESTIONS = [
   { id: 'vc53', cat: 'Horn', q: 'You may NOT use your hooter except:', options: ['To greet someone you know','To warn others of danger and to avoid an accident','Whenever you think it necessary','In a built-up area at any time'], answer: 1 },
 
   // ── Indicators ────────────────────────────────────────────────────────────
-  { id: 'vc54', cat: 'Indicators', q: 'When must you signal before turning?', options: ['Exactly 10 m before','Exactly 50 m before','In good time, so other road users can clearly see your intention','Only as you start the turn'], answer: 2 },
+  { id: 'vc54', cat: 'Indicators', q: 'When must you signal before turning?', options: ['Only when a car is behind you','Exactly 50 m before','In good time, so other road users can clearly see your intention','Only as you start the turn'], answer: 2 },
   { id: 'vc55', cat: 'Indicators', q: 'You MUST signal when:', options: ['Only in heavy traffic','Changing direction, changing lanes, moving off, or stopping — always indicate your intentions','Only when other vehicles are present','Only on freeways'], answer: 1 },
   { id: 'vc56', cat: 'Indicators', q: 'Hazard lights (all four indicators flashing) may be used when:', options: ['Driving slowly in traffic as a warning','The vehicle is stationary and is a hazard to others, or to warn of a hazard ahead','Whenever it is raining','To thank another driver'], answer: 1 },
   { id: 'vc57', cat: 'Indicators', q: 'If your turn signal fails to cancel automatically after a turn, you must:', options: ['Continue driving — it is a minor issue','Cancel it manually immediately — a signal left on misleads other drivers','Drive to a workshop before continuing','Flash your headlights to warn others'], answer: 1 },
@@ -96,7 +96,7 @@ const QUESTIONS = [
   { id: 'vc58', cat: 'Mirrors', q: 'You should check your mirrors approximately every:', options: ['Minute','5–8 seconds in normal driving','30 seconds','Only when you need to manoeuvre'], answer: 1 },
   { id: 'vc59', cat: 'Mirrors', q: 'The interior (rear-view) mirror should be adjusted so you can see:', options: ['The road ahead','The full rear window without moving your head','Both side mirrors','The back seat passengers'], answer: 1 },
   { id: 'vc60', cat: 'Mirrors', q: 'Side mirrors cannot replace the blind spot check because:', options: ['They are too far away','They have a limited field of view that leaves a blind zone beside and slightly behind the vehicle','They are only for parking','The law requires a physical check'], answer: 1 },
-  { id: 'vc61', cat: 'Mirrors', q: 'A dirty or fogged rear window must be cleared before driving because:', options: ['It reduces fuel economy','It severely limits rear visibility — illegal to drive with impaired rear vision','Only an issue at night','Traffic police check for this'], answer: 1 },
+  { id: 'vc61', cat: 'Mirrors', q: 'A dirty or fogged rear window must be cleared before driving because:', options: ['It reduces fuel economy','It severely limits your view of traffic to the rear','Only an issue at night','Traffic police check for this'], answer: 1 },
 
   // ── Fuel system ───────────────────────────────────────────────────────────
   { id: 'vc62', cat: 'Fuel', q: 'Running a diesel engine completely out of fuel causes:', options: ['No problem — just refuel','Air entry into the fuel system requiring bleeding — costly and time-consuming','Immediate engine cutoff with no damage','Only starter motor wear'], answer: 1 },
@@ -104,7 +104,7 @@ const QUESTIONS = [
   { id: 'vc64', cat: 'Fuel', q: 'Filling a petrol vehicle with diesel (or vice versa) causes:', options: ['Minor engine roughness that clears','Serious engine damage — do not start the engine if misfuelled','No problem if the tank is empty first','Only affects emissions'], answer: 1 },
 
   // ── Defrost & demisting ───────────────────────────────────────────────────
-  { id: 'vc65', cat: 'Vision', q: 'You may only drive when all windows are:', options: ['At least 50% clear','Fully clear of condensation, frost and dirt — all-round visibility is a legal requirement','Only the windscreen — rear window is optional','Clear on the driver\'s side only'], answer: 1 },
+  { id: 'vc65', cat: 'Vision', q: 'You may only drive when all windows are:', options: ['At least 50% clear','Clear — you must have a full and clear view of the road ahead and to the left and right','Only the windscreen — rear window is optional','Clear on the driver\'s side only'], answer: 1 },
   { id: 'vc66', cat: 'Vision', q: 'The fastest way to demist a fogged windscreen is:', options: ['Wipe it with your hand','Turn on the air conditioning (which dries the air) combined with the heater blower aimed at the screen','Open all windows fully','Leave the engine running — it clears automatically'], answer: 1 },
 
   // ── Emergency Controls ────────────────────────────────────────────────────
@@ -130,18 +130,18 @@ const QUESTIONS = [
 
   // ── Towing ────────────────────────────────────────────────────────────────
   { id: 'vc82', cat: 'Towing', q: 'A trailer being towed on a South African public road must have:', options: ['Only a matching number plate','Functioning brake lights and indicators synchronised with the towing vehicle, plus a rear number plate','Only tail lights — indicators are not required on trailers','No lights if towed in daylight'], answer: 1 },
-  { id: 'vc83', cat: 'Towing', q: 'Safety chains between the towing vehicle and trailer are required because:', options: ['They are recommended but not compulsory','If the hitch coupling fails, the chains prevent the trailer from completely separating and becoming a runaway hazard','They act as secondary brakes for the trailer','They are only required on trailers over 750 kg'], answer: 1 },
+  { id: 'vc83', cat: 'Towing', q: 'Safety chains between the towing vehicle and trailer are used because:', options: ['They are recommended but not compulsory','If the hitch coupling fails, the chains prevent the trailer from completely separating and becoming a runaway hazard','They act as secondary brakes for the trailer','They are only required on trailers over 750 kg'], answer: 1 },
   { id: 'vc84', cat: 'Towing', q: 'If your trailer begins to sway (snake) at speed, you should:', options: ['Accelerate firmly to stabilise the combination','Ease off the accelerator gently and hold the steering wheel straight — do NOT brake hard or make sharp steering inputs','Brake firmly and steer into the sway','Immediately engage a lower gear'], answer: 1 },
   { id: 'vc85', cat: 'Towing', q: 'When loading a trailer, heavy items should be positioned:', options: ['At the very rear to reduce nose weight on the hitch','Over or just ahead of the trailer axle — excessive rear weight causes trailer sway, excessive nose weight overloads the hitch','Loaded high for easy access when unloading','Spread evenly only on the left side'], answer: 1 },
   { id: 'vc86', cat: 'Towing', q: "A trailer's number plate light must:", options: ['Be optional if the towing vehicle plate is visible','Illuminate the rear number plate so it is clearly readable — it must work with the towing vehicle\'s lights','Only be required if towing at night','Only be required for commercial trailers'], answer: 1 },
 
   // ── Lights (additional) ───────────────────────────────────────────────────
   { id: 'vc87', cat: 'Lights', q: 'Parking lights (side lights) are designed for:', options: ['Driving slowly in a well-lit residential street','Driving in fog at low speed','Making a parked or stationary vehicle visible to others — NOT for driving','Replacing low beams in urban areas'], answer: 2 },
-  { id: 'vc88', cat: 'Lights', q: 'Rear fog lights (red) should only be switched on when visibility falls below:', options: ['200 m','150 m','100 m','50 m'], answer: 2 },
+  { id: "vc88", q: "Fog lamps (front or rear) may be switched on only in poor visibility caused by:", options: ["Snow, fog, mist, dust or smoke","Heavy rain","Darkness","Any reduced visibility"], answer: 0, cat: "Lights" },
 
   // ── Horn (additional) ─────────────────────────────────────────────────────
   { id: 'vc89', cat: 'Horn', q: 'The hooter (horn) may legally be used:', options: ['To greet a friend you recognise on the road','To warn other road users and help avoid an accident — not for general communication','When another driver has made you angry','When waiting outside a building for someone to come out'], answer: 1 },
-  { id: 'vc90', cat: 'Horn', q: 'In a built-up (urban) area, unnecessary or excessive use of the hooter is:', options: ['Permitted at any hour','Prohibited — it disturbs the public and may constitute an offence under the NRTA','Permitted during daytime hours only','Permitted only to warn pedestrians'], answer: 1 },
+  { id: 'vc90', cat: 'Horn', q: 'In a built-up (urban) area, unnecessary or excessive use of the hooter is:', options: ['Permitted at any hour','Prohibited — the hooter may only be used when necessary on the grounds of safety','Permitted during daytime hours only','Permitted only to warn pedestrians'], answer: 1 },
 
   // ── Fuel (additional) ─────────────────────────────────────────────────────
   { id: 'vc91', cat: 'Fuel', q: 'You must switch the engine OFF before refuelling because:', options: ['The fuel gauge reads incorrectly with the engine running','A running engine can ignite fuel vapour, causing a fire or explosion','Only relevant for older carburettor engines','It is required by the manufacturer only, not by law'], answer: 1 },
@@ -204,7 +204,7 @@ export default function VehicleControls({ onBack, onPass }) {
     const pool = selectedMode === 'all'
       ? [...QUESTIONS]
       : QUESTIONS.filter(q => q.cat === selectedMode);
-    const shuffled = prepareAll(pool.sort(() => Math.random() - 0.5));
+    const shuffled = prepareAll(shuffleCopy(pool));
     setMode(selectedMode);
     setQuestions(shuffled);
     setQIndex(0);

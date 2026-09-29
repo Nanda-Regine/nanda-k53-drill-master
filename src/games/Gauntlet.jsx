@@ -156,7 +156,7 @@ const TESTS = [
         q: "You're driving a minibus on a freeway (general limit 120km/h). What is YOUR maximum speed?",
         options: ["120 km/h — freeway limit applies","80 km/h","100 km/h","60 km/h"],
         answer: 2,
-        explain: "Buses and minibuses = 100 km/h regardless of road type. The freeway's 120 km/h does NOT apply to them.",
+        explain: "Buses and minibuses = 100 km/h, even on a freeway (lower limits, e.g. 60 km/h in urban areas, still apply). Rules of the Road §6.28.",
       },
       {
         q: "A breakdown vehicle is towing another vehicle. Maximum speed?",
@@ -660,9 +660,9 @@ const TESTS = [
       },
       {
         q: "What is the correct hand signal for turning LEFT in a light motor vehicle (K53 Module 7)?",
-        options: ["Extend left arm horizontally from the window","Extend right arm sideward from shoulder, then turn forearm VERTICALLY DOWNWARD from the elbow","Extend right arm fully horizontal with palm to the front","Extend right arm with forearm vertical and upward"],
+        options: ["Extend left arm horizontally from the window","Extend right arm sideward, forearm VERTICALLY DOWNWARD, moving it in an anti-clockwise circle","Extend right arm fully horizontal with palm to the front","Extend right arm with forearm vertical and upward"],
         answer: 1,
-        explain: "K53 LMV Module 7: For left turn, extend the RIGHT arm sideward from the shoulder, then turn the forearm VERTICALLY DOWNWARD from the elbow. SA hand signals are given through the driver's right-side window.",
+        explain: "K53 LMV Module 7: For left turn, extend the RIGHT arm sideward from the shoulder, turn the forearm VERTICALLY DOWNWARD from the elbow and move it in a circular anti-clockwise motion. SA hand signals are given through the driver's right-side window.",
       },
       {
         q: "What is the correct hand signal for stopping or sudden speed reduction (K53 Module 9)?",

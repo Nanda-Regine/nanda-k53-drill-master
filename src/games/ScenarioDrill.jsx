@@ -4,6 +4,7 @@ import { T } from '../theme.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 import { recordGameAnswer } from '../utils/masteryStore.js';
+import { stableId } from '../utils/quizHelpers.js';
 
 // ── All questions from the 56 K53 LMV modules (lmv-eng1 + lmv-eng2)
 // Every question is verified against official DLTC documentation
@@ -46,16 +47,11 @@ const ALL_QUESTIONS = [
     explanation: 'Cancel the signal as soon as you have completed the turn. A signal left on after a turn misleads other road users.',
   },
   {
-    cat: 'signals',
-    q: 'You are about to move off from a parked position. What is the sequence of actions?',
-    correct: 'Signal → Check blind spot → Move off when safe',
-    options: [
-      'Signal → Check blind spot → Move off when safe',
-      'Move off → Signal → Check blind spot',
-      'Check blind spot → Move off → Signal',
-      'Signal → Move off immediately',
-    ],
-    explanation: 'Before moving off from a stationary position: Signal your intention, then check the blind spot for approaching traffic, then move off only when safe.',
+    cat: "signals",
+    q: "You are about to move off from a parked position. What is the K53 sequence?",
+    correct: "Check mirrors and blind spot → Signal → Observe → Move off when safe",
+    options: ["Check mirrors and blind spot → Signal → Observe → Move off when safe","Move off → Signal → Check blind spot","Signal → Move off immediately","Check blind spot → Move off → Signal"],
+    explanation: "K53 Module 12: check the rear-view mirror(s) and appropriate blind spot, signal intention, select gear, observe, release the parking brake and move off — then cancel the signal.",
   },
   {
     cat: 'signals',
@@ -70,28 +66,18 @@ const ALL_QUESTIONS = [
     explanation: 'Your brake lights warn following drivers. Pressing the brake lightly before stopping hard gives drivers behind more reaction time.',
   },
   {
-    cat: 'signals',
-    q: 'A traffic officer is standing at an intersection facing you with one arm extended sideways. What does this mean?',
-    correct: 'Stop — you must not proceed',
-    options: [
-      'Stop — you must not proceed',
-      'Slow down and proceed with caution',
-      'You may proceed straight through',
-      'Yield to oncoming traffic',
-    ],
-    explanation: 'An officer facing you with arm extended to the side is giving the STOP signal to traffic approaching from your direction. You must stop and wait.',
+    cat: "signals",
+    q: "A traffic officer at an intersection signals you to stop, but your traffic light is green. What must you do?",
+    correct: "Stop — the officer's signal takes precedence over the traffic light",
+    options: ["Stop — the officer's signal takes precedence over the traffic light","Proceed — the green light has priority","Hoot and proceed slowly","Proceed if the intersection looks clear"],
+    explanation: "SGN §8.1 (SS1): the traffic officer's signals take precedence over any other traffic signal.",
   },
   {
-    cat: 'signals',
-    q: 'A scholar patrol officer raises both hands and steps onto the road. What must you do?',
-    correct: 'Stop immediately and allow children to cross',
-    options: [
-      'Stop immediately and allow children to cross',
-      'Slow down and proceed carefully',
-      'Hoot to warn the children',
-      'Only stop if children are already on the road',
-    ],
-    explanation: 'Scholar patrol officers have the same authority as traffic officers. When they display a Stop signal, all traffic must stop until released.',
+    cat: "signals",
+    q: "A scholar patrol is displaying a STOP sign at a crossing. When may you proceed?",
+    correct: "Only when the stop sign has been removed and it is safe to do so",
+    options: ["Only when the stop sign has been removed and it is safe to do so","As soon as the children are on the pavement","After stopping for 3 seconds","Immediately, if you are turning left"],
+    explanation: "K53 Module 37 (Note B): at a scholar patrol crossing, only proceed when the stop sign has been removed and if safe to do so.",
   },
 
   // ── CATEGORY: intersections ────────────────────────────────────────────
@@ -108,28 +94,18 @@ const ALL_QUESTIONS = [
     explanation: 'A stop sign requires a COMPLETE stop every time — even if the road appears clear. This is a legal requirement, not optional.',
   },
   {
-    cat: 'intersections',
-    q: 'At an uncontrolled intersection (no signs or lights), two vehicles arrive simultaneously. Who has right of way?',
-    correct: 'The vehicle on the RIGHT',
-    options: [
-      'The vehicle on the RIGHT',
-      'The vehicle on the LEFT',
-      'The larger vehicle',
-      'The vehicle going straight',
-    ],
-    explanation: 'At an uncontrolled intersection with simultaneous arrival, you must yield to the vehicle on YOUR RIGHT. This is the standard SA right-of-way rule.',
+    cat: "intersections",
+    q: "What does K53 require when you approach an uncontrolled intersection (no signs or signals)?",
+    correct: "Look right, left and ahead for cross traffic, approaching traffic and pedestrians, and proceed only if safe",
+    options: ["Look right, left and ahead for cross traffic, approaching traffic and pedestrians, and proceed only if safe","Always yield to the vehicle on your right","Hoot and proceed","The vehicle going straight always has right of way"],
+    explanation: "K53 Module 39: check mirrors, look right, left and ahead for cross traffic, approaching traffic and pedestrians, slow down/stop if necessary and proceed only when safe. SA law has no general \"yield to the right\" rule at uncontrolled intersections — that rule applies to traffic circles.",
   },
   {
-    cat: 'intersections',
-    q: 'You are at a yield sign. There is traffic on the road you are entering. What must you do?',
-    correct: 'Stop and wait until traffic is clear, then proceed',
-    options: [
-      'Stop and wait until traffic is clear, then proceed',
-      'Slow down but proceed if there is a gap',
-      'Yield means slow down only — you never need to fully stop',
-      'Stop only if an accident is likely',
-    ],
-    explanation: 'A yield sign means give way to traffic on the intersecting road. If traffic is present, you MUST stop before the yield line. You may proceed only when it is safe.',
+    cat: "intersections",
+    q: "You are at a yield sign and there is traffic on the road you are entering. What must you do?",
+    correct: "Give way — slow down and stop if necessary, proceeding only when it is safe",
+    options: ["Give way — slow down and stop if necessary, proceeding only when it is safe","Proceed — yield only means slow down","Hoot and merge","Always stop for 3 seconds"],
+    explanation: "SGN R2: if other traffic is approaching the intersection, reduce speed and, if necessary, stop.",
   },
   {
     cat: 'intersections',
@@ -180,16 +156,11 @@ const ALL_QUESTIONS = [
     explanation: 'Flashing red = Stop sign. You must come to a complete stop, then proceed only when it is safe. This is NOT the same as flashing amber.',
   },
   {
-    cat: 'intersections',
-    q: 'What does a FLASHING AMBER traffic light mean?',
-    correct: 'Treat it as an uncontrolled intersection — yield to the right',
-    options: [
-      'Treat it as an uncontrolled intersection — yield to the right',
-      'Stop and wait for the light to change',
-      'Treat it as a stop sign',
-      'Proceed immediately — amber means caution',
-    ],
-    explanation: 'Flashing amber means the traffic light is not fully operational. Treat the intersection as uncontrolled — yield to the vehicle on your RIGHT.',
+    cat: "intersections",
+    q: "What does a FLASHING AMBER traffic light mean?",
+    correct: "Drive on carefully, but yield to pedestrians",
+    options: ["Drive on carefully, but yield to pedestrians","Treat it as a stop sign","Stop and wait for green","Yield to the vehicle on your right"],
+    explanation: "SGN §8: flashing amber disc — drive on carefully, but yield to pedestrians; pedestrians may cross. K53 Module 43: if vehicles must stop, right of way goes to the traffic that stopped first.",
   },
   {
     cat: 'intersections',
@@ -225,43 +196,28 @@ const ALL_QUESTIONS = [
       'You must slow down before turning right',
       'Green arrow means yield to oncoming traffic and turn right',
     ],
-    explanation: 'A flashing green arrow is a filter arrow — you may ONLY proceed in the direction it points (right). Oncoming traffic still has a red light, so you may turn without waiting for a gap.',
+    explanation: 'A flashing green arrow is a filter arrow — you may ONLY proceed in the direction it points (right). You have right of way in that direction, but still subject to pedestrians and vehicles lawfully within the intersection (K53 Module 41–42).',
   },
   {
-    cat: 'intersections',
-    q: 'At a TRAFFIC CIRCLE (roundabout), to whom must you yield?',
-    correct: 'Traffic already travelling in the circle',
-    options: [
-      'Traffic already travelling in the circle',
-      'Traffic coming from the right outside the circle',
-      'Traffic coming from the left',
-      'No one — you proceed when there is space',
-    ],
-    explanation: 'At a full traffic circle, you must yield to vehicles already circulating inside the circle. The R2.2 yield sign confirms this. Travel anti-clockwise.',
+    cat: "intersections",
+    q: "At a TRAFFIC CIRCLE (roundabout), to whom must you yield?",
+    correct: "Traffic approaching from your right (and pedestrians), unless signs direct otherwise",
+    options: ["Traffic approaching from your right (and pedestrians), unless signs direct otherwise","Traffic coming from the left","No one — you proceed when there is space","Only heavy vehicles"],
+    explanation: "Rules of the Road §6.46 and K53 Module 45: yield to traffic from the right and/or pedestrians, unless road traffic signs or signals direct otherwise. In South Africa traffic moves CLOCKWISE around a circle.",
   },
   {
-    cat: 'intersections',
-    q: 'At a MINI-TRAFFIC CIRCLE, two vehicles arrive simultaneously. What is the rule?',
-    correct: 'Yield to the vehicle on your RIGHT (the one crossing first)',
-    options: [
-      'Yield to the vehicle on your RIGHT (the one crossing first)',
-      'Yield to the vehicle on your left',
-      'Both vehicles stop and the larger one goes first',
-      'The vehicle going straight has priority',
-    ],
-    explanation: 'At a mini-circle, the rule is different from a full roundabout. With simultaneous arrival, yield to the vehicle on your RIGHT — the same rule as an uncontrolled intersection.',
+    cat: "intersections",
+    q: "At a MINI-CIRCLE, who may proceed first?",
+    correct: "The driver who crosses his or her yield line first",
+    options: ["The driver who crosses his or her yield line first","Always the vehicle on your right","The larger vehicle","The vehicle going straight"],
+    explanation: "SGN R2.2 and K53 Module 45 (Note B): at a mini-circle, right of way is given to traffic crossing the yield line first. Signal left or right as at a normal intersection.",
   },
   {
-    cat: 'intersections',
-    q: 'In which direction must you travel around a traffic circle or roundabout?',
-    correct: 'Anti-clockwise (counter-clockwise)',
-    options: [
-      'Anti-clockwise (counter-clockwise)',
-      'Clockwise',
-      'The direction with the least traffic',
-      'Either direction, as long as you are careful',
-    ],
-    explanation: 'In South Africa, vehicles travel on the LEFT side of the road. Traffic circles are therefore traversed anti-clockwise. This keeps traffic flowing in an orderly direction.',
+    cat: "intersections",
+    q: "In which direction must you travel around a traffic circle in South Africa?",
+    correct: "Clockwise — you drive on the left, so you keep the circle on your right",
+    options: ["Clockwise — you drive on the left, so you keep the circle on your right","Anti-clockwise","The direction with the least traffic","Either direction"],
+    explanation: "In South Africa traffic keeps LEFT, so you enter to the left and travel clockwise around the circle, yielding to traffic from your right (RoR §6.46). Follow any mandatory direction arrows (RM15).",
   },
 
   // ── CATEGORY: overtaking ───────────────────────────────────────────────
@@ -299,7 +255,7 @@ const ALL_QUESTIONS = [
       'Move right to give the overtaking vehicle more room',
       'Speed up to close the gap ahead',
     ],
-    explanation: 'Being overtaken on the left is illegal for the other driver, but YOU must still not accelerate. Maintain your position and speed to avoid a collision.',
+    explanation: 'Passing on the left is allowed in certain cases (e.g. when you are turning right). K53 Module 51: check mirrors and blind spot, keep to the centre of your lane or as far right as is safe, and do NOT accelerate.',
   },
   {
     cat: 'overtaking',
@@ -339,7 +295,7 @@ const ALL_QUESTIONS = [
     q: 'What is the general speed limit on a freeway (highway)?',
     correct: '120 km/h',
     options: ['120 km/h', '100 km/h', '110 km/h', '140 km/h'],
-    explanation: 'The default maximum speed on a freeway is 120 km/h. This is for light motor vehicles. Heavy vehicles and vehicles with trailers have lower limits.',
+    explanation: 'The default maximum speed on a freeway is 120 km/h. Lower class limits still apply — e.g. buses/minibuses 100 km/h and goods vehicles over 9 000 kg GVM 80 km/h (RoR §6.28–6.29).',
   },
   {
     cat: 'speed',
@@ -356,11 +312,11 @@ const ALL_QUESTIONS = [
     explanation: 'The minimum following distance under normal conditions is 2 seconds. Use the 2-second rule: when the vehicle ahead passes a fixed point, you should not pass that point for at least 2 seconds.',
   },
   {
-    cat: 'speed',
-    q: 'What following distance should you maintain in adverse conditions (rain, fog, reduced visibility)?',
-    correct: '3 seconds or more',
-    options: ['3 seconds or more', '2 seconds', '4 seconds exactly', '10 metres per 10 km/h of speed'],
-    explanation: 'In adverse conditions, increase your following distance to at least 3 seconds. Wet roads dramatically increase stopping distances — your tyres have less grip.',
+    cat: "speed",
+    q: "What must you do with your following distance in adverse conditions (rain, slippery road, poor visibility)?",
+    correct: "Increase it beyond the 2-second minimum",
+    options: ["Increase it beyond the 2-second minimum","Keep it at exactly 2 seconds","Reduce it to see the car ahead","Keep 10 m per 10 km/h"],
+    explanation: "K53 Module 27 / RoR §6.49: under adverse conditions such as rain, a slippery surface, poor visibility or when being followed too closely, the following distance shall be increased.",
   },
   {
     cat: 'speed',
@@ -374,7 +330,7 @@ const ALL_QUESTIONS = [
     q: 'How far ahead must your MAIN (full/bright) headlights illuminate the road?',
     correct: '100 metres',
     options: ['100 metres', '45 metres', '120 metres', '150 metres'],
-    explanation: 'Main beam (full/high beam) headlights must illuminate at least 100 metres ahead. You must be able to stop within 100 m, hence the higher speed limit at night with main beam.',
+    explanation: 'Main beam (full/high beam) headlights must illuminate at least 100 metres ahead. Remember to dip for oncoming traffic and when following another vehicle (RoR §6.2).',
   },
   {
     cat: 'speed',
@@ -416,7 +372,7 @@ const ALL_QUESTIONS = [
       'Leave wheels straight',
       'It does not matter if the handbrake is on',
     ],
-    explanation: 'When parked facing downhill, turn wheels LEFT so the tyre rests against the kerb. If the brakes fail, the vehicle rolls into the kerb (not into traffic). Facing uphill: wheels RIGHT (away from kerb).',
+    explanation: 'When parked facing downhill, turn wheels LEFT so the tyre rests against the kerb. If the brakes fail, the vehicle rolls into the kerb (not into traffic). K53 Module 31 (Note A): turn the front wheels in the direction of the kerb as a precaution, depending on the gradient.',
   },
   {
     cat: 'parking',
@@ -506,7 +462,7 @@ const ALL_QUESTIONS = [
       'Hoot to warn the merging vehicle',
       'Slow down and stop to allow the vehicle to merge',
     ],
-    explanation: 'When passing an on-ramp, check blind spots for merging vehicles. While merging traffic must yield, the courteous and safe action is to allow space where possible by moving left or adjusting speed.',
+    explanation: 'When passing an on-ramp, check blind spots for merging vehicles. Rules of the Road §6.56: a freeway driver who notices a vehicle wishing to merge from an on-ramp must allow it to merge in front. K53 Module 55: adjust speed and position to facilitate entry.',
   },
   {
     cat: 'freeways',
@@ -559,16 +515,11 @@ const ALL_QUESTIONS = [
     explanation: 'A thorough pre-trip tyre inspection covers: pressure (correct inflation), tread depth (minimum 1mm legally, but more for safety), sidewall cracks or bulges, and the spare tyre condition and pressure.',
   },
   {
-    cat: 'pretrip',
-    q: 'Before starting a manual (manual transmission) vehicle, what must you do with the clutch?',
-    correct: 'Press the clutch pedal fully to the floor',
-    options: [
-      'Press the clutch pedal fully to the floor',
-      'Leave the clutch in the neutral position',
-      'Hold the clutch halfway',
-      'Press the brake and clutch together',
-    ],
-    explanation: 'In a manual vehicle, you must press the clutch fully before starting the engine. This disengages the gearbox so the starter motor only has to turn the engine, not the drivetrain.',
+    cat: "pretrip",
+    q: "K53: before you turn the key to start a manual vehicle, you must ensure that:",
+    correct: "The parking brake is applied and the gear lever is in neutral",
+    options: ["The parking brake is applied and the gear lever is in neutral","The clutch is pressed to the floor","The accelerator is pressed halfway","The seatbelt warning light is off"],
+    explanation: "K53 Module 3 (starting procedure): ensure the parking brake is applied, the gear lever is in neutral, and check gauges and warning lights — then start the engine.",
   },
   {
     cat: 'pretrip',
@@ -623,16 +574,11 @@ const ALL_QUESTIONS = [
     explanation: 'During an emergency stop, BOTH hands must remain on the steering wheel at all times until the vehicle is completely stationary. This maintains steering control during heavy braking.',
   },
   {
-    cat: 'emergency',
-    q: 'In a manual vehicle doing an emergency stop, when do you press the clutch?',
-    correct: 'Just before the vehicle comes to a complete stop (to prevent stalling)',
-    options: [
-      'Just before the vehicle comes to a complete stop (to prevent stalling)',
-      'Immediately when the examiner says stop',
-      'At the same time as the brakes',
-      'Only after the vehicle has stopped',
-    ],
-    explanation: 'In an emergency stop on a manual vehicle: brake hard first, then press the clutch pedal just before the vehicle stalls (around 5–10 km/h). Braking before clutch gives maximum engine braking.',
+    cat: "emergency",
+    q: "During the K53 emergency stop, the wheels lock. What must you do?",
+    correct: "Release pressure on the brake pedal as necessary so the wheels roll again",
+    options: ["Release pressure on the brake pedal as necessary so the wheels roll again","Press the brake harder","Pull the handbrake","Steer sharply to the left"],
+    explanation: "K53 Module 56 (Note D): release pressure on the brake pedal as necessary if the wheels lock. Whether or not you depress the clutch, it is regarded as an emergency stop (Note H).",
   },
   {
     cat: 'emergency',
@@ -675,16 +621,11 @@ const ALL_QUESTIONS = [
     explanation: 'Engine braking (letting the engine resistance slow you down) prevents the brakes from overheating (brake fade). Always select the lower gear BEFORE the descent begins, not halfway down.',
   },
   {
-    cat: 'gears',
-    q: 'When is it correct to change DOWN to a lower gear?',
-    correct: 'When you need to slow down, overtake, or before a steep gradient',
-    options: [
-      'When you need to slow down, overtake, or before a steep gradient',
-      'Only when the engine is about to stall',
-      'As soon as you release the accelerator',
-      'Only in first gear for stopping',
-    ],
-    explanation: 'Downshifting provides engine braking and greater power when needed (for overtaking or climbing). Always match your gear to your speed and the road conditions ahead.',
+    cat: "gears",
+    q: "According to K53, when should you change DOWN to a lower gear?",
+    correct: "After braking to a suitable speed, or when the engine needs more power (e.g. climbing) — not to replace braking",
+    options: ["After braking to a suitable speed, or when the engine needs more power (e.g. climbing) — not to replace braking","As soon as you release the accelerator","Instead of braking when approaching a stop","Only in first gear for stopping"],
+    explanation: "K53 Module 24: braking shall be completed before a lower gear is selected; avoid selecting a lower gear to assist or replace braking. On a climb, change down before the engine labours.",
   },
 
   // ── CATEGORY: moving off & incline ────────────────────────────────────
@@ -715,40 +656,25 @@ const ALL_QUESTIONS = [
 
   // ── CATEGORY: parking manoeuvres ──────────────────────────────────────
   {
-    cat: 'manoeuvres',
-    q: 'During an alley docking manoeuvre (K53), how many reference points guide you into the bay?',
-    correct: 'Two key reference points on the vehicle',
-    options: [
-      'Two key reference points on the vehicle',
-      'One reference point — the centre of the bonnet',
-      'Three reference points — front, rear, and side mirrors',
-      'No fixed reference points — it is done by eye',
-    ],
-    explanation: 'Alley docking uses two reference points: one to start turning (usually when the rear of the vehicle aligns with the bay entrance) and one to straighten up (when the vehicle is parallel in the bay).',
+    cat: "manoeuvres",
+    q: "During K53 alley docking to the left (reversing in), what must you check just before the vehicle changes direction?",
+    correct: "The blind spot on the opposite side (the right)",
+    options: ["The blind spot on the opposite side (the right)","Nothing — only the mirrors","The fuel gauge","The left blind spot only"],
+    explanation: "K53 Module 15: check the blind spot to the right before the vehicle changes direction (Note G: check the opposite blind spot while reversing). No forward movement is allowed while entering.",
   },
   {
-    cat: 'manoeuvres',
-    q: 'During a TURN IN THE ROAD (3-point turn), what is the maximum number of forward and reverse movements allowed?',
-    correct: 'No fixed maximum — you use as many as needed to complete the turn safely',
-    options: [
-      'No fixed maximum — you use as many as needed to complete the turn safely',
-      'Exactly 3 movements (forward, reverse, forward)',
-      'Maximum 5 movements',
-      'Only 1 forward and 1 reverse',
-    ],
-    explanation: 'While called a "3-point turn," the K53 test does not penalise you for using more movements if the road is narrow. What matters is safety: no wheelspin, no hitting kerbs, correct signal and observation.',
+    cat: "manoeuvres",
+    q: "In the K53 turn in the road, how many movements are allowed?",
+    correct: "Three — two forward and one reverse",
+    options: ["Three — two forward and one reverse","As many as needed","Five","Two — one forward and one reverse"],
+    explanation: "K53 Module 19 (Note A): the manoeuvre shall be completed in three movements — two forward and one reverse — without touching the boundary line.",
   },
   {
-    cat: 'manoeuvres',
-    q: 'During PARALLEL PARKING, what is the correct starting position relative to the parked vehicle ahead?',
-    correct: 'Alongside the parked vehicle, with your rear axle aligned with their rear bumper',
-    options: [
-      'Alongside the parked vehicle, with your rear axle aligned with their rear bumper',
-      'One vehicle length behind the parked vehicle',
-      'Your front bumper aligned with their front bumper',
-      'Half a metre behind the parked vehicle',
-    ],
-    explanation: 'The K53 reference point for starting parallel parking: pull alongside the parked vehicle so your vehicle\'s rear axle is level with their rear bumper. Then turn full lock left and reverse.',
+    cat: "manoeuvres",
+    q: "In the K53 parallel parking manoeuvre, how many movements are permitted to get into the bay?",
+    correct: "Three — the reverse movement in, plus two more once partly in the bay",
+    options: ["Three — the reverse movement in, plus two more once partly in the bay","Unlimited","One only","Five"],
+    explanation: "K53 Module 20 (Note A): only three movements are permissible — a reverse into the bay and two additional movements once the vehicle is at least partially in the bay. Leaving the bay: unlimited movements, but observe each time.",
   },
 
   // ── CATEGORY: gears (expanded) ────────────────────────────────────────────
@@ -777,16 +703,11 @@ const ALL_QUESTIONS = [
     explanation: 'Each gear has a speed range. At 20 km/h, 2nd gear is normally appropriate. Driving in too high a gear at low speed lugs the engine and causes premature wear.',
   },
   {
-    cat: 'gears',
-    q: 'When is it correct to skip a gear (e.g. change from 4th to 2nd without going through 3rd)?',
-    correct: 'When overtaking or needing a significant power increase — block gear changes are acceptable',
-    options: [
-      'When overtaking or needing a significant power increase — block gear changes are acceptable',
-      'Never — you must always change through every gear sequentially',
-      'Only in reverse situations',
-      'Only on automatic transmission vehicles',
-    ],
-    explanation: 'Block gear changes (skipping gears when downshifting) are acceptable in K53 and real driving when you need more power quickly — e.g. overtaking or emergency acceleration.',
+    cat: "gears",
+    q: "Where possible, K53 says you should change gears:",
+    correct: "While travelling on a straight course",
+    options: ["While travelling on a straight course","In the middle of a bend","While braking hard","Inside an intersection"],
+    explanation: "K53 Modules 23–24: gears should be changed, where possible, whilst travelling on a straight course.",
   },
   {
     cat: 'gears',
@@ -834,7 +755,7 @@ const ALL_QUESTIONS = [
       'The vehicle will roll forward',
       'It is fine — this is the correct method for a quick departure',
     ],
-    explanation: 'Holding the clutch pedal depressed for long periods wears the clutch release bearing. At a long stop, select neutral and release the clutch to protect the clutch.',
+    explanation: 'K53 Module 29 (Note B): select neutral when stationary for any length of time; Module 11 (Note B): your foot may not rest on the clutch pedal while the engine runs, except in stop-start traffic.',
   },
 
   // ── CATEGORY: moving (expanded) ───────────────────────────────────────────
@@ -848,7 +769,7 @@ const ALL_QUESTIONS = [
       'Check the right blind spot',
       'Start the engine',
     ],
-    explanation: 'Full move-off sequence: Interior mirror → Signal right → Right blind spot → Move off when safe → Cancel signal. Mirror ALWAYS first.',
+    explanation: 'K53 Module 12: check the rear-view mirror(s) and appropriate blind spot → signal → select gear → observe → release the parking brake → move off → cancel the signal.',
   },
   {
     cat: 'moving',
@@ -886,29 +807,20 @@ const ALL_QUESTIONS = [
     explanation: 'Cyclists have right of way over a stationary vehicle moving off. Always check the blind spot for cyclists before moving. Wait until it is safe.',
   },
   {
-    cat: 'moving',
-    q: 'When approaching a STOP sign to turn right, and there is traffic from both left and right, who do you yield to FIRST?',
-    correct: 'Traffic from the RIGHT — they have priority at an uncontrolled crossing',
-    options: [
-      'Traffic from the RIGHT — they have priority at an uncontrolled crossing',
-      'Traffic from the LEFT',
-      'You may proceed when either side is clear',
-      'Oncoming traffic always has priority over traffic from the right'],
-    explanation: 'After stopping, yield to traffic on the road you are entering. At an uncontrolled crossing yield RIGHT first. Then check left and proceed when safe to cross both lanes.',
+    cat: "moving",
+    q: "At a stop sign, you want to turn right. After stopping, when may you move off?",
+    correct: "Only when the road is clear of traffic for a sufficient distance so that you can turn without obstructing or endangering anyone",
+    options: ["Only when the road is clear of traffic for a sufficient distance so that you can turn without obstructing or endangering anyone","When traffic from the right has passed, even if traffic from the left is close","After 3 seconds","When the car behind you hoots"],
+    explanation: "SGN R1.1: proceed only when it is safe. RoR §6.59: do not cross or enter a road unless it is clear for a sufficient distance.",
   },
 
   // ── CATEGORY: weather ─────────────────────────────────────────────────────
   {
-    cat: 'weather',
-    q: 'In heavy rain, you switch on your headlights. This is because:',
-    correct: 'Headlights make your vehicle more visible to others in poor visibility — not just to see ahead',
-    options: [
-      'Headlights make your vehicle more visible to others in poor visibility — not just to see ahead',
-      'It is required by law whenever it rains',
-      'They improve your ability to see through rain',
-      'They activate the rain sensor on wipers',
-    ],
-    explanation: 'In rain, low beams make you visible to others. This is more important than illuminating the road. SA law requires lights when visibility is poor.',
+    cat: "weather",
+    q: "It is raining so heavily that you cannot clearly see persons and vehicles 150 m away. Your headlamps must be:",
+    correct: "Switched on — the law requires them when persons/vehicles are not clearly visible at 150 m",
+    options: ["Switched on — the law requires them when persons/vehicles are not clearly visible at 150 m","Off — it is daytime","On main beam only","Replaced by the hazard lights"],
+    explanation: "RoR §6.1.2: headlamps, rear lamps and number-plate lamps must be lit between sunset and sunrise, and at any other time when persons and vehicles are not clearly discernible at 150 m.",
   },
   {
     cat: 'weather',
@@ -976,29 +888,21 @@ const ALL_QUESTIONS = [
       'Roads are wetter at night',
       'Tyres lose traction in the dark',
       'You drive faster at night'],
-    explanation: 'At 100 km/h, your dipped beams illuminate about 45 m. Your stopping distance is ~67 m. You are "overdriving your headlights" — if anything appears you cannot stop in time.',
+    explanation: 'Dipped beams only need to light 45 m ahead (RoR §6.3); at higher speeds your stopping distance can be longer than that — so you can "overdrive" your headlights. Slow down.',
   },
   {
-    cat: 'night',
-    q: 'When you want to park at night on a road with no streetlights, you must:',
-    correct: 'Leave your parking lights (sidelights) on to make the vehicle visible to other road users',
-    options: [
-      'Leave your parking lights (sidelights) on to make the vehicle visible to other road users',
-      'Leave your headlights on full beam',
-      'No lights are needed if you are off the road',
-      'Leave your hazard lights flashing'],
-    explanation: 'Parking lights are designed exactly for this: marking a parked vehicle in low-visibility conditions. Full beam would dazzle; hazards imply a breakdown. Parking lights are correct.',
+    cat: "night",
+    q: "At night, when is a parked car exempt from having its lamps lit?",
+    correct: "When parked off the roadway, in a demarcated parking place, or within 12 m of a lit street lamp",
+    options: ["When parked off the roadway, in a demarcated parking place, or within 12 m of a lit street lamp","Never","Whenever the hazard lights are on","Only in urban areas"],
+    explanation: "RoR §6.1.2: the lamp requirement does not apply to a vehicle parked off the roadway, in a parking place demarcated by a road traffic sign, or within 12 m of a lighted street lamp illuminating the road.",
   },
   {
-    cat: 'night',
-    q: 'When must you switch from high beam to dipped beam?',
-    correct: 'When within 150 m of an oncoming vehicle AND when following another vehicle within 150 m',
-    options: [
-      'When within 150 m of an oncoming vehicle AND when following another vehicle within 150 m',
-      'Only when approaching oncoming vehicles',
-      'When within 100 m of any vehicle',
-      'Only in built-up areas with street lighting'],
-    explanation: 'SA law requires dipped beams within 150 m of oncoming traffic AND within 150 m of vehicles ahead (following). High beam from behind is as dangerous as from the front.',
+    cat: "night",
+    q: "When must you switch from main beam to dipped beam?",
+    correct: "For oncoming traffic and when following another vehicle",
+    options: ["For oncoming traffic and when following another vehicle","Only when approaching oncoming vehicles","Only in built-up areas","Only when another driver flashes you"],
+    explanation: "RoR §6.2: remember to dip the main beam for oncoming traffic, as well as when following another vehicle.",
   },
 
   // ── CATEGORY: fatigue ─────────────────────────────────────────────────────
@@ -1038,15 +942,11 @@ const ALL_QUESTIONS = [
 
   // ── CATEGORY: intersections (expanded) ────────────────────────────────────
   {
-    cat: 'intersections',
-    q: 'You arrive at a four-way stop at exactly the same time as a vehicle from your right. Who has right of way?',
-    correct: 'The vehicle on the right — you must yield to them',
-    options: [
-      'The vehicle on the right — you must yield to them',
-      'You — because you intend to go straight',
-      'Whoever is facing the steepest uphill',
-      'The larger vehicle'],
-    explanation: 'At a four-way stop with simultaneous arrivals, yield to the vehicle on YOUR RIGHT. This is the universal uncontrolled intersection rule in South Africa.',
+    cat: "intersections",
+    q: "At a four-way stop, several vehicles have stopped. Who may move off first?",
+    correct: "The vehicle that stopped first",
+    options: ["The vehicle that stopped first","The vehicle on your right","The vehicle going straight","The larger vehicle"],
+    explanation: "SGN R1.4 and K53 Module 37: the vehicle which stopped first should move off first, and you may not move off before vehicles that stopped before you.",
   },
   {
     cat: 'intersections',
@@ -1079,7 +979,7 @@ const ALL_QUESTIONS = [
       'A priority intersection marked with yellow lines',
       'An intersection with no traffic lights where all traffic must stop',
       'A pedestrian crossing with yellow markings'],
-    explanation: 'Box junctions prevent gridlock. Even with a green light, you must not enter the box if your exit is blocked. The only exception: turning right and blocked only by oncoming traffic.',
+    explanation: 'Box junctions prevent gridlock. Even with a green light, you must not enter the box if your exit is blocked. (SGN RM10: do not stop in the demarcated box; enter only if you can drive through.)',
   },
   {
     cat: 'intersections',
@@ -1103,7 +1003,7 @@ const ALL_QUESTIONS = [
       'Stop on the shoulder and wait for a gap to reverse',
       'Cut across the gore area to reach the exit ramp',
       'Flash your lights and slowly reverse to the exit'],
-    explanation: 'Reversing or U-turning on a freeway is extremely dangerous and illegal. Continue to the next exit. The cost of a few extra kilometres is nothing compared to a fatal collision.',
+    explanation: 'You may only reverse when it can be done in safety (RoR §6.49) — never the case on a freeway. Continue to the next exit. The cost of a few extra kilometres is nothing compared to a fatal collision.',
   },
   {
     cat: 'freeways',
@@ -1125,7 +1025,7 @@ const ALL_QUESTIONS = [
       'Stop at the end of the on-ramp and wait for a gap',
       'Force your way in — freeway traffic must yield to merging vehicles',
       'Signal and immediately enter the freeway'],
-    explanation: 'You do NOT have right of way merging onto a freeway. Match speed on the ramp (acceleration lane), find a safe gap, and blend in smoothly. Stopping at the end is extremely dangerous.',
+    explanation: 'K53 Module 53: yield in accordance with the traffic pattern, signs and markings, then merge. (Freeway drivers must also allow you to merge — RoR §6.56.) Match speed on the ramp (acceleration lane), find a safe gap, and blend in smoothly. Stopping at the end is extremely dangerous.',
   },
 ];
 
@@ -1147,7 +1047,7 @@ const CATEGORIES = [
   { id: 'fatigue',       label: 'Fatigue & Alertness',     icon: '😴', desc: 'Rest stops, microsleeps, warning signs of fatigue', count: ALL_QUESTIONS.filter(q => q.cat === 'fatigue').length },
 ];
 
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
 const SA_STRIPE = (
   <div style={{ display: 'flex', height: 3 }}>
@@ -1167,7 +1067,8 @@ export default function ScenarioDrill({ onBack, onPass }) {
   const [wrong, setWrong]     = useState([]);
 
   const startCat = useCallback((catId) => {
-    const qs = shuffle(ALL_QUESTIONS.filter(q => q.cat === catId));
+    // Shuffle questions AND each question's options once per session (not on every render).
+    const qs = shuffle(ALL_QUESTIONS.filter(q => q.cat === catId)).map(q => ({ ...q, options: shuffle(q.options) }));
     setCat(catId);
     setQs(qs);
     setQIdx(0);
@@ -1183,7 +1084,7 @@ export default function ScenarioDrill({ onBack, onPass }) {
     if (chosen) return;
     setChosen(opt);
     const correct = opt === current.correct;
-    recordGameAnswer('scenario', qIdx, correct);
+    recordGameAnswer('scenario', stableId(current, 'sc_'), correct);
     if (correct) { hapticCorrect(); sfx('correct'); setScore(s => s + 1); }
     else { hapticWrong(); sfx('wrong'); setWrong(w => [...w, current]); }
     setTimeout(() => {
@@ -1238,7 +1139,7 @@ export default function ScenarioDrill({ onBack, onPass }) {
   // ── Quiz ────────────────────────────────────────────────────────────────────
   if (screen === 'quiz' && current) {
     const catInfo = CATEGORIES.find(c => c.id === current.cat);
-    const opts = shuffle(current.options);
+    const opts = current.options;
     return (
       <div style={{ minHeight: '100vh', background: T.bg, color: T.text, fontFamily: T.font }}>
         {SA_STRIPE}

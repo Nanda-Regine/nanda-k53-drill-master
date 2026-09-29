@@ -4,6 +4,7 @@ import { T } from '../theme.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 import { CRISP_SIGNS as ROAD_SIGNS } from '../data/roadSigns.js';
+import { shuffleCopy } from '../utils/quizHelpers.js';
 
 // ── Battle config ─────────────────────────────────────────────────────────────
 const QUESTION_COUNT = 10;
@@ -11,12 +12,12 @@ const ANSWER_SECONDS = 12;
 
 // ── Build a local question set for battles ────────────────────────────────────
 function buildBattleQuestions() {
-  const signs = [...ROAD_SIGNS].sort(() => Math.random() - 0.5).slice(0, QUESTION_COUNT);
+  const signs = shuffleCopy(ROAD_SIGNS).slice(0, QUESTION_COUNT);
   return signs.map(s => ({
     id: s.id,
     q: `What does the ${s.code || s.id} sign mean?`,
     img: s.img,
-    options: [...s.options].sort(() => Math.random() - 0.5),
+    options: shuffleCopy(s.options),
     answer: s.options[0],
   }));
 }

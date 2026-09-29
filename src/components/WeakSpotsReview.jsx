@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { T } from '../theme.js';
 import { getCategoryStats } from '../utils/progressHistory.js';
 import { getDueIds } from '../utils/spacedRepetition.js';
+import { shuffleCopy } from '../utils/quizHelpers.js';
 
 const CATEGORY_LABELS = {
   road_rules:  '🚦 Road Rules',
@@ -94,7 +95,7 @@ export default function WeakSpotsReview({ onBack }) {
   }, []);
 
   const startDrill = () => {
-    const q = getWeakPool(catStats).sort(() => Math.random() - 0.5).slice(0, 15);
+    const q = shuffleCopy(getWeakPool(catStats)).slice(0, 15);
     setPool(q);
     setQIndex(0);
     setSelected(null);

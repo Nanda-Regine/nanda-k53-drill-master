@@ -83,6 +83,79 @@ for (const q of gen.GENERATED_SIGN_QUESTIONS) {
     err(where, `answer index ${q.answer} out of range`);
 }
 
+// ---- verified learner-test bank + adaptive drill bank ----
+const ltb = await imp('src/data/learnerTestBank.js');
+const seenIds = new Set();
+for (const q of [...ltb.RULES, ...ltb.SIGNALS_MARKINGS, ...ltb.CONTROLS_LMV, ...ltb.CONTROLS_MC]) {
+  qCount++;
+  const where = `learnerTestBank#${q.id}`;
+  if (seenIds.has(q.id)) err(where, 'duplicate id');
+  seenIds.add(q.id);
+  checkOptions(where, q.options);
+  if (q.options.length !== 4) err(where, `expected 4 options, got ${q.options.length}`);
+  if (q.answer !== 0) err(where, 'bank convention: correct option must be first (answer: 0)');
+  if (!q.ref) err(where, 'missing source reference (ref)');
+}
+// Official format (DLTC §5.4): 28 signs/23, 28 rules/22, 8 controls/6 — and enough questions to fill it.
+const fmt = Object.fromEntries(ltb.TEST_FORMAT.sections.map(s => [s.key, s]));
+const expect = { signs: [28, 23], rules: [28, 22], controls: [8, 6] };
+for (const [k, [count, pass]] of Object.entries(expect)) {
+  if (fmt[k]?.count !== count || fmt[k]?.pass !== pass) err('TEST_FORMAT', `${k} must be ${pass}/${count} per DLTC §5.4`);
+}
+for (const code of ['lmv', 'mc']) {
+  if (ltb.rulesFor(code).length < 28) err('learnerTestBank', `${code}: fewer than 28 rules questions`);
+  if (ltb.controlsFor(code).length < 8) err('learnerTestBank', `${code}: fewer than 8 controls questions`);
+}
+const { NERVE_BANK } = await imp('src/data/drillBank.js');
+for (const [nerve, items] of Object.entries(NERVE_BANK)) {
+  if (items.length < 2) err(`drillBank.${nerve}`, 'needs at least 2 items for the daily diagnostic');
+  for (const q of items) { if (!seenIds.has(q.id)) { qCount++; checkOptions(`drillBank#${q.id}`, q.options); } }
+}
+
+// ---- road markings ----
+const { ROAD_MARKINGS } = await imp('src/data/roadMarkings.js');
+const mIds = new Set();
+for (const m of ROAD_MARKINGS) {
+  qCount++;
+  const where = `roadMarkings#${m.id}`;
+  if (mIds.has(m.id)) err(where, 'duplicate id');
+  mIds.add(m.id);
+  if (!m.meaning || !m.action || !m.ref) err(where, 'meaning, action and ref are required');
+  if (m.img && !fs.existsSync(path.join(signsDir, m.img))) err(where, `image "${m.img}" missing`);
+}
+
+// ---- `correct`-string banks (ScenarioDrill, PatternTrainer): correct must be one of the options ----
+const reCorrect = /correct:\s*(['"`])((?:\\.|(?!\1).)*)\1\s*,\s*options:\s*(\[(?:[^\[\]]|\[[^\]]*\])*\])/g;
+for (const file of ['ScenarioDrill.jsx', 'PatternTrainer.jsx']) {
+  const text = fs.readFileSync(path.join(gamesDir, file), 'utf8');
+  let m;
+  while ((m = reCorrect.exec(text)) !== null) {
+    qCount++;
+    const where = `${file}:${text.slice(0, m.index).split('\n').length}`;
+    const opts = parseOptions(m[3]);
+    checkOptions(where, opts);
+    if (!opts.includes(m[2].replace(/\\(.)/g, '$1'))) err(where, `correct answer "${m[2]}" is not among the options`);
+  }
+}
+
+// ---- known foreign / invented rules must never come back ----
+const BANNED = [
+  [/yield to (the vehicle on )?(your|the) right[^.]{0,40}(simultaneous|same time)|(simultaneous|same time)[^.]{0,60}(vehicle on (your|the) right|yield to (your|the) right)/i, 'no SA "yield to the right" rule for simultaneous arrivals — first to stop goes first'],
+  [/travel anti-?clockwise|go anti-?clockwise|enter anti-?clockwise/i, 'SA traffic circles run clockwise (SGN R137)'],
+  [/zig-?zag/i, 'zig-zag markings are UK, not SA'],
+  [/1\.6 ?mm[^"'\n]{0,40}(✓|correct)/i, 'SA minimum tread is 1 mm'],
+  [/\b68 (questions|Q)\b|\b68Q\b/i, 'learner test is 64 questions (DLTC §5.4)'],
+];
+for (const dir of ['src/games', 'src/data', 'src/components']) {
+  for (const file of fs.readdirSync(path.join(ROOT, dir)).filter(f => /\.(jsx?|mjs)$/.test(f))) {
+    const text = fs.readFileSync(path.join(ROOT, dir, file), 'utf8');
+    for (const [re, why] of BANNED) {
+      const m = text.match(re);
+      if (m) err(`${dir}/${file}:${text.slice(0, m.index).split('\n').length}`, `banned claim "${m[0].slice(0, 50)}" — ${why}`);
+    }
+  }
+}
+
 // ---- report ----
 console.log(`Validated ${qCount} questions/signs across banks.`);
 if (errors.length) {

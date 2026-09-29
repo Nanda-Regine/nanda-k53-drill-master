@@ -5,12 +5,9 @@ import { sfx } from '../utils/sounds.js';
 
 const PAGE_SIZE = 12;
 
-const MOCK_QA = [
-  { id: 'm1', question: 'What is the minimum following distance on a wet road?', answer: '3 seconds (double the dry following distance of 2 seconds).', votes: 18, answered: true, created_at: new Date(Date.now() - 86400000).toISOString() },
-  { id: 'm2', question: 'Do I need to signal when moving off from the kerb?', answer: 'Yes — signal right, check mirrors and blind spot, then move off.', votes: 12, answered: true, created_at: new Date(Date.now() - 86400000 * 2).toISOString() },
-  { id: 'm3', question: 'What does a yellow broken line in the centre of the road mean?', answer: null, votes: 5, answered: false, created_at: new Date(Date.now() - 3600000 * 2).toISOString() },
-  { id: 'm4', question: 'How far must an emergency triangle be placed behind the vehicle?', answer: 'At least 45 metres behind the vehicle on the roadway.', votes: 24, answered: true, created_at: new Date(Date.now() - 86400000 * 5).toISOString() },
-];
+// No placeholder content: when the backend is unreachable (e.g. offline) the
+// screen shows its honest empty state instead of fabricated community posts.
+const MOCK_QA = [];
 
 function timeAgo(iso) {
   const s = Math.floor((Date.now() - new Date(iso)) / 1000);

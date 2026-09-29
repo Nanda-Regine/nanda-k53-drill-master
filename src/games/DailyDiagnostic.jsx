@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { T } from '../theme.js';
 import { sfx } from '../utils/sounds.js';
 import { getNerveMastery, recordAnswer, NERVES } from '../utils/masteryStore.js';
+import { NERVE_BANK } from '../data/drillBank.js';
 import { getStreak } from '../utils/streakTracker.js';
 
 const hapticCorrect = () => { try { navigator.vibrate?.(30); } catch {} };
@@ -12,48 +13,12 @@ const hapticPass    = () => { try { navigator.vibrate?.([60, 30, 60, 30, 60]); }
 const TODAY_KEY = 'k53_daily_diag_date';
 const SCORE_KEY = 'k53_daily_diag_score';
 
-// ── Balanced 10-question daily bank (2 per nerve) ─────────────────────────────
-// Pulled fresh each day; order is randomised
-const DAILY_BANK = [
-  // Signs (2)
-  { nerve: 'signs',    q: 'A red octagonal sign means:', opts: ['Yield','Stop completely','No entry','Danger'], ans: 1 },
-  { nerve: 'signs',    q: 'A yellow diamond sign on SA roads indicates:', opts: ['Prohibition','Warning','Guidance','Command'], ans: 1 },
-  // Rules (2)
-  { nerve: 'rules',    q: 'The speed limit on a freeway for a passenger car is:', opts: ['100 km/h','110 km/h','120 km/h','140 km/h'], ans: 2 },
-  { nerve: 'rules',    q: 'Minimum following distance on a wet road:', opts: ['1 sec','2 sec','3 sec','4 sec'], ans: 2 },
-  // Controls (2)
-  { nerve: 'controls', q: 'The clutch pedal is used to:', opts: ['Apply brakes','Engage/disengage the gearbox','Control throttle','Steer'], ans: 1 },
-  { nerve: 'controls', q: 'Minimum legal tyre tread depth in South Africa:', opts: ['0.5 mm','1 mm','1.6 mm','3 mm'], ans: 2 },
-  // Scenarios (2)
-  { nerve: 'scenarios', q: 'If you skid on a wet road, you should:', opts: ['Brake hard and steer hard','Lift off accelerator and steer into the skid','Accelerate to regain traction','Apply handbrake immediately'], ans: 1 },
-  { nerve: 'scenarios', q: 'You are dazzled by oncoming high beams. You should:', opts: ['Flash your high beams back','Look to the left road edge and slow down','Close your eyes briefly','Speed up to pass quickly'], ans: 1 },
-  // Markings (2)
-  { nerve: 'markings', q: 'A solid white centre line means:', opts: ['Overtaking is permitted','Do not cross — no overtaking','Lane ends ahead','Emergency vehicle lane'], ans: 1 },
-  { nerve: 'markings', q: 'Hatched yellow diagonal road markings mean:', opts: ['No parking','No stopping or parking — obstruction-free zone','Speed bump ahead','Bus route'], ans: 1 },
-];
-
-// Supplementary pool for variety (swap in on subsequent days)
-const DAILY_POOL_B = [
-  { nerve: 'signs',    q: 'A "No entry" sign is:', opts: ['Red circle with white bar','Red octagon','Red triangle','Blue circle'], ans: 0 },
-  { nerve: 'signs',    q: 'A blue circle on a road sign contains:', opts: ['Warning','Prohibition','A positive instruction','Guide information'], ans: 2 },
-  { nerve: 'rules',    q: 'BAC limit for non-professional drivers:', opts: ['0.02 g/100ml','0.05 g/100ml','0.08 g/100ml','0.10 g/100ml'], ans: 1 },
-  { nerve: 'rules',    q: 'Emergency triangle must be placed at least ___ behind the vehicle:', opts: ['25 m','30 m','45 m','60 m'], ans: 2 },
-  { nerve: 'controls', q: 'Aquaplaning is most likely when:', opts: ['Driving slowly on dry roads','Driving fast on wet roads with worn tyres','Using engine braking','In a tunnel'], ans: 1 },
-  { nerve: 'controls', q: 'ABS brakes help by:', opts: ['Stopping faster than normal','Preventing wheel lock during hard braking','Activating automatically in rain','Reducing stopping distance by half'], ans: 1 },
-  { nerve: 'scenarios', q: 'You miss your freeway off-ramp. You should:', opts: ['Reverse on the shoulder','Stop on the shoulder','Continue to the next exit','Do a U-turn on the freeway'], ans: 2 },
-  { nerve: 'scenarios', q: 'You are feeling fatigued on a long trip. You should:', opts: ['Open the window and continue','Stop safely and rest','Drink coffee and push on','Speed up to reach your destination sooner'], ans: 1 },
-  { nerve: 'markings', q: 'A broken white centre line means:', opts: ['Do not cross','Overtaking permitted when safe','Emergency lane','Pedestrian area'], ans: 1 },
-  { nerve: 'markings', q: 'Zigzag white lines near a pedestrian crossing mean:', opts: ['Speed bumps ahead','No parking or overtaking near the crossing','Yield to buses','Road narrows'], ans: 1 },
-];
+// ── Balanced 10-question daily set (2 per nerve) from the verified bank ────────
+// Same set all day (seeded by the date), refreshed every day.
+const DAILY_NERVES = ['signs', 'rules', 'controls', 'scenarios', 'markings'];
 
 function getTodayKey() {
   return new Date().toDateString();
-}
-
-function getPool() {
-  const today = getTodayKey();
-  const dayNum = Math.floor(Date.now() / 86400000);
-  return dayNum % 2 === 0 ? DAILY_BANK : DAILY_POOL_B;
 }
 
 function shuffle(arr) {
@@ -64,6 +29,19 @@ function shuffle(arr) {
   }
   return a;
 }
+
+// Deterministic PRNG so everyone gets a stable set for the whole day.
+function seeded(seed) { let t = seed >>> 0; return () => { t += 0x6D2B79F5; let r = Math.imul(t ^ (t >>> 15), 1 | t); r ^= r + Math.imul(r ^ (r >>> 7), 61 | r); return ((r ^ (r >>> 14)) >>> 0) / 4294967296; }; }
+
+// Adapt verified bank items ({q, options, answer}) to this drill's shape ({q, opts, ans}), options shuffled.
+const toDrill = (item, nerve) => { const opts = shuffle(item.options); return { id: item.id, nerve, q: item.q, opts, ans: opts.indexOf(item.options[item.answer]), explain: item.explain, ref: item.ref }; };
+
+function getPool() {
+  const rnd = seeded(Math.floor(Date.now() / 86400000));
+  const pick = (arr, n) => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a.slice(0, n); };
+  return DAILY_NERVES.flatMap(n => pick(NERVE_BANK[n] || [], 2).map(item => toDrill(item, n)));
+}
+
 
 // ── Nerve health bar ──────────────────────────────────────────────────────────
 function NerveBar({ nerve, score, answered }) {

@@ -7,12 +7,9 @@ import { sfx } from '../utils/sounds.js';
 const PROVINCES = ['Any', 'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo', 'Mpumalanga', 'Northern Cape', 'North West', 'Western Cape'];
 
 // ── Mock data (used when Supabase unavailable) ────────────────────────────────
-const MOCK_TIPS = [
-  { id: '1', province: 'Gauteng', city: 'Johannesburg', dltc_name: 'Johannesburg Central DLTC', tip_text: 'Arrive at 07:00 — queues start forming at 06:30. Bring all documents in a plastic sleeve to avoid "missing pages" issues.', upvotes: 47, verified: true, created_at: new Date(Date.now() - 86400000 * 3).toISOString() },
-  { id: '2', province: 'Western Cape', city: 'Cape Town', dltc_name: 'Cape Town Central DLTC', tip_text: 'Book online at least 3 weeks in advance. Walk-ins are rarely accommodated on weekdays.', upvotes: 31, verified: false, created_at: new Date(Date.now() - 86400000 * 7).toISOString() },
-  { id: '3', province: 'Eastern Cape', city: 'East London', dltc_name: 'East London DLTC', tip_text: 'The K53 test starts at 08:30 sharp. The examiner checks your signal, mirrors and blind-spot checks strictly — do all three every time.', upvotes: 19, verified: true, created_at: new Date(Date.now() - 86400000 * 14).toISOString() },
-  { id: '4', province: 'KwaZulu-Natal', city: 'Durban', dltc_name: 'Pinetown DLTC', tip_text: 'Tuesday and Thursday mornings are the least busy. Bring a certified copy of your ID — originals sometimes get lost.', upvotes: 22, verified: false, created_at: new Date(Date.now() - 86400000 * 5).toISOString() },
-];
+// No placeholder content: when the backend is unreachable (e.g. offline) the
+// screen shows its honest empty state instead of fabricated community posts.
+const MOCK_TIPS = [];
 
 // ── Tip card ──────────────────────────────────────────────────────────────────
 function TipCard({ tip, onUpvote, upvoted }) {

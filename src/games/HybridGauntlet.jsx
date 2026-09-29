@@ -58,7 +58,7 @@ const TESTS = [
       },
       {
         q: "Which of the following is NOT a valid reason to cross a no-crossing line (RM2)?",
-        options: ["To drive around a broken-down vehicle stopped in your lane","To overtake a slow-moving heavy vehicle when the road ahead is clear","To access an entrance on the other side of the road","None — RM2 may never be crossed"],
+        options: ["To drive around a broken-down vehicle stopped in your lane","To overtake a slow-moving heavy vehicle when the road ahead is clear","To drive around a stationary obstruction such as fallen rocks","None — RM2 may never be crossed"],
         answer: 1,
         explain: "RM2 (no-crossing line) has ONLY ONE exception: to go around a STATIONARY obstruction. Overtaking a slow-moving (i.e. moving) vehicle is never permitted across RM2. Note: accessing an entrance IS allowed for RM1 (no-overtaking) — NOT RM2.",
       },
@@ -104,7 +104,7 @@ const TESTS = [
         q: "How many metres from a fire hydrant may you NOT park (on the same side of the road, on either side of the hydrant)?",
         options: ["3m","1.5m","5m","9m"],
         answer: 1,
-        explain: "No parking within 1.5m of a fire hydrant on EITHER SIDE of the hydrant (so 3m total clearance around it). 5m = intersection. 9m = pedestrian crossing. 3m = railway crossing stop distance.",
+        explain: "No parking within 1.5m of a fire hydrant on EITHER SIDE of the hydrant (so 3m total clearance around it). 5m = intersection. 9m = pedestrian crossing. Tunnel/bridge stopping = 6m.",
       },
       {
         q: "Maximum tow rope length is 3.5m. Tow rope maximum speed is 30 km/h. Emergency triangle is placed 45m away. What is the HOOTER audibility distance?",
@@ -119,10 +119,10 @@ const TESTS = [
         explain: "MORE than 150mm to the SIDE = must be marked. MORE than 300mm to the REAR = must be marked. At 280mm to the side, you exceed the 150mm side threshold, so marking is required.",
       },
       {
-        q: "Following distance for a light motor vehicle is 2 seconds. For a heavy motor vehicle it is 3 seconds. What is the minimum following distance required when towing with a tow rope?",
-        options: ["2 seconds — same as an LMV","3 seconds — treat as heavy vehicle when towing","The manual does not specify a separate towing following distance","4 seconds"],
+        q: "Following distance is 2 seconds for a light motor vehicle and 3 seconds for a heavy motor vehicle. When MUST you increase it?",
+        options: ["Only when towing","Only at night","In rain, on a slippery surface, in poor visibility or when being followed too closely","Never — the minimum is always enough"],
         answer: 2,
-        explain: "The manual specifies 2 seconds for LMV and 3 seconds for HMV. There is no separate prescribed following distance for towing — this is a trap question. The answer is that no separate rule is specified.",
+        explain: "Rules of the Road §6.49 / K53 Module 27: under adverse conditions — rain, slippery surface, poor visibility or when being followed too closely — the following distance shall be increased.",
       },
       {
         q: "A goods vehicle has a GVM of exactly 9,000 kg. What speed limit applies outside an urban area?",
@@ -131,7 +131,7 @@ const TESTS = [
         explain: "The 80 km/h limit applies to GVM MORE THAN 9,000 kg. At EXACTLY 9,000 kg, the standard limits apply: 100 km/h on rural roads. This 'exceeds' vs 'equals' distinction is a classic exam trap.",
       },
       {
-        q: "The minimum tyre tread depth for a motorcycle is the same as for a light motor vehicle. What is that depth?",
+        q: "For a motorcycle over 50cc, the minimum tyre tread depth is the same as for a light motor vehicle. What is that depth?",
         options: ["0.5mm","1.6mm","1mm","2mm"],
         answer: 2,
         explain: "1mm minimum tread depth, visible across the full breadth and circumference, for both motorcycles and light motor vehicles. 1.6mm is the European standard and commonly confused with SA law.",
@@ -152,9 +152,9 @@ const TESTS = [
     questions: [
       {
         q: "You're driving a minibus at 110 km/h on a freeway. A speed camera flashes you. Are you speeding?",
-        options: ["No — the freeway limit is 120 km/h","Yes — buses and minibuses are limited to 100 km/h regardless of road type","No — 110 km/h is under 120 km/h","Only if the road is wet"],
+        options: ["No — the freeway limit is 120 km/h","Yes — buses and minibuses are limited to 100 km/h, even on a freeway","No — 110 km/h is under 120 km/h","Only if the road is wet"],
         answer: 1,
-        explain: "Buses and minibuses are capped at 100 km/h on ANY road — freeway or otherwise. The freeway's 120 km/h limit does not apply to them. At 110 km/h in a minibus you ARE speeding.",
+        explain: "Buses and minibuses are capped at 100 km/h, even on a freeway (lower limits such as 60 km/h in urban areas still apply). The freeway's 120 km/h limit does not apply to them. At 110 km/h in a minibus you ARE speeding.",
       },
       {
         q: "A breakdown vehicle is towing a car on a freeway. What is the maximum permitted speed?",
@@ -199,10 +199,10 @@ const TESTS = [
         explain: "A speed limit sign (R201) applies FROM THE SIGN and overrides the default limit. The 60 km/h urban default only applies where no sign is posted. If a sign shows 80, that is the applicable limit from that point.",
       },
       {
-        q: "You are doing 95 km/h on a rural road. You pass a 'buses and minibuses only' sign (R121). You are in a private car. Does the speed limit change for you?",
-        options: ["Yes — once on a bus-designated road, 100 km/h max applies to all vehicles","No — R121 reserves the road for buses only; private cars should not be on that road, but the speed restriction is 100 km/h for that road type","No change — 95 km/h is fine anywhere rural","Yes — bus-reserved roads have a 80 km/h limit"],
+        q: "Sign R121 (buses only) is displayed at the start of a lane. You are driving a private car. What does it mean for you?",
+        options: ["You may use the lane below 60 km/h","The lane is set aside for buses — you may not use it","You may use it to overtake","It only applies to minibus taxis"],
         answer: 1,
-        explain: "R121 means the road or lane is for buses only. If you're a private car and somehow on it, the standard rural 100 km/h limit applies to that road — but you shouldn't be there. Speed limits are by road type, not reservation status.",
+        explain: "R121 indicates that the road or portion of the road is set aside for use by buses (SGN R121). A private car may not use it.",
       },
       {
         q: "You are towing another vehicle with a rope. Your passenger asks to sit in the towed car. You are travelling at 28 km/h. Is any of this illegal?",
@@ -226,9 +226,9 @@ const TESTS = [
       },
       {
         q: "Which regulatory sign shares its shape with another sign category?",
-        options: ["Yield — an inverted triangle, like the warning-sign family","Stop — a red octagon","Pedestrian priority — a diamond","No entry — a red circle"],
+        options: ["Yield — an inverted triangle, like the warning-sign family","Stop — a red octagon","Speed limit — a red circle","No entry — a red circle"],
         answer: 0,
-        explain: "Yield (R2) is an inverted triangle — the same triangular family as warning signs, which is why it can be confused with them. Stop (octagon), pedestrian priority (diamond) and no-entry (circle) each have a shape unique to their meaning.",
+        explain: "Yield (R2) is an inverted triangle — the same triangular family as warning signs, which is why it can be confused with them. Most regulatory signs are round; the exceptions are the octagonal stop sign, the triangular yield sign and the diamond-shaped pedestrian-priority sign (SGN §1).",
       },
       {
         q: "Sign TR201 is displayed. What does the 'T' prefix tell you — and what colour is its background?",
@@ -305,10 +305,10 @@ const TESTS = [
         explain: "You MAY enter the box junction if your exit is clear. The rule is: you must be able to drive THROUGH and EXIT before stopping. If your exit is clear when you enter, you are complying — even if traffic backs up after you enter.",
       },
       {
-        q: "A solid white no-crossing line (RM2) runs alongside a dashed line in the centre of the road. You are on the DASHED line side. May you cross to overtake?",
-        options: ["No — RM2 always prohibits crossing regardless of which side you're on","Yes — on the dashed line side you may cross to overtake if safe","Yes but only motorcycles may cross","No — only emergency vehicles may cross RM2"],
+        q: "A no-overtaking line (RM1) is painted beside a broken line. The BROKEN line is on your side. May you cross to overtake?",
+        options: ["No — you may never cross","Yes — if it is safe, because the restriction applies to traffic on the solid-line side","Only motorcycles may cross","Only emergency vehicles may cross"],
         answer: 1,
-        explain: "When a solid line and dashed line run together, the rule applies to the side with the SOLID line nearest to you. On the DASHED side you may cross to overtake if safe. On the SOLID side you may not — this is a paired line system.",
+        explain: "RM1 prohibits driving with any part of your vehicle to the right of the line on YOUR side. With the broken line nearest you, you may cross to overtake when safe (SGN RM1).",
       },
       {
         q: "The traffic signals at an intersection are completely dark (power failure). No traffic officer is present. A driver in front of you stops. How must you treat this intersection?",
@@ -358,7 +358,7 @@ const TESTS = [
         q: "A motorcycle engine is exactly 50cc. May you carry a pillion passenger?",
         options: ["Yes — 50cc meets the minimum requirement","No — the engine must EXCEED 50cc to carry a passenger","Yes if both wear helmets","Yes if riding at under 60 km/h"],
         answer: 1,
-        explain: "The engine must EXCEED 50cc (not just equal it) to carry a passenger. At exactly 50cc you may NOT carry a pillion. Same rule applies to sidecars. This word 'exceed' is a deliberate trap.",
+        explain: "The engine must EXCEED 50cc (not just equal it) to carry a passenger. At exactly 50cc you may NOT carry a pillion. (Sidecars are different: a sidecar may not be attached if the engine is LESS than 50cc.) This word 'exceed' is a deliberate trap.",
       },
       {
         q: "A motorcycle rider is 16 years old and has a Code 1 learner's licence. What is the maximum engine size they may ride?",
@@ -404,7 +404,7 @@ const TESTS = [
       },
       {
         q: "A motorcycle has a 45cc engine and a sidecar attached to the left side. What is WRONG with this setup?",
-        options: ["Nothing — 45cc is above the 40cc threshold","The sidecar engine must exceed 50cc — at 45cc no sidecar is permitted","The sidecar is on the wrong side","Nothing — sidecar rules only apply to engines over 125cc"],
+        options: ["Nothing — 45cc is above the 40cc threshold","No sidecar may be attached to an engine of less than 50cc — at 45cc it is not permitted","The sidecar is on the wrong side","Nothing — sidecar rules only apply to engines over 125cc"],
         answer: 1,
         explain: "No sidecar may be attached to a motorcycle with engine capacity LESS THAN 50cc. At 45cc the engine is under 50cc — this sidecar is illegal. The sidecar side (left) is correct.",
       },
@@ -430,7 +430,7 @@ const TESTS = [
       },
       {
         q: "A 15-year-old who is 1.4m tall is in your vehicle. For seatbelt purposes, are they a child or an adult?",
-        options: ["Child — they are under 16","Adult — they are older than 14","Adult — only height below 1.5m makes you a child","Child — they are both under 14 in height terms... wait, they are 15"],
+        options: ["Child — they are under 16","Adult — they are older than 14","Adult — only height below 1.5m makes you a child","Child — anyone shorter than 1.5 m is a child"],
         answer: 1,
         explain: "OLDER THAN 14 = automatically adult for seatbelt purposes. At 15 years old, regardless of height, this person is an adult. The height exception (>1.5m) only applies to those UNDER 14 to make them adults earlier.",
       },
@@ -565,10 +565,10 @@ const TESTS = [
         explain: "Lights are NOT required if parked: (1) completely off the roadway, (2) in a demarcated parking bay, OR (3) within 12m of a lit street lamp. Being off the roadway alone is sufficient — distance to lamp is irrelevant here.",
       },
       {
-        q: "You are towing a vehicle with a rigid tow-bar (not a rope). How many passengers may travel in the towed vehicle?",
-        options: ["The same restriction as rope towing — only permitted at ≤30 km/h","None — passengers in towed vehicles are always prohibited","The tow-bar removes the passenger restriction — standard rules apply","Only one passenger, in the front seat"],
+        q: "You tow a broken-down car with a rigid tow-bar and a passenger sits in the towed car. What is your maximum speed?",
+        options: ["Normal road speed limits","80 km/h","30 km/h — a towed vehicle conveying persons may not exceed 30 km/h (unless it is a semi-trailer)","Passengers are never allowed in a towed vehicle"],
         answer: 2,
-        explain: "Conveying persons in a towed vehicle at more than 30 km/h is prohibited UNLESS the towed vehicle is a semi-trailer (Rules of the Road §6.57). A rigid tow-bar lets you tow at normal speed, but not while carrying passengers — with passengers you are still capped at 30 km/h.",
+        explain: "Rules of the Road §6.57: a tow-bar lifts the 30 km/h ROPE limit, but a towed vehicle conveying persons may not exceed 30 km/h unless it is a semi-trailer.",
       },
       {
         q: "Your car breaks down on the roadway. You have no emergency warning triangle. No flares. What are you legally required to do?",
@@ -675,10 +675,10 @@ const TESTS = [
         explain: "Private motor cars are NOT among the three permitted vehicle types (emergency vehicles, loading/delivery, maintenance). Urgency and destination do not change this. A private car — even in a genuine personal emergency — may not enter the pedestrian priority zone.",
       },
       {
-        q: "A no-entry sign (R3) is displayed at the end of an off-ramp. You accidentally drove up the off-ramp. May you reverse back down?",
-        options: ["Yes — reversing down the ramp is safer than proceeding through the no-entry","No — proceed past the R3 sign and find a safe turnaround point","No — stop immediately and call a traffic officer","Yes — no-entry signs do not apply when reversing"],
+        q: "Where would you usually find the No Entry sign (R3), and what does it mean?",
+        options: ["At the start of a freeway — slow down","At the end of a one-way street or off-ramp — no traffic may proceed past it","At a school — no hooting","At a parking area — no entry after hours only"],
         answer: 1,
-        explain: "R3 (No Entry) means NO traffic may PROCEED past the sign on that road. Reversing back down an off-ramp against traffic flow is extremely dangerous and illegal. The correct action is to proceed past the sign and find a legal, safe place to turn around.",
+        explain: "SGN R3: usually at the end of a one-way street, at the end of an off-ramp, or where a two-way road becomes one-way. No traffic may proceed past the sign.",
       },
       {
         q: "Your test is TOMORROW. Blood alcohol at the police station is 0.05g (you are a general driver). A sign error caused you to park 8m from a pedestrian crossing (legal minimum: 9m). Your tyre tread is exactly 1mm. Your vehicle disc expired 20 days ago. How many offences have you committed?",

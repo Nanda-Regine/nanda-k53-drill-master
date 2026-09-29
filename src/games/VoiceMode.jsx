@@ -18,7 +18,7 @@ const SESSION_SIZE = 15;
 const STRIPE = ['#007A4D', '#FFB612', '#DE3831', '#4472CA', '#FFFFFF'];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
 function levenshtein(a, b) {
   const m = a.length, n = b.length;
@@ -201,7 +201,7 @@ export default function VoiceMode({ onBack, onPass }) {
         )}
 
         <div style={{ background: T.surface, borderRadius: 12, padding: 16, marginBottom: 32, textAlign: 'left' }}>
-          {['15 road signs per session', 'Say the name or meaning — both accepted', 'Fuzzy matching handles accent variations', '75%+ to pass · SA English / Afrikaans / isiXhosa'].map((tip, i) => (
+          {['15 road signs per session', 'Say the name or meaning — both accepted', 'Fuzzy matching handles accent variations', 'Score 75%+ to clear the drill · SA English / Afrikaans / isiXhosa'].map((tip, i) => (
             <div key={i} style={{ display: 'flex', gap: 10, marginBottom: i < 3 ? 10 : 0, fontSize: 13, color: T.dim }}>
               <span style={{ color: T.green }}>✓</span> {tip}
             </div>

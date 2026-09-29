@@ -17,19 +17,19 @@ const CLUSTERS = [
     scenario: 'You are driving on the N2 freeway at 23:00. It is raining lightly. The road is wet and your visibility is reduced.',
     questions: [
       { q: 'What is the maximum speed limit on this road?', opts: ['100 km/h', '120 km/h', '60 km/h', '80 km/h'], ans: 1, nerve: 'rules' },
-      { q: 'What following distance should you keep in these conditions?', opts: ['1 second', '2 seconds', '3 seconds', '4 seconds'], ans: 2, nerve: 'rules' },
+      { q: 'What following distance should you keep in these conditions?', opts: ['Only the 2-second minimum', 'More than the 2-second minimum', '1 second', 'Exactly 5 car lengths'], ans: 1, nerve: 'rules' },
       { q: 'Your headlights must illuminate how far ahead on main beam?', opts: ['45 m', '60 m', '90 m', '100 m'], ans: 3, nerve: 'rules' },
-      { q: 'If your vehicle breaks down on the freeway, you must place the emergency triangle at least ___ behind the vehicle.', opts: ['25 m', '30 m', '45 m', '60 m'], ans: 2, nerve: 'rules' },
+      { q: 'If a warning triangle is displayed behind a broken-down vehicle, it must be placed at least ___ behind it.', opts: ['25 m', '30 m', '45 m', '60 m'], ans: 2, nerve: 'rules' },
     ],
   },
   {
     id: 'intersection_yield',
     icon: '🛑',
-    scenario: 'You arrive at a four-way stop at the same time as another vehicle approaching from your right.',
+    scenario: 'You arrive at a four-way stop. A vehicle on your right stopped at its stop line just before you did.',
     questions: [
-      { q: 'Who has right of way?', opts: ['You do — you were first', 'The vehicle on your right', 'The vehicle on your left', 'Neither — hoot and proceed'], ans: 1, nerve: 'rules' },
+      { q: 'Who may move off first?', opts: ['You — you are going straight', 'The vehicle that stopped first (the one on your right)', 'The larger vehicle', 'Neither — hoot and proceed'], ans: 1, nerve: 'rules' },
       { q: 'What must you do before proceeding?', opts: ['Hoot once and go', 'Come to a complete stop, then yield', 'Slow down and check', 'Flash your lights'], ans: 1, nerve: 'rules' },
-      { q: 'The four-way stop sign consists of:', opts: ['A yield plate only', 'A stop sign with a "4 WAY" plate', 'A red circle', 'An octagon only'], ans: 1, nerve: 'signs' },
+      { q: 'Regulatory signs are usually round. What shape is the stop sign?', opts: ['Round', 'Octagonal', 'Triangular', 'Diamond'], ans: 1, nerve: 'signs' },
       { q: 'After stopping at the stop line, when may you proceed?', opts: ['Immediately after stopping', 'Only when all roads are clear', 'When it is safe to do so', 'After counting to three'], ans: 2, nerve: 'rules' },
     ],
   },
@@ -38,10 +38,10 @@ const CLUSTERS = [
     icon: '🛣️',
     scenario: 'You are joining a freeway via an on-ramp. Traffic on the freeway is moving at 110 km/h.',
     questions: [
-      { q: 'Who must yield when joining the freeway?', opts: ['Traffic on the freeway', 'You, on the on-ramp', 'Larger vehicles only', 'No one — merge at will'], ans: 1, nerve: 'rules' },
-      { q: 'What is the correct procedure before merging?', opts: ['Signal, match speed, check mirrors and blind spot, merge', 'Hoot and merge quickly', 'Stop and wait for a gap', 'Signal and stop'], ans: 0, nerve: 'rules' },
+      { q: 'K53: while merging from the on-ramp you must:', opts: ['Merge at will — freeway traffic must stop', 'Yield according to the traffic pattern, signs and markings, and check your blind spots', 'Stop at the end of the ramp every time', 'Hoot and merge'], ans: 1, nerve: 'rules' },
+      { q: 'What is the K53 procedure for entering a freeway?', opts: ['Check mirrors and blind spot, signal, adjust speed, check blind spots again, merge', 'Hoot and merge quickly', 'Stop and wait for a gap', 'Signal and stop'], ans: 0, nerve: 'rules' },
       { q: 'Flashing your high beams at a vehicle ahead signals:', opts: ['Move over — you want to pass', 'Danger ahead', 'Slow down', 'You are turning'], ans: 0, nerve: 'rules' },
-      { q: 'When is it legal to overtake on the left (inside lane)?', opts: ['Never', 'When traffic is turning right', 'When the vehicle ahead signals left', 'When lanes are moving slowly in queues'], ans: 3, nerve: 'rules' },
+      { q: 'When may you pass another vehicle on its left?', opts: ['Never', 'When it is turning right (or has signalled to turn right)', 'When it signals left', 'Whenever traffic is slow'], ans: 1, nerve: 'rules' },
     ],
   },
   {
@@ -61,7 +61,7 @@ const CLUSTERS = [
     scenario: 'You approach a marked pedestrian crossing. A pedestrian is waiting at the kerb.',
     questions: [
       { q: 'What must you do?', opts: ['Hoot to let them know you are passing', 'Slow down and be prepared to stop', 'Stop and allow the pedestrian to cross', 'Continue — they are not yet on the road'], ans: 2, nerve: 'rules' },
-      { q: 'The sign warning of a pedestrian crossing ahead is:', opts: ['A red circle with a person', 'A yield triangle with a person', 'A yellow diamond with a person walking', 'A blue square'], ans: 2, nerve: 'signs' },
+      { q: 'Warning sign W306 (pedestrian crossing ahead) tells you to:', opts: ['Speed up before pedestrians arrive', 'Hoot at pedestrians', 'Slow down, and stop if a pedestrian is waiting at the crossing', 'Stop in every case'], ans: 2, nerve: 'signs' },
       { q: 'If a learner child is crossing, who must you yield to?', opts: ['Only if a school patrol officer is present', 'Only during school hours', 'Any pedestrian using a marked crossing', 'Emergency vehicles only'], ans: 2, nerve: 'rules' },
       { q: 'A pedestrian who is blind uses a white cane. You must:', opts: ['Hoot to alert them', 'Give them extra space and wait until they are safely across', 'Proceed carefully', 'Flash your lights'], ans: 1, nerve: 'rules' },
     ],
@@ -83,7 +83,7 @@ const CLUSTERS = [
     scenario: 'You are about to set off on a long road trip. You do a pre-trip check of your vehicle.',
     questions: [
       { q: 'Which of the following is a legal requirement before driving?', opts: ['Full tank of fuel', 'Working hooter, lights, wipers and brakes', 'Air conditioning', 'GPS navigation'], ans: 1, nerve: 'controls' },
-      { q: 'Tyre tread depth must be at least:', opts: ['0.5 mm', '1 mm', '1.6 mm', '3 mm'], ans: 2, nerve: 'controls' },
+      { q: 'Tyre tread depth must be at least:', opts: ['0.5 mm', '1 mm', '1.6 mm', '3 mm'], ans: 1, nerve: 'controls' },
       { q: 'You notice your brake warning light is on. You should:', opts: ['Drive slowly to the garage', 'Do not drive — have the brakes inspected immediately', 'Top up brake fluid and continue', 'Ignore it if brakes feel okay'], ans: 1, nerve: 'controls' },
       { q: 'Seat belts are required for:', opts: ['Front passengers only', 'The driver only', 'All occupants where fitted', 'Children under 12 only'], ans: 2, nerve: 'controls' },
     ],

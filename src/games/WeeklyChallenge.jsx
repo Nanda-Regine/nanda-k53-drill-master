@@ -4,10 +4,11 @@ import { T } from '../theme.js';
 import { sfx } from '../utils/sounds.js';
 import { hapticCorrect, hapticWrong, hapticPass } from '../utils/haptics.js';
 import { CRISP_SIGNS as ROAD_SIGNS } from '../data/roadSigns.js';
+import { shuffleCopy } from '../utils/quizHelpers.js';
 
 // ── Fallback challenge (used when no Supabase challenge found) ────────────────
 function buildLocalChallenge() {
-  const signs = [...ROAD_SIGNS].sort(() => Math.random() - 0.5).slice(0, 10);
+  const signs = shuffleCopy(ROAD_SIGNS).slice(0, 10);
   const endsAt = new Date();
   endsAt.setDate(endsAt.getDate() + (7 - endsAt.getDay())); // next Sunday
   endsAt.setHours(23, 59, 59, 0);
@@ -21,7 +22,7 @@ function buildLocalChallenge() {
     questions: signs.map(s => ({
       id: s.id, img: s.img,
       q: `What does this sign (${s.code || s.id}) mean?`,
-      options: [...s.options].sort(() => Math.random() - 0.5),
+      options: shuffleCopy(s.options),
       answer: s.options[0],
     })),
   };
@@ -129,7 +130,7 @@ export default function WeeklyChallenge({ onBack, onPass }) {
                 id: r.external_id || r.id,
                 img: r.img,
                 q: r.question_text,
-                options: Array.isArray(r.options) ? [...r.options].sort(() => Math.random() - 0.5) : [],
+                options: Array.isArray(r.options) ? shuffleCopy(r.options) : [],
                 answer: r.correct_answer,
               }));
             }

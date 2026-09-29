@@ -10,12 +10,10 @@ const Gauntlet            = lazy(() => import('./games/Gauntlet.jsx'));
 const HybridGauntlet      = lazy(() => import('./games/HybridGauntlet.jsx'));
 const PatternTrainer      = lazy(() => import('./games/PatternTrainer.jsx'));
 const RoadRulesGauntlet   = lazy(() => import('./games/RoadRulesGauntlet.jsx'));
-const MockExam            = lazy(() => import('./games/MockExam.jsx'));
 const VehicleControls     = lazy(() => import('./games/VehicleControls.jsx'));
 const PDPPrep             = lazy(() => import('./games/PDPPrep.jsx'));
 const MotorcycleGauntlet   = lazy(() => import('./games/MotorcycleGauntlet.jsx'));
 const HeavyVehicleGauntlet = lazy(() => import('./games/HeavyVehicleGauntlet.jsx'));
-const MotorcycleMockExam   = lazy(() => import('./games/MotorcycleMockExam.jsx'));
 const RoadSignsQuiz        = lazy(() => import('./games/RoadSignsQuiz.jsx'));
 const SignShapeTrainer     = lazy(() => import('./games/SignShapeTrainer.jsx'));
 const RoadMarkingsDrill    = lazy(() => import('./games/RoadMarkingsDrill.jsx'));
@@ -132,7 +130,7 @@ const GAMES_BASE = [
   { id: 'motorcycle',   icon: '🏍️', tier: 'free',    diff: 'beginner',     cat: 'controls',  codes: ['code12'] },
   { id: 'moto_exam',    icon: '📝', tier: 'free',    diff: 'intermediate', cat: 'exam',      codes: ['code12'] },
   { id: 'gauntlet',     icon: '⚡', tier: 'free',    diff: 'beginner',     cat: 'controls',  codes: ['code8'] },
-  { id: 'mockexam',     icon: '📝', tier: 'free',    diff: 'intermediate', cat: 'exam',      codes: ['code8'] },
+  { id: 'mockexam',     icon: '📝', tier: 'free',    diff: 'intermediate', cat: 'exam',      codes: ['code8'], hidden: true }, // same engine as learner_exam; kept for deep links
   { id: 'hybrid',       icon: '🔥', tier: 'premium', diff: 'advanced',     cat: 'rules',     codes: ['code8'] },
   { id: 'heavy',        icon: '🚛', tier: 'free',    diff: 'beginner',     cat: 'controls',  codes: ['code10', 'code14'] },
   { id: 'pdp',          icon: '🎓', tier: 'pdp',     diff: 'professional', cat: 'exam',      codes: ['code10', 'code14'] },
@@ -448,12 +446,12 @@ export default function App() {
   if (activeGame === 'hybrid')      return <><GameErrorBoundary onBack={onGameBack} gameName="Hybrid Gauntlet"><HybridGauntlet      onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'patterns')    return <><GameErrorBoundary onBack={onGameBack} gameName="Pattern Trainer"><PatternTrainer      onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'road_rules')  return <><GameErrorBoundary onBack={onGameBack} gameName="Road Rules Gauntlet"><RoadRulesGauntlet   onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
-  if (activeGame === 'mockexam')    return <><GameErrorBoundary onBack={onGameBack} gameName="Mock Exam"><MockExam            onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'mockexam')    return <><GameErrorBoundary onBack={onGameBack} gameName="Mock Exam"><K53LearnerExam variant="lmv" onBack={onGameBack} onPass={onGamePass} onGoToGame={(gId) => handleGameSelect(GAMES.find(g => g.id === gId) || { id: gId, tier: 'free' })} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'controls')    return <><GameErrorBoundary onBack={onGameBack} gameName="Vehicle Controls"><VehicleControls     onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'pdp')         return <><GameErrorBoundary onBack={onGameBack} gameName="PDP Prep"><PDPPrep             onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'motorcycle')  return <><GameErrorBoundary onBack={onGameBack} gameName="Motorcycle Gauntlet"><MotorcycleGauntlet  onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'heavy')       return <><GameErrorBoundary onBack={onGameBack} gameName="Heavy Vehicle Gauntlet"><HeavyVehicleGauntlet onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
-  if (activeGame === 'moto_exam')   return <><GameErrorBoundary onBack={onGameBack} gameName="Motorcycle Mock Exam"><MotorcycleMockExam   onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
+  if (activeGame === 'moto_exam')   return <><GameErrorBoundary onBack={onGameBack} gameName="Motorcycle Mock Exam"><K53LearnerExam variant="mc" onBack={onGameBack} onPass={onGamePass} onGoToGame={(gId) => handleGameSelect(GAMES.find(g => g.id === gId) || { id: gId, tier: 'free' })} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'roadsigns')   return <><GameErrorBoundary onBack={onGameBack} gameName="Road Signs Quiz"><RoadSignsQuiz         onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'sign_shape')  return <><GameErrorBoundary onBack={onGameBack} gameName="Sign Shape Trainer"><SignShapeTrainer       onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
   if (activeGame === 'road_marks')  return <><GameErrorBoundary onBack={onGameBack} gameName="Road Markings Drill"><RoadMarkingsDrill      onBack={onGameBack} onPass={onGamePass} /></GameErrorBoundary>{confettiOverlay}</>;
