@@ -699,3 +699,12 @@ Learners reported "a lot of mistakes". A line-by-line re-audit against `updated-
 **Staging results (2026-10-22, https://k53drillmaster.mirembemuse.workers.dev, side by side with www on Vercel):** home, sw.js, robots, sitemap (same bytes); `/api/health` ok; checkout monthly 302 to the same Paystack page; annual checkout page same (differs only by the generated ref); ITN with a bad signature quietly ignored (`OK`) on both; Paystack webhook without hub secret 403; claim 400; cancel 401; unknown `/api/*` 404. Fixes: `html_handling: none` so `/pricing` serves the SPA like Vercel; apex → www with **308** (keeps POST bodies, so a webhook sent to the apex still lands).
 
 **LIVE 2026-10-22 ~22:35 SAST.** Worker routes `www.k53drillmaster.co.za/*` + `k53drillmaster.co.za/*` (DNS was already Cloudflare + proxied, so no DNS change). Live checks: served from Cloudflare JNB, no Vercel header; health, checkout, ITN, webhook all as before. Rollback = delete the 2 routes (Vercel stays live underneath until ~Nov 5). Gap found live: Static Assets answered apex GETs without running Worker code, so no apex → www redirect. Fix: `run_worker_first: true`. From now on a push to `feat/cloudflare-workers` deploys to production.
+
+## Phase 18 — PayFast ITN: returning buyers never got their time
+**2026-10-22**
+
+**Bug (pre-existing, found in the post-cutover payment audit):** `api/itn.js` called `inviteUserByEmail` on every COMPLETE payment. Supabase refuses to invite an email that already has an account, so the handler threw and a returning PayFast buyer paid but `subscribers` was never extended. The upsert also never set `status`, so someone who had cancelled stayed `cancelled` after paying again. The Paystack path (`paystack-webhook.js`) already handled both.
+
+**Fix:** look up the subscriber by email first. New buyer: invite as before. Account without a subscriber row: resolve the user with a magic link (no duplicate account). Paying while still active adds the days on top of the time left; lapsed buyers start from now. Upsert sets `status: 'active'`.
+
+**Proof:** `tests/itn.test.mjs` (node:test, fake Supabase, no install needed via `tests/stubs/register.mjs`), 5/5: new buyer, returning buyer (the bug), lapsed buyer, account without row, unresolvable user. Wired into `npm test`, so CI runs it before every deploy. Still to prove live: one real small PayFast purchase + refund.

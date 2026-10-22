@@ -17,25 +17,44 @@ function adminClient() {
   );
 }
 
-async function activateSubscriber(email, plan, paymentId) {
-  const supabase = adminClient();
+// Exported (with an injectable client) so tests/itn.test.mjs can exercise it.
+export async function activateSubscriber(email, plan, paymentId, supabase = adminClient(), now = Date.now()) {
   const days = PLAN_DAYS[plan] || 30;
-  const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
   const siteUrl = process.env.SITE_URL || 'https://k53drillmaster.co.za';
 
-  // Invite user by email — creates account if new, sends magic link either way.
-  // The subscriber receives a "sign in to activate your account" email automatically.
-  const { data, error: inviteErr } = await supabase.auth.admin.inviteUserByEmail(email, {
-    redirectTo: siteUrl,
-  });
-  if (inviteErr) throw new Error(`Invite failed: ${inviteErr.message}`);
+  // Returning buyer: Supabase refuses to invite an email that already has an account, so
+  // inviting first meant a repeat PayFast payment never extended anything. Find them first.
+  const { data: existing } = await supabase
+    .from('subscribers').select('user_id, expires_at').eq('email', email).maybeSingle();
 
-  const userId = data.user.id;
+  let userId = existing && existing.user_id;
+  if (!userId) {
+    // New buyer: invite creates the account and sends the "sign in to activate" email.
+    const { data, error: inviteErr } = await supabase.auth.admin.inviteUserByEmail(email, { redirectTo: siteUrl });
+    if (!inviteErr && data && data.user) {
+      userId = data.user.id;
+    } else {
+      // Account exists but has no subscriber row (signed up free, or a past failed activation):
+      // a magic link resolves the existing user without creating a duplicate.
+      const { data: link, error: linkErr } = await supabase.auth.admin.generateLink({
+        type: 'magiclink', email, options: { redirectTo: siteUrl },
+      });
+      if (linkErr || !link || !link.user) {
+        throw new Error(`Invite failed: ${(inviteErr && inviteErr.message) || (linkErr && linkErr.message) || 'no user'}`);
+      }
+      userId = link.user.id;
+    }
+  }
+
+  // Paying again while still active adds the days on top of the time they already have.
+  const current = existing && existing.expires_at ? Date.parse(existing.expires_at) : 0;
+  const base = current > now ? current : now;
+  const expiresAt = new Date(base + days * 24 * 60 * 60 * 1000).toISOString();
 
   // Upsert subscriber row (handles renewals / plan changes); store the PayFast id for audit.
   const { error: dbErr } = await supabase
     .from('subscribers')
-    .upsert({ user_id: userId, email, plan, expires_at: expiresAt, payfast_payment_id: paymentId ?? null }, { onConflict: 'user_id' });
+    .upsert({ user_id: userId, email, plan, status: 'active', expires_at: expiresAt, payfast_payment_id: paymentId ?? null }, { onConflict: 'user_id' });
   if (dbErr) throw new Error(`DB upsert failed: ${dbErr.message}`);
 
   console.log(`[ITN] Activated: ${email} | plan=${plan} | expires=${expiresAt} | pf=${paymentId}`);
