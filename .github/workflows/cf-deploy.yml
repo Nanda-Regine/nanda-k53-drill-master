@@ -1,0 +1,33 @@
+# K53 on Cloudflare Workers: build the Vite SPA in GitHub (never on the laptop) and deploy.
+# workers.dev staging only until cutover (wrangler.jsonc has no routes yet).
+name: cf-deploy
+on:
+  push:
+    branches: [feat/cloudflare-workers]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      VITE_USE_SUPABASE_QUESTIONS: ${{ secrets.VITE_USE_SUPABASE_QUESTIONS }}
+      HAS_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npm run build
+      - name: Bundle check (dry run)
+        run: npx wrangler deploy --dry-run --outdir /tmp/cf-out 2>&1 | tail -8
+      - name: Deploy to workers.dev (staging)
+        if: ${{ env.HAS_TOKEN == 'true' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy

@@ -1,0 +1,23 @@
+// K53 DrillMaster on Cloudflare Workers: Vite SPA (Static Assets) + /api payment handlers (worker/index.js).
+// Secrets are set with `wrangler secret put` only. Never put them here.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "k53drillmaster",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-01",
+  // nodejs_compat: node:crypto (PayFast md5 + HMAC), Buffer, process.env from secrets
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // /api/* must reach the Worker even if a same-named asset existed
+    "run_worker_first": ["/api/*"]
+  },
+  // Run near Supabase (the API handlers talk to it on every call)
+  "placement": { "mode": "smart" },
+  "observability": { "enabled": true },
+  // Staging only until cutover. No routes / custom domain yet.
+  "workers_dev": true,
+  "preview_urls": true
+}
