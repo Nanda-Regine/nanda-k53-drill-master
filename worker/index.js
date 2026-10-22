@@ -76,6 +76,12 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
+    // Canonical host is www (as on Vercel). Apex -> www keeps links + SEO intact.
+    if (url.hostname === 'k53drillmaster.co.za') {
+      url.hostname = 'www.k53drillmaster.co.za';
+      return Response.redirect(url.toString(), 308);
+    }
+
     // Jarvis engineering feedback (was a Vercel rewrite)
     if (url.pathname === '/api/engineering/feedback') {
       const target = new URL('https://jarvis.mirembemuse.co.za/api/engineering/feedback' + url.search);

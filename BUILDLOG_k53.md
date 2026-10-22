@@ -682,3 +682,18 @@ Learners reported "a lot of mistakes". A line-by-line re-audit against `updated-
 
   They were replaced with verifiable trust copy (the official format, answers checked against the DoT manuals).
 - `validate-questions.mjs` now also fails on rating markup, testimonials, unsourced pass-rate stats and 68Q/45-min wording in the marketing pages.
+
+---
+
+## Phase 17 — Vercel → Cloudflare Workers (staging)
+**2026-10-22**
+
+**Why now:** paying subscribers and real traffic. Every domain already sits on Cloudflare DNS, but it was proxied (orange cloud) in front of Vercel, so every request crossed two edges. On Workers the app runs on Cloudflare's edge alone, Johannesburg included.
+
+**Decision: payment code does not change.** The 7 `/api` handlers (checkout, PayFast ITN, Paystack webhook, verify, claim, cancel, health) run unchanged through a small Vercel-compatible `req`/`res` adapter in `worker/index.js`. The PayFast ITN form is parsed with `URLSearchParams`, so fields keep their order and the md5 signature matches exactly as on Vercel. The Jarvis feedback rewrite is a proxy in the Worker.
+
+**Setup:** branch `feat/cloudflare-workers`. `wrangler.jsonc`: Static Assets from `dist/` with SPA fallback, `run_worker_first` on `/api/*`, Smart Placement (runs near Supabase), `nodejs_compat` (node:crypto, Buffer, process.env), observability on. CI `cf-deploy.yml` builds in GitHub and deploys to workers.dev only. 10 Worker secrets copied from Vercel production (names only were ever printed); `PAYFAST_HUB_NOTIFY_URL`, `PAYSTACK_HUB_URL`, `VITE_USE_SUPABASE_QUESTIONS` are unset on Vercel too, so behaviour matches live.
+
+**Before cutover:** test checkout redirect, a PayFast sandbox ITN, a hub-forwarded Paystack event, verify/claim/cancel, every SPA route; then the full Cloudflare stack checklist (WAF skip rules for `/api/itn` + `/api/paystack-webhook`, Turnstile, Web Analytics). Vercel stays live 14 days.
+
+**Staging results (2026-10-22, https://k53drillmaster.mirembemuse.workers.dev, side by side with www on Vercel):** home, sw.js, robots, sitemap (same bytes); `/api/health` ok; checkout monthly 302 to the same Paystack page; annual checkout page same (differs only by the generated ref); ITN with a bad signature quietly ignored (`OK`) on both; Paystack webhook without hub secret 403; claim 400; cancel 401; unknown `/api/*` 404. Fixes: `html_handling: none` so `/pricing` serves the SPA like Vercel; apex → www with **308** (keeps POST bodies, so a webhook sent to the apex still lands).

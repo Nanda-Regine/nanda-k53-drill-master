@@ -11,6 +11,8 @@
     "directory": "dist",
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
+    // Match Vercel: /pricing -> the SPA, not pricing.html (exact /x.html paths still serve)
+    "html_handling": "none",
     // /api/* must reach the Worker even if a same-named asset existed
     "run_worker_first": ["/api/*"]
   },
