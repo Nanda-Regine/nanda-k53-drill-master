@@ -13,8 +13,9 @@
     "not_found_handling": "single-page-application",
     // Match Vercel: /pricing -> the SPA, not pricing.html (exact /x.html paths still serve)
     "html_handling": "none",
-    // /api/* must reach the Worker even if a same-named asset existed
-    "run_worker_first": ["/api/*"]
+    // Every request runs the Worker first: the apex -> www 308 must run before the SPA/asset
+    // handler (with ["/api/*"] only, apex GETs were served as the SPA, no redirect).
+    "run_worker_first": true
   },
   // Run near Supabase (the API handlers talk to it on every call)
   "placement": { "mode": "smart" },
