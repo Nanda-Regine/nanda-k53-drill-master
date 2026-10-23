@@ -1,11 +1,19 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { inject } from "@vercel/analytics";
 import { Capacitor } from "@capacitor/core";
 import App from "./App.jsx";
 import { LangProvider } from "./LangContext.jsx";
 
-inject();
+// Cloudflare Web Analytics (cookieless). Token is a public build-time value (VITE_CF_BEACON_TOKEN);
+// nothing is loaded when it is unset, or inside the native Capacitor shell.
+const CF_BEACON_TOKEN = import.meta.env.VITE_CF_BEACON_TOKEN;
+if (CF_BEACON_TOKEN && !Capacitor.isNativePlatform()) {
+  const s = document.createElement("script");
+  s.defer = true;
+  s.src = "https://static.cloudflareinsights.com/beacon.min.js";
+  s.setAttribute("data-cf-beacon", JSON.stringify({ token: CF_BEACON_TOKEN }));
+  document.head.appendChild(s);
+}
 
 // ── Native shell init (Capacitor) ───────────────────────────────────────────────
 if (Capacitor.isNativePlatform()) {

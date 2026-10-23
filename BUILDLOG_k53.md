@@ -716,3 +716,14 @@ Learners reported "a lot of mistakes". A line-by-line re-audit against `updated-
 - No real payment has crossed the Worker yet; the last one was the PayFast product sale on 2026-10-19, before cutover.
 - **Proof still owed:** one real Bundle (R69, PayFast, exercises the Phase 18 fix) + refund, and one Monthly (R29, Paystack) + cancel.
 - Retire Vercel about 2026-11-05.
+
+## Phase 19 — Cloudflare finish-off (2026-10-23)
+- **Analytics:** Cloudflare Web Analytics (cookieless) replaces `@vercel/analytics`, which 404s on Workers.
+  - The beacon loads from `src/main.jsx` only when `VITE_CF_BEACON_TOKEN` is set, and never inside the native Capacitor shell.
+  - The dependency is removed.
+- **Zone (done via the API):** Early Hints, Smart Tiered Cache, and a WAF skip rule (Browser Integrity Check + security level) for `/api/itn` and `/api/paystack-webhook`, so PayFast/hub callbacks can never be challenged.
+- **Turnstile: deliberately NOT used on K53.**
+  - Every `/api` endpoint is a payment path (checkout, ITN, Paystack webhook, verify, cancel), or `claim`.
+  - `claim` requires a `claimToken` that only exists after a real PayFast payment, so it cannot be abused for free.
+  - A widget would only add risk to the money flow.
+- **Payment checks after deploy:** home 200, apex 308 to www, checkout 302 to Paystack, ITN 200, unsigned webhook 403. Results are in the Jarvis journal.

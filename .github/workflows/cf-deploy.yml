@@ -13,6 +13,8 @@ jobs:
       VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
       VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       VITE_USE_SUPABASE_QUESTIONS: ${{ secrets.VITE_USE_SUPABASE_QUESTIONS }}
+      # Public build-time values: CF Web Analytics beacon token (Turnstile is not used on K53, see BUILDLOG)
+      VITE_CF_BEACON_TOKEN: ${{ secrets.VITE_CF_BEACON_TOKEN }}
       HAS_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
