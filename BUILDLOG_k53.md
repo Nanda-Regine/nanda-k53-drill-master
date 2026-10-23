@@ -685,7 +685,7 @@ Learners reported "a lot of mistakes". A line-by-line re-audit against `updated-
 
 ---
 
-## Phase 17 — Vercel → Cloudflare Workers (staging)
+## Phase 17 — Vercel → Cloudflare Workers (LIVE since 2026-10-22 22:27 SAST)
 **2026-10-22**
 
 **Why now:** paying subscribers and real traffic. Every domain already sits on Cloudflare DNS, but it was proxied (orange cloud) in front of Vercel, so every request crossed two edges. On Workers the app runs on Cloudflare's edge alone, Johannesburg included.
@@ -698,7 +698,7 @@ Learners reported "a lot of mistakes". A line-by-line re-audit against `updated-
 
 **Staging results (2026-10-22, https://k53drillmaster.mirembemuse.workers.dev, side by side with www on Vercel):** home, sw.js, robots, sitemap (same bytes); `/api/health` ok; checkout monthly 302 to the same Paystack page; annual checkout page same (differs only by the generated ref); ITN with a bad signature quietly ignored (`OK`) on both; Paystack webhook without hub secret 403; claim 400; cancel 401; unknown `/api/*` 404. Fixes: `html_handling: none` so `/pricing` serves the SPA like Vercel; apex → www with **308** (keeps POST bodies, so a webhook sent to the apex still lands).
 
-**LIVE 2026-10-22 ~22:35 SAST.** Worker routes `www.k53drillmaster.co.za/*` + `k53drillmaster.co.za/*` (DNS was already Cloudflare + proxied, so no DNS change). Live checks: served from Cloudflare JNB, no Vercel header; health, checkout, ITN, webhook all as before. Rollback = delete the 2 routes (Vercel stays live underneath until ~Nov 5). Gap found live: Static Assets answered apex GETs without running Worker code, so no apex → www redirect. Fix: `run_worker_first: true`. From now on a push to `feat/cloudflare-workers` deploys to production.
+**LIVE 2026-10-22 22:27 SAST** (route_create in the Cloudflare audit log: 20:27 UTC). Worker routes `www.k53drillmaster.co.za/*` + `k53drillmaster.co.za/*` (DNS was already Cloudflare + proxied, so no DNS change). Live checks: served from Cloudflare JNB, no Vercel header; health, checkout, ITN, webhook all as before. Rollback = delete the 2 routes (Vercel stays live underneath until ~Nov 5). Gap found live: Static Assets answered apex GETs without running Worker code, so no apex → www redirect. Fix: `run_worker_first: true`. From now on a push to `feat/cloudflare-workers` deploys to production.
 
 ## Phase 18 — PayFast ITN: returning buyers never got their time
 **2026-10-22**
@@ -708,3 +708,11 @@ Learners reported "a lot of mistakes". A line-by-line re-audit against `updated-
 **Fix:** look up the subscriber by email first. New buyer: invite as before. Account without a subscriber row: resolve the user with a magic link (no duplicate account). Paying while still active adds the days on top of the time left; lapsed buyers start from now. Upsert sets `status: 'active'`.
 
 **Proof:** `tests/itn.test.mjs` (node:test, fake Supabase, no install needed via `tests/stubs/register.mjs`), 5/5: new buyer, returning buyer (the bug), lapsed buyer, account without row, unresolvable user. Wired into `npm test`, so CI runs it before every deploy. Still to prove live: one real small PayFast purchase + refund.
+
+**Payment status after cutover (2026-10-23):**
+- The Mirembe hub forwards PayFast to `www.k53drillmaster.co.za/api/itn` and Paystack to `/api/paystack-webhook`. Both use www, so there is no apex redirect in the path.
+- A no-op probe carrying the hub secret was accepted (200): the Worker holds the same `HUB_INTERNAL_SECRET` as the hub.
+- Monthly checkout 302s to the live Paystack page.
+- No real payment has crossed the Worker yet; the last one was the PayFast product sale on 2026-10-19, before cutover.
+- **Proof still owed:** one real Bundle (R69, PayFast, exercises the Phase 18 fix) + refund, and one Monthly (R29, Paystack) + cancel.
+- Retire Vercel about 2026-11-05.
