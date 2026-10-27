@@ -1,6 +1,23 @@
 // AUTO-GENERATED from /public/signs — only images >=250px wide (crisp).
 // Gates generated sign questions so quizzes never show a low-resolution sign.
 export const SIGN_IMAGES = new Set([
+  'sadc-W313.svg',
+  'sadc-W311.svg',
+  'sadc-W114.svg',
+  'sadc-W113.svg',
+  'sadc-W111.svg',
+  'sadc-R203.svg',
+  'sadc-R202.svg',
+  'sadc-R238.svg',
+  'sadc-R237.svg',
+  'sadc-R218.svg',
+  'sadc-R219.svg',
+  'sadc-R222.svg',
+  'sadc-R205.svg',
+  'sadc-R239.svg',
+  'sadc-R2.1.svg',
+  'sadc-R1.4.svg',
+  'sadc-R1.3.svg',
   "abnormal-vehicle-parking-reservation-sign.jpg",
   "abnormal-vehicle-reservation-sign.jpg",
   "advance-exit-direction.jpg",
