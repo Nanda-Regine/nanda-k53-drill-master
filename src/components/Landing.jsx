@@ -141,12 +141,8 @@ export default function Landing({ onStart }) {
         backgroundPosition: 'center 0px',
         animation: 'roadFlow 0.85s linear infinite',
       }}>
-        {/* Radial vignette — kills road pattern except faint center strip */}
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 160% 100% at 50% 50%, rgba(13,14,24,0.15) 0%, rgba(13,14,24,0.94) 72%)', pointerEvents: 'none' }} />
-        {/* Side vignettes — show only the center lane */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(13,14,24,0.85) 0%, transparent 28%, transparent 72%, rgba(13,14,24,0.85) 100%)', pointerEvents: 'none' }} />
-        {/* Green glow top-right */}
-        <div style={{ position: 'absolute', top: -90, right: -50, width: 320, height: 320, background: 'radial-gradient(circle, rgba(0,122,77,0.13) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        {/* Single vignette — fades the road pattern out toward the edges, nothing else layered on top */}
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 120% 90% at 50% 20%, rgba(13,14,24,0.2) 0%, rgba(13,14,24,0.96) 68%)', pointerEvents: 'none' }} />
 
         <div style={{ position: 'relative', zIndex: 1 }}>
           {/* Badge */}
@@ -154,7 +150,7 @@ export default function Landing({ onStart }) {
             initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
             style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(0,122,77,0.14)', border: '1px solid rgba(0,122,77,0.38)', borderRadius: 99, padding: '5px 14px', marginBottom: 30 }}>
             <span style={{ fontSize: 13 }}>🇿🇦</span>
-            <span style={{ fontSize: 10, fontWeight: 800, color: '#4ade80', letterSpacing: 1.2 }}>SOUTH AFRICA'S #1 K53 APP</span>
+            <span style={{ fontSize: 10, fontWeight: 800, color: '#4ade80', letterSpacing: 1.2 }}>BUILT FOR THE OFFICIAL SA K53 TEST</span>
           </motion.div>
 
           {/* Headline */}
@@ -162,7 +158,7 @@ export default function Landing({ onStart }) {
             <h1 style={{ fontSize: 52, fontWeight: 900, lineHeight: 1.0, letterSpacing: -2.5, margin: '0 0 2px', color: '#ffffff', textWrap: 'balance' }}>
               Pass your K53.
             </h1>
-            <h1 style={{ fontSize: 52, fontWeight: 900, lineHeight: 1.0, letterSpacing: -2.5, margin: '0 0 32px', background: `linear-gradient(90deg, ${GOLD} 0%, #4ade80 65%)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+            <h1 style={{ fontSize: 52, fontWeight: 900, lineHeight: 1.0, letterSpacing: -2.5, margin: '0 0 32px', color: '#4ade80' }}>
               First try.
             </h1>
           </motion.div>
@@ -187,7 +183,7 @@ export default function Landing({ onStart }) {
           <motion.button
             initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4, delay: 0.28 }}
             whileTap={{ scale: 0.97 }} onClick={onStart}
-            style={{ width: '100%', background: `linear-gradient(135deg, ${GREEN} 0%, #00a365 100%)`, border: 'none', borderRadius: 16, padding: '20px', color: '#fff', fontFamily: FONT, fontWeight: 900, fontSize: 18, cursor: 'pointer', boxShadow: '0 10px 40px rgba(0,122,77,0.5)', letterSpacing: 0.2, marginBottom: 12 }}>
+            style={{ width: '100%', background: GREEN, border: 'none', borderRadius: 14, padding: '20px', color: '#fff', fontFamily: FONT, fontWeight: 900, fontSize: 18, cursor: 'pointer', boxShadow: '0 6px 24px rgba(0,122,77,0.35)', letterSpacing: 0.2, marginBottom: 12 }}>
             Start Free — No Signup →
           </motion.button>
           <div style={{ textAlign: 'center', fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>
@@ -216,11 +212,6 @@ export default function Landing({ onStart }) {
               <span style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.32)', letterSpacing: 1, textTransform: 'uppercase' }}>
                 Road Signs Drill · Q{(demoIdx % 3) + 1} of 3
               </span>
-              <div style={{ marginLeft: 'auto', display: 'flex', gap: 5 }}>
-                {DEMO.map((_, i) => (
-                  <div key={i} style={{ width: i === demoIdx % 3 ? 16 : 5, height: 5, borderRadius: 99, background: i === demoIdx % 3 ? GOLD : 'rgba(255,255,255,0.1)', transition: 'all 0.3s' }} />
-                ))}
-              </div>
             </div>
 
             {/* Sign + question */}
@@ -258,7 +249,7 @@ export default function Landing({ onStart }) {
 
       {/* ── TRUST PANEL (verifiable facts only) ──────────────────────────────── */}
       <div style={{ padding: '0 20px 36px' }}>
-        <div style={{ background: 'linear-gradient(135deg, rgba(0,122,77,0.1) 0%, rgba(68,114,202,0.06) 100%)', border: '1px solid rgba(0,122,77,0.2)', borderRadius: 18, padding: '22px 20px', display: 'flex', alignItems: 'center', gap: 20 }}>
+        <div style={{ background: SURFACE, border: `1px solid rgba(0,122,77,0.3)`, borderLeft: `4px solid ${GREEN}`, borderRadius: 16, padding: '22px 20px', display: 'flex', alignItems: 'center', gap: 20 }}>
           <div style={{ flexShrink: 0 }}>
             <div style={{ fontSize: 56, fontWeight: 900, color: '#4ade80', lineHeight: 1, letterSpacing: -2.5, fontVariantNumeric: 'tabular-nums' }}>64</div>
             <div style={{ fontSize: 10, color: 'rgba(232,234,242,0.35)', marginTop: 4, letterSpacing: 0.3 }}>question mock exam</div>
@@ -315,7 +306,7 @@ export default function Landing({ onStart }) {
       {/* ── PRICING ───────────────────────────────────────────────────────────── */}
       <div style={{ padding: '0 20px 24px' }}>
         <div style={{ background: SURFACE, border: '1px solid rgba(255,255,255,0.07)', borderRadius: 20, overflow: 'hidden' }}>
-          <div style={{ padding: '20px 18px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'linear-gradient(135deg, rgba(0,122,77,0.1) 0%, rgba(255,182,18,0.05) 100%)' }}>
+          <div style={{ padding: '20px 18px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ fontWeight: 900, fontSize: 20, color: TEXT, marginBottom: 4 }}>Simple pricing</div>
             <div style={{ fontSize: 13, color: DIM, lineHeight: 1.5 }}>Start free. Go unlimited when you're ready.</div>
           </div>
@@ -342,7 +333,7 @@ export default function Landing({ onStart }) {
             ))}
           </div>
           <div style={{ textAlign: 'center', padding: '4px 14px 14px', fontSize: 10, color: 'rgba(255,255,255,0.18)' }}>
-            Pay via PayFast · Card · EFT · SnapScan · Instant activation
+            Pay via Paystack or PayFast · Card · EFT · SnapScan · Instant activation
           </div>
         </div>
       </div>
@@ -354,7 +345,7 @@ export default function Landing({ onStart }) {
         transition={{ delay: 0.55, type: 'spring', damping: 22, stiffness: 240 }}
         style={{ position: 'fixed', bottom: 0, left: 0, right: 0, padding: '12px 20px 30px', background: `linear-gradient(0deg, ${BG} 55%, rgba(13,14,24,0) 100%)`, zIndex: 100 }}>
         <motion.button whileTap={{ scale: 0.97 }} onClick={onStart}
-          style={{ width: '100%', background: `linear-gradient(135deg, ${GREEN} 0%, #00a365 100%)`, border: 'none', borderRadius: 16, padding: '19px', color: '#fff', fontFamily: FONT, fontWeight: 900, fontSize: 17, cursor: 'pointer', boxShadow: '0 8px 40px rgba(0,122,77,0.5)', letterSpacing: 0.2 }}>
+          style={{ width: '100%', background: GREEN, border: 'none', borderRadius: 14, padding: '19px', color: '#fff', fontFamily: FONT, fontWeight: 900, fontSize: 17, cursor: 'pointer', boxShadow: '0 6px 24px rgba(0,122,77,0.4)', letterSpacing: 0.2 }}>
           Start Free Now →
         </motion.button>
         <div style={{ textAlign: 'center', fontSize: 11, color: 'rgba(255,255,255,0.25)', marginTop: 9 }}>
