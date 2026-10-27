@@ -98,6 +98,40 @@
 
   btn.onclick = function () { if (open) return; open = true; btn.style.display = 'none'; render() }
 
-  function mount() { document.body.appendChild(btn) }
+  // "You said, we fixed" (Oct 27 2026): once per fix, thank the person whose report led to it. Anonymous: only this
+  // browser's random id is sent; the reply holds just the public fix note. Seen fixes are remembered locally.
+  function thank() {
+    if (!submitter) return
+    var seen = []
+    try { seen = JSON.parse(localStorage.getItem('mm_fb_thanked') || '[]') } catch (e) {}
+    fetch(ORIGIN + '/api/engineering/feedback/thanks?app=' + encodeURIComponent(APP) + '&submitter=' + encodeURIComponent(submitter))
+      .then(function (r) { return r.ok ? r.json() : null })
+      .then(function (j) {
+        var fixed = ((j && j.data && j.data.fixed) || []).filter(function (f) { return seen.indexOf(f.id) < 0 })
+        if (!fixed.length) return
+        var card = el('div', 'position:fixed;right:18px;bottom:76px;z-index:2147483001;width:320px;max-width:calc(100vw - 36px);' +
+          'background:#0F0F13;border:1px solid ' + COLOR + '88;border-radius:18px;padding:16px 18px;font-family:system-ui,sans-serif;' +
+          'box-shadow:0 12px 40px rgba(0,0,0,0.5);')
+        var head = el('div', 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;')
+        head.appendChild(el('div', 'color:#FEF3C7;font-weight:700;font-size:15px;', '💚 You said, we fixed it'))
+        var x = el('button', 'background:none;border:none;color:#ffffff70;font-size:18px;cursor:pointer;min-width:44px;min-height:44px;', '✕')
+        head.appendChild(x); card.appendChild(head)
+        card.appendChild(el('div', 'color:#ffffffb0;font-size:13px;margin-bottom:8px;',
+          'Thank you for taking the time to tell us. Because of you:'))
+        fixed.forEach(function (f) { card.appendChild(el('div', 'color:#FEF3C7;font-size:13px;margin:4px 0;', '✓ ' + f.note)) })
+        function done() {
+          try { localStorage.setItem('mm_fb_thanked', JSON.stringify(seen.concat(fixed.map(function (f) { return f.id })).slice(-50))) } catch (e) {}
+          card.remove()
+        }
+        x.onclick = done
+        var ok = el('button', 'width:100%;margin-top:10px;padding:11px;border:none;border-radius:12px;cursor:pointer;min-height:44px;' +
+          'background:' + COLOR + ';color:#0A0A0F;font-weight:700;font-size:14px;', 'You’re welcome')
+        ok.onclick = done; card.appendChild(ok)
+        document.body.appendChild(card)
+      })
+      .catch(function () {})
+  }
+
+  function mount() { document.body.appendChild(btn); setTimeout(thank, 2500) }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount()
 })();
