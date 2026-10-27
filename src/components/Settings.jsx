@@ -21,7 +21,7 @@ All study data (progress, streaks, badges, quiz history) is stored locally on yo
 
 If you sign in with a magic link, we store your email address in our Supabase database solely to verify your subscription. We do not sell or share your email.
 
-Payment processing is handled by PayFast. We never see or store your card details.
+Payment processing is handled by Paystack (monthly subscriptions) and PayFast (once-off Bundle and Lifetime payments). We never see or store your card details.
 
 2. ANALYTICS
 We use Vercel Analytics to track aggregate page views. No personally identifiable information is collected.
@@ -51,7 +51,7 @@ The ${DAILY_LIMIT}-question daily limit resets at midnight each day.
 Each answered question (correct or wrong) counts toward the daily limit.
 
 4. PAID PLANS
-Processed via PayFast (ZAR). Monthly plans auto-renew. Lifetime plans are one-time.
+Processed via Paystack (monthly, ZAR) or PayFast (Bundle/Lifetime, ZAR). Monthly plans auto-renew. Lifetime plans are one-time.
 No refunds after activation.
 
 5. INTELLECTUAL PROPERTY

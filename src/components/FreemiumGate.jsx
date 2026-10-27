@@ -173,8 +173,9 @@ export default function FreemiumGate({ onClose, onUpgrade }) {
           Maybe Tomorrow
         </button>
 
-        <p style={{ color: T.dim, fontSize: 11, marginTop: 14, fontFamily: T.mono }}>
-          Secure payment via PayFast · Limit resets at midnight
+        <p style={{ color: T.dim, fontSize: 11, marginTop: 14, fontFamily: T.mono, lineHeight: 1.6 }}>
+          Secure payment via Paystack or PayFast · Limit resets at midnight
+          <br />After paying, check your email for a sign-in link to activate your account.
         </p>
       </div>
     </div>
