@@ -9,3 +9,6 @@
 
 ---
 
+
+## Road signs match the official SA signs (Oct 27 2026)
+Every one of the 160 signs was checked against the official SADC drawings. 23 names were moved to the right code, 17 wrong pictures were replaced with official ones, 4 signs with no official picture were taken out of quizzes, and 26 Road Signs Quiz questions were fixed. The users who reported the problems get a thank-you in the app. Full detail: `BUILDLOG_k53.md` Phase 20. Next: road rules against the National Road Traffic Act.

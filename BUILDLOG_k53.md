@@ -727,3 +727,41 @@ Learners reported "a lot of mistakes". A line-by-line re-audit against `updated-
   - `claim` requires a `claimToken` that only exists after a real PayFast payment, so it cannot be abused for free.
   - A widget would only add risk to the money flow.
 - **Payment checks after deploy:** home 200, apex 308 to www, checkout 302 to Paystack, ITN 200, unsigned webhook 403. Results are in the Jarvis journal.
+
+## Phase 20 — Road signs checked against the official SA signs (2026-10-27)
+**Why:** paying users reported wrong pictures through the feedback widget: W205 showed a left bend, W115 the wrong picture, "Pedal cycles prohibited" and "Horse riders prohibited" showed other vehicles, and (Oct 13) signs not matching descriptions plus lefts and rights mixed up in study mode. Commit c98d489 corrected the sign codes, but the pictures and words still disagreed.
+
+**Source of truth:**
+- The official SADC road sign drawings (Wikimedia Commons, `SADC road sign <code>.svg`, public domain). Found for 151 of the 160 codes.
+- The SARTSM code-to-name chart already transcribed in `scripts/_audit_sign_codes.mjs`.
+- Rule: the CODE is the truth.
+
+**Method:** every sign rendered side by side, the app's picture next to the official one, and checked by eye. The local file names could not be trusted: `sharp-bend-left.jpg` shows a right bend, and `horse-riders-prohibited.jpg` shows a goods truck.
+
+**Found:**
+- **Words on the wrong code (23):** for R4.1/R4.2, W202–W211 and the junction/lane group W105–W118 + W214/W215, the picture already matched its official code. The name, meaning, hint, options and mnemonic belonged to a different code. Fix: the words move to the code they describe.
+  - Examples: W204 is a sharp bend to the right, W115 is the Y-junction, W108 is a side road junction, and W214/W215 are "lane ends".
+  - W105 (skewed T-junction) and W112 (sharp junction) got new text.
+- **Wrong pictures (17), replaced with the official SVG (`public/signs/sadc-<code>.svg`):**
+  - R218, R219, R222, R237, R238 (the prohibitions showed a bus, minibus, car or truck)
+  - R239 width and R205 length
+  - R1.3 and R1.4 (missing their 3/4 plates), R2.1 (missing its pedestrian plate)
+  - R202 (stray text), R203
+  - W111, W113, W114, W311, W313 (blue fill)
+- **No official picture (4):** R201-600, R214-600, R215-600 and R600 showed a tour bus, a tractor and a cart. Their `img` is now null, so the generated quizzes skip them (`CRISP_SIGNS` / the manifest gate) until a correct picture is sourced.
+- **RoadSignsQuiz.jsx:** 26 questions now show the official picture for what they ask. w23's answer was reworded to the official meaning (End of dual roadway).
+
+**Proof:**
+- `scripts/fix-sign-truth.mjs` is repeatable. It prints every change and takes the official SVG folder as input.
+- Before/after sheets were viewed by eye.
+- `_audit_sign_codes.mjs` now reports 0 picture problems and 6 minor wording differences ("Authorised" vs "Authorized"). R351 is a real one: officially it is the bus, minibus and tram lane.
+- The live `roadSigns` chunk contains the corrected data, and the `sadc-*.svg` files return 200.
+
+**Users told:** the feedback widget now thanks a reporter once their report is resolved: "Thanks for your report, it's fixed 💚 / You helped us improve K53 Drill Master. Here is what we fixed:". It is anonymous: it uses only the random browser id the widget created, and Jarvis `/api/engineering/feedback/thanks` returns only the public fix notes. All 6 reports are resolved.
+
+**Shipped:** 877edfb (signs), 8cb25a2 + 35e3157 (thank-you widget). cf-deploy green.
+
+**Still owed:**
+- Correct pictures for the 4 End-of-restriction signs.
+- R351 name.
+- **Next:** the road-rules questions (`learnerTestBank.js`, `HybridGauntlet.jsx`) checked claim by claim against the National Road Traffic Act 93 of 1996 + Regulations and the official K53 learner material.
