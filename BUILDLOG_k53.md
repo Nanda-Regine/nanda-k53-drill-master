@@ -765,3 +765,30 @@ Learners reported "a lot of mistakes". A line-by-line re-audit against `updated-
 - Correct pictures for the 4 End-of-restriction signs.
 - R351 name.
 - **Next:** the road-rules questions (`learnerTestBank.js`, `HybridGauntlet.jsx`) checked claim by claim against the National Road Traffic Act 93 of 1996 + Regulations and the official K53 learner material.
+
+## Phase 21 — Road rules checked against the regulations (2026-10-28, in progress)
+**Source of truth:** the National Road Traffic Regulations, 2000 (current consolidated text, Acts Online, read regulation by regulation) + the official K53 "Rules of the Road" sections each question already cites (`ref`).
+
+**Checked so far:** all 150 RULES questions in `learnerTestBank.js`.
+- **Confirmed against the regulation text:**
+  - speedometer at 60 km/h (reg 215)
+  - seatbelts: child 3–14 unless taller than 1.5 m, and the driver ensures all persons wear one (reg 213(1), 213(11))
+  - motorcycle loads 600/900/450 mm (reg 228)
+  - freeway bans, stopping and hand signals (reg 323)
+  - passing, keeping left when being overtaken, summits/curves, stationary bus (reg 298)
+  - keep left (reg 296)
+  - triangle at 45 m (reg 214(4))
+- The rest match the cited Rules of the Road sections and the known regulation figures (lamp distances, speed limits, parking distances, towing, loads, alcohol, abandoned vehicles).
+
+**Wrong (fixed):** reg 214(1)(a) excludes only motorcycles, motor tricycles and quadrucycles, and motor cars or ambulances **first registered before 1 July 2006**. The app taught "motor cars never need a triangle" in 6 places: r038, Gauntlet, HeavyVehicleGauntlet, HybridGauntlet ×2 and VehicleControls vc19. All 6 now teach the current law. Correct answers stay at the same index.
+
+**Not confirmed in the regulation text (cited only to Rules of the Road):**
+- r071: flashing headlights to overtake
+- r101: let on-ramp traffic merge in front (Arrive Alive notes there is no specific merge provision in law)
+- r118: keep left / overtake right on a freeway
+- r136: roof load at half the car's height
+- These stay, because the official learner material teaches them.
+
+**Risk to know:** an older edition of Rules of the Road may still say motor cars are excluded. The app now follows the law.
+
+**Still to check:** SIGNALS_MARKINGS, CONTROLS_LMV / CONTROLS_MC, and the separate question banks inside the game files (Gauntlet, HybridGauntlet, HeavyVehicleGauntlet, VehicleControls, drillBank).

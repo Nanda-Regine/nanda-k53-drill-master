@@ -85,9 +85,9 @@ const TESTS = [
     questions: [
       {
         q: "Which vehicles must carry at least one emergency warning sign (triangle)?",
-        options: ["Only vehicles carrying dangerous goods","Heavy motor vehicles, all goods vehicles, minibuses and buses","All vehicles including motor cars","Only articulated vehicles"],
+        options: ["Only vehicles carrying dangerous goods","All motor vehicles except motorcycles (and cars or ambulances first registered before 1 July 2006)","Only heavy motor vehicles","Only articulated vehicles"],
         answer: 1,
-        explain: "Rules of the Road §6.24: any heavy motor vehicle, all goods vehicles, minibuses and buses must carry at least one emergency warning sign (motor cars, ambulances and motorcycles are excluded).",
+        explain: "NRTR reg 214: every motor vehicle must carry an emergency warning triangle, EXCEPT motorcycles, motor tricycles, quadrucycles, and motor cars or ambulances first registered before 1 July 2006.",
       },
       {
         q: "What is the maximum overall width of a goods vehicle with a GVM of 12 000 kg or more?",

@@ -252,9 +252,9 @@ const TESTS = [
       },
       {
         q: "Your car breaks down with a flat tyre on the roadway. You have no triangle. Is this an offence?",
-        options: ["Yes — all vehicles must carry and display a triangle","No — motor cars are not required to carry emergency warning triangles","Yes — all stationary vehicles must display a triangle","No — a flat tyre is beyond your control so no triangle needed"],
+        options: ["Yes — all vehicles must carry and display a triangle","Yes, if the car was first registered from 1 July 2006: it must carry a triangle","Yes — all stationary vehicles must display a triangle","No — a flat tyre is beyond your control so no triangle needed"],
         answer: 1,
-        explain: "MOTOR CARS are specifically excluded from the triangle requirement. Heavy vehicles, goods vehicles, minibuses and buses must carry one.",
+        explain: "NRTR reg 214: every motor vehicle must carry an emergency warning triangle, EXCEPT motorcycles, motor tricycles, quadrucycles, and motor cars or ambulances first registered before 1 July 2006. Not every vehicle (motorcycles are excluded), so option 1 is too broad.",
       },
       {
         q: "Minimum following distance for a light motor vehicle?",

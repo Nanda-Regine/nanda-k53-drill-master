@@ -22,9 +22,9 @@ const TESTS = [
       },
       {
         q: "All of the following vehicles MUST carry an emergency warning triangle EXCEPT:",
-        options: ["A minibus","A goods vehicle","A motor car","A heavy bus"],
+        options: ["A minibus","A goods vehicle","A motorcycle","A heavy bus"],
         answer: 2,
-        explain: "Motor cars are specifically excluded from the emergency triangle requirement. Also excluded: ambulances and motorcycles. Heavy vehicles, goods vehicles, minibuses and buses must carry one.",
+        explain: "NRTR reg 214: every motor vehicle must carry an emergency warning triangle, EXCEPT motorcycles, motor tricycles, quadrucycles, and motor cars or ambulances first registered before 1 July 2006.",
       },
       {
         q: "A motorcycle headlamp must be lit at all times. Which statement is NOT true about this rule?",
@@ -572,9 +572,9 @@ const TESTS = [
       },
       {
         q: "Your car breaks down on the roadway. You have no emergency warning triangle. No flares. What are you legally required to do?",
-        options: ["You are in breach — all vehicles must carry a triangle","Nothing — motor cars are not required to carry emergency warning triangles","You must call a breakdown company within 30 minutes","You must push the car off the road immediately"],
+        options: ["Nothing — no car ever needs a triangle","Display a triangle at least 45 m behind the car — cars first registered from 1 July 2006 must carry one","You must call a breakdown company within 30 minutes","You must push the car off the road immediately"],
         answer: 1,
-        explain: "MOTOR CARS are not required to carry or display emergency warning triangles. Triangles are required for: heavy vehicles (GVM >3,500 kg), goods vehicles, minibuses, and buses. Not motor cars.",
+        explain: "NRTR reg 214: every motor vehicle must carry an emergency warning triangle, EXCEPT motorcycles, motor tricycles, quadrucycles, and motor cars or ambulances first registered before 1 July 2006. A stationary vehicle on the roadway must display it at least 45 m behind, facing approaching traffic (reg 214(4)).",
       },
       {
         q: "You see freeway sign GA2/3. What should you have done ALREADY by the time you see this sign?",
