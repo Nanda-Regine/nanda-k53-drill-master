@@ -374,6 +374,10 @@ export default function Footer() {
             Nandawula Kabali-Kagwa
           </a>
           <div style={{ fontSize: 11, color: T.dim, fontFamily: T.font, marginBottom: 10 }}>Mirembe Muse (Pty) Ltd · East London, SA</div>
+          <a href="https://mirembemuse.co.za/?utm_source=k53&utm_medium=referral&utm_campaign=built-by" target="_blank" rel="noopener"
+            style={{ color: T.gold, fontSize: 12, fontFamily: T.font, textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minHeight: 44, minWidth: 44, marginBottom: 4 }}>
+            Built by Mirembe Muse
+          </a>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 16 }}>
             <a href="https://creativelynanda.co.za" target="_blank" rel="noopener noreferrer"
               style={{ color: T.dim, fontSize: 11, fontFamily: T.font, textDecoration: 'none' }}>
